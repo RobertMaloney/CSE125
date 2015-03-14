@@ -28,6 +28,46 @@ void Gv::ByteBuffer::Append(char byte) {
 }
 
 
+void Gv::ByteBuffer::Append(short bytes) {
+  if (size + sizeof(short) >= capacity) {
+    Expand(capacity << 1);
+  }
+
+}
+
+
+void Gv::ByteBuffer::Append(int bytes) {
+  if (size + sizeof(int) >= capacity) {
+    Expand(capacity << 1);
+  }
+
+}
+
+
+void Gv::ByteBuffer::Append(long bytes) {
+  if (size + sizeof(long) >= capacity) {
+    Expand(capacity << 1);
+  }
+
+}
+
+
+void Gv::ByteBuffer::Append(float bytes) {
+  if (size + sizeof(float) >= capacity) {
+    Expand(capacity << 1);
+  }
+
+}
+
+
+void Gv::ByteBuffer::Append(double bytes) {
+  if (size + sizeof(double) >= capacity) {
+    Expand(capacity << 1);
+  }
+
+}
+
+
 int Gv::ByteBuffer::Size() {
   return size;
 }

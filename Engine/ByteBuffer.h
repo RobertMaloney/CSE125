@@ -16,7 +16,7 @@ namespace Gv {
     ByteBuffer(int capacity = DEFAULT_CAPACITY);
     ~ByteBuffer();
 
-    void Expand(int newCapacity);
+    void Expand(int ncap);
 
     void Append(char byte);
     void Append(short bytes);
