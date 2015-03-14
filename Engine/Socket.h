@@ -13,7 +13,6 @@
 #include <string>
 #include "ByteBuffer.h"
 
-using std::string;
 
 namespace Gv {
 
@@ -45,13 +44,13 @@ namespace Gv {
 
   public:
 
-    SocketException(const std::string & error);
+    SocketException(int err);
 
-    string GetError();
+    int GetError();
 
   private:
 
-    string error;
+    int error;
 
   };
 

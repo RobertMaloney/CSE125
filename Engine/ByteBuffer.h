@@ -38,8 +38,6 @@ namespace Gv {
 
   private:
 
-    
-
     char* front;
     unsigned int size;
     unsigned int capacity;

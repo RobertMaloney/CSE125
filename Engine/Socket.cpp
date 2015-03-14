@@ -1,11 +1,11 @@
 #include "Socket.h"
 
 
-Gv::SocketException::SocketException(const string & err) 
+Gv::SocketException::SocketException(int err) 
   : error(err) {}
 
 
-string Gv::SocketException::GetError() {
+int Gv::SocketException::GetError() {
   return error;
 }
 
@@ -25,7 +25,7 @@ void Gv::Socket::Initialize() {
   if (!initialized) {
     WSAData wsaData;
     if (WSAStartup(MAKEWORD(2, 0), &wsaData) != 0) {
-      throw SocketException("Socket already initialized.");
+      throw SocketException(WSAGetLastError());
     }
   }
 #endif
