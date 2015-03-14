@@ -13,7 +13,6 @@ namespace Gv {
     static float HostToNet(float bytes);
     static double HostToNet(double bytes);
     
-
     static short NetToHost(short bytes);
     static int NetToHost(int bytes);
     static long NetToHost(long bytes);
@@ -22,8 +21,7 @@ namespace Gv {
 
   private:
     
-    static inline void NetToHost(char* first, unsigned int size);
-    static inline void HostToNet(char* first, unsigned int size);
+    static inline void byteSwap(char* first, unsigned int size);
     static inline bool isBigEndian();
 
   };

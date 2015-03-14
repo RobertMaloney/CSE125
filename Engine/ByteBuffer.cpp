@@ -19,9 +19,32 @@ Gv::ByteBuffer::~ByteBuffer() {
 }
 
 
+void Gv::ByteBuffer::Expand(int ncap) {
+  char* res = new char[ncap];
+  memmove(static_cast<void*>(res), static_cast<void*>(front), size);
+  delete front;
+  front = res;
+  capacity = ncap;
+}
+
+
+void Gv::ByteBuffer::Append(char* firstByte, unsigned int numBytes) {
+  if (!firstByte) {
+    return;
+  }
+  
+  while (size + numBytes >= capacity) {
+    this->Expand(capacity << 1);
+  }
+
+  memmove(static_cast<void*>(&front[size]), 
+    static_cast<void*>(firstByte), numBytes);
+}
+
+
 void Gv::ByteBuffer::Append(char byte) {
   if (size == capacity) {
-    Expand(capacity << 1);
+    this->Expand(capacity << 1);
   }
   front[size] = byte;
   size++;
@@ -29,42 +52,42 @@ void Gv::ByteBuffer::Append(char byte) {
 
 
 void Gv::ByteBuffer::Append(short bytes) {
-  if (size + sizeof(short) >= capacity) {
-    Expand(capacity << 1);
+  while (size + sizeof(short) >= capacity) {
+    this->Expand(capacity << 1);
   }
-
+  this->Append((char*) &bytes, sizeof(bytes));
 }
 
 
 void Gv::ByteBuffer::Append(int bytes) {
-  if (size + sizeof(int) >= capacity) {
-    Expand(capacity << 1);
+  while (size + sizeof(int) >= capacity) {
+    this->Expand(capacity << 1);
   }
-
+  this->Append((char*) &bytes, sizeof(bytes));
 }
 
 
 void Gv::ByteBuffer::Append(long bytes) {
-  if (size + sizeof(long) >= capacity) {
-    Expand(capacity << 1);
+  while (size + sizeof(long) >= capacity) {
+    this->Expand(capacity << 1);
   }
-
+  this->Append((char*) &bytes, sizeof(bytes));
 }
 
 
 void Gv::ByteBuffer::Append(float bytes) {
-  if (size + sizeof(float) >= capacity) {
-    Expand(capacity << 1);
+  while (size + sizeof(float) >= capacity) {
+    this->Expand(capacity << 1);
   }
-
+  this->Append((char*) &bytes, sizeof(bytes));
 }
 
 
 void Gv::ByteBuffer::Append(double bytes) {
-  if (size + sizeof(double) >= capacity) {
-    Expand(capacity << 1);
+  while (size + sizeof(double) >= capacity) {
+    this->Expand(capacity << 1);
   }
-
+  this->Append((char*) &bytes, sizeof(bytes));
 }
 
 
@@ -109,28 +132,8 @@ char & Gv::ByteBuffer::operator[](unsigned int i) {
 }
 
 
-void Gv::ByteBuffer::Expand(int ncap) {
-  char* res = new char[ncap];
-  memmove(static_cast<void*>(res), static_cast<void*>(front), size);
-  delete front;
-  front = res;
-  capacity = ncap;
-}
-
-#include <iostream>
-#include "ByteOrder.h"
-
 // just here so it compiles
 int main(int argc, char* arv[]) {
 
-  short x = 128;
-  int y = 128;
-  char c;
-  std::cout << "orig " << y;
-  Gv::ByteOrder::HostToNet((char*)&y, sizeof(int));
-
-  std::cout << " swapped " << y << std::endl;
-//  std::cout << "orig " << y << " swapped " << Gv::ByteOrder::HostToNet(y) << std::endl;
-  std::cin >> c;
   return 0;
 }

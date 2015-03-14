@@ -18,6 +18,7 @@ namespace Gv {
 
     void Expand(int ncap);
 
+    void Append(char* first, unsigned int size);
     void Append(char byte);
     void Append(short bytes);
     void Append(int bytes);
@@ -37,7 +38,7 @@ namespace Gv {
 
   private:
 
-    void append();
+    
 
     char* front;
     unsigned int size;
