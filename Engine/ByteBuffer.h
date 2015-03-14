@@ -32,16 +32,16 @@ namespace Gv {
     char* Last();
     char* Back();
 
-    char operator[](int i) const;
-    char & operator[](int i);
+    char operator[](unsigned int i) const;
+    char & operator[](unsigned int i);
 
   private:
 
     void append();
 
     char* front;
-    int size;
-    int capacity;
+    unsigned int size;
+    unsigned int capacity;
 
   }; // End of ByteBuffer.h
 

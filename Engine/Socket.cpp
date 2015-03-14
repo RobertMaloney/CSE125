@@ -24,12 +24,12 @@ void Gv::Socket::Initialize() {
 #ifdef _WIN32
   if (!initialized) {
     WSAData wsaData;
-    WORD wVersionRequested = MAKEWORD(2, 0);
-    if (WSAStartup(wVersionRequested, &wsaData) != 0) {
+    if (WSAStartup(MAKEWORD(2, 0), &wsaData) != 0) {
       throw SocketException("Socket already initialized.");
     }
   }
 #endif
+  initialized = true;
 }
 
 
@@ -40,6 +40,7 @@ bool Gv::Socket::IsInitialized() {
 void Gv::Socket::Close() {
 #ifdef _WIN32
   closesocket(static_cast<SOCKET>(socket));
+  WSACleanup();
 #else
   close(socket);
 #endif

@@ -93,15 +93,15 @@ char* Gv::ByteBuffer::Back() {
 }
 
 
-char Gv::ByteBuffer::operator[](int i) const {
-  if (i < 0 || i >= capacity) {
+char Gv::ByteBuffer::operator[](unsigned int i) const {
+  if (i >= capacity) {
     throw out_of_range(i + " is out of range.");
   }
   return front[i];
 }
 
 
-char & Gv::ByteBuffer::operator[](int i) {
+char & Gv::ByteBuffer::operator[](unsigned int i) {
   if (i < 0 || i >= capacity) {
     throw out_of_range(i + " is out of range.");
   }
@@ -117,9 +117,20 @@ void Gv::ByteBuffer::Expand(int ncap) {
   capacity = ncap;
 }
 
+#include <iostream>
+#include "ByteOrder.h"
 
 // just here so it compiles
 int main(int argc, char* arv[]) {
 
+  short x = 128;
+  int y = 128;
+  char c;
+  std::cout << "orig " << y;
+  Gv::ByteOrder::HostToNet((char*)&y, sizeof(int));
+
+  std::cout << " swapped " << y << std::endl;
+//  std::cout << "orig " << y << " swapped " << Gv::ByteOrder::HostToNet(y) << std::endl;
+  std::cin >> c;
   return 0;
 }
