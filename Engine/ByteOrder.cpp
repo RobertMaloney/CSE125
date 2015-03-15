@@ -26,90 +26,70 @@ inline bool Gv::ByteOrder::isBigEndian() {
 
 
 short Gv::ByteOrder::HostToNet(short bytes) {
-  if (isBigEndian()) {
-    return bytes;
-  }
+  if (isBigEndian()) { return bytes; }
   byteSwap((char*) &bytes, sizeof(bytes));
   return bytes;
 }
 
 
 int Gv::ByteOrder::HostToNet(int bytes) {
-  if (isBigEndian()) {
-    return bytes;
-  }
+  if (isBigEndian()) { return bytes; }
   byteSwap((char*) &bytes, sizeof(bytes));
   return bytes;
 }
 
 
 long Gv::ByteOrder::HostToNet(long bytes) {
-  if (isBigEndian()) {
-    return bytes;
-  }
+  if (isBigEndian()) { return bytes; }
   byteSwap((char*) &bytes, sizeof(bytes));
   return bytes;
 }
 
 
 float Gv::ByteOrder::HostToNet(float bytes) {
-  if (isBigEndian()) {
-    return bytes;
-  }
+  if (isBigEndian()) { return bytes; }
   byteSwap((char*) &bytes, sizeof(bytes));
   return bytes;
 }
 
 
 double Gv::ByteOrder::HostToNet(double bytes) {
-  if (isBigEndian()) {
-    return bytes;
-  }
+  if (isBigEndian()) { return bytes; }
   byteSwap((char*) &bytes, sizeof(bytes));
   return bytes;
 }
 
 
 short Gv::ByteOrder::NetToHost(short bytes) {
-  if (isBigEndian()) {
-    return bytes;
-  }
+  if (isBigEndian()) { return bytes; }
   byteSwap((char*) &bytes, sizeof(bytes));
   return bytes;
 }
 
 
 int Gv::ByteOrder::NetToHost(int bytes) {
-  if (isBigEndian()) {
-    return bytes;
-  }
+  if (isBigEndian()) { return bytes; }
   byteSwap((char*) &bytes, sizeof(bytes));
   return bytes;
 }
 
 
 long Gv::ByteOrder::NetToHost(long bytes) {
-  if (isBigEndian()) {
-    return bytes;
-  }
+  if (isBigEndian()) { return bytes; }
   byteSwap((char*) &bytes, sizeof(bytes));
   return bytes;
 }
 
 
 float Gv::ByteOrder::NetToHost(float bytes) {
-  if (isBigEndian()) {
-    return bytes;
-  }
+  if (isBigEndian()) { return bytes; }
   byteSwap((char*) &bytes, sizeof(bytes));
   return bytes;
 }
 
 
 double Gv::ByteOrder::NetToHost(double bytes) {
-  if (isBigEndian()) {
-    return bytes;
-  }
+  if (isBigEndian()) { return bytes; }
   byteSwap((char*) &bytes, sizeof(bytes));
   return bytes;
 }

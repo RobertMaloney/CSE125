@@ -11,11 +11,6 @@ Gv::UdpSocket::~UdpSocket() {
 }
 
 
-void Gv::UdpSocket::Initialize() {
-
-}
-
-
 void Gv::UdpSocket::Send(Packet* packet) {
 
 }

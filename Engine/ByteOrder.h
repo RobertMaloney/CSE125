@@ -28,20 +28,3 @@ namespace Gv {
 
 }
 #endif
-
-/*
-
-unsigned int res = 0;
-unsigned int shiftamt = 0;
-unsigned int lsbmask = 0xFF;
-unsigned int msbmask = 0xFF << ((sizeof (int) - 1) << 3);
-unsigned int orig = static_cast<unsigned int>(bytes);
-
-for (int i = sizeof(int) >> 1; i > 0; --i) {
-shiftamt = (i << 1) - 1;
-res |= (orig & lsbmask) << (shiftamt << 3);
-res |= (orig & msbmask) >> (shiftamt << 3);
-lsbmask = lsbmask << 8;
-msbmask = msbmask >> 8;
-}
-*/
