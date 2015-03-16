@@ -66,12 +66,18 @@
   <ItemGroup>
     <ClInclude Include="ByteBuffer.h" />
     <ClInclude Include="ByteOrder.h" />
+    <ClInclude Include="IPv4Interface.h" />
+    <ClInclude Include="IPv6Interface.h" />
+    <ClInclude Include="NetInterface.h" />
     <ClInclude Include="Socket.h" />
     <ClInclude Include="UdpSocket.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ByteBuffer.cpp" />
     <ClCompile Include="ByteOrder.cpp" />
+    <ClCompile Include="IPv4Interface.cpp" />
+    <ClCompile Include="IPv6Interface.cpp" />
+    <ClCompile Include="NetInterface.cpp" />
     <ClCompile Include="Socket.cpp" />
     <ClCompile Include="UdpSocket.cpp" />
   </ItemGroup>

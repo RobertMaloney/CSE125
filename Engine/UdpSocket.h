@@ -12,7 +12,6 @@ namespace Gv {
     UdpSocket();
     ~UdpSocket();
 
-    void Initialize() override;
     void Send(Packet* packet) override;
     Packet* Receive() override;
 

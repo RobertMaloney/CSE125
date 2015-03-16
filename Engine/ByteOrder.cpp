@@ -9,11 +9,9 @@ void Gv::ByteOrder::byteSwap(char* first, unsigned int size) {
 
   while (lsb < msb) {
     temp = *lsb & bmask;
-    *lsb &= 0;
-    *lsb |= *msb & bmask;
-    *msb &= 0;
-    *msb |= temp;
-    lsb++;
+    *lsb = *msb & bmask;
+    *msb = temp;
+    lsb++; 
     msb--;
   }
 }
@@ -21,7 +19,7 @@ void Gv::ByteOrder::byteSwap(char* first, unsigned int size) {
 
 inline bool Gv::ByteOrder::isBigEndian() {
   int x = 1;
-  return !((*(char*)&x) == 1);
+  return ((*(char*)&x) == 0);
 }
 
 
