@@ -27,13 +27,13 @@
     <ClInclude Include="ByteOrder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NetInterface.h">
+    <ClInclude Include="SocketAddress.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="IPv6Interface.h">
+    <ClInclude Include="Packet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="IPv4Interface.h">
+    <ClInclude Include="Platform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -50,13 +50,10 @@
     <ClCompile Include="ByteOrder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="IPv6Interface.cpp">
+    <ClCompile Include="SocketAddress.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="IPv4Interface.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="NetInterface.cpp">
+    <ClCompile Include="Packet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
