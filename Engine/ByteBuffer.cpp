@@ -19,7 +19,11 @@ Gv::ByteBuffer::~ByteBuffer() {
 }
 
 
-void Gv::ByteBuffer::Expand(int ncap) {
+void Gv::ByteBuffer::Expand(int necesarrySize) {
+  int ncap = capacity;
+  while (necesarrySize > ncap) {
+    ncap <<= 1;
+  }
   char* res = new char[ncap];
   memmove(static_cast<void*>(res), static_cast<void*>(front), size);
   delete front;
@@ -33,8 +37,8 @@ void Gv::ByteBuffer::Append(char* firstByte, unsigned int numBytes) {
     return;
   }
   
-  while (size + numBytes >= capacity) {
-    this->Expand(capacity << 1);
+  if (size + numBytes >= capacity) {
+    this->Expand(size + numBytes);
   }
 
   memmove(static_cast<void*>(&front[size]), 
@@ -44,7 +48,7 @@ void Gv::ByteBuffer::Append(char* firstByte, unsigned int numBytes) {
 
 void Gv::ByteBuffer::Append(char byte) {
   if (size == capacity) {
-    this->Expand(capacity << 1);
+    this->Expand(size + 1);
   }
   front[size] = byte;
   size++;
@@ -52,41 +56,26 @@ void Gv::ByteBuffer::Append(char byte) {
 
 
 void Gv::ByteBuffer::Append(short bytes) {
-  while (size + sizeof(short) >= capacity) {
-    this->Expand(capacity << 1);
-  }
   this->Append((char*) &bytes, sizeof(bytes));
 }
 
 
 void Gv::ByteBuffer::Append(int bytes) {
-  while (size + sizeof(int) >= capacity) {
-    this->Expand(capacity << 1);
-  }
   this->Append((char*) &bytes, sizeof(bytes));
 }
 
 
 void Gv::ByteBuffer::Append(long bytes) {
-  while (size + sizeof(long) >= capacity) {
-    this->Expand(capacity << 1);
-  }
   this->Append((char*) &bytes, sizeof(bytes));
 }
 
 
 void Gv::ByteBuffer::Append(float bytes) {
-  while (size + sizeof(float) >= capacity) {
-    this->Expand(capacity << 1);
-  }
   this->Append((char*) &bytes, sizeof(bytes));
 }
 
 
 void Gv::ByteBuffer::Append(double bytes) {
-  while (size + sizeof(double) >= capacity) {
-    this->Expand(capacity << 1);
-  }
   this->Append((char*) &bytes, sizeof(bytes));
 }
 
@@ -125,7 +114,7 @@ char Gv::ByteBuffer::operator[](unsigned int i) const {
 
 
 char & Gv::ByteBuffer::operator[](unsigned int i) {
-  if (i < 0 || i >= capacity) {
+  if (i >= capacity) {
     throw out_of_range(i + " is out of range.");
   }
   return front[i];
