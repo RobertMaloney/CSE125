@@ -11,8 +11,9 @@
 
 #include <stdexcept>
 #include <string>
-#include "ByteBuffer.h"
 
+#include "ByteBuffer.h"
+#include "SocketAddress.h"
 
 namespace Gv {
 
@@ -22,10 +23,11 @@ namespace Gv {
 
   public:
 
+    Socket(SocketAddress addr);
     Socket();
     virtual ~Socket();
 
-    virtual void Initialize();
+    virtual void Initialize() = 0;
     virtual void Send(Packet* packet) = 0;
     virtual Packet* Receive() = 0;
 
@@ -34,8 +36,9 @@ namespace Gv {
 
   protected:
 
-    int socket;
+    int sock;
     bool initialized;
+    SocketAddress address;
 
   };
 

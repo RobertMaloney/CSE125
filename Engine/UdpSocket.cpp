@@ -1,8 +1,8 @@
 #include "UdpSocket.h"
 
 
-Gv::UdpSocket::UdpSocket() {
-
+Gv::UdpSocket::UdpSocket(SocketAddress addr){
+  this->address = addr;
 }
 
 
@@ -11,7 +11,24 @@ Gv::UdpSocket::~UdpSocket() {
 }
 
 
+void Gv::UdpSocket::Initialize() {
+  if (!initialized) {
+    cerr << "Initialize called after invalid socket construction." 
+         << " Address : " << this << endl;
+    return;
+  }
+
+  sock = static_cast<int>(socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP));
+  bind(sock, (sockaddr *)&address.address, sizeof(sockaddr_in));
+}
+
+
 void Gv::UdpSocket::Send(Packet* packet) {
+  if (!packet) {
+    cerr << "Null packet to send. Address : " << this << endl;
+    return;
+  }
+
 
 }
 
@@ -19,3 +36,5 @@ void Gv::UdpSocket::Send(Packet* packet) {
 Gv::Packet* Gv::UdpSocket::Receive() {
   return nullptr;
 }
+
+

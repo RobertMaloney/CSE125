@@ -11,7 +11,7 @@ namespace Gv {
 
   public:
 
-    static const int DEFAULT_CAPACITY = 1024;
+    static const int DEFAULT_CAPACITY = 1500;
 
     ByteBuffer(int capacity = DEFAULT_CAPACITY);
     ~ByteBuffer();

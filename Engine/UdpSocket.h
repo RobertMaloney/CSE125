@@ -2,6 +2,11 @@
 #define GV_UDPSOCKET_H
 
 #include "Socket.h"
+#include <iostream>
+
+using std::cerr;
+using std::cout;
+using std::endl;
 
 namespace Gv {
 
@@ -9,14 +14,16 @@ namespace Gv {
 
   public:
 
-    UdpSocket();
+    UdpSocket(SocketAddress addr);
     ~UdpSocket();
 
+    void Initialize() override;
     void Send(Packet* packet) override;
     Packet* Receive() override;
 
   private:
 
+    
   };
 
 }

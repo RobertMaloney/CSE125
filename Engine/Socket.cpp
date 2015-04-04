@@ -10,17 +10,10 @@ int Gv::SocketException::GetError() {
 }
 
 
-Gv::Socket::Socket() : socket(0), initialized(false) {}
+Gv::Socket::Socket() {}
 
 
-Gv::Socket::~Socket() {
-  if (socket) {
-    Close();
-  }
-}
-
-
-void Gv::Socket::Initialize() {
+Gv::Socket::Socket(SocketAddress address) : sock(0), initialized(false) {
 #ifdef _WIN32
   if (!initialized) {
     WSAData wsaData;
@@ -33,16 +26,24 @@ void Gv::Socket::Initialize() {
 }
 
 
+Gv::Socket::~Socket() {
+  if (sock) {
+    Close();
+  }
+}
+
+
 bool Gv::Socket::IsInitialized() {
   return initialized;
 }
 
+
 void Gv::Socket::Close() {
 #ifdef _WIN32
-  closesocket(static_cast<SOCKET>(socket));
+  closesocket(static_cast<SOCKET>(sock));
   WSACleanup();
 #else
-  close(socket);
+  close(sock);
 #endif
-  socket = 0;
+  sock = 0;
 }

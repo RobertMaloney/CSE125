@@ -1,13 +1,13 @@
 #include "ByteOrder.h"
 
 
-void Gv::ByteOrder::byteSwap(char* first, unsigned int size) {
+inline void Gv::ByteOrder::byteSwap(char* first, unsigned int size) {
   char bmask = (char) 0xFF;
   char temp = 0;
   char* lsb = first;
   char* msb = &first[size - 1];
 
-  while (lsb < msb) {
+  for (; size > 0; size -= 2){
     temp = *lsb & bmask;
     *lsb = *msb & bmask;
     *msb = temp;

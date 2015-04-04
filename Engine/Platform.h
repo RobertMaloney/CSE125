@@ -1,7 +1,7 @@
 #ifndef PLATFORM_H
 #define PLATFORM_H
 
-
+#ifdef _WIN32
 typedef signed long long int64;
 typedef signed int int32;
 typedef signed short int16;
@@ -11,6 +11,6 @@ typedef unsigned long long uint64;
 typedef unsigned int uint32;
 typedef unsigned short uint16;
 typedef unsigned char uint8;
-
+#endif
 
 #endif

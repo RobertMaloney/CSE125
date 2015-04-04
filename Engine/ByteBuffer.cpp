@@ -123,11 +123,12 @@ char & Gv::ByteBuffer::operator[](unsigned int i) {
 
 #include <iostream> 
 #include "ByteOrder.h"
+#include <iomanip>
 
 // just here so it compiles
 int main(int argc, char* arv[]) {
-  short y = 128;
-  std::cout << "orig " << y << " " <<  Gv::ByteOrder::HostToNet(y) << std::endl;
+  int y = 0xAAFFEEBB;
+  std::cout << "orig " << std::hex <<  y << " " <<  Gv::ByteOrder::HostToNet(y) << std::endl;
   std::cin >> y;
   return 0;
 }
