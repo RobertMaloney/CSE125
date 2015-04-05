@@ -52,7 +52,7 @@ void Blob::Socket::Bind() {
 #ifdef _WIN32
   if (bind(sock, (const sockaddr*) &address, sizeof(SocketAddress)) == SOCKET_ERROR) {
     Close();
-    throw SocketException("Failed to bind.\n");
+    throw SocketException(WSAGetLastError());
   }
 #else
   if (bind(sock, (sockaddr*) &address, sizeof(SocketAddress)) < 0) {
@@ -79,7 +79,7 @@ void Blob::Socket::Connect(SocketAddress addr) {
 #ifdef _WIN32
   if (connect(sock, (const sockaddr*) &address, sizeof(SocketAddress)) == SOCKET_ERROR) {
     Close();
-    throw SocketException("Failed to bind.\n");
+    throw SocketException(WSAGetLastError());
   }
 #else
   if (connect(sock, (sockaddr*) &address, sizeof(SocketAddress)) < 0) {
@@ -97,6 +97,7 @@ bool Blob::Socket::IsInitialized() {
 
 void Blob::Socket::SetAddress(const string & ip) {
   inet_pton(AF_INET, ip.c_str(), &address.sin_addr);
+  Bind();
 }
 
 
@@ -105,32 +106,54 @@ void Blob::Socket::SetAddress(const string & ip, unsigned short port) {
   address.sin_family = AF_INET;
   SetPortNo(port);
   SetAddress(ip);
+  Bind();
 }
 
 
 void Blob::Socket::SetPortNo(unsigned short port) {
   address.sin_port = HostToNet(port);
+  Bind();
+}
+
+
+Blob::SocketAddress Blob::Socket::GetSockName() {
+  int size = sizeof(sockaddr_in);
+  SocketAddress info;
+
+#ifdef _WIN32
+  if (getsockname(sock, (sockaddr*) &info, &size) == SOCKET_ERROR) {
+    Close();
+    throw SocketException(WSAGetLastError());
+  }
+#else
+  if (getsockname(sock, (sockaddr*) &info, &size) < 0) {
+    Close();
+    throw SocketException("Error retrieving port information.\n");
+  }
+#endif
+  return info;
 }
 
 
 unsigned short Blob::Socket::GetPort() {
-  return address.sin_port;
+  return NetToHost(this->GetSockName().sin_port);
 }
 
 
 unsigned long Blob::Socket::GetAddress() {
-  return address.sin_addr.s_addr;
+  return NetToHost(static_cast<long>(this->GetSockName().sin_addr.s_addr));
 }
 
 
 string Blob::Socket::GetPortStr() {
-  return std::to_string(address.sin_port);
+  return std::to_string(NetToHost(this->GetSockName().sin_port));
 }
 
 
 string Blob::Socket::GetAddressStr() {
   char str[INET_ADDRSTRLEN];
-  inet_ntop(AF_INET, (void*) &address.sin_addr, str, INET_ADDRSTRLEN);
+  SocketAddress info = this->GetSockName();
+  inet_ntop(AF_INET, (void*) &info.sin_addr, str, INET_ADDRSTRLEN);
   return string(str);
 }
 

@@ -55,6 +55,8 @@ namespace Blob {
 
   protected:
 
+    SocketAddress GetSockName();
+
     int sock;
     bool initialized;
     SocketAddress address;
