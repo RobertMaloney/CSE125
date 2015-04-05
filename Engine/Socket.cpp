@@ -120,6 +120,8 @@ Blob::SocketAddress Blob::Socket::GetSockName() {
   int size = sizeof(sockaddr_in);
   SocketAddress info;
 
+  memset(static_cast<void*>(&info), 0, sizeof(SocketAddress));
+
 #ifdef _WIN32
   if (getsockname(sock, (sockaddr*) &info, &size) == SOCKET_ERROR) {
     Close();
