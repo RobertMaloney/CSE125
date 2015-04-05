@@ -14,6 +14,7 @@ Gv::Socket::Socket(SocketAddress address) : sock(0), initialized(false) {
   if (!initialized) {
     WSAData wsaData;
     if (WSAStartup(MAKEWORD(2, 0), &wsaData) != 0) {
+      WSACleanup();
       throw SocketException(WSAGetLastError());
     }
   }
@@ -32,7 +33,6 @@ Gv::Socket::~Socket() {
 void Gv::Socket::Close() {
   if (!initialized) {
     throw SocketException("Socket not initialized.\n");
-    return;
   }
 #ifdef _WIN32
   closesocket(static_cast<SOCKET>(sock));
@@ -50,9 +50,17 @@ void Gv::Socket::Bind() {
     return;
   }
 
-  if (bind(sock, (const sockaddr*) &address, sizeof(SocketAddress)) < 0) {
+#ifdef _WIN32
+  if (bind(sock, (const sockaddr*) &address, sizeof(SocketAddress)) == SOCKET_ERROR) {
+    Close();
     throw SocketException("Failed to bind.\n");
   }
+#else
+  if (bind(sock, (sockaddr*) &address, sizeof(SocketAddress)) < 0) {
+    close(sock);
+    throw SocketException("Failed to bind.\n");
+  }
+#endif
 }
 
 
@@ -70,9 +78,17 @@ void Gv::Socket::Connect(SocketAddress addr) {
 
   this->address = addr;
 
-  if (connect(sock, (const sockaddr*) &address, sizeof(SocketAddress)) < 0) {
-    throw SocketException("Unable to connect.\n");
+#ifdef _WIN32
+  if (connect(sock, (const sockaddr*) &address, sizeof(SocketAddress)) == SOCKET_ERROR) {
+    Close();
+    throw SocketException("Failed to bind.\n");
   }
+#else
+  if (connect(sock, (sockaddr*) &address, sizeof(SocketAddress)) < 0) {
+    close(sock);
+    throw SocketException("Failed to bind.\n");
+  }
+#endif
 }
 
 
