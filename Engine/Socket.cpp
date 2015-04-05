@@ -47,7 +47,6 @@ void Blob::Socket::Close() {
 void Blob::Socket::Bind() {
   if (!initialized) {
     throw SocketException("Socket not initialized.\n");
-    return;
   }
 
 #ifdef _WIN32
@@ -57,7 +56,7 @@ void Blob::Socket::Bind() {
   }
 #else
   if (bind(sock, (sockaddr*) &address, sizeof(SocketAddress)) < 0) {
-    close(sock);
+    Close();
     throw SocketException("Failed to bind.\n");
   }
 #endif
@@ -73,7 +72,6 @@ void Blob::Socket::Bind(SocketAddress addr) {
 void Blob::Socket::Connect(SocketAddress addr) {
   if (!initialized) {
     throw SocketException("Socket not initialized.\n");
-    return;
   }
 
   this->address = addr;
@@ -85,7 +83,7 @@ void Blob::Socket::Connect(SocketAddress addr) {
   }
 #else
   if (connect(sock, (sockaddr*) &address, sizeof(SocketAddress)) < 0) {
-    close(sock);
+    Close();
     throw SocketException("Failed to bind.\n");
   }
 #endif
