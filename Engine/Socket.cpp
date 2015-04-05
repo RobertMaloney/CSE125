@@ -141,7 +141,7 @@ string Blob::Socket::GetPortStr(void) {
 string Blob::Socket::GetAddressStr(void) {
   char str[INET_ADDRSTRLEN];
   SocketAddress info = this->GetSockName();
-  inet_ntop(AF_INET, (void*) &info.sin_addr, str, INET_ADDRSTRLEN);
+  inet_ntop(AF_INET, static_cast<void*>(&info.sin_addr), str, INET_ADDRSTRLEN);
   return string(str);
 }
 
