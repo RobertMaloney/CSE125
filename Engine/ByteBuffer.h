@@ -5,7 +5,7 @@
 
 using std::out_of_range;
 
-namespace Gv {
+namespace Blob {
 
   class ByteBuffer {
 

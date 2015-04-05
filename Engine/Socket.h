@@ -19,7 +19,7 @@
 
 using std::string;
 
-namespace Gv {
+namespace Blob {
 
   typedef ByteBuffer Packet;
   typedef sockaddr_in SocketAddress;

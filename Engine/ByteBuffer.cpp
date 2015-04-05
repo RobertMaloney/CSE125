@@ -1,14 +1,14 @@
 #include "ByteBuffer.h"
 
 
-Gv::ByteBuffer::ByteBuffer(int capacity) {
+Blob::ByteBuffer::ByteBuffer(int capacity) {
   front = new char[capacity];
   size = 0;
   this->capacity = capacity;
 }
 
 
-Gv::ByteBuffer::~ByteBuffer() {
+Blob::ByteBuffer::~ByteBuffer() {
   if (front) {
     delete front;
   }
@@ -19,7 +19,7 @@ Gv::ByteBuffer::~ByteBuffer() {
 }
 
 
-void Gv::ByteBuffer::Expand(int necesarrySize) {
+void Blob::ByteBuffer::Expand(int necesarrySize) {
   int ncap = capacity;
   while (necesarrySize > ncap) {
     ncap <<= 1;
@@ -32,7 +32,7 @@ void Gv::ByteBuffer::Expand(int necesarrySize) {
 }
 
 
-void Gv::ByteBuffer::Append(char* firstByte, unsigned int numBytes) {
+void Blob::ByteBuffer::Append(char* firstByte, unsigned int numBytes) {
   if (!firstByte) {
     return;
   }
@@ -46,7 +46,7 @@ void Gv::ByteBuffer::Append(char* firstByte, unsigned int numBytes) {
 }
 
 
-void Gv::ByteBuffer::Append(char byte) {
+void Blob::ByteBuffer::Append(char byte) {
   if (size == capacity) {
     this->Expand(size + 1);
   }
@@ -55,57 +55,57 @@ void Gv::ByteBuffer::Append(char byte) {
 }
 
 
-void Gv::ByteBuffer::Append(short bytes) {
+void Blob::ByteBuffer::Append(short bytes) {
   this->Append((char*) &bytes, sizeof(bytes));
 }
 
 
-void Gv::ByteBuffer::Append(int bytes) {
+void Blob::ByteBuffer::Append(int bytes) {
   this->Append((char*) &bytes, sizeof(bytes));
 }
 
 
-void Gv::ByteBuffer::Append(long bytes) {
+void Blob::ByteBuffer::Append(long bytes) {
   this->Append((char*) &bytes, sizeof(bytes));
 }
 
 
-void Gv::ByteBuffer::Append(float bytes) {
+void Blob::ByteBuffer::Append(float bytes) {
   this->Append((char*) &bytes, sizeof(bytes));
 }
 
 
-void Gv::ByteBuffer::Append(double bytes) {
+void Blob::ByteBuffer::Append(double bytes) {
   this->Append((char*) &bytes, sizeof(bytes));
 }
 
 
-int Gv::ByteBuffer::Size() {
+int Blob::ByteBuffer::Size() {
   return size;
 }
 
 
-int Gv::ByteBuffer::Capacity() {
+int Blob::ByteBuffer::Capacity() {
   return capacity;
 }
 
 
-char* Gv::ByteBuffer::Front() {
+char* Blob::ByteBuffer::Front() {
   return front;
 }
 
 
-char* Gv::ByteBuffer::Last() {
+char* Blob::ByteBuffer::Last() {
   return &front[size - 1];
 }
 
 
-char* Gv::ByteBuffer::Back() {
+char* Blob::ByteBuffer::Back() {
   return front + (capacity - 1);
 }
 
 
-char Gv::ByteBuffer::operator[](unsigned int i) const {
+char Blob::ByteBuffer::operator[](unsigned int i) const {
   if (i >= capacity) {
     throw out_of_range(i + " is out of range.");
   }
@@ -113,7 +113,7 @@ char Gv::ByteBuffer::operator[](unsigned int i) const {
 }
 
 
-char & Gv::ByteBuffer::operator[](unsigned int i) {
+char & Blob::ByteBuffer::operator[](unsigned int i) {
   if (i >= capacity) {
     throw out_of_range(i + " is out of range.");
   }

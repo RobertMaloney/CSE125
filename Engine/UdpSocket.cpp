@@ -1,17 +1,19 @@
 #include "UdpSocket.h"
 
 
-Gv::UdpSocket::UdpSocket(SocketAddress addr){
+Blob::UdpSocket::UdpSocket(SocketAddress addr){
   this->address = addr;
 }
 
 
-Gv::UdpSocket::~UdpSocket() {
+//TODO
+Blob::UdpSocket::~UdpSocket() {
 
 }
 
 
-void Gv::UdpSocket::Initialize() {
+// TODO
+void Blob::UdpSocket::Initialize() {
   if (!initialized) {
     cerr << "Initialize called after invalid socket construction." 
          << " Address : " << this << endl;
@@ -22,7 +24,8 @@ void Gv::UdpSocket::Initialize() {
 }
 
 
-void Gv::UdpSocket::Send(Packet* packet) {
+//TODO
+void Blob::UdpSocket::Send(Packet* packet) {
   if (!packet) {
     cerr << "Null packet to send. Address : " << this << endl;
     return;
@@ -32,7 +35,8 @@ void Gv::UdpSocket::Send(Packet* packet) {
 }
 
 
-Gv::Packet* Gv::UdpSocket::Receive() {
+//TODO
+Blob::Packet* Blob::UdpSocket::Receive() {
   return nullptr;
 }
 

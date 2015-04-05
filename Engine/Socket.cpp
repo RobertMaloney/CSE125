@@ -4,12 +4,12 @@
 /* ==================== Socket ===================== */
 
 
-Gv::Socket::Socket() {
+Blob::Socket::Socket() {
   initialized = false;
 }
 
 
-Gv::Socket::Socket(SocketAddress address) : sock(0), initialized(false) {
+Blob::Socket::Socket(SocketAddress address) : sock(0), initialized(false) {
 #ifdef _WIN32
   if (!initialized) {
     WSAData wsaData;
@@ -23,14 +23,14 @@ Gv::Socket::Socket(SocketAddress address) : sock(0), initialized(false) {
 }
 
 
-Gv::Socket::~Socket() {
+Blob::Socket::~Socket() {
   if (sock && initialized) {
     Close();
   }
 }
 
 
-void Gv::Socket::Close() {
+void Blob::Socket::Close() {
   if (!initialized) {
     throw SocketException("Socket not initialized.\n");
   }
@@ -44,7 +44,7 @@ void Gv::Socket::Close() {
 }
 
 
-void Gv::Socket::Bind() {
+void Blob::Socket::Bind() {
   if (!initialized) {
     throw SocketException("Socket not initialized.\n");
     return;
@@ -64,13 +64,13 @@ void Gv::Socket::Bind() {
 }
 
 
-void Gv::Socket::Bind(SocketAddress addr) {
+void Blob::Socket::Bind(SocketAddress addr) {
   this->address = addr;
   Bind();
 }
 
 
-void Gv::Socket::Connect(SocketAddress addr) {
+void Blob::Socket::Connect(SocketAddress addr) {
   if (!initialized) {
     throw SocketException("Socket not initialized.\n");
     return;
@@ -92,17 +92,17 @@ void Gv::Socket::Connect(SocketAddress addr) {
 }
 
 
-bool Gv::Socket::IsInitialized() {
+bool Blob::Socket::IsInitialized() {
   return initialized;
 }
 
 
-void Gv::Socket::SetAddress(const string & ip) {
+void Blob::Socket::SetAddress(const string & ip) {
   inet_pton(AF_INET, ip.c_str(), &address.sin_addr);
 }
 
 
-void Gv::Socket::SetAddress(const string & ip, unsigned short port) {
+void Blob::Socket::SetAddress(const string & ip, unsigned short port) {
   memset((void*) &address, 0, sizeof(sockaddr_in));
   address.sin_family = AF_INET;
   SetPortNo(port);
@@ -110,27 +110,27 @@ void Gv::Socket::SetAddress(const string & ip, unsigned short port) {
 }
 
 
-void Gv::Socket::SetPortNo(unsigned short port) {
+void Blob::Socket::SetPortNo(unsigned short port) {
   address.sin_port = HostToNet(port);
 }
 
 
-unsigned short Gv::Socket::GetPort() {
+unsigned short Blob::Socket::GetPort() {
   return address.sin_port;
 }
 
 
-unsigned long Gv::Socket::GetAddress() {
+unsigned long Blob::Socket::GetAddress() {
   return address.sin_addr.s_addr;
 }
 
 
-string Gv::Socket::GetPortStr() {
+string Blob::Socket::GetPortStr() {
   return std::to_string(address.sin_port);
 }
 
 
-string Gv::Socket::GetAddressStr() {
+string Blob::Socket::GetAddressStr() {
   char str[INET_ADDRSTRLEN];
   inet_ntop(AF_INET, (void*) &address.sin_addr, str, INET_ADDRSTRLEN);
   return string(str);
@@ -140,22 +140,22 @@ string Gv::Socket::GetAddressStr() {
 /* ==================== SocketException ===================== */
 
 
-Gv::SocketException::SocketException(int err)
+Blob::SocketException::SocketException(int err)
 : error(err) {
 }
 
 
-Gv::SocketException::SocketException(string msg) {
+Blob::SocketException::SocketException(string msg) {
   this->errMsg = msg;
 }
 
 
-int Gv::SocketException::GetError() {
+int Blob::SocketException::GetError() {
   return error;
 }
 
 
-const string & Gv::SocketException::GetErrMsg() {
+const string & Blob::SocketException::GetErrMsg() {
   return this->errMsg;
 }
 
