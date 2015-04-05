@@ -24,16 +24,7 @@
     <ClInclude Include="UdpSocket.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ByteOrder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SocketAddress.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Packet.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform.h">
+    <ClInclude Include="Endianness.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -47,13 +38,7 @@
     <ClCompile Include="UdpSocket.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ByteOrder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SocketAddress.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Packet.cpp">
+    <ClCompile Include="Endianness.inl">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

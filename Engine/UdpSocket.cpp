@@ -19,7 +19,6 @@ void Gv::UdpSocket::Initialize() {
   }
 
   sock = static_cast<int>(socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP));
-  bind(sock, (sockaddr *)&address.address, sizeof(sockaddr_in));
 }
 
 

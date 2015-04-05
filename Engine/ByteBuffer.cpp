@@ -122,13 +122,13 @@ char & Gv::ByteBuffer::operator[](unsigned int i) {
 
 
 #include <iostream> 
-#include "ByteOrder.h"
+//#include "ByteOrder.h"
 #include <iomanip>
 
 // just here so it compiles
 int main(int argc, char* arv[]) {
   int y = 0xAAFFEEBB;
-  std::cout << "orig " << std::hex <<  y << " " <<  Gv::ByteOrder::HostToNet(y) << std::endl;
+ // std::cout << "orig " << std::hex <<  y << " " <<  HostToNet(y) << std::endl;
   std::cin >> y;
   return 0;
 }

@@ -3,6 +3,7 @@
 
 #ifdef _WIN32
 #include <WinSock2.h>
+#include <WS2tcpip.h>
 #pragma comment(lib, "Ws2_32.lib")
 #else
 #include <sys/socket.h>
@@ -11,14 +12,18 @@
 
 #include <stdexcept>
 #include <string>
+#include <exception>
 
 #include "ByteBuffer.h"
-#include "SocketAddress.h"
+#include "Endianness.h"
+
+using std::string;
 
 namespace Gv {
 
   typedef ByteBuffer Packet;
-  
+  typedef sockaddr_in SocketAddress;
+
   class Socket {
 
   public:
@@ -27,12 +32,25 @@ namespace Gv {
     Socket();
     virtual ~Socket();
 
+    void Close();
+    void Bind();
+    void Bind(SocketAddress addr);
+
+    bool IsInitialized();
     virtual void Initialize() = 0;
+
     virtual void Send(Packet* packet) = 0;
     virtual Packet* Receive() = 0;
 
-    void Close();
-    bool IsInitialized();
+    void SetAddress(const string & ip);
+    void SetAddress(const string & ip, unsigned short port);
+    void SetPortNo(unsigned short port);
+
+    unsigned short GetPort();
+    unsigned long GetAddress();
+
+    string GetPortStr();
+    string GetAddressStr();
 
   protected:
 
@@ -48,11 +66,14 @@ namespace Gv {
   public:
 
     SocketException(int err);
+    SocketException(string msg);
 
     int GetError();
+    const string & GetErrMsg();
 
   private:
 
+    string errMsg;
     int error;
 
   };
