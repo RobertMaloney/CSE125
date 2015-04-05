@@ -36,6 +36,7 @@ void Blob::Socket::Close(void) {
   close(sock);
 #endif
   sock = -1;
+  initialized = false;
 }
 
 
