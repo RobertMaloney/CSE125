@@ -110,14 +110,16 @@ Blob::SocketAddress Blob::Socket::GetSockName(void) {
   memset(static_cast<void*>(&info), 0, sizeof(SocketAddress));
 
 #ifdef _WIN32
-  if (getsockname(sock, (sockaddr*) &info, &size) == SOCKET_ERROR) {
-    Close();
-    throw SocketException(WSAGetLastError());
+  if (getsockname(sock, (sockaddr*) &info, &size) == SOCKET_ERROR || 
+      size != sizeof(SocketAddress)) {
+        Close();
+        throw SocketException(WSAGetLastError());
   }
 #else
-  if (getsockname(sock, (sockaddr*) &info, &size) < 0) {
-    Close();
-    throw SocketException("Error retrieving port information.\n");
+  if (getsockname(sock, (sockaddr*) &info, &size) < 0) || 
+      size != sizeof(SocketAddress)) {
+        Close();
+        throw SocketException("Error retrieving port information.\n");
   }
 #endif
   return info;
