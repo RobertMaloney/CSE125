@@ -35,6 +35,7 @@ namespace Gv {
     void Close();
     void Bind();
     void Bind(SocketAddress addr);
+    void Connect(SocketAddress addr);
 
     bool IsInitialized();
     virtual void Initialize() = 0;

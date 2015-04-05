@@ -1,26 +1,12 @@
 #include "Socket.h"
 
 
-Gv::SocketException::SocketException(int err) 
-  : error(err) {}
+/* ==================== Socket ===================== */
 
 
-Gv::SocketException::SocketException(string msg) {
-  this->errMsg = msg;
+Gv::Socket::Socket() {
+  initialized = false;
 }
-
-
-int Gv::SocketException::GetError() {
-  return error;
-}
-
-
-const string & Gv::SocketException::GetErrMsg() {
-  return this->errMsg;
-}
-
-
-Gv::Socket::Socket() {}
 
 
 Gv::Socket::Socket(SocketAddress address) : sock(0), initialized(false) {
@@ -37,18 +23,17 @@ Gv::Socket::Socket(SocketAddress address) : sock(0), initialized(false) {
 
 
 Gv::Socket::~Socket() {
-  if (sock) {
+  if (sock && initialized) {
     Close();
   }
 }
 
 
-bool Gv::Socket::IsInitialized() {
-  return initialized;
-}
-
-
 void Gv::Socket::Close() {
+  if (!initialized) {
+    throw SocketException("Socket not initialized.\n");
+    return;
+  }
 #ifdef _WIN32
   closesocket(static_cast<SOCKET>(sock));
   WSACleanup();
@@ -60,6 +45,11 @@ void Gv::Socket::Close() {
 
 
 void Gv::Socket::Bind() {
+  if (!initialized) {
+    throw SocketException("Socket not initialized.\n");
+    return;
+  }
+
   if (bind(sock, (const sockaddr*) &address, sizeof(SocketAddress)) < 0) {
     throw SocketException("Failed to bind.\n");
   }
@@ -69,6 +59,25 @@ void Gv::Socket::Bind() {
 void Gv::Socket::Bind(SocketAddress addr) {
   this->address = addr;
   Bind();
+}
+
+
+void Gv::Socket::Connect(SocketAddress addr) {
+  if (!initialized) {
+    throw SocketException("Socket not initialized.\n");
+    return;
+  }
+
+  this->address = addr;
+
+  if (connect(sock, (const sockaddr*) &address, sizeof(SocketAddress)) < 0) {
+    throw SocketException("Unable to connect.\n");
+  }
+}
+
+
+bool Gv::Socket::IsInitialized() {
+  return initialized;
 }
 
 
@@ -110,3 +119,27 @@ string Gv::Socket::GetAddressStr() {
   inet_ntop(AF_INET, (void*) &address.sin_addr, str, INET_ADDRSTRLEN);
   return string(str);
 }
+
+
+/* ==================== SocketException ===================== */
+
+
+Gv::SocketException::SocketException(int err)
+: error(err) {
+}
+
+
+Gv::SocketException::SocketException(string msg) {
+  this->errMsg = msg;
+}
+
+
+int Gv::SocketException::GetError() {
+  return error;
+}
+
+
+const string & Gv::SocketException::GetErrMsg() {
+  return this->errMsg;
+}
+
