@@ -10,7 +10,7 @@ using std::endl;
 
 namespace Blob {
 
-  class UdpSocket : Socket {
+  class UdpSocket : public Socket {
 
   public:
 
