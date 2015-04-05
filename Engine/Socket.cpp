@@ -4,12 +4,7 @@
 /* ==================== Socket ===================== */
 
 
-Blob::Socket::Socket() {
-  initialized = false;
-}
-
-
-Blob::Socket::Socket(SocketAddress address) : sock(0), initialized(false) {
+Blob::Socket::Socket(void) : sock(0), initialized(false) {
 #ifdef _WIN32
   if (!initialized) {
     WSAData wsaData;
@@ -23,14 +18,14 @@ Blob::Socket::Socket(SocketAddress address) : sock(0), initialized(false) {
 }
 
 
-Blob::Socket::~Socket() {
+Blob::Socket::~Socket(void) {
   if (sock && initialized) {
     Close();
   }
 }
 
 
-void Blob::Socket::Close() {
+void Blob::Socket::Close(void) {
   if (!initialized) {
     throw SocketException("Socket not initialized.\n");
   }
@@ -44,28 +39,22 @@ void Blob::Socket::Close() {
 }
 
 
-void Blob::Socket::Bind() {
+void Blob::Socket::Bind(SocketAddress addr) {
   if (!initialized) {
     throw SocketException("Socket not initialized.\n");
   }
 
 #ifdef _WIN32
-  if (bind(sock, (const sockaddr*) &address, sizeof(SocketAddress)) == SOCKET_ERROR) {
+  if (bind(sock, (const sockaddr*) &addr, sizeof(SocketAddress)) == SOCKET_ERROR) {
     Close();
     throw SocketException(WSAGetLastError());
   }
 #else
-  if (bind(sock, (sockaddr*) &address, sizeof(SocketAddress)) < 0) {
+  if (bind(sock, (sockaddr*) &addr, sizeof(SocketAddress)) < 0) {
     Close();
     throw SocketException("Failed to bind.\n");
   }
 #endif
-}
-
-
-void Blob::Socket::Bind(SocketAddress addr) {
-  this->address = addr;
-  Bind();
 }
 
 
@@ -74,15 +63,13 @@ void Blob::Socket::Connect(SocketAddress addr) {
     throw SocketException("Socket not initialized.\n");
   }
 
-  this->address = addr;
-
 #ifdef _WIN32
-  if (connect(sock, (const sockaddr*) &address, sizeof(SocketAddress)) == SOCKET_ERROR) {
+  if (connect(sock, (const sockaddr*) &addr, sizeof(SocketAddress)) == SOCKET_ERROR) {
     Close();
     throw SocketException(WSAGetLastError());
   }
 #else
-  if (connect(sock, (sockaddr*) &address, sizeof(SocketAddress)) < 0) {
+  if (connect(sock, (sockaddr*) &addr, sizeof(SocketAddress)) < 0) {
     Close();
     throw SocketException("Failed to bind.\n");
   }
@@ -90,33 +77,32 @@ void Blob::Socket::Connect(SocketAddress addr) {
 }
 
 
-bool Blob::Socket::IsInitialized() {
+bool Blob::Socket::IsInitialized(void) {
   return initialized;
 }
 
 
 void Blob::Socket::SetAddress(const string & ip) {
-  inet_pton(AF_INET, ip.c_str(), &address.sin_addr);
-  Bind();
-}
-
-
-void Blob::Socket::SetAddress(const string & ip, unsigned short port) {
-  memset((void*) &address, 0, sizeof(sockaddr_in));
-  address.sin_family = AF_INET;
-  SetPortNo(port);
-  SetAddress(ip);
-  Bind();
+  SocketAddress addr;
+  memset(static_cast<void*>(&addr), 0, sizeof(SocketAddress));
+  addr.sin_family = AF_INET;
+  inet_pton(AF_INET, ip.c_str(), &addr.sin_addr);
+  addr.sin_port = this->GetSockName().sin_port;
+  Bind(addr);
 }
 
 
 void Blob::Socket::SetPortNo(unsigned short port) {
-  address.sin_port = HostToNet(port);
-  Bind();
+  SocketAddress addr;
+  memset(static_cast<void*>(&addr), 0, sizeof(SocketAddress));
+  addr.sin_family = AF_INET;
+  addr.sin_addr.s_addr = this->GetSockName().sin_addr.s_addr;
+  addr.sin_port = HostToNet(port);
+  Bind(addr);
 }
 
 
-Blob::SocketAddress Blob::Socket::GetSockName() {
+Blob::SocketAddress Blob::Socket::GetSockName(void) {
   int size = sizeof(sockaddr_in);
   SocketAddress info;
 
@@ -137,22 +123,22 @@ Blob::SocketAddress Blob::Socket::GetSockName() {
 }
 
 
-unsigned short Blob::Socket::GetPort() {
+unsigned short Blob::Socket::GetPort(void) {
   return NetToHost(this->GetSockName().sin_port);
 }
 
 
-unsigned long Blob::Socket::GetAddress() {
+unsigned long Blob::Socket::GetAddress(void) {
   return NetToHost(static_cast<long>(this->GetSockName().sin_addr.s_addr));
 }
 
 
-string Blob::Socket::GetPortStr() {
+string Blob::Socket::GetPortStr(void) {
   return std::to_string(NetToHost(this->GetSockName().sin_port));
 }
 
 
-string Blob::Socket::GetAddressStr() {
+string Blob::Socket::GetAddressStr(void) {
   char str[INET_ADDRSTRLEN];
   SocketAddress info = this->GetSockName();
   inet_ntop(AF_INET, (void*) &info.sin_addr, str, INET_ADDRSTRLEN);
@@ -173,12 +159,12 @@ Blob::SocketException::SocketException(string msg) {
 }
 
 
-int Blob::SocketException::GetError() {
+int Blob::SocketException::GetError(void) {
   return error;
 }
 
 
-const string & Blob::SocketException::GetErrMsg() {
+const string & Blob::SocketException::GetErrMsg(void) {
   return this->errMsg;
 }
 

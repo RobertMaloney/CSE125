@@ -21,45 +21,43 @@ using std::string;
 
 namespace Blob {
 
+
   typedef ByteBuffer Packet;
   typedef sockaddr_in SocketAddress;
+
 
   class Socket {
 
   public:
 
-    Socket(SocketAddress addr);
-    Socket();
-    virtual ~Socket();
+    Socket(void);
+    virtual ~Socket(void);
 
     void Close();
-    void Bind();
     void Bind(SocketAddress addr);
     void Connect(SocketAddress addr);
 
-    bool IsInitialized();
-    virtual void Initialize() = 0;
+    bool IsInitialized(void);
+    virtual void Initialize(void) = 0;
 
     virtual void Send(Packet* packet) = 0;
-    virtual Packet* Receive() = 0;
+    virtual Packet* Receive(void) = 0;
 
     void SetAddress(const string & ip);
-    void SetAddress(const string & ip, unsigned short port);
     void SetPortNo(unsigned short port);
 
-    unsigned short GetPort();
-    unsigned long GetAddress();
+    unsigned short GetPort(void);
+    unsigned long GetAddress(void);
 
-    string GetPortStr();
-    string GetAddressStr();
+    string GetPortStr(void);
+    string GetAddressStr(void);
+
+    SocketAddress GetSockName(void);
 
   protected:
 
-    SocketAddress GetSockName();
-
     int sock;
     bool initialized;
-    SocketAddress address;
 
   };
 
@@ -80,6 +78,7 @@ namespace Blob {
     int error;
 
   };
+
 
 }
 #endif

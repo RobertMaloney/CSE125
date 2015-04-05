@@ -2,7 +2,7 @@
 
 
 Blob::UdpSocket::UdpSocket(SocketAddress addr){
-  this->address = addr;
+
 }
 
 
