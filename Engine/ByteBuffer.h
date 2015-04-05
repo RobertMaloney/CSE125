@@ -1,5 +1,5 @@
-#ifndef GV_BYTEBUFFER_H
-#define GV_BYTEBUFFER_H
+#ifndef BLOB_BYTEBUFFER_H
+#define BLOB_BYTEBUFFER_H
 
 #include <stdexcept>
 

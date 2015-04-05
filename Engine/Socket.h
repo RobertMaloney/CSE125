@@ -1,5 +1,5 @@
-#ifndef GV_SOCKET_H
-#define GV_SOCKET_H
+#ifndef BLOB_SOCKET_H
+#define BLOB_SOCKET_H
 
 #ifdef _WIN32
 #include <WinSock2.h>

@@ -1,5 +1,5 @@
-#ifndef GV_ENDIANNESS_H
-#define GV_ENDIANNESS_H
+#ifndef BLOB_ENDIANNESS_H
+#define BLOB_ENDIANNESS_H
 
 
 inline short HostToNet(short bytes);

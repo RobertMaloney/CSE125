@@ -1,5 +1,5 @@
-#ifndef GV_UDPSOCKET_H
-#define GV_UDPSOCKET_H
+#ifndef BLOB_UDPSOCKET_H
+#define BLOB_UDPSOCKET_H
 
 #include "Socket.h"
 #include <iostream>
