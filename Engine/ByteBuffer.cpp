@@ -8,7 +8,7 @@ Blob::ByteBuffer::ByteBuffer(int capacity) {
 }
 
 
-Blob::ByteBuffer::~ByteBuffer() {
+Blob::ByteBuffer::~ByteBuffer(void) {
   if (front) {
     delete front;
   }
@@ -80,27 +80,27 @@ void Blob::ByteBuffer::Append(double bytes) {
 }
 
 
-int Blob::ByteBuffer::Size() {
+int Blob::ByteBuffer::Size(void) {
   return size;
 }
 
 
-int Blob::ByteBuffer::Capacity() {
+int Blob::ByteBuffer::Capacity(void) {
   return capacity;
 }
 
 
-char* Blob::ByteBuffer::Front() {
+char* Blob::ByteBuffer::Front(void) {
   return front;
 }
 
 
-char* Blob::ByteBuffer::Last() {
+char* Blob::ByteBuffer::Last(void) {
   return &front[size - 1];
 }
 
 
-char* Blob::ByteBuffer::Back() {
+char* Blob::ByteBuffer::Back(void) {
   return front + (capacity - 1);
 }
 
@@ -118,17 +118,4 @@ char & Blob::ByteBuffer::operator[](unsigned int i) {
     throw out_of_range(i + " is out of range.");
   }
   return front[i];
-}
-
-
-#include <iostream> 
-//#include "ByteOrder.h"
-#include <iomanip>
-
-// just here so it compiles
-int main(int argc, char* arv[]) {
-  int y = 0xAAFFEEBB;
- // std::cout << "orig " << std::hex <<  y << " " <<  HostToNet(y) << std::endl;
-  std::cin >> y;
-  return 0;
 }

@@ -7,13 +7,13 @@ Blob::UdpSocket::UdpSocket(SocketAddress addr){
 
 
 //TODO
-Blob::UdpSocket::~UdpSocket() {
+Blob::UdpSocket::~UdpSocket(void) {
 
 }
 
 
 // TODO
-void Blob::UdpSocket::Initialize() {
+void Blob::UdpSocket::Initialize(void) {
   if (!initialized) {
     cerr << "Initialize called after invalid socket construction." 
          << " Address : " << this << endl;
@@ -36,7 +36,7 @@ void Blob::UdpSocket::Send(Packet* packet) {
 
 
 //TODO
-Blob::Packet* Blob::UdpSocket::Receive() {
+Blob::Packet* Blob::UdpSocket::Receive(void) {
   return nullptr;
 }
 

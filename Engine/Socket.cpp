@@ -169,3 +169,8 @@ const string & Blob::SocketException::GetErrMsg(void) {
   return this->errMsg;
 }
 
+
+// Just here so the project will compile
+int main(int argc, char* argv[]) {
+  return 0;
+}
