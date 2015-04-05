@@ -2,6 +2,10 @@
 
 
 inline void ByteSwap(char* first, unsigned int size) {
+  if (size < 2) {
+    return;
+  }
+
   char bmask = (char) 0xFF;
   char temp = 0;
   char* lsb = first;
