@@ -41,8 +41,8 @@ void Blob::ByteBuffer::Append(char* firstByte, unsigned int numBytes) {
     this->Expand(size + numBytes);
   }
 
-  memmove(static_cast<void*>(&front[size]), 
-    static_cast<void*>(firstByte), numBytes);
+  memmove(static_cast<void*>(&front[size]), static_cast<void*>(firstByte), numBytes);
+  size += numBytes;
 }
 
 
