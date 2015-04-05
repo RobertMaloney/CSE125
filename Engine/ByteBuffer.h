@@ -30,7 +30,7 @@ namespace Blob {
     int Capacity(void);
 
     char* Front(void);
-    char* Last(void);
+    char* LastElement(void);
     char* Back(void);
 
     char operator[](unsigned int i) const;

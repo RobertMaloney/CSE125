@@ -95,7 +95,7 @@ char* Blob::ByteBuffer::Front(void) {
 }
 
 
-char* Blob::ByteBuffer::Last(void) {
+char* Blob::ByteBuffer::LastElement(void) {
   return &front[size - 1];
 }
 
