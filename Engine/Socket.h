@@ -15,11 +15,15 @@
 #include <stdexcept>
 #include <string>
 #include <exception>
+#include <mutex>
 
 #include "ByteBuffer.h"
 #include "Endianness.h"
 
 using std::string;
+using std::mutex;
+using std::lock_guard;
+
 
 namespace Blob {
 
@@ -45,8 +49,8 @@ namespace Blob {
     virtual void Send(Packet* packet) = 0;
     virtual Packet* Receive() = 0;
 
-    void DNSLookup(const string & hostName, const string & port, 
-                   int type, struct addrinfo* res);
+    static void DNSLookup(const string & hostName, const string & port, 
+                          int type, struct addrinfo* res);
 
     void SetNonBlocking();
 

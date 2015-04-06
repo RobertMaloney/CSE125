@@ -81,6 +81,10 @@ bool Blob::Socket::IsInitialized() {
 }
 
 
+/*
+ * If you use this function remember that you must free res when you are done 
+ * with it using freeaddrinfo()
+ */
 void Blob::Socket::DNSLookup(const string & hostName, const string & port, 
   int type, struct addrinfo* res) {
 
@@ -97,6 +101,11 @@ void Blob::Socket::DNSLookup(const string & hostName, const string & port,
 #endif
 
   if (getaddrinfo(hostName.c_str(), port.c_str(), &hints, result) != 0) {
+#ifdef _WIN32
+    freeaddrinfo(*result);
+#else
+    freeaddrinfo(result);
+#endif
     throw SocketException("Error in dns lookup.\n");
   }
 }
