@@ -86,7 +86,7 @@ bool Blob::Socket::IsInitialized() {
  * with it using freeaddrinfo()
  */
 void Blob::Socket::DNSLookup(const string & hostName, const string & port, 
-  int type, struct addrinfo* res) {
+  int type, struct addrinfo** res) {
 
   struct addrinfo hints;
   
@@ -94,18 +94,8 @@ void Blob::Socket::DNSLookup(const string & hostName, const string & port,
   hints.ai_family = AF_INET;
   hints.ai_socktype = type;
 
-#ifdef _WIN32
-  PADDRINFOA* result = reinterpret_cast<PADDRINFOA*>(res);
-#else
-  addrinfo* result = res;
-#endif
-
-  if (getaddrinfo(hostName.c_str(), port.c_str(), &hints, result) != 0) {
-#ifdef _WIN32
-    freeaddrinfo(*result);
-#else
-    freeaddrinfo(result);
-#endif
+  if (getaddrinfo(hostName.c_str(), port.c_str(), &hints, res) != 0) {
+    freeaddrinfo(*res);
     throw SocketException("Error in dns lookup.\n");
   }
 }

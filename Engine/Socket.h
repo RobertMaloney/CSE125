@@ -50,7 +50,7 @@ namespace Blob {
     virtual Packet* Receive() = 0;
 
     static void DNSLookup(const string & hostName, const string & port, 
-                          int type, struct addrinfo* res);
+                          int type, struct addrinfo** res);
 
     void SetNonBlocking();
 
