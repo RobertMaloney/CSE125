@@ -21,8 +21,6 @@
 #include "Endianness.h"
 
 using std::string;
-using std::mutex;
-using std::lock_guard;
 
 
 namespace Blob {
