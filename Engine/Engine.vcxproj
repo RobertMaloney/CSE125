@@ -64,19 +64,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ByteBuffer.h" />
-    <ClInclude Include="Endianness.h" />
-    <ClInclude Include="Socket.h" />
-    <ClInclude Include="UdpSocket.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="ByteBuffer.cpp" />
-    <ClCompile Include="Endianness.inl" />
-    <ClCompile Include="Socket.cpp" />
-    <ClCompile Include="UdpSocket.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="ClassDiagram.cd" />
+    <None Include="Net\Endianness.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Net\ByteBuffer.cpp" />
+    <ClCompile Include="Net\Socket.cpp" />
+    <ClCompile Include="Net\UdpSocket.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Net\ByteBuffer.h" />
+    <ClInclude Include="Net\Endianness.h" />
+    <ClInclude Include="Net\Socket.h" />
+    <ClInclude Include="Net\UdpSocket.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

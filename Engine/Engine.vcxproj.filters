@@ -13,39 +13,36 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Net">
-      <UniqueIdentifier>{62008b2c-3d34-400b-a6a3-940228750665}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="ByteBuffer.h">
-      <Filter>Net</Filter>
-    </ClInclude>
-    <ClInclude Include="Endianness.h">
-      <Filter>Net</Filter>
-    </ClInclude>
-    <ClInclude Include="Socket.h">
-      <Filter>Net</Filter>
-    </ClInclude>
-    <ClInclude Include="UdpSocket.h">
-      <Filter>Net</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="ByteBuffer.cpp">
-      <Filter>Net</Filter>
-    </ClCompile>
-    <ClCompile Include="Endianness.inl">
-      <Filter>Net</Filter>
-    </ClCompile>
-    <ClCompile Include="Socket.cpp">
-      <Filter>Net</Filter>
-    </ClCompile>
-    <ClCompile Include="UdpSocket.cpp">
-      <Filter>Net</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+    <None Include="Net\Endianness.inl">
+      <Filter>Header Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Net\ByteBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Net\Socket.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Net\UdpSocket.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Net\ByteBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Net\Endianness.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Net\Socket.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Net\UdpSocket.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
