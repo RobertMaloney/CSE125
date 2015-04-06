@@ -60,6 +60,8 @@ namespace Blob {
 
     SocketAddress GetLocalAddress();
 
+    string GetError();
+
   protected:
 
     int sock;

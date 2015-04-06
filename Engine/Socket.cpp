@@ -43,17 +43,11 @@ void Blob::Socket::Bind(SocketAddress addr) {
     throw SocketException("Socket not initialized.\n");
   }
 
-#ifdef _WIN32
-  if (bind(sock, reinterpret_cast<const sockaddr*>(&addr), sizeof(SocketAddress)) == SOCKET_ERROR) {
-    Close();
-    throw SocketException(WSAGetLastError());
-  }
-#else
   if (bind(sock, reinterpret_cast<const sockaddr*>(&addr), sizeof(SocketAddress)) < 0) {
     Close();
-    throw SocketException("Failed to bind.\n");
+    throw SocketException("Failed to bind. " + this->GetError());
   }
-#endif
+
 }
 
 
@@ -62,17 +56,11 @@ void Blob::Socket::Connect(SocketAddress addr) {
     throw SocketException("Socket not initialized.\n");
   }
 
-#ifdef _WIN32
-  if (connect(sock, reinterpret_cast<const sockaddr*>(&addr), sizeof(SocketAddress)) == SOCKET_ERROR) {
-    Close();
-    throw SocketException(WSAGetLastError());
-  }
-#else
   if (connect(sock, reinterpret_cast<const sockaddr*>(&addr), sizeof(SocketAddress)) < 0) {
     Close();
-    throw SocketException("Failed to bind.\n");
+    throw SocketException("Failed to Connect. " + this->GetError());
   }
-#endif
+
 }
 
 
@@ -96,7 +84,7 @@ void Blob::Socket::DNSLookup(const string & hostName, const string & port,
 
   if (getaddrinfo(hostName.c_str(), port.c_str(), &hints, res) != 0) {
     freeaddrinfo(*res);
-    throw SocketException("Error in dns lookup.\n");
+    throw SocketException("Error in dns lookup.");
   }
 }
 
@@ -105,16 +93,18 @@ void Blob::Socket::SetNonBlocking() {
   if (!initialized) {
     throw SocketException("Unitialized socket set non-blocking.\n");
   }
+
 #ifdef _WIN32
   u_long argp = 0;
+
   if (ioctlsocket(sock, FIONBIO, &argp) != NO_ERROR) {
     Close();
-    throw SocketException(WSAGetLastError());
+    throw SocketException("Could not set non-blocking. " + this->GetError());
   }
 #else
   if(fcntl(sock, FSETFL, O_NONBLOCK) < 0) {
     Close();
-    throw SocketException("Error setting to non-blocking.\n");
+    throw SocketException("Error setting to non-blocking. " + this->GetError());
   }
 #endif
 }
@@ -125,8 +115,8 @@ void Blob::Socket::SetLocalAddress(const string & ip) {
   memset(static_cast<void*>(&addr), 0, sizeof(SocketAddress));
 
   addr.sin_family = AF_INET;
-  inet_pton(AF_INET, ip.c_str(), &addr.sin_addr);
   addr.sin_port = this->GetLocalAddress().sin_port;
+  inet_pton(AF_INET, ip.c_str(), &addr.sin_addr);
 
   Bind(addr);
 }
@@ -145,24 +135,16 @@ void Blob::Socket::SetLocalPort(unsigned short port) {
 
 
 Blob::SocketAddress Blob::Socket::GetLocalAddress() {
-  int size = sizeof(sockaddr_in);
   SocketAddress info;
+  int size = sizeof(sockaddr_in);
 
   memset(static_cast<void*>(&info), 0, sizeof(SocketAddress));
 
-#ifdef _WIN32
-  if (getsockname(sock, reinterpret_cast<sockaddr*>(&info), &size) == SOCKET_ERROR ||
-      size != sizeof(SocketAddress)) {
+  if (getsockname(sock, reinterpret_cast<sockaddr*>(&info), &size) < 0 
+      || size != sizeof(SocketAddress)) {
         Close();
-        throw SocketException(WSAGetLastError());
+        throw SocketException("Error retrieving port information. " + this->GetError());
   }
-#else
-  if (getsockname(sock, reinterpret_cast<sockaddr*>(&info), &size) < 0) || 
-      size != sizeof(SocketAddress)) {
-        Close();
-        throw SocketException("Error retrieving port information.\n");
-  }
-#endif
   return info;
 }
 
@@ -175,10 +157,33 @@ string Blob::Socket::GetLocalPortStr() {
 string Blob::Socket::GetLocalAddressStr() {
   char str[INET_ADDRSTRLEN];
   SocketAddress info = this->GetLocalAddress();
+
   inet_ntop(AF_INET, static_cast<void*>(&info.sin_addr), str, INET_ADDRSTRLEN);
+
   return string(str);
 }
 
+
+
+string Blob::Socket::GetError() {
+#ifdef _WIN32
+  int err = WSAGetLastError();
+  LPSTR errString = NULL;
+
+  FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+    FORMAT_MESSAGE_FROM_SYSTEM | 
+    FORMAT_MESSAGE_IGNORE_INSERTS, 
+    NULL, err, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), 
+    (LPSTR) &errString, 0, NULL);
+
+  string result = string(errString);
+  LocalFree(errString);
+
+  return result;
+#else
+  return string(strerror(errno));
+#endif
+}
 
 /* ==================== SocketException ===================== */
 
