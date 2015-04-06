@@ -7,20 +7,20 @@ Blob::UdpSocket::UdpSocket(SocketAddress addr){
 
 
 //TODO
-Blob::UdpSocket::~UdpSocket(void) {
+Blob::UdpSocket::~UdpSocket() {
 
 }
 
 
 // TODO
-void Blob::UdpSocket::Initialize(void) {
+void Blob::UdpSocket::Initialize() {
   if (!initialized) {
     cerr << "Initialize called after invalid socket construction." 
          << " Address : " << this << endl;
     return;
   }
 
-  sock = static_cast<int>(socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP));
+  sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 }
 
 
@@ -36,7 +36,7 @@ void Blob::UdpSocket::Send(Packet* packet) {
 
 
 //TODO
-Blob::Packet* Blob::UdpSocket::Receive(void) {
+Blob::Packet* Blob::UdpSocket::Receive() {
   return nullptr;
 }
 

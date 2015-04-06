@@ -32,34 +32,31 @@ namespace Blob {
 
   public:
 
-    Socket(void);
-    virtual ~Socket(void);
+    Socket();
+    virtual ~Socket();
 
     void Close();
     void Bind(SocketAddress addr);
     void Connect(SocketAddress addr);
 
-    bool IsInitialized(void);
-    virtual void Initialize(void) = 0;
+    bool IsInitialized();
+    virtual void Initialize() = 0;
 
     virtual void Send(Packet* packet) = 0;
-    virtual Packet* Receive(void) = 0;
+    virtual Packet* Receive() = 0;
 
-    void Ioctl(long command, long argp);
+    void SetNonBlocking();
 
-    void SetSockOpt(int level, int optName, const char optVal, int optLen);
-    void GetSockOpt(int level, int optName, char optVal, int optLen);
+    void SetLocalAddress(const string & ip);
+    void SetLocalPort(unsigned short port);
 
-    void SetAddress(const string & ip);
-    void SetPortNo(unsigned short port);
+    unsigned short GetLocalPort();
+    unsigned long GetLocalAddress();
 
-    unsigned short GetPort(void);
-    unsigned long GetAddress(void);
+    string GetLocalPortStr();
+    string GetLocalAddressStr();
 
-    string GetPortStr(void);
-    string GetAddressStr(void);
-
-    SocketAddress GetSockName(void);
+    SocketAddress GetLocalSockName();
 
   protected:
 

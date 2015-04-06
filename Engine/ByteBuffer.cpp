@@ -8,7 +8,7 @@ Blob::ByteBuffer::ByteBuffer(int capacity) {
 }
 
 
-Blob::ByteBuffer::~ByteBuffer(void) {
+Blob::ByteBuffer::~ByteBuffer() {
   if (front) {
     delete front;
   }
@@ -56,51 +56,51 @@ void Blob::ByteBuffer::Append(char byte) {
 
 
 void Blob::ByteBuffer::Append(short bytes) {
-  this->Append((char*) &bytes, sizeof(bytes));
+  this->Append(reinterpret_cast<char*>(&bytes), sizeof(bytes));
 }
 
 
 void Blob::ByteBuffer::Append(int bytes) {
-  this->Append((char*) &bytes, sizeof(bytes));
+  this->Append(reinterpret_cast<char*>(&bytes), sizeof(bytes));
 }
 
 
 void Blob::ByteBuffer::Append(long bytes) {
-  this->Append((char*) &bytes, sizeof(bytes));
+  this->Append(reinterpret_cast<char*>(&bytes), sizeof(bytes));
 }
 
 
 void Blob::ByteBuffer::Append(float bytes) {
-  this->Append((char*) &bytes, sizeof(bytes));
+  this->Append(reinterpret_cast<char*>(&bytes), sizeof(bytes));
 }
 
 
 void Blob::ByteBuffer::Append(double bytes) {
-  this->Append((char*) &bytes, sizeof(bytes));
+  this->Append(reinterpret_cast<char*>(&bytes), sizeof(bytes));
 }
 
 
-int Blob::ByteBuffer::Size(void) {
+int Blob::ByteBuffer::Size() {
   return size;
 }
 
 
-int Blob::ByteBuffer::Capacity(void) {
+int Blob::ByteBuffer::Capacity() {
   return capacity;
 }
 
 
-char* Blob::ByteBuffer::Front(void) {
+char* Blob::ByteBuffer::Front() {
   return front;
 }
 
 
-char* Blob::ByteBuffer::LastElement(void) {
+char* Blob::ByteBuffer::LastElement() {
   return &front[size - 1];
 }
 
 
-char* Blob::ByteBuffer::Back(void) {
+char* Blob::ByteBuffer::Back() {
   return front + (capacity - 1);
 }
 

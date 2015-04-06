@@ -15,7 +15,7 @@ inline float NetToHost(float bytes);
 inline double NetToHost(double bytes);
 
 inline void ByteSwap(char* first, unsigned int size);
-inline bool IsBigEndian(void);
+inline bool IsBigEndian();
 
 
 #include "Endianness.inl"

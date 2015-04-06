@@ -14,7 +14,7 @@ namespace Blob {
     static const int DEFAULT_CAPACITY = 1500;
 
     ByteBuffer(int capacity = DEFAULT_CAPACITY);
-    ~ByteBuffer(void);
+    ~ByteBuffer();
 
     void Expand(int ncap);
 
@@ -26,12 +26,12 @@ namespace Blob {
     void Append(float bytes);
     void Append(double bytes);
 
-    int Size(void);
-    int Capacity(void);
+    int Size();
+    int Capacity();
 
-    char* Front(void);
-    char* LastElement(void);
-    char* Back(void);
+    char* Front();
+    char* LastElement();
+    char* Back();
 
     char operator[](unsigned int i) const;
     char & operator[](unsigned int i);

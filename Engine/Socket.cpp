@@ -4,12 +4,11 @@
 /* ==================== Socket ===================== */
 
 
-Blob::Socket::Socket(void) : sock(0), initialized(false) {
+Blob::Socket::Socket() : sock(0), initialized(false) {
 #ifdef _WIN32
   if (!initialized) {
     WSAData wsaData;
     if (WSAStartup(MAKEWORD(2, 0), &wsaData) != 0) {
-      WSACleanup();
       throw SocketException(WSAGetLastError());
     }
   }
@@ -17,19 +16,19 @@ Blob::Socket::Socket(void) : sock(0), initialized(false) {
 }
 
 
-Blob::Socket::~Socket(void) {
+Blob::Socket::~Socket() {
   if (sock && initialized) {
     Close();
   }
 }
 
 
-void Blob::Socket::Close(void) {
+void Blob::Socket::Close() {
   if (!initialized) {
     throw SocketException("Socket not initialized.\n");
   }
 #ifdef _WIN32
-  closesocket(static_cast<SOCKET>(sock));
+  closesocket(sock);
   WSACleanup();
 #else
   close(sock);
@@ -45,12 +44,12 @@ void Blob::Socket::Bind(SocketAddress addr) {
   }
 
 #ifdef _WIN32
-  if (bind(sock, (const sockaddr*) &addr, sizeof(SocketAddress)) == SOCKET_ERROR) {
+  if (bind(sock, reinterpret_cast<const sockaddr*>(&addr), sizeof(SocketAddress)) == SOCKET_ERROR) {
     Close();
     throw SocketException(WSAGetLastError());
   }
 #else
-  if (bind(sock, (sockaddr*) &addr, sizeof(SocketAddress)) < 0) {
+  if (bind(sock, reinterpret_cast<const sockaddr*>(&addr), sizeof(SocketAddress)) < 0) {
     Close();
     throw SocketException("Failed to bind.\n");
   }
@@ -64,12 +63,12 @@ void Blob::Socket::Connect(SocketAddress addr) {
   }
 
 #ifdef _WIN32
-  if (connect(sock, (const sockaddr*) &addr, sizeof(SocketAddress)) == SOCKET_ERROR) {
+  if (connect(sock, reinterpret_cast<const sockaddr*>(&addr), sizeof(SocketAddress)) == SOCKET_ERROR) {
     Close();
     throw SocketException(WSAGetLastError());
   }
 #else
-  if (connect(sock, (sockaddr*) &addr, sizeof(SocketAddress)) < 0) {
+  if (connect(sock, reinterpret_cast<const sockaddr*>(&addr), sizeof(SocketAddress)) < 0) {
     Close();
     throw SocketException("Failed to bind.\n");
   }
@@ -77,103 +76,64 @@ void Blob::Socket::Connect(SocketAddress addr) {
 }
 
 
-bool Blob::Socket::IsInitialized(void) {
+bool Blob::Socket::IsInitialized() {
   return initialized;
 }
 
 
-void Blob::Socket::Ioctl(long command, long argp) {
+void Blob::Socket::SetNonBlocking() {
+  if (!initialized) {
+    throw SocketException("Unitialized socket set non-blocking.\n");
+  }
 #ifdef _WIN32
-  if (ioctlsocket(sock, command, reinterpret_cast<u_long*>(&argp)) != NO_ERROR) {
-    if (initialized) {
-      Close();
-    }
+  u_long argp = 0;
+  if (ioctlsocket(sock, FIONBIO, &argp) != NO_ERROR) {
+    Close();
     throw SocketException(WSAGetLastError());
   }
 #else
-  if (fcntl(sock, (static_cast<int>(command), argp) < 0) {
-    if (initialized) {
-      Close();
-    }
-    throw SocketException("Unable to set option with Ioctl.\n");
+  if(fcntl(sock, FSETFL, O_NONBLOCK) < 0) {
+    Close();
+    throw SocketException("Error setting to non-blocking.\n");
   }
 #endif
 }
 
 
-void Blob::Socket::SetSockOpt(int level, int optName, const char optVal, int optLen) {
-#ifdef _WIN32
-  if (setsockopt(static_cast<SOCKET>(sock), level, optName, &optVal, optLen) == SOCKET_ERROR) {
-    if (initialized) {
-      Close();
-    }
-    throw SocketException(WSAGetLastError());
-  }
-#else
-  if (setsockopt(sock, level, optName, static_cast<const void*>(optVal), static_cast<socklen_t>(optLen)) < 0) {
-    if (initialized) {
-      Close();
-    }
-    throw SocketException("Unable to set option with Ioctl.\n");
-  }
-#endif
-}
-
-
-void Blob::Socket::GetSockOpt(int level, int optName, char optVal, int optLen) {
-#ifdef _WIN32
-  if (getsockopt(sock, level, optName, &optVal, &optLen) == SOCKET_ERROR) {
-    if (initialized) {
-      Close();
-    }
-    throw SocketException(WSAGetLastError());
-  }
-#else
-  if (getsockopt(sock, level, optName, static_cast<void*>(&optVal), 
-    static_cast<socklen_t*>(&optLen)) < 0) {
-    if (initialized) {
-      Close();
-    }
-    throw SocketException("Unable to set option with Ioctl.\n");
-  }
-#endif
-}
-
-
-void Blob::Socket::SetAddress(const string & ip) {
+void Blob::Socket::SetLocalAddress(const string & ip) {
   SocketAddress addr;
   memset(static_cast<void*>(&addr), 0, sizeof(SocketAddress));
   addr.sin_family = AF_INET;
   inet_pton(AF_INET, ip.c_str(), &addr.sin_addr);
-  addr.sin_port = this->GetSockName().sin_port;
+  addr.sin_port = this->GetLocalSockName().sin_port;
   Bind(addr);
 }
 
 
-void Blob::Socket::SetPortNo(unsigned short port) {
+void Blob::Socket::SetLocalPort(unsigned short port) {
   SocketAddress addr;
   memset(static_cast<void*>(&addr), 0, sizeof(SocketAddress));
   addr.sin_family = AF_INET;
-  addr.sin_addr.s_addr = this->GetSockName().sin_addr.s_addr;
+  addr.sin_addr.s_addr = this->GetLocalSockName().sin_addr.s_addr;
   addr.sin_port = HostToNet(port);
   Bind(addr);
 }
 
 
-Blob::SocketAddress Blob::Socket::GetSockName(void) {
+Blob::SocketAddress Blob::Socket::GetLocalSockName() {
   int size = sizeof(sockaddr_in);
   SocketAddress info;
 
   memset(static_cast<void*>(&info), 0, sizeof(SocketAddress));
 
 #ifdef _WIN32
-  if (getsockname(sock, (sockaddr*) &info, &size) == SOCKET_ERROR || 
+  if (getsockname(sock, reinterpret_cast<sockaddr*>(&info), &size) == SOCKET_ERROR ||
       size != sizeof(SocketAddress)) {
         Close();
         throw SocketException(WSAGetLastError());
   }
 #else
-  if (getsockname(sock, (sockaddr*) &info, &size) < 0) || 
+  if (getsockname(sock, reinterpret_cast<sockaddr*>(&info), &size) < 0) || 
       size != sizeof(SocketAddress)) {
         Close();
         throw SocketException("Error retrieving port information.\n");
@@ -183,24 +143,24 @@ Blob::SocketAddress Blob::Socket::GetSockName(void) {
 }
 
 
-unsigned short Blob::Socket::GetPort(void) {
-  return NetToHost(this->GetSockName().sin_port);
+unsigned short Blob::Socket::GetLocalPort() {
+  return NetToHost(this->GetLocalSockName().sin_port);
 }
 
 
-unsigned long Blob::Socket::GetAddress(void) {
-  return NetToHost(static_cast<long>(this->GetSockName().sin_addr.s_addr));
+unsigned long Blob::Socket::GetLocalAddress() {
+  return NetToHost(static_cast<long>(this->GetLocalSockName().sin_addr.s_addr));
 }
 
 
-string Blob::Socket::GetPortStr(void) {
-  return std::to_string(NetToHost(this->GetSockName().sin_port));
+string Blob::Socket::GetLocalPortStr() {
+  return std::to_string(NetToHost(this->GetLocalSockName().sin_port));
 }
 
 
-string Blob::Socket::GetAddressStr(void) {
+string Blob::Socket::GetLocalAddressStr() {
   char str[INET_ADDRSTRLEN];
-  SocketAddress info = this->GetSockName();
+  SocketAddress info = this->GetLocalSockName();
   inet_ntop(AF_INET, static_cast<void*>(&info.sin_addr), str, INET_ADDRSTRLEN);
   return string(str);
 }
@@ -219,12 +179,12 @@ Blob::SocketException::SocketException(string msg) {
 }
 
 
-int Blob::SocketException::GetError(void) {
+int Blob::SocketException::GetError() {
   return error;
 }
 
 
-const string & Blob::SocketException::GetErrMsg(void) {
+const string & Blob::SocketException::GetErrMsg() {
   return this->errMsg;
 }
 

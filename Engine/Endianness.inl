@@ -21,7 +21,7 @@ inline void ByteSwap(char* first, unsigned int size) {
 }
 
 
-inline bool IsBigEndian(void) {
+inline bool IsBigEndian() {
   int x = 1;
   return ((*(char*)&x) == 0);
 }

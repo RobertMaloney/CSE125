@@ -15,11 +15,11 @@ namespace Blob {
   public:
 
     UdpSocket(SocketAddress addr);
-    ~UdpSocket(void);
+    ~UdpSocket();
 
-    void Initialize(void) override;
+    void Initialize() override;
     void Send(Packet* packet) override;
-    Packet* Receive(void) override;
+    Packet* Receive() override;
 
   private:
 
