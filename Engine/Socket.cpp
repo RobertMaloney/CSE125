@@ -47,7 +47,6 @@ void Blob::Socket::Bind(SocketAddress addr) {
     Close();
     throw SocketException("Failed to bind. " + this->GetError());
   }
-
 }
 
 
@@ -60,7 +59,6 @@ void Blob::Socket::Connect(SocketAddress addr) {
     Close();
     throw SocketException("Failed to Connect. " + this->GetError());
   }
-
 }
 
 
