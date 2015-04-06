@@ -14,7 +14,6 @@ Blob::Socket::Socket(void) : sock(0), initialized(false) {
     }
   }
 #endif
-  initialized = true;
 }
 
 
@@ -80,6 +79,64 @@ void Blob::Socket::Connect(SocketAddress addr) {
 
 bool Blob::Socket::IsInitialized(void) {
   return initialized;
+}
+
+
+void Blob::Socket::Ioctl(long command, long argp) {
+#ifdef _WIN32
+  if (ioctlsocket(sock, command, reinterpret_cast<u_long*>(&argp)) != NO_ERROR) {
+    if (initialized) {
+      Close();
+    }
+    throw SocketException(WSAGetLastError());
+  }
+#else
+  if (fcntl(sock, (static_cast<int>(command), argp) < 0) {
+    if (initialized) {
+      Close();
+    }
+    throw SocketException("Unable to set option with Ioctl.\n");
+  }
+#endif
+}
+
+
+void Blob::Socket::SetSockOpt(int level, int optName, const char optVal, int optLen) {
+#ifdef _WIN32
+  if (setsockopt(static_cast<SOCKET>(sock), level, optName, &optVal, optLen) == SOCKET_ERROR) {
+    if (initialized) {
+      Close();
+    }
+    throw SocketException(WSAGetLastError());
+  }
+#else
+  if (setsockopt(sock, level, optName, static_cast<const void*>(optVal), static_cast<socklen_t>(optLen)) < 0) {
+    if (initialized) {
+      Close();
+    }
+    throw SocketException("Unable to set option with Ioctl.\n");
+  }
+#endif
+}
+
+
+void Blob::Socket::GetSockOpt(int level, int optName, char optVal, int optLen) {
+#ifdef _WIN32
+  if (getsockopt(sock, level, optName, &optVal, &optLen) == SOCKET_ERROR) {
+    if (initialized) {
+      Close();
+    }
+    throw SocketException(WSAGetLastError());
+  }
+#else
+  if (getsockopt(sock, level, optName, static_cast<void*>(&optVal), 
+    static_cast<socklen_t*>(&optLen)) < 0) {
+    if (initialized) {
+      Close();
+    }
+    throw SocketException("Unable to set option with Ioctl.\n");
+  }
+#endif
 }
 
 

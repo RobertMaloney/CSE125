@@ -6,6 +6,8 @@
 #include <WS2tcpip.h>
 #pragma comment(lib, "Ws2_32.lib")
 #else
+#include <sys/unistd.h>
+#include <sys/fcntl.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #endif
@@ -42,6 +44,11 @@ namespace Blob {
 
     virtual void Send(Packet* packet) = 0;
     virtual Packet* Receive(void) = 0;
+
+    void Ioctl(long command, long argp);
+
+    void SetSockOpt(int level, int optName, const char optVal, int optLen);
+    void GetSockOpt(int level, int optName, char optVal, int optLen);
 
     void SetAddress(const string & ip);
     void SetPortNo(unsigned short port);
