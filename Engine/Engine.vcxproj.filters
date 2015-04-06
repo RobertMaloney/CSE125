@@ -17,7 +17,7 @@
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
     <None Include="Net\Endianness.inl">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
