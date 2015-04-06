@@ -31,7 +31,7 @@ void Blob::Socket::Close() {
   closesocket(sock);
   WSACleanup();
 #else
-  close(sock);
+  ::close(sock);
 #endif
   sock = -1;
   initialized = false;
@@ -81,6 +81,27 @@ bool Blob::Socket::IsInitialized() {
 }
 
 
+void Blob::Socket::DNSLookup(const string & hostName, const string & port, 
+  int type, struct addrinfo* res) {
+
+  struct addrinfo hints;
+  
+  memset(static_cast<void*>(&hints), 0, sizeof(addrinfo));
+  hints.ai_family = AF_INET;
+  hints.ai_socktype = type;
+
+#ifdef _WIN32
+  PADDRINFOA* result = reinterpret_cast<PADDRINFOA*>(res);
+#else
+  addrinfo* result = res;
+#endif
+
+  if (getaddrinfo(hostName.c_str(), port.c_str(), &hints, result) != 0) {
+    throw SocketException("Error in dns lookup.\n");
+  }
+}
+
+
 void Blob::Socket::SetNonBlocking() {
   if (!initialized) {
     throw SocketException("Unitialized socket set non-blocking.\n");
@@ -103,9 +124,11 @@ void Blob::Socket::SetNonBlocking() {
 void Blob::Socket::SetLocalAddress(const string & ip) {
   SocketAddress addr;
   memset(static_cast<void*>(&addr), 0, sizeof(SocketAddress));
+
   addr.sin_family = AF_INET;
   inet_pton(AF_INET, ip.c_str(), &addr.sin_addr);
-  addr.sin_port = this->GetLocalSockName().sin_port;
+  addr.sin_port = this->GetLocalAddress().sin_port;
+
   Bind(addr);
 }
 
@@ -113,14 +136,16 @@ void Blob::Socket::SetLocalAddress(const string & ip) {
 void Blob::Socket::SetLocalPort(unsigned short port) {
   SocketAddress addr;
   memset(static_cast<void*>(&addr), 0, sizeof(SocketAddress));
+
   addr.sin_family = AF_INET;
-  addr.sin_addr.s_addr = this->GetLocalSockName().sin_addr.s_addr;
+  addr.sin_addr.s_addr = this->GetLocalAddress().sin_addr.s_addr;
   addr.sin_port = HostToNet(port);
+
   Bind(addr);
 }
 
 
-Blob::SocketAddress Blob::Socket::GetLocalSockName() {
+Blob::SocketAddress Blob::Socket::GetLocalAddress() {
   int size = sizeof(sockaddr_in);
   SocketAddress info;
 
@@ -143,24 +168,14 @@ Blob::SocketAddress Blob::Socket::GetLocalSockName() {
 }
 
 
-unsigned short Blob::Socket::GetLocalPort() {
-  return NetToHost(this->GetLocalSockName().sin_port);
-}
-
-
-unsigned long Blob::Socket::GetLocalAddress() {
-  return NetToHost(static_cast<long>(this->GetLocalSockName().sin_addr.s_addr));
-}
-
-
 string Blob::Socket::GetLocalPortStr() {
-  return std::to_string(NetToHost(this->GetLocalSockName().sin_port));
+  return std::to_string(NetToHost(this->GetLocalAddress().sin_port));
 }
 
 
 string Blob::Socket::GetLocalAddressStr() {
   char str[INET_ADDRSTRLEN];
-  SocketAddress info = this->GetLocalSockName();
+  SocketAddress info = this->GetLocalAddress();
   inet_ntop(AF_INET, static_cast<void*>(&info.sin_addr), str, INET_ADDRSTRLEN);
   return string(str);
 }

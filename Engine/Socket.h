@@ -45,18 +45,18 @@ namespace Blob {
     virtual void Send(Packet* packet) = 0;
     virtual Packet* Receive() = 0;
 
+    void DNSLookup(const string & hostName, const string & port, 
+                   int type, struct addrinfo* res);
+
     void SetNonBlocking();
 
     void SetLocalAddress(const string & ip);
     void SetLocalPort(unsigned short port);
 
-    unsigned short GetLocalPort();
-    unsigned long GetLocalAddress();
-
     string GetLocalPortStr();
     string GetLocalAddressStr();
 
-    SocketAddress GetLocalSockName();
+    SocketAddress GetLocalAddress();
 
   protected:
 
