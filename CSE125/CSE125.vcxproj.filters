@@ -15,34 +15,26 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram.cd" />
-    <None Include="Net\Endianness.inl">
-      <Filter>Source Files</Filter>
-    </None>
+    <ClInclude Include="Graphics\Cube.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Renderable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\GraphicsEngine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Net\ByteBuffer.cpp">
+    <ClCompile Include="Core\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Net\Socket.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Net\UdpSocket.cpp">
+    <ClCompile Include="Graphics\GraphicsEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Net\ByteBuffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Net\Endianness.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Net\Socket.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Net\UdpSocket.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <None Include="Graphics\Shaders\test.frag" />
+    <None Include="Graphics\Shaders\test.vert" />
   </ItemGroup>
 </Project>
