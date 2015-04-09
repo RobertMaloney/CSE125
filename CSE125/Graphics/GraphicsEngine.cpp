@@ -174,13 +174,16 @@ void GraphicsEngine::DrawAndPoll() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	GLint light = glGetUniformLocation(m_shaderProgram, "lightPosition");
-	glm::vec3 lightpos(0, 0, 1);
+	const float radius = 2.f;
+	float sine = radius*glm::sin(glm::radians(90 * glfwGetTime()));
+	float cosine = radius*glm::cos(glm::radians(90 * glfwGetTime()));
+	glm::vec3 lightpos(cosine, sine, 1);
 	glUniform3fv(light, 1, glm::value_ptr(lightpos));
 
 	// render objects
 	int renderableCount = m_objects.size();
 	for (int i = 0; i < renderableCount; ++i) {
-		m_objects[i]->getMatrix() = glm::rotate(m_objects[i]->getMatrix(), glm::radians(1.f), glm::vec3(0, 0, 1));
+		//m_objects[i]->getMatrix() = glm::rotate(m_objects[i]->getMatrix(), glm::radians(1.f), glm::vec3(0, 0, 1));
 		m_objects[i]->render();
 	}
 
