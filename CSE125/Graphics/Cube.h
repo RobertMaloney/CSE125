@@ -14,15 +14,70 @@ public:
 		m_matrix *= glm::mat4_cast(rotation);
 
 		GLfloat m_vertexData[] = {
-			halfLength, halfLength, halfLength, color[0], color[1], color[2],
-			halfLength, -halfLength, halfLength, color[0], color[1], color[2],
-			-halfLength, -halfLength, halfLength, color[0], color[1], color[2],
-			-halfLength, halfLength, halfLength, color[0], color[1], color[2],
+			// top
+			halfLength, halfLength, halfLength, 0.f, 0.f, 1.f, color[0], color[1], color[2], //0
+			halfLength, -halfLength, halfLength, 0.f, 0.f, 1.f, color[0], color[1], color[2], //1
+			-halfLength, -halfLength, halfLength, 0.f, 0.f, 1.f, color[0], color[1], color[2], //2
 
-			halfLength, halfLength, -halfLength, color[0], color[1], color[2],
-			halfLength, -halfLength, -halfLength, color[0], color[1], color[2],
-			-halfLength, -halfLength, -halfLength, color[0], color[1], color[2],
-			-halfLength, halfLength, -halfLength, color[0], color[1], color[2]
+			-halfLength, -halfLength, halfLength, 0.f, 0.f, 1.f, color[0], color[1], color[2], //2
+			-halfLength, halfLength, halfLength, 0.f, 0.f, 1.f, color[0], color[1], color[2], //3
+			halfLength, halfLength, halfLength, 0.f, 0.f, 1.f, color[0], color[1], color[2], //0
+
+			// bottom
+			halfLength, halfLength, -halfLength, 0.f, 0.f, -1.f, color[0], color[1], color[2], //4
+			halfLength, -halfLength, -halfLength, 0.f, 0.f, -1.f, color[0], color[1], color[2], //5
+			-halfLength, -halfLength, -halfLength, 0.f, 0.f, -1.f, color[0], color[1], color[2], //6
+
+			-halfLength, -halfLength, -halfLength, 0.f, 0.f, -1.f, color[0], color[1], color[2], //6
+			-halfLength, halfLength, -halfLength, 0.f, 0.f, -1.f, color[0], color[1], color[2], //7
+			halfLength, halfLength, -halfLength, 0.f, 0.f, -1.f, color[0], color[1], color[2], //4
+
+			// left
+			-halfLength, -halfLength, halfLength, -1.f, 0.f, 0.f, color[0], color[1], color[2], //2
+			-halfLength, halfLength, halfLength, -1.f, 0.f, 0.f, color[0], color[1], color[2], //3
+			-halfLength, halfLength, -halfLength, -1.f, 0.f, 0.f, color[0], color[1], color[2], //7
+
+			-halfLength, halfLength, -halfLength, -1.f, 0.f, 0.f, color[0], color[1], color[2], //7
+			-halfLength, -halfLength, -halfLength, -1.f, 0.f, 0.f, color[0], color[1], color[2], //6
+			-halfLength, -halfLength, halfLength, -1.f, 0.f, 0.f, color[0], color[1], color[2], //2
+
+			// right
+			halfLength, halfLength, halfLength, 1.f, 0.f, 0.f, color[0], color[1], color[2], //0
+			halfLength, -halfLength, halfLength, 1.f, 0.f, 0.f, color[0], color[1], color[2], //1
+			halfLength, -halfLength, -halfLength, 1.f, 0.f, 0.f, color[0], color[1], color[2], //5
+
+			halfLength, -halfLength, -halfLength, 1.f, 0.f, 0.f, color[0], color[1], color[2], //5
+			halfLength, halfLength, -halfLength, 1.f, 0.f, 0.f, color[0], color[1], color[2], //4
+			halfLength, halfLength, halfLength, 1.f, 0.f, 0.f, color[0], color[1], color[2], //0
+
+			// back
+			halfLength, halfLength, halfLength, 0.f, 1.f, 0.f, color[0], color[1], color[2], //0
+			-halfLength, halfLength, halfLength, 0.f, 1.f, 0.f, color[0], color[1], color[2], //3
+			-halfLength, halfLength, -halfLength, 0.f, 1.f, 0.f, color[0], color[1], color[2], //7
+
+			-halfLength, halfLength, -halfLength, 0.f, 1.f, 0.f, color[0], color[1], color[2], //7
+			halfLength, halfLength, -halfLength, 0.f, 1.f, 0.f, color[0], color[1], color[2], //4
+			halfLength, halfLength, halfLength, 0.f, 1.f, 0.f, color[0], color[1], color[2], //0
+
+			// front
+			halfLength, -halfLength, halfLength, 0.f, -1.f, 0.f, color[0], color[1], color[2], //1
+			-halfLength, -halfLength, halfLength, 0.f, -1.f, 0.f, color[0], color[1], color[2], //2
+			-halfLength, -halfLength, -halfLength, 0.f, -1.f, 0.f, color[0], color[1], color[2], //6
+
+			-halfLength, -halfLength, -halfLength, 0.f, -1.f, 0.f, color[0], color[1], color[2], //6
+			halfLength, -halfLength, -halfLength, 0.f, -1.f, 0.f, color[0], color[1], color[2], //5
+			halfLength, -halfLength, halfLength, 0.f, -1.f, 0.f, color[0], color[1], color[2] //1
+
+
+			//halfLength, halfLength, halfLength, color[0], color[1], color[2], //0
+			//halfLength, -halfLength, halfLength, color[0], color[1], color[2], //1
+			//-halfLength, -halfLength, halfLength, color[0], color[1], color[2], //2
+			//-halfLength, halfLength, halfLength, color[0], color[1], color[2], //3
+
+			//halfLength, halfLength, -halfLength, color[0], color[1], color[2], //4
+			//halfLength, -halfLength, -halfLength, color[0], color[1], color[2], //5
+			//-halfLength, -halfLength, -halfLength, color[0], color[1], color[2], //6
+			//-halfLength, halfLength, -halfLength, color[0], color[1], color[2] //7
 		};
 
 		GLuint m_elements[] = {
@@ -46,7 +101,7 @@ public:
 			6, 5, 1
 		};
 
-		bufferObject(GL_TRIANGLES, m_vertexData, sizeof(m_vertexData) / sizeof(GLfloat), m_elements, sizeof(m_elements) / sizeof(GLuint));
+		bufferObject(GL_TRIANGLES, m_vertexData, sizeof(m_vertexData) / sizeof(GLfloat));
 	}
 };
 #endif

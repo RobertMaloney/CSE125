@@ -24,11 +24,14 @@ private:
 	RenderMode	m_renderMode;
 	GLint		m_numElems, m_numVerts;
 	GLboolean	m_valid;
-	GLenum		m_elementType;
+	GLenum		m_drawType;
 
 protected:
 	glm::mat4 m_matrix;
 
+	// This bufferObject is used for element drawing
+	// TODO Allow object geometry updates OR prevent them
+	// TODO Handle normals
 	void bufferObject(GLenum elementType, GLfloat* vertexArray, int vertexLength, GLuint *elementArray, int elementLength){
 		glGenVertexArrays(1, &m_vao);
 		glBindVertexArray(m_vao);
@@ -39,7 +42,7 @@ protected:
 
 		m_numElems = elementLength;
 		m_numVerts = vertexLength;
-		m_elementType = elementType;
+		m_drawType = elementType;
 		m_renderMode = ELEMENTS;
 
 		glGenBuffers(1, &m_vbo);
@@ -66,6 +69,44 @@ protected:
 		glBindVertexArray(0);
 	}
 
+	// This bufferObject handles vertices only
+	void bufferObject(GLenum elementType, GLfloat* vertexArray, int vertexLength) {
+		glGenVertexArrays(1, &m_vao);
+		glBindVertexArray(m_vao);
+
+		m_valid = false;
+		if (vertexLength == 0) return;
+		m_valid = true;
+
+		m_numVerts = vertexLength;
+		m_drawType = elementType;
+		m_renderMode = VERTICES;
+
+		glGenBuffers(1, &m_vbo);
+		glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+		glBufferData(GL_ARRAY_BUFFER, vertexLength * sizeof(*vertexArray), vertexArray, GL_STATIC_DRAW);
+
+		GLint shaderProgram;
+		glGetIntegerv(GL_CURRENT_PROGRAM, &shaderProgram);
+
+		m_model = glGetUniformLocation(shaderProgram, "model");
+
+		// Vert in attributes
+		GLint posAttrib = glGetAttribLocation(shaderProgram, "position");
+		glEnableVertexAttribArray(posAttrib);
+		glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), 0);
+
+		GLint colAttrib = glGetAttribLocation(shaderProgram, "color");
+		glEnableVertexAttribArray(colAttrib);
+		glVertexAttribPointer(colAttrib, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(6 * sizeof(float)));
+
+		GLint normalAttrib = glGetAttribLocation(shaderProgram, "normal");
+		glEnableVertexAttribArray(normalAttrib);
+		glVertexAttribPointer(normalAttrib, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(3 * sizeof(float)));
+
+		glBindVertexArray(0);
+	}
+
 	~Renderable() {
 		glDeleteBuffers(1, &m_vbo);
 		glDeleteVertexArrays(1, &m_vao);
@@ -78,8 +119,8 @@ public:
 			glBindVertexArray(m_vao);
 			glUniformMatrix4fv(m_model, 1, GL_FALSE, glm::value_ptr(m_matrix));
 			switch (m_renderMode) {
-				case ELEMENTS: glDrawElements(m_elementType, m_numElems, GL_UNSIGNED_INT, 0); break;
-				case VERTICES: glDrawArrays(m_elementType, 0, 3); break;
+				case ELEMENTS: glDrawElements(m_drawType, m_numElems, GL_UNSIGNED_INT, 0); break;
+				case VERTICES: glDrawArrays(m_drawType, 0, m_numVerts / 9); break; // 3 vec3 per triangle
 			}
 			glBindVertexArray(0);
 		}

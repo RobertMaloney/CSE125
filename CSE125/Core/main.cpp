@@ -26,7 +26,7 @@ main(int argc, char** argv) {
 	}
 
 	GraphicsEngine::Destroy();
-
+	system("pause");
 	return 0;
 }
 

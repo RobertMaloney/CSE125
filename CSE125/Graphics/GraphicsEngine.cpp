@@ -70,7 +70,7 @@ void GraphicsEngine::Initialize() {
 	m_window = glfwCreateWindow(800, 800, "CSE 125", NULL, NULL);
 	glfwSetKeyCallback(m_window, key_callback);
 	glfwMakeContextCurrent(m_window);
-	glfwSwapInterval(0);
+	glfwSwapInterval(1);
 
 	glewExperimental = GL_TRUE;
 	glewInit();
@@ -117,8 +117,9 @@ void GraphicsEngine::Initialize() {
 	const int CUBE_COUNT = 100;
 	for (int i = 0; i < CUBE_COUNT; ++i) {
 		glm::vec3 position(-2.f + 0.4f*(i % 10), -2.f + 0.4f*(i / 10), 0.1f);
-		m_objects.push_back(new Cube(position, glm::angleAxis(glm::radians((float)i), glm::vec3(0, 0, 1)), glm::vec3(1.f, 0.f, 0.f), 0.02f + 0.08f * (i / (float)100)));
+		m_objects.push_back(new Cube(position, glm::angleAxis(glm::radians((float)i), glm::vec3(0, 0, 1)), glm::vec3(1.f, 1.f, 1.f), 0.02f + 0.08f * (i / (float)100)));
 	}
+	//m_objects.push_back(new Cube(glm::vec3(0, 0, 0), glm::quat(), glm::vec3(1.f, 1.f, 1.f), 0.5f));
 
 	// view and projection matrix locations in the shader program
 	m_uniView = glGetUniformLocation(m_shaderProgram, "view");
@@ -171,6 +172,10 @@ void GraphicsEngine::DrawAndPoll() {
 	glUniformMatrix4fv(m_uniProjection, 1, GL_FALSE, glm::value_ptr(m_projection));
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
+	GLint light = glGetUniformLocation(m_shaderProgram, "lightPosition");
+	glm::vec3 lightpos(0, 0, 1);
+	glUniform3fv(light, 1, glm::value_ptr(lightpos));
 
 	// render objects
 	int renderableCount = m_objects.size();
