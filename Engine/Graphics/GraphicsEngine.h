@@ -2,11 +2,11 @@
 #define GRAPHICS_ENGINE_H
 
 #define GLEW_STATIC
-#include <glew.h>
-#include <glm\glm.hpp>
+#include <GL\glew.h>
+#include <glm.hpp>
 #include <GLFW\glfw3.h>
-#include <glm\gtc\matrix_transform.hpp>
-#include <glm\gtc\type_ptr.hpp>
+#include <gtc\matrix_transform.hpp>
+#include <gtc\type_ptr.hpp>
 
 #include <vector>
 #include "Renderable.h"

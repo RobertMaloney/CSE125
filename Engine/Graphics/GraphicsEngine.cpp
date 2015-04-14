@@ -1,4 +1,4 @@
-#include "GraphicsEngine.h"
+
 
 // STL
 #include <stdio.h>
@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string>
 
+#include "GraphicsEngine.h"
 #include "..\Graphics\Cube.h"
 
 using namespace std;
@@ -59,8 +60,8 @@ void GraphicsEngine::Initialize() {
 		return;
 
 	// Load shader files
-	pair<string, int> vertInfo = TextFromFile("./Graphics/Shaders/test.vert");
-	pair<string, int> fragInfo = TextFromFile("./Graphics/Shaders/test.frag");
+	pair<string, int> vertInfo = TextFromFile("../Engine/Graphics/Shaders/test.vert");
+	pair<string, int> fragInfo = TextFromFile("../Engine/Graphics/Shaders/test.frag");
 
 	GLchar const* vertFiles[] = { version.c_str(), vertInfo.first.c_str() };
 	GLint vertLengths[] = { version.size(), vertInfo.second };
