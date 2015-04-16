@@ -8,11 +8,8 @@
 
 # Build results
 
-[Dd]ebug/
-[Rr]elease/
 x64/
 build/
-[Bb]in/
 [Oo]bj/
 
 # Enable "build/" folder in the NuGet Packages folder since NuGet packages use it for MSBuild targets
@@ -22,6 +19,12 @@ build/
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
 
+server.tlog/
+client.tlog/
+dust-core/
+
+*.exe
+*.tlog
 *_i.c
 *_p.c
 *.ilk
@@ -43,6 +46,7 @@ build/
 *.vssscc
 .builds
 *.pidb
+*.idb
 *.log
 *.scc
 
