@@ -8,8 +8,8 @@
 #include <string>
 
 #include "GraphicsEngine.h"
-#include "..\Graphics\Cube.h"
-#include "..\Graphics\Geometry.h"
+#include "..\graphics\Cube.h"
+#include "..\graphics\Geometry.h"
 
 using namespace std;
 
@@ -63,8 +63,8 @@ void GraphicsEngine::Initialize() {
 		return;
 
 	// Load shader files
-	pair<string, int> vertInfo = TextFromFile("../Engine/Graphics/Shaders/test.vert");
-	pair<string, int> fragInfo = TextFromFile("../Engine/Graphics/Shaders/test.frag");
+	pair<string, int> vertInfo = TextFromFile("../../../src/engine/graphics/Shaders/test.vert");
+	pair<string, int> fragInfo = TextFromFile("../../../src/engine/graphics/Shaders/test.frag");
 
 	GLchar const* vertFiles[] = { version.c_str(), vertInfo.first.c_str() };
 	GLint vertLengths[] = { version.size(), vertInfo.second };
@@ -125,8 +125,9 @@ void GraphicsEngine::Initialize() {
 		m_objects.push_back(new Cube(position, glm::angleAxis(glm::radians((float)i), glm::vec3(0, 0, 1)), glm::vec3(1.f, 1.f, 1.f), 0.02f + 0.08f * (i / (float)100)));
 	}
 	//m_objects.push_back(new Cube(glm::vec3(0, 0, 0), glm::quat(), glm::vec3(1.f, 1.f, 1.f), 0.5f));
+	printf("before teapot");
 	m_player = new Geometry("../teapot.obj");
-
+	printf("after teapot");
 	// view and projection matrix locations in the shader program
 	m_uniView = glGetUniformLocation(m_shaderProgram, "view");
 	m_uniProjection = glGetUniformLocation(m_shaderProgram, "projection");

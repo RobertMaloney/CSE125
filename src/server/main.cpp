@@ -6,8 +6,8 @@
 #include <iostream>
 #include <string>
 
-#include "../Engine/Network/TCPListener.h"
-#include "../Engine/Network/TCPConnection.h"
+#include "network\TCPListener.h"
+#include "network\TCPConnection.h"
 
 using std::cout;
 
@@ -26,14 +26,14 @@ int main(int argc, char* argv[]) {
             nclient = listener.Accept();
 
         }
-        numRecvd = nclient->Receive(static_cast<void*>(&buffer), 1024);
+     //   numRecvd = nclient->Receive(static_cast<void*>(&buffer), 1024);
 		if (numRecvd == 0){
 			nclient->Close();
 		}
 		if (numRecvd > 0){
 			cout << std::string(buffer) << std::endl;
 		}
-        nclient->Send(static_cast<void*>(&buffer), numRecvd);
+//        nclient->Send(static_cast<void*>(&buffer), numRecvd);
     }
     return 0;
 }
