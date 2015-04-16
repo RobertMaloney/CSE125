@@ -10,23 +10,10 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Graphics\Cube.h" />
-    <ClInclude Include="Graphics\GraphicsEngine.h" />
-    <ClInclude Include="Graphics\Renderable.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Core\main.cpp" />
-    <ClCompile Include="Graphics\GraphicsEngine.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Graphics\Shaders\test.frag" />
-    <None Include="Graphics\Shaders\test.vert" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{0B952AD5-5B2F-440E-8C5D-3178ED4B227A}</ProjectGuid>
+    <ProjectGuid>{FF4CBEF8-422C-4125-AED9-8AC4C35F0B4C}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>CSE125</RootNamespace>
+    <RootNamespace>Engine</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -65,13 +52,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\GLFW\glfw-3.1.1\include;C:\lib\glm;C:\lib\glew-1.12.0\include\GL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\lib\glew-1.12.0\include;C:\GLFW\glfw-3.1.1\include;C:\lib\glm\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\lib\glew-1.12.0\lib\Release\Win32;C:\GLFW\glfw-3.1.1\src\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -91,6 +78,30 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="core.cpp" />
+    <ClCompile Include="Graphics\GraphicsEngine.cpp" />
+    <ClCompile Include="Network\Socket.cpp" />
+    <ClCompile Include="Network\SocketSelector.cpp" />
+    <ClCompile Include="Network\TCPConnection.cpp" />
+    <ClCompile Include="Network\TCPListener.cpp" />
+    <ClCompile Include="Utility\ObjLoader.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Graphics\Cube.h" />
+    <ClInclude Include="Graphics\Geometry.h" />
+    <ClInclude Include="Graphics\GraphicsEngine.h" />
+    <ClInclude Include="Graphics\Renderable.h" />
+    <ClInclude Include="Network\Endianness.h" />
+    <ClInclude Include="Network\Socket.h" />
+    <ClInclude Include="Network\SocketSelector.h" />
+    <ClInclude Include="Network\TCPConnection.h" />
+    <ClInclude Include="Network\TCPListener.h" />
+    <ClInclude Include="Utility\ObjLoader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Network\Endianness.inl" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

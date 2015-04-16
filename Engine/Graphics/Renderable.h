@@ -1,16 +1,18 @@
 #ifndef RENDERABLE_H
 #define RENDERABLE_H
 
-#define GLEW_STATIC
-#include <glew.h>
-#include <GLFW\glfw3.h>
-#include <glm\glm.hpp>
-#include <glm\gtc\matrix_transform.hpp>
-#include <glm\gtc\type_ptr.hpp>
-#include <glm\gtx\quaternion.hpp>
-#include <glm\gtx\string_cast.hpp>
-
 #include <iostream>
+
+#define GLEW_STATIC
+#include <GL\glew.h>
+#include <GLFW\glfw3.h>
+#include <glm.hpp>
+#include <gtc\matrix_transform.hpp>
+#include <gtc\type_ptr.hpp>
+#include <gtx\quaternion.hpp>
+#include <gtx\string_cast.hpp>
+
+
 
 class Renderable
 {

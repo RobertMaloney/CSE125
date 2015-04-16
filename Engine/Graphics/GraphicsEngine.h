@@ -2,11 +2,11 @@
 #define GRAPHICS_ENGINE_H
 
 #define GLEW_STATIC
-#include <glew.h>
-#include <glm\glm.hpp>
+#include <GL\glew.h>
+#include <glm.hpp>
 #include <GLFW\glfw3.h>
-#include <glm\gtc\matrix_transform.hpp>
-#include <glm\gtc\type_ptr.hpp>
+#include <gtc\matrix_transform.hpp>
+#include <gtc\type_ptr.hpp>
 
 #include <vector>
 #include "Renderable.h"
@@ -21,6 +21,10 @@ public:
 	static void DrawAndPoll();
 	static void Destroy();
 	static void SetKeyCallback(KeyCallback);
+	static void MoveUp();
+	static void MoveLeft();
+	static void MoveDown();
+	static void MoveRight();
 	static KeyCallback GetKeyCallback();
 
 private:
@@ -31,6 +35,7 @@ private:
 	static std::vector<Renderable*> m_objects;
 	static GLuint					m_vertexShader, m_fragmentShader, m_shaderProgram;
 	static KeyCallback				m_keyCallback;
+	static Renderable				*m_player;
 };
 
 #endif

@@ -1,4 +1,4 @@
-#include "GraphicsEngine.h"
+
 
 // STL
 #include <stdio.h>
@@ -7,7 +7,9 @@
 #include <iostream>
 #include <string>
 
+#include "GraphicsEngine.h"
 #include "..\Graphics\Cube.h"
+#include "..\Graphics\Geometry.h"
 
 using namespace std;
 
@@ -25,6 +27,8 @@ GLuint				GraphicsEngine::m_vertexShader,
 					GraphicsEngine::m_shaderProgram;
 
 KeyCallback			GraphicsEngine::m_keyCallback = NULL;
+
+Renderable			*GraphicsEngine::m_player = NULL;
 
 string version = "#version 150\n";
 
@@ -59,14 +63,15 @@ void GraphicsEngine::Initialize() {
 		return;
 
 	// Load shader files
-	pair<string, int> vertInfo = TextFromFile("./Graphics/Shaders/test.vert");
-	pair<string, int> fragInfo = TextFromFile("./Graphics/Shaders/test.frag");
+	pair<string, int> vertInfo = TextFromFile("../Engine/Graphics/Shaders/test.vert");
+	pair<string, int> fragInfo = TextFromFile("../Engine/Graphics/Shaders/test.frag");
 
 	GLchar const* vertFiles[] = { version.c_str(), vertInfo.first.c_str() };
 	GLint vertLengths[] = { version.size(), vertInfo.second };
 	GLchar const* fragFiles[] = { version.c_str(), fragInfo.first.c_str() };
 	GLint fragLengths[] = { version.size(), fragInfo.second };
 
+	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 	m_window = glfwCreateWindow(800, 800, "CSE 125", NULL, NULL);
 	glfwSetKeyCallback(m_window, key_callback);
 	glfwMakeContextCurrent(m_window);
@@ -114,12 +119,13 @@ void GraphicsEngine::Initialize() {
 	glEnable(GL_DEPTH_TEST);
 
 	// Testing renderables
-	const int CUBE_COUNT = 100;
+	const int CUBE_COUNT = 0;
 	for (int i = 0; i < CUBE_COUNT; ++i) {
 		glm::vec3 position(-2.f + 0.4f*(i % 10), -2.f + 0.4f*(i / 10), 0.1f);
 		m_objects.push_back(new Cube(position, glm::angleAxis(glm::radians((float)i), glm::vec3(0, 0, 1)), glm::vec3(1.f, 1.f, 1.f), 0.02f + 0.08f * (i / (float)100)));
 	}
 	//m_objects.push_back(new Cube(glm::vec3(0, 0, 0), glm::quat(), glm::vec3(1.f, 1.f, 1.f), 0.5f));
+	m_player = new Geometry("../teapot.obj");
 
 	// view and projection matrix locations in the shader program
 	m_uniView = glGetUniformLocation(m_shaderProgram, "view");
@@ -130,7 +136,7 @@ void GraphicsEngine::Initialize() {
 		glm::vec3(0.f, 0.f, 0.f),
 		glm::vec3(0.f, 0.f, 1.f));
 
-	if (glGetError()) printf("Error Code: %d\n", glGetError());
+	if (glGetError() != 0) printf("Error Code: %d\n", glGetError());
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -166,7 +172,7 @@ void GraphicsEngine::DrawAndPoll() {
 	m_projection = glm::perspective(
 		glm::radians(45.f),
 		((float)height) / width,
-		1.f, 10.f);
+		1.f, 1000.f);
 
 	glUniformMatrix4fv(m_uniView, 1, GL_FALSE, glm::value_ptr(m_view));
 	glUniformMatrix4fv(m_uniProjection, 1, GL_FALSE, glm::value_ptr(m_projection));
@@ -183,9 +189,11 @@ void GraphicsEngine::DrawAndPoll() {
 	// render objects
 	int renderableCount = m_objects.size();
 	for (int i = 0; i < renderableCount; ++i) {
-		//m_objects[i]->getMatrix() = glm::rotate(m_objects[i]->getMatrix(), glm::radians(1.f), glm::vec3(0, 0, 1));
+		//m_objects[i]->getMatrix() = glm::translate(m_objects[i]->getMatrix(), glm::vec3(0, 0, -0.01f));
 		m_objects[i]->render();
 	}
+
+	m_player->render();
 
 	glfwSwapBuffers(m_window);
 	glfwPollEvents();
@@ -217,4 +225,24 @@ void GraphicsEngine::SetKeyCallback(KeyCallback key_fn) {
 
 KeyCallback GraphicsEngine::GetKeyCallback() {
 	return m_keyCallback;
+}
+
+void GraphicsEngine::MoveUp() {
+	if (m_player)
+	m_player->getMatrix() = glm::translate(m_player->getMatrix(), glm::vec3(0, -1, 0));
+}
+
+void GraphicsEngine::MoveLeft() {
+	if (m_player)
+	m_player->getMatrix() = glm::translate(m_player->getMatrix(), glm::vec3(1, 0, 0));
+}
+
+void GraphicsEngine::MoveDown() {
+	if (m_player)
+	m_player->getMatrix() = glm::translate(m_player->getMatrix(), glm::vec3(0, 1, 0));
+}
+
+void GraphicsEngine::MoveRight() {
+	if (m_player)
+	m_player->getMatrix() = glm::translate(m_player->getMatrix(), glm::vec3(-1, 0, 0));
 }
