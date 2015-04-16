@@ -19,4 +19,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="config_server.json">
+      <Filter>Source Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>

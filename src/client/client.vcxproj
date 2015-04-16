@@ -13,6 +13,9 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="config_client.json" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{876E3E63-59A0-421E-BF9E-7E2601CAD053}</ProjectGuid>
     <RootNamespace>client</RootNamespace>
