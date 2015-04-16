@@ -28,6 +28,8 @@ GLuint				GraphicsEngine::m_vertexShader,
 
 KeyCallback			GraphicsEngine::m_keyCallback = NULL;
 
+Renderable			*GraphicsEngine::m_player = NULL;
+
 string version = "#version 150\n";
 
 // Puts a file's contents into a string
@@ -69,6 +71,7 @@ void GraphicsEngine::Initialize() {
 	GLchar const* fragFiles[] = { version.c_str(), fragInfo.first.c_str() };
 	GLint fragLengths[] = { version.size(), fragInfo.second };
 
+	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 	m_window = glfwCreateWindow(800, 800, "CSE 125", NULL, NULL);
 	glfwSetKeyCallback(m_window, key_callback);
 	glfwMakeContextCurrent(m_window);
@@ -122,7 +125,7 @@ void GraphicsEngine::Initialize() {
 		m_objects.push_back(new Cube(position, glm::angleAxis(glm::radians((float)i), glm::vec3(0, 0, 1)), glm::vec3(1.f, 1.f, 1.f), 0.02f + 0.08f * (i / (float)100)));
 	}
 	//m_objects.push_back(new Cube(glm::vec3(0, 0, 0), glm::quat(), glm::vec3(1.f, 1.f, 1.f), 0.5f));
-	m_objects.push_back(new Geometry("../teapot.obj"));
+	m_player = new Geometry("../teapot.obj");
 
 	// view and projection matrix locations in the shader program
 	m_uniView = glGetUniformLocation(m_shaderProgram, "view");
@@ -190,6 +193,8 @@ void GraphicsEngine::DrawAndPoll() {
 		m_objects[i]->render();
 	}
 
+	m_player->render();
+
 	glfwSwapBuffers(m_window);
 	glfwPollEvents();
 }
@@ -220,4 +225,24 @@ void GraphicsEngine::SetKeyCallback(KeyCallback key_fn) {
 
 KeyCallback GraphicsEngine::GetKeyCallback() {
 	return m_keyCallback;
+}
+
+void GraphicsEngine::MoveUp() {
+	if (m_player)
+	m_player->getMatrix() = glm::translate(m_player->getMatrix(), glm::vec3(0, -1, 0));
+}
+
+void GraphicsEngine::MoveLeft() {
+	if (m_player)
+	m_player->getMatrix() = glm::translate(m_player->getMatrix(), glm::vec3(1, 0, 0));
+}
+
+void GraphicsEngine::MoveDown() {
+	if (m_player)
+	m_player->getMatrix() = glm::translate(m_player->getMatrix(), glm::vec3(0, 1, 0));
+}
+
+void GraphicsEngine::MoveRight() {
+	if (m_player)
+	m_player->getMatrix() = glm::translate(m_player->getMatrix(), glm::vec3(-1, 0, 0));
 }

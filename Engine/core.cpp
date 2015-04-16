@@ -19,6 +19,14 @@ using std::cout;
 static void keyCallback(int key, int action, int mods) {
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		GraphicsEngine::CloseGame();
+	else if (key == GLFW_KEY_W && (action == GLFW_PRESS || action == GLFW_REPEAT))
+		GraphicsEngine::MoveUp();
+	else if (key == GLFW_KEY_A && (action == GLFW_PRESS || action == GLFW_REPEAT))
+		GraphicsEngine::MoveLeft();
+	else if (key == GLFW_KEY_S && (action == GLFW_PRESS || action == GLFW_REPEAT))
+		GraphicsEngine::MoveDown();
+	else if (key == GLFW_KEY_D && (action == GLFW_PRESS || action == GLFW_REPEAT))
+		GraphicsEngine::MoveRight();
 }
 
 int main(int argc, char* argv[]) {

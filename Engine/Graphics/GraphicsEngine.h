@@ -21,6 +21,10 @@ public:
 	static void DrawAndPoll();
 	static void Destroy();
 	static void SetKeyCallback(KeyCallback);
+	static void MoveUp();
+	static void MoveLeft();
+	static void MoveDown();
+	static void MoveRight();
 	static KeyCallback GetKeyCallback();
 
 private:
@@ -31,6 +35,7 @@ private:
 	static std::vector<Renderable*> m_objects;
 	static GLuint					m_vertexShader, m_fragmentShader, m_shaderProgram;
 	static KeyCallback				m_keyCallback;
+	static Renderable				*m_player;
 };
 
 #endif
