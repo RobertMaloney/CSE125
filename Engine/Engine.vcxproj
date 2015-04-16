@@ -85,9 +85,11 @@
     <ClCompile Include="Network\SocketSelector.cpp" />
     <ClCompile Include="Network\TCPConnection.cpp" />
     <ClCompile Include="Network\TCPListener.cpp" />
+    <ClCompile Include="Utility\ObjLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\Cube.h" />
+    <ClInclude Include="Graphics\Geometry.h" />
     <ClInclude Include="Graphics\GraphicsEngine.h" />
     <ClInclude Include="Graphics\Renderable.h" />
     <ClInclude Include="Network\Endianness.h" />
@@ -95,6 +97,7 @@
     <ClInclude Include="Network\SocketSelector.h" />
     <ClInclude Include="Network\TCPConnection.h" />
     <ClInclude Include="Network\TCPListener.h" />
+    <ClInclude Include="Utility\ObjLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Network\Endianness.inl" />
