@@ -1,6 +1,5 @@
-#ifndef BLOB_ENDIANNESS_H
-#define BLOB_ENDIANNESS_H
-
+#ifndef ENDIANNESS_H
+#define ENDIANNESS_H
 
 inline short HostToNet(short bytes);
 inline int HostToNet(int bytes);
@@ -16,6 +15,7 @@ inline double NetToHost(double bytes);
 
 inline void ByteSwap(char* first, unsigned int size);
 inline bool IsBigEndian();
+
 
 
 #include "Endianness.inl"
