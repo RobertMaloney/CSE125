@@ -31,8 +31,6 @@ KeyCallback			GraphicsEngine::m_keyCallback = NULL;
 
 Renderable			*GraphicsEngine::m_player = NULL;
 
-std::vector<Event *> eventList;
-
 string version = "#version 150\n";
 
 // Puts a file's contents into a string
@@ -53,7 +51,7 @@ static pair<string, int> TextFromFile(string filename) {
 
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	if (GraphicsEngine::GetKeyCallback()) handleKey(key, action, mods);
+	InputHandler::eventList.push_back(InputHandler::handleKey(key, action, mods));
 }
 
 /**
@@ -201,6 +199,7 @@ void GraphicsEngine::DrawAndPoll() {
 
 	glfwSwapBuffers(m_window);
 	glfwPollEvents();
+   if (InputHandler::eventList.front) 
 }
 
 /**

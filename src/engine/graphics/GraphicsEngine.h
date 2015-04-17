@@ -10,6 +10,7 @@
 
 #include <vector>
 #include "Renderable.h"
+#include "../utility/Event.h"
 
 typedef void (*KeyCallback) (int,int,int);
 

@@ -1,5 +1,6 @@
 #include "InputHandler.h"
 #include "Event.h"
+#include <vector>
 
 Event * handleKey(int key, int state, int mods)
 {

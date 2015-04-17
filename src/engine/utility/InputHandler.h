@@ -4,6 +4,8 @@
 class InputHandler
 {
 public:
+   static std::vector<Event *> eventList;
+
    static Event * handleKey(int key, int state, int mods);
 };
 

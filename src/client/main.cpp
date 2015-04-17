@@ -42,6 +42,7 @@ int main(int argc, char* argv[]) {
 
 	while (!GraphicsEngine::Closing()) {
 		GraphicsEngine::DrawAndPoll();
+
 		client.Send(echo, 7);
 		client.Receive(static_cast<void*>(&buffer), 1024);
 
