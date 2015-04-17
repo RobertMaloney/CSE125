@@ -1,11 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Server", "Server\Server.vcxproj", "{3784B98B-BBED-4B7E-A64B-3F2AB8615594}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "server", "src\server\server.vcxproj", "{3784B98B-BBED-4B7E-A64B-3F2AB8615594}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FF4CBEF8-422C-4125-AED9-8AC4C35F0B4C} = {FF4CBEF8-422C-4125-AED9-8AC4C35F0B4C}
+	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "Engine\Engine.vcxproj", "{FF4CBEF8-422C-4125-AED9-8AC4C35F0B4C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "engine", "src\engine\engine.vcxproj", "{FF4CBEF8-422C-4125-AED9-8AC4C35F0B4C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "client", "src\client\client.vcxproj", "{876E3E63-59A0-421E-BF9E-7E2601CAD053}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FF4CBEF8-422C-4125-AED9-8AC4C35F0B4C} = {FF4CBEF8-422C-4125-AED9-8AC4C35F0B4C}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +29,10 @@ Global
 		{FF4CBEF8-422C-4125-AED9-8AC4C35F0B4C}.Debug|Win32.Build.0 = Debug|Win32
 		{FF4CBEF8-422C-4125-AED9-8AC4C35F0B4C}.Release|Win32.ActiveCfg = Release|Win32
 		{FF4CBEF8-422C-4125-AED9-8AC4C35F0B4C}.Release|Win32.Build.0 = Release|Win32
+		{876E3E63-59A0-421E-BF9E-7E2601CAD053}.Debug|Win32.ActiveCfg = Debug|Win32
+		{876E3E63-59A0-421E-BF9E-7E2601CAD053}.Debug|Win32.Build.0 = Debug|Win32
+		{876E3E63-59A0-421E-BF9E-7E2601CAD053}.Release|Win32.ActiveCfg = Release|Win32
+		{876E3E63-59A0-421E-BF9E-7E2601CAD053}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

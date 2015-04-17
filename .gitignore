@@ -8,12 +8,8 @@
 
 # Build results
 
-[Dd]ebug/
-[Rr]elease/
 x64/
 build/
-[Bb]in/
-[Oo]bj/
 
 # Enable "build/" folder in the NuGet Packages folder since NuGet packages use it for MSBuild targets
 !packages/*/build/
@@ -22,6 +18,12 @@ build/
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
 
+server.tlog/
+client.tlog/
+dust-core/
+
+*.exe
+*.tlog
 *_i.c
 *_p.c
 *.ilk
@@ -43,6 +45,7 @@ build/
 *.vssscc
 .builds
 *.pidb
+*.idb
 *.log
 *.scc
 
@@ -154,3 +157,4 @@ $RECYCLE.BIN/
 
 # Mac desktop service store files
 .DS_Store
+/lib/dusty-core/lib/dusty-core.lib
