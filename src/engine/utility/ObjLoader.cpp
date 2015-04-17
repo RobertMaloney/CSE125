@@ -5,6 +5,8 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
+#include <Windows.h>
+#include <tchar.h>
 
 using namespace std;
 
