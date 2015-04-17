@@ -46,12 +46,12 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)\bin\win32\debug\</OutDir>
-    <IntDir>$(SolutionDir)\bin\win32\tmp\client\</IntDir>
+    <OutDir>$(SolutionDir)\bin\win32\debug\client\</OutDir>
+    <IntDir>$(SolutionDir)\bin\win32\debug\client\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)\bin\win32\release\</OutDir>
-    <IntDir>$(SolutionDir)\bin\win32\tmp\client\</IntDir>
+    <OutDir>$(SolutionDir)\bin\win32\release\client\</OutDir>
+    <IntDir>$(SolutionDir)\bin\win32\release\client\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -62,11 +62,11 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;glew32s.lib;dusty-core.lib;%(AdditionalDependencies);</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\lib\glew\lib;..\..\lib\glfw\lib;..\..\lib\dusty-core\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <OutputFile>$(SolutionDir)\bin\win32\debug\$(TargetName)$(TargetExt)</OutputFile>
-      <ProgramDatabaseFile>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDatabaseFile>
+      <OutputFile>$(SolutionDir)\bin\win32\debug\client\$(TargetName)$(TargetExt)</OutputFile>
+      <ProgramDatabaseFile>$(OutDir)$(TargetName).pdb</ProgramDatabaseFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -85,7 +85,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>..\..\lib\glew\lib;..\..\lib\glfw\lib;..\..\lib\dusty-core\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;glew32s.lib;dusty-core.lib;%(AdditionalDependencies);</AdditionalDependencies>
-      <OutputFile>$(SolutionDir)\bin\win32\release\$(TargetName)$(TargetExt)</OutputFile>
+      <OutputFile>$(SolutionDir)\bin\win32\release\client\$(TargetName)$(TargetExt)</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
