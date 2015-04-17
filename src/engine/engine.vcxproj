@@ -103,6 +103,7 @@
   <ItemGroup>
     <ClCompile Include="core.cpp" />
     <ClCompile Include="Graphics\GraphicsEngine.cpp" />
+    <ClCompile Include="graphics\MoveEvent.cpp" />
     <ClCompile Include="Network\Socket.cpp" />
     <ClCompile Include="Network\SocketSelector.cpp" />
     <ClCompile Include="Network\TCPConnection.cpp" />
@@ -111,8 +112,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\Cube.h" />
+    <ClInclude Include="graphics\ActionEvent.h" />
     <ClInclude Include="Graphics\Geometry.h" />
     <ClInclude Include="Graphics\GraphicsEngine.h" />
+    <ClInclude Include="graphics\KeyCallback.h" />
+    <ClInclude Include="graphics\InputHandler.h" />
+    <ClInclude Include="graphics\MoveEvent.h" />
     <ClInclude Include="Graphics\Renderable.h" />
     <ClInclude Include="Network\Endianness.h" />
     <ClInclude Include="Network\Socket.h" />

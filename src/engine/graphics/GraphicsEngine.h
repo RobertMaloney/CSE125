@@ -26,6 +26,7 @@ public:
 	static void MoveDown();
 	static void MoveRight();
 	static KeyCallback GetKeyCallback();
+   static int getKeyState(int);
 
 private:
 	static glm::mat4				m_view, m_projection;

@@ -10,6 +10,7 @@
 #include "GraphicsEngine.h"
 #include "..\graphics\Cube.h"
 #include "..\graphics\Geometry.h"
+#include "..\utility\InputHandler.h"
 
 using namespace std;
 
@@ -29,6 +30,8 @@ GLuint				GraphicsEngine::m_vertexShader,
 KeyCallback			GraphicsEngine::m_keyCallback = NULL;
 
 Renderable			*GraphicsEngine::m_player = NULL;
+
+std::vector<Event *> eventList;
 
 string version = "#version 150\n";
 
@@ -50,7 +53,7 @@ static pair<string, int> TextFromFile(string filename) {
 
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	if (GraphicsEngine::GetKeyCallback()) GraphicsEngine::GetKeyCallback()(key, action, mods);
+	if (GraphicsEngine::GetKeyCallback()) handleKey(key, action, mods);
 }
 
 /**
