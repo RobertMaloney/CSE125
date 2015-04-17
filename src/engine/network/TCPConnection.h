@@ -8,6 +8,7 @@
 #include "Socket.h"
 
 using std::vector;
+using std::fill;
 
 typedef uint8_t byte;
 typedef vector<byte> Packet;
@@ -15,7 +16,7 @@ typedef vector<byte> Packet;
 const int DEFAULT_SOCKET_BUFSIZ = 8192;
 const int BYTES_IN_HEADER = 4;
 const int FREE_THRESHOLD = 512;
-const int MAX_SOCKET_BUFSIZ = 65511;
+const int MAX_SOCKET_BUFSIZ = MAX_PACKET_SIZE;
 
 class TCPConnection : public Socket {
 

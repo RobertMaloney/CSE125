@@ -25,6 +25,7 @@ int main(int argc, char* argv[]) {
     int numRecvd = 0;
 
     while (true) {
+        memset((void*) &p, 0, p.size());
         if (!nclient) {
             nclient = listener.Accept();
 			std::cout << "accepted new client" << std::endl;

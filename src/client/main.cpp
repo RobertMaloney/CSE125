@@ -49,28 +49,15 @@ int main(int argc, char* argv[]) {
 
 	}
 	
-
-	for (unsigned int i = 0; i < packets.size(); ++i){
-		for (auto it = packets[i].begin(); it != packets[i].end(); ++it){
-			std::cout << *it << " ";
-			std::cout << packets[i].size() << std::endl;
-			std::cout << packets.size() << std::endl;
-		}
-	}
-
-	std::cout << " ad " << packets.size() << std::endl;
 	
 	int i = 0;
 	while (!GraphicsEngine::Closing()) {
 		GraphicsEngine::DrawAndPoll();
-		std::cout << packets.size() << std::endl;
 		Packet p = packets[i % 26];
-		
-		std::cout << p.size() << std::endl;
-		std::cout << p.at(0) << std::endl;
+
 		client.Send(packets[i % 26]);
 		++i;
-		std::cout << i << std::endl;
+        std::cout << i << std::endl;
 		std::this_thread::sleep_for(std::chrono::seconds(2));
 	}
 	
