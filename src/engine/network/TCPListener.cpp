@@ -1,6 +1,6 @@
 #include "TCPListener.h"
 
-TCPListener::TCPListener() {}
+TCPListener::TCPListener() : Socket() {}
 
 
 TCPListener::~TCPListener() {

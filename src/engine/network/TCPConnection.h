@@ -39,7 +39,7 @@ protected:
     bool FillFromBuffer(Packet & packet);
     void ExpandReceiveBuff();
 
-	int nextPacketSize;
+	unsigned int nextPacketSize;
 
     vector<byte> sendBuffer;
     vector<byte> receiveBuffer;

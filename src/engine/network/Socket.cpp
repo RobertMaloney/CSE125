@@ -4,10 +4,10 @@
 /* ==================== Socket ===================== */
 
 // Constructors
-Socket::Socket() : sock(INACTIVE_SOCKET) {}
+Socket::Socket() : sock(INACTIVE_SOCKET), nonBlocking(false) {}
 
 
-Socket::Socket(int sockfd) : sock(sockfd) {}
+Socket::Socket(int sockfd) : sock(sockfd), nonBlocking(false) {}
 
 
 // Destructor

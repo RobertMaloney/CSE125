@@ -31,10 +31,12 @@ int main(int argc, char* argv[]) {
 			std::cout << "accepted new client" << std::endl;
         }
 		nclient->Receive(p);
-
+        
+        std::cout << "Packet : ";
 		for (auto it = p.begin(); it != p.end(); ++it){
-			std::cout << *it;
+			std::cout << std::to_string(*it);
 		}
+        p.resize(0);
 		std::cout << "" << std::endl;
 		std::this_thread::sleep_for(std::chrono::seconds(2));
     }
