@@ -4,6 +4,7 @@
 #include <string.h>
 // Note: move to client game class
 enum EventType {
+   DO_NOTHING,
    MOVE_UP,
    MOVE_DOWN,
    MOVE_LEFT,

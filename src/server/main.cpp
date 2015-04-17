@@ -38,6 +38,12 @@ int main(int argc, char* argv[]) {
          e.deserialize(buffer);
          if (e.theevent == EventType::MOVE_DOWN)
             cout << "down";
+         else if (e.theevent == EventType::MOVE_UP)
+            cout << "up";
+         else if (e.theevent == EventType::MOVE_LEFT)
+            cout << "left";
+         else if (e.theevent == EventType::MOVE_RIGHT)
+            cout << "right";
 		}
        nclient->Send(static_cast<void*>(&buffer), numRecvd);
     }

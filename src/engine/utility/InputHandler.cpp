@@ -6,10 +6,11 @@ std::deque<Event> InputHandler::eventList;
 
 Event InputHandler::handleKey(int key, int state, int mods)
 {
+   Event newevent;
+   newevent.theevent = EventType::DO_NOTHING;
+
    if (state == GLFW_PRESS || state == GLFW_REPEAT)
    {
-      Event newevent;
-
       switch (key) {
       case (GLFW_KEY_UP) :
          newevent.theevent = EventType::MOVE_UP;
@@ -29,4 +30,5 @@ Event InputHandler::handleKey(int key, int state, int mods)
          break;
       }
    }
+   return newevent;
 }
