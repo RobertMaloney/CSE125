@@ -103,11 +103,11 @@
   <ItemGroup>
     <ClCompile Include="core.cpp" />
     <ClCompile Include="Graphics\GraphicsEngine.cpp" />
-    <ClCompile Include="graphics\MoveEvent.cpp" />
     <ClCompile Include="Network\Socket.cpp" />
     <ClCompile Include="Network\SocketSelector.cpp" />
     <ClCompile Include="Network\TCPConnection.cpp" />
     <ClCompile Include="Network\TCPListener.cpp" />
+    <ClCompile Include="utility\InputHandler.cpp" />
     <ClCompile Include="Utility\ObjLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -115,15 +115,14 @@
     <ClInclude Include="graphics\ActionEvent.h" />
     <ClInclude Include="Graphics\Geometry.h" />
     <ClInclude Include="Graphics\GraphicsEngine.h" />
-    <ClInclude Include="graphics\KeyCallback.h" />
-    <ClInclude Include="graphics\InputHandler.h" />
-    <ClInclude Include="graphics\MoveEvent.h" />
     <ClInclude Include="Graphics\Renderable.h" />
     <ClInclude Include="Network\Endianness.h" />
     <ClInclude Include="Network\Socket.h" />
     <ClInclude Include="Network\SocketSelector.h" />
     <ClInclude Include="Network\TCPConnection.h" />
     <ClInclude Include="Network\TCPListener.h" />
+    <ClInclude Include="utility\Event.h" />
+    <ClInclude Include="utility\InputHandler.h" />
     <ClInclude Include="Utility\ObjLoader.h" />
   </ItemGroup>
   <ItemGroup>

@@ -9,13 +9,27 @@
 #include "network\TCPConnection.h"
 
 #include "graphics\GraphicsEngine.h"
-
-
+#include "utility\InputHandler.h"
+#include "utility\Event.h"
 
 using std::cout;
+TCPConnection client;
+
+void processEvents()
+{
+   char toSend[sizeof(int)];
+   if (InputHandler::eventList.size() != 0)
+   {
+      Event e = InputHandler::eventList.front();
+      InputHandler::eventList.pop_front();
+      e.serialize(toSend);
+      cout << toSend;
+      client.Send(toSend, sizeof(int));
+   }
+}
 
 
-static void keyCallback(int key, int action, int mods) {
+/*static void keyCallback(int key, int action, int mods) {
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		GraphicsEngine::CloseGame();
 	else if (key == GLFW_KEY_W && (action == GLFW_PRESS || action == GLFW_REPEAT))
@@ -26,14 +40,14 @@ static void keyCallback(int key, int action, int mods) {
 		GraphicsEngine::MoveDown();
 	else if (key == GLFW_KEY_D && (action == GLFW_PRESS || action == GLFW_REPEAT))
 		GraphicsEngine::MoveRight();
-}
+}*/
 
 int main(int argc, char* argv[]) {
 
 	GraphicsEngine::Initialize();
-	GraphicsEngine::SetKeyCallback(keyCallback);
+	//GraphicsEngine::SetKeyCallback(GraphicsEngine::);
 
-	TCPConnection client;
+
 	char buffer[1024];
 
 	memset((void*)&buffer, 0, 1024);
@@ -42,9 +56,9 @@ int main(int argc, char* argv[]) {
 
 	while (!GraphicsEngine::Closing()) {
 		GraphicsEngine::DrawAndPoll();
-
-		client.Send(echo, 7);
-		client.Receive(static_cast<void*>(&buffer), 1024);
+      processEvents();
+		//client.Send(echo, 7);
+		//client.Receive(static_cast<void*>(&buffer), 1024);
 
 	}
 

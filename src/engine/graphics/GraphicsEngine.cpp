@@ -11,6 +11,7 @@
 #include "..\graphics\Cube.h"
 #include "..\graphics\Geometry.h"
 #include "..\utility\InputHandler.h"
+#include "..\utility\Event.h"
 
 using namespace std;
 
@@ -127,7 +128,7 @@ void GraphicsEngine::Initialize() {
 	}
 	//m_objects.push_back(new Cube(glm::vec3(0, 0, 0), glm::quat(), glm::vec3(1.f, 1.f, 1.f), 0.5f));
 	printf("before teapot");
-	m_player = new Geometry("../teapot.obj");
+	m_player = new Geometry("../teapotss.obj");
 	printf("after teapot");
 	// view and projection matrix locations in the shader program
 	m_uniView = glGetUniformLocation(m_shaderProgram, "view");
@@ -199,7 +200,6 @@ void GraphicsEngine::DrawAndPoll() {
 
 	glfwSwapBuffers(m_window);
 	glfwPollEvents();
-   if (InputHandler::eventList.front) 
 }
 
 /**

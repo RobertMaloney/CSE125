@@ -1,23 +1,31 @@
 #include "InputHandler.h"
 #include "Event.h"
-#include <vector>
+#include <deque>
 
-Event * handleKey(int key, int state, int mods)
+std::deque<Event> InputHandler::eventList;
+
+Event InputHandler::handleKey(int key, int state, int mods)
 {
    if (state == GLFW_PRESS || state == GLFW_REPEAT)
    {
+      Event newevent;
+
       switch (key) {
       case (GLFW_KEY_UP) :
-         return new MoveEvent(MoveEvent::MoveDirection::UP);
+         newevent.theevent = EventType::MOVE_UP;
+         return newevent;
          break;
       case (GLFW_KEY_DOWN) :
-         return new MoveEvent(MoveEvent::MoveDirection::DOWN);
+         newevent.theevent = EventType::MOVE_DOWN;
+         return newevent;
          break;
       case (GLFW_KEY_LEFT) :
-         return new MoveEvent(MoveEvent::MoveDirection::LEFT);
+         newevent.theevent = EventType::MOVE_LEFT;
+         return newevent;
          break;
       case (GLFW_KEY_RIGHT) :
-         return new MoveEvent(MoveEvent::MoveDirection::RIGHT);
+         newevent.theevent = EventType::MOVE_RIGHT;
+         return newevent;
          break;
       }
    }

@@ -36,7 +36,7 @@
     <ClCompile Include="Utility\ObjLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="graphics\MoveEvent.cpp">
+    <ClCompile Include="utility\InputHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -71,16 +71,13 @@
     <ClInclude Include="Graphics\Geometry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="graphics\KeyCallback.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="graphics\ActionEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="graphics\MoveEvent.h">
+    <ClInclude Include="utility\InputHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="graphics\InputHandler.h">
+    <ClInclude Include="utility\Event.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
