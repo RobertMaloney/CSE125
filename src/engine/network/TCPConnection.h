@@ -8,7 +8,6 @@
 #include "Socket.h"
 
 using std::vector;
-using std::deque;
 
 typedef uint8_t byte;
 typedef vector<byte> Packet;

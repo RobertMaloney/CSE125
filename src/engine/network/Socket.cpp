@@ -122,7 +122,7 @@ string Socket::GetErrorMsg() {
         FORMAT_MESSAGE_FROM_SYSTEM |
         FORMAT_MESSAGE_IGNORE_INSERTS,
         NULL, err, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-        (LPSTR) &errString, 0, NULL);
+        (LPWSTR) &errString, 0, NULL);
 
     string result = string(errString) + "\n";
     LocalFree(errString);                    // we have to free the buffer the string was put in
@@ -187,7 +187,10 @@ AddressInfo* Socket::DNSLookup(const string& ip, const string& port, int sockTyp
     hints.ai_socktype = sockType; // whatever type of socket you want (SOCK_STREAM or SOCK_DGRAM)
 
     if (getaddrinfo(ip.c_str(), port.c_str(), &hints, &servinfo) != 0) {
-        freeaddrinfo(servinfo);
+		std::cout << WSAGetLastError() << std::endl;
+		if (servinfo){
+			freeaddrinfo(servinfo);
+		}
         return nullptr;
     }
     return servinfo;
