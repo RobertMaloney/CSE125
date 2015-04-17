@@ -3,33 +3,25 @@
 
 /* ==================== Socket ===================== */
 
-
-Socket::Socket() : sock(INACTIVE_SOCKET) {
-    this->Initialize();
-	nonBlocking = false;
-}
+// Constructors
+Socket::Socket() : sock(INACTIVE_SOCKET) {}
 
 
-Socket::Socket(int sockfd) : sock(sockfd) {
-    this->Initialize();
-	nonBlocking = false;
-}
+Socket::Socket(int sockfd) : sock(sockfd) {}
 
 
+// Destructor
 Socket::~Socket() {
-    if (this->IsSocketActive()) {
-        this->Close();
-    }
+    this->Close();
 }
 
 
 void Socket::Close() {
     if (!this->IsSocketActive()) {
-        this->DieWithError("Can not close inactive socket.");
+        return;
     }
 #ifdef _WIN32
     ::closesocket(sock);
-    WSACleanup();
 #else
     ::close(sock);
 #endif
@@ -49,22 +41,72 @@ void Socket::Close(int fd) {
 }
 
 
-void Socket::SetNoDelay(bool on) {
-    if (!this->IsSocketActive()) {
-        this->DieWithError("Trying to set inactive socket to no delay.");
+SocketError Socket::SetNoDelay(bool on) {
+    if (!this->IsSocketActive()) {           // cant change options on inactive sockets
+        return SE_BADFD;
     }
-    this->SetSockOpt(SOL_SOCKET, TCP_NODELAY, on ? 1 : 0);
+    return this->SetSockOpt(SOL_SOCKET, TCP_NODELAY, on ? 1 : 0);
 }
 
 
-int Socket::GetDescriptor() {
-    return sock;
-}
-
-
-int Socket::GetError() {
+SocketError Socket::SetNonBlocking(bool on) {
+    if (!this->IsSocketActive()) {            // cant change options on inactive sockets
+        return SE_BADFD;
+    }
 #ifdef _WIN32
-    return WSAGetLastError();
+    u_long flags = on ? 1 : 0;
+    if (::ioctlsocket(sock, FIONBIO, &flags) != NO_ERROR) {
+        return this->GetError();
+    }
+#else
+    int flags = on ? 1 : 0;
+    if(ioctl(sock, FIONBIO, &flags) != 0) {
+        return this->GetError();
+    }
+#endif
+    nonBlocking = on;     
+    return SE_NOERR;
+}
+
+
+SocketError Socket::GetError() {
+#ifdef _WIN32
+    switch (WSAGetLastError()) {
+    case WSAEWOULDBLOCK:
+        return SE_WOULDBLOCK;
+    case WSAEBADF:
+        return SE_BADFD;
+    case WSAEINPROGRESS:
+        return SE_INPROGRESS;
+    case WSAEALREADY:
+        return SE_INPROGRESS;
+    case WSAENOTSOCK:
+        return SE_BADFD;
+    case WSAEMSGSIZE:
+        return SE_PACKETSIZE;
+    case WSAEADDRINUSE:
+        return SE_ADDRINUSE;
+    case WSAECONNABORTED:
+        return SE_DISCONNECTED;
+    case WSAENETRESET:
+        return SE_DISCONNECTED;
+    case WSAECONNRESET:
+        return SE_DISCONNECTED;
+    case WSAESTALE:
+        return SE_BADFD;
+    case WSAECONNREFUSED:
+        return SE_NOCONNECT;
+    case WSAETIMEDOUT:
+        return SE_NOCONNECT;
+    case WSAESHUTDOWN:
+        return SE_BADFD;
+    case WSAENOTCONN:
+        return SE_DISCONNECTED;
+    case WSAEISCONN:
+        return SE_CONNECTED;
+    default:
+        return SE_UNKNOWN;
+    }
 #else
     return errno;
 #endif
@@ -73,17 +115,17 @@ int Socket::GetError() {
 
 string Socket::GetErrorMsg() {
 #ifdef _WIN32
-    int err = WSAGetLastError();
+    int err = WSAGetLastError();             // gets the last error on windows (like errno)
     LPSTR errString = NULL;
-    // lol this is one function call
+    // this monstrous function call will give us a system error message
     FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
         FORMAT_MESSAGE_FROM_SYSTEM |
         FORMAT_MESSAGE_IGNORE_INSERTS,
         NULL, err, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-        (LPWSTR) &errString, 0, NULL);
+        (LPSTR) &errString, 0, NULL);
 
     string result = string(errString) + "\n";
-    LocalFree(errString);
+    LocalFree(errString);                    // we have to free the buffer the string was put in
     return result;
 #else
     return string(strerror(errno)) + "\n";
@@ -91,30 +133,21 @@ string Socket::GetErrorMsg() {
 }
 
 
-void Socket::Initialize() {
-#ifdef _WIN32
-    WSAData wsaData;
-    WORD wsaVerRequested = MAKEWORD(2, 2);
-    if (WSAStartup(wsaVerRequested, &wsaData) != 0) {
-        this->DieWithError("Error in WSAStartup.");
-    }
-  
-#endif
-}
-
-
 inline bool Socket::IsSocketActive() {
-    return sock != INACTIVE_SOCKET;
+    return sock != INACTIVE_SOCKET;          // INACTIVE_SOCKET is -1. 
 }
 
 
-int Socket::SetSockOpt(int optLevel, int optName, int val) {
+SocketError Socket::SetSockOpt(int optLevel, int optName, int val) {
 #ifdef _WIN32
     const char opt = static_cast<char>(val);
 #else
     int opt = val;
 #endif
-    return setsockopt(sock, optLevel, optName, &opt, sizeof(opt));
+    if(setsockopt(sock, optLevel, optName, &opt, sizeof(opt)) != 0){
+        return this->GetError();
+    }
+    return SE_NOERR;
 }
 
 
@@ -132,17 +165,30 @@ int Socket::GetSockOpt(int optLevel, int optName) {
 }
 
 
+/* This only needs to be called once at the beginning of a program on windows. 
+ */
+void Socket::Initialize() {
+#ifdef _WIN32
+    WSAData wsaData;
+    WORD wsaVerRequested = MAKEWORD(2, 2);
+    if (WSAStartup(wsaVerRequested, &wsaData) != 0) {    // start the socket layer
+        throw SocketException("Unable to initialize socket layer.");
+    }
+#endif
+}
+
+
 AddressInfo* Socket::DNSLookup(const string& ip, const string& port, int sockType) {
     AddressInfo hints;
     AddressInfo *servinfo;
 
     memset(&hints, 0, sizeof hints);
     hints.ai_family = AF_INET; // IPv4
-    hints.ai_socktype = sockType;
+    hints.ai_socktype = sockType; // whatever type of socket you want (SOCK_STREAM or SOCK_DGRAM)
 
     if (getaddrinfo(ip.c_str(), port.c_str(), &hints, &servinfo) != 0) {
         freeaddrinfo(servinfo);
-        throw SocketException("Getaddrinfo failed in listen(). \n");
+        return nullptr;
     }
     return servinfo;
 }
@@ -150,9 +196,7 @@ AddressInfo* Socket::DNSLookup(const string& ip, const string& port, int sockTyp
 
 void Socket::DieWithError(const string & errMsg) {
     cerr << errMsg << "\tSYSTEM ERROR: " << this->GetErrorMsg() << endl;
-    if (this->IsSocketActive()) {
-        this->Close();
-    }
+    this->Close();
     throw SocketException(this->GetError());
 }
 
