@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {
 	char buffer[1024];
 
 	memset((void*)&buffer, 0, 1024);
-	//client.Connect(DEFAULT_SERVER_IP, DEFAULT_SERVER_PORT);
+	client.Connect(DEFAULT_SERVER_IP, DEFAULT_SERVER_PORT);
 	const char * echo = "echo..";
 	
 	vector<Packet> packets(26);
@@ -62,7 +62,7 @@ int main(int argc, char* argv[]) {
 	
 	int i = 0;
 	while (!GraphicsEngine::Closing()) {
-		//GraphicsEngine::DrawAndPoll();
+		GraphicsEngine::DrawAndPoll();
 		std::cout << packets.size() << std::endl;
 		Packet p = packets[i % 26];
 		
@@ -71,6 +71,7 @@ int main(int argc, char* argv[]) {
 		client.Send(packets[i % 26]);
 		++i;
 		std::cout << i << std::endl;
+		std::this_thread::sleep_for(std::chrono::seconds(2));
 	}
 	
 	GraphicsEngine::Destroy();

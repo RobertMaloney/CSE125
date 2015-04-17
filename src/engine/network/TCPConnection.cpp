@@ -56,12 +56,14 @@ SocketError TCPConnection::Send(const Packet & packet) {
 	std::cout << "22" << std::endl;
     // reserve enough space in the buffer to store the entire packet.
     if (packet.size() > sendBuffer.capacity() - sendBuffer.size()) {
-        sendBuffer.resize(sendBuffer.size() + packet.size() + sizeof(packet.size()));
+        sendBuffer.reserve(sendBuffer.size() + packet.size() + sizeof(packet.size()));
     }
 	std::cout << sendBuffer.size() << std::endl;
     // get the packet size so we can send that as the packet's header
-    uint32_t size = static_cast<uint32_t>(packet.size());
-    sendBuffer.push_back(HostToNet(size)); 
+    uint32_t size = HostToNet(static_cast<uint32_t>(packet.size()));
+	for (int i = 0; i < 4; ++i){
+		sendBuffer.push_back(size & (0xFF << (i * 8)));
+	}
 	std::cout << sendBuffer.size() << std::endl;
     // put the body of the packet in the buffer
     for (auto it = packet.begin(); it != packet.end(); ++it) {
@@ -88,7 +90,7 @@ SocketError TCPConnection::Send(const Packet & packet) {
         sendBuffer[spos] = sendBuffer[vpos];
     }
     // change the size to be correct after the send
-    sendBuffer.resize(packet.size() - numSent);
+    sendBuffer.resize(sendBuffer.size() - numSent);
     return SE_NOERR;
 }
 
@@ -156,7 +158,9 @@ bool TCPConnection::FillFromBuffer(Packet & packet) {
 		return false;
         
     }
-	nextPacketSize = NetToHost(receiveBuffer[0] | receiveBuffer[1] | receiveBuffer[2] | receiveBuffer[3]);
+	
+	nextPacketSize = NetToHost(receiveBuffer[0] << 24 | receiveBuffer[1] << 16 | receiveBuffer[2] << 8 | receiveBuffer[3]);
+
 	std::cout << "next packet size " << nextPacketSize << std::endl;
     // If the buffer doesn't contain a complete packet then return false
     if (receiveBuffer.size() - BYTES_IN_HEADER < (unsigned int) nextPacketSize) {
