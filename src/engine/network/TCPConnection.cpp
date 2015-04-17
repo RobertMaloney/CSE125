@@ -101,11 +101,14 @@ SocketError TCPConnection::Send(const Packet & packet) {
     return SE_NOERR;
 }
 
-
+void printBuffer(vector<byte> & buffer) {
+    for (auto it = buffer.begin(); it != buffer.end(); ++it) {
+        std::cout << std::to_string(*it) << " ";
+    }
+    std::cout << "\n";
+}
 
 SocketError TCPConnection::Receive(Packet & packet) {
-
-    std::cout << "1" << std::endl;
     // Try to grab a packet from the buffer before calling receive.
     if (this->FillFromBuffer(packet)) {
         return SE_NOERR;
@@ -116,7 +119,6 @@ SocketError TCPConnection::Receive(Packet & packet) {
         return SE_PACKETSIZE;
     }
 
-    std::cout << "2" << std::endl;
     // Caclulate how much buffer space we have. If the buffer is small try to make it bigger
     int bytesAvail = receiveBuffer.capacity() - receiveBuffer.size();
     if (bytesAvail < FREE_THRESHOLD && receiveBuffer.capacity() < MAX_SOCKET_BUFSIZ) {
@@ -125,10 +127,7 @@ SocketError TCPConnection::Receive(Packet & packet) {
 
     uint32_t buffPosition = receiveBuffer.size();
     receiveBuffer.resize(receiveBuffer.capacity());
-    std::cout << "3  bytes avail  " << bytesAvail <<  " receivebuff.size : " << receiveBuffer.size() << std::endl;
-    // receive as much as we can
     int bytesRecvd = this->Receive(receiveBuffer.data() + buffPosition, bytesAvail);
-    std::cout << "bytesRecvd " << bytesRecvd << std::endl;
 
     // check for errors
     if (bytesRecvd == 0) {          // 0 means the socket isnt connected anymore
@@ -136,17 +135,14 @@ SocketError TCPConnection::Receive(Packet & packet) {
     } else if (bytesRecvd < 0) {    // < 0 means there was some error
         return this->GetError();
     }
-    std::cout << "4 receivebuffer.size" << receiveBuffer.size() <<  "  prop new size " << receiveBuffer.size() + bytesRecvd << std::endl;
+
     // update the buffer size to reflect the number of bytes we got from the network
     receiveBuffer.resize(buffPosition + bytesRecvd);
-    for (auto it = receiveBuffer.begin(); it != receiveBuffer.end(); ++it) {
-        std::cout << std::to_string(*it) << " ";
-    }
-    std::cout << "\n";
-
+    printBuffer(receiveBuffer);
     this->FillFromBuffer(packet);               // try to get a packet from the buffer
     return SE_NOERR;
 }
+
 
 
 int TCPConnection::Send(const void* data, int size) {
@@ -170,43 +166,34 @@ int TCPConnection::Receive(void* buffer, int buffSize) {
 bool TCPConnection::FillFromBuffer(Packet & packet) {
     // if the buffer is as long as the header read the header so we know how many bytes to grab
     if (receiveBuffer.size() < BYTES_IN_HEADER) {
-        std::cout << "not enough data to fill. returning..." << std::endl;
         return false;
     }
 
     // If the buffer doesn't contain a complete packet then return false
     if (receiveBuffer.size() - BYTES_IN_HEADER < (unsigned int) nextPacketSize) {
-        std::cout << "returning false" << std::endl;
         return false;
     }
-    uint32_t x = 0;
-    x |= receiveBuffer[0] << 24; 
+
+    uint32_t x = receiveBuffer[0] << 24 | receiveBuffer[1] << 16 | receiveBuffer[2] << 8 | receiveBuffer[3];
+  /*  x |= receiveBuffer[0] << 24; 
     x |= receiveBuffer[1] << 16;
     x |= receiveBuffer[2] << 8;
-    x |= receiveBuffer[3];
-    std::cout << " x :::: " << x << std::endl;
+    x |= receiveBuffer[3];*/
+ 
     nextPacketSize = NetToHost(x);
-    std::cout << "next packet size ::::::: " << nextPacketSize << std::endl;
-    std::cout << "copying..." << std::endl;
+
     // Copy a packet into the packet buffer we were passed
     for (int i = 0; i < nextPacketSize; ++i) {
-        std::cout << "val : " << receiveBuffer[i + BYTES_IN_HEADER] << std::endl;
         packet.push_back(receiveBuffer[i + BYTES_IN_HEADER]);
     }
-    std::cout << "done." << std::endl;
     // calculate the leftover bytes then move them to the front of the buffer. THis way the nextPacketSize is always the 
     // first thing in the buffer. Resize the buffer so the size member variable is accurate.
     int bytesRemaining = receiveBuffer.size() - nextPacketSize - BYTES_IN_HEADER;
-    std::cout << "bytes remaining " << bytesRemaining << std::endl;
-    //memmove((void*) &receiveBuffer, (void*) (&receiveBuffer[0] + BYTES_IN_HEADER + nextPacketSize), bytesRemaining);
-    int i = 0;
-
-    for (; i < bytesRemaining; ++i) {
+    for (int i = 0; i < bytesRemaining; ++i) {
         receiveBuffer[i] = receiveBuffer[i + BYTES_IN_HEADER + nextPacketSize];
-        std::cout << receiveBuffer[i] << std::endl;
     }
-    receiveBuffer.resize(bytesRemaining);
 
+    receiveBuffer.resize(bytesRemaining);
     return true;
 }
 
