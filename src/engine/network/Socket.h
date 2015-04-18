@@ -48,6 +48,7 @@ enum SocketError {
     SE_ADDRINUSE,             // the address/port is already in use
     SE_PACKETSIZE,            // the packet was too big or too small 
     SE_INPROGRESS,            // an operation is already in progress
+	SE_NODATA,
     SE_UNKNOWN                // everything else not really interested in them
 };
 
