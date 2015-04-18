@@ -107,6 +107,7 @@
     <ClCompile Include="Network\SocketSelector.cpp" />
     <ClCompile Include="Network\TCPConnection.cpp" />
     <ClCompile Include="Network\TCPListener.cpp" />
+    <ClCompile Include="utility\EntityMap.cpp" />
     <ClCompile Include="Utility\ObjLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -119,6 +120,7 @@
     <ClInclude Include="Network\SocketSelector.h" />
     <ClInclude Include="Network\TCPConnection.h" />
     <ClInclude Include="Network\TCPListener.h" />
+    <ClInclude Include="utility\EntityMap.h" />
     <ClInclude Include="Utility\ObjLoader.h" />
   </ItemGroup>
   <ItemGroup>
