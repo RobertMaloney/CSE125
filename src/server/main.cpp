@@ -25,20 +25,23 @@ int main(int argc, char* argv[]) {
     int numRecvd = 0;
 
     while (true) {
-        memset((void*) &p, 0, p.size());
         if (!nclient) {
             nclient = listener.Accept();
 			std::cout << "accepted new client" << std::endl;
+			//nclient->SetNonBlocking(true);
         }
-		nclient->Receive(p);
-        
-        std::cout << "Packet : ";
-		for (auto it = p.begin(); it != p.end(); ++it){
-			std::cout << std::to_string(*it);
+		
+		if (nclient->Receive(p) == SE_NOERR){
+
+			std::cout << "Packet." << std::endl;
+			for (auto it = p.begin(); it != p.end(); ++it){
+				std::cout << std::to_string(*it);
+			}
+			
+			std::cout << "" << std::endl;
 		}
-        p.resize(0);
-		std::cout << "" << std::endl;
-		std::this_thread::sleep_for(std::chrono::seconds(2));
+		p.clear();
+		std::this_thread::sleep_for(std::chrono::seconds(3));
     }
     return 0;
 }
