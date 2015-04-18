@@ -175,7 +175,7 @@ bool TCPConnection::FillFromBuffer(Packet & packet, unsigned int & pos) {
     // read the header, it will tell us how many bytes in this "packet"
     unsigned int nextPacketSize = this->ReadHeader(pos);
     // if we cant get the whole packet do nothing
-    if (nextPacketSize > receiveBuffer.size() - pos) {
+    if (nextPacketSize + BYTES_IN_HEADER > receiveBuffer.size() - pos) {
         return false;
     }
     // skip the header since its still in the buffer
