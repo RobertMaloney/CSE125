@@ -7,7 +7,7 @@
 using namespace std;
 
 class Player {
-
+	enum BlobModel { OB, PB, BB, GB };//TODO put it outside
 protected:
 
 	int pid;
@@ -17,8 +17,14 @@ protected:
 	Location loc;
 	static int numOfPlayers;
 
+
+	BlobModel bm;
+
 public:
-	Player();
+
+
+	Player() :Player(OB) {};
+	Player(BlobModel thebm);
 	virtual ~Player();
 
 	int getSpeed();
