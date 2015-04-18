@@ -49,9 +49,7 @@ void GameServer::Run() {
         }
 
         for (auto it = clients->begin(); it != clients->end(); ++it) {
-
             SocketError err = it->second->Receive(updates);
-            
             if (this->ShouldTerminate(err)) {
                 it->second->Close();
                 delete it->second;
