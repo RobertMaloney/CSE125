@@ -35,7 +35,6 @@ void GameServer::Initialize() {
 
 
 void GameServer::Run() {
-
     deque<Packet> updates;
     TCPConnection* newClient = nullptr;
 
@@ -50,18 +49,20 @@ void GameServer::Run() {
         }
 
         for (auto it = clients->begin(); it != clients->end(); ++it) {
+
             SocketError err = it->second->Receive(updates);
+            
             if (this->ShouldTerminate(err)) {
                 it->second->Close();
                 delete it->second;
                 clients->erase(it->first);
+            } else {
+                this->PrintUpdates(updates);
+                it->second->Send(updates);
             }
-            this->PrintUpdates(updates);
-            it->second->Send(updates);
         }
         sleep_for(milliseconds(200));
     }
-
 }
 
 
