@@ -36,7 +36,7 @@ void ConnectionManager::ReceiveUpdates(deque<Packet> & updates) {
         TCPConnection* newConn = listener->Accept();
         if (newConn) {
             newConn->SetNoDelay(true);
-            newConn->SetNonBlocking(true);
+             newConn->SetNonBlocking(true);
             connections.push_back(newConn);
         }
     }
