@@ -13,7 +13,7 @@ using std::fill;
 typedef uint8_t byte;
 typedef vector<byte> Packet;
 
-const int DEFAULT_SOCKET_BUFSIZ = 8192;
+const int DEFAULT_SOCKET_BUFSIZ = 7;
 const int BYTES_IN_HEADER = 4;
 const int FREE_THRESHOLD = 512;
 const int MAX_SOCKET_BUFSIZ = MAX_PACKET_SIZE;
@@ -29,17 +29,21 @@ public:
     SocketError Connect(const string & ip, const string & port);
 
     SocketError Send(const Packet & packet);
+	SocketError Send(const vector<Packet> & packets);
+
     SocketError Receive(Packet & packet);
+	SocketError Receive(vector<Packet> & packets);
 
 
 protected:
 
-    int Send(const void* data, int size);
-    int Receive(void* buffer, int buffSize);
-    bool FillFromBuffer(Packet & packet);
-    void ExpandReceiveBuff();
+	SocketError Send();
+    SocketError Receive();
+	uint32_t ReadHeader(const int start);
+	bool WriteToBuffer(const Packet & packet);
+    bool FillFromBuffer(unsigned int pos, Packet & packet);
 
-	unsigned int nextPacketSize;
+	uint32_t nextPacketSize;
 
     vector<byte> sendBuffer;
     vector<byte> receiveBuffer;

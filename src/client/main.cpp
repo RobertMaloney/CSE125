@@ -40,13 +40,14 @@ int main(int argc, char* argv[]) {
 	memset((void*)&buffer, 0, 1024);
 	client.Connect(DEFAULT_SERVER_IP, DEFAULT_SERVER_PORT);
 	const char * echo = "echo..";
-	
-	vector<Packet> packets(26);
+	Packet p;
+	vector<Packet> packets;
 	for (int i = 0; i < 26; ++i){
-		Packet p;
-		p.push_back('a' + i);
-		packets[i] = p;
-
+		p.resize(0);
+		for (int j = 0; j < 3; ++j){
+			p.push_back('a' + i);
+		}
+		packets.push_back(p);
 	}
 	
 	
@@ -58,7 +59,7 @@ int main(int argc, char* argv[]) {
 		client.Send(packets[i % 26]);
 		++i;
         std::cout << i << std::endl;
-		std::this_thread::sleep_for(std::chrono::seconds(2));
+		std::this_thread::sleep_for(std::chrono::seconds(1));
 	}
 	
 	GraphicsEngine::Destroy();
