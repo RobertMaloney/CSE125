@@ -74,4 +74,5 @@ bool ObjLoader::LoadObj(const char * filePath, vector<float> & vertexData) {
 		// color
 		for (int j = 0; j < 3; ++j) vertexData.push_back(1.f);
 	}
+	return true;
 }

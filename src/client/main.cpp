@@ -33,20 +33,36 @@ int main(int argc, char* argv[]) {
 	GraphicsEngine::Initialize();
 	GraphicsEngine::SetKeyCallback(keyCallback);
 
+	Socket::Initialize();
 	TCPConnection client;
 	char buffer[1024];
 
+    srand(time(NULL));
 	memset((void*)&buffer, 0, 1024);
 	client.Connect(DEFAULT_SERVER_IP, DEFAULT_SERVER_PORT);
 	const char * echo = "echo..";
-
+	Packet p;
+	vector<Packet> packets;
+	for (int i = 0; i < 26; ++i){
+		p.resize(0);
+        int len = rand() % 100;
+        for (int j = 0; j < len; ++j) {
+			p.push_back('a' + i);
+		}
+		packets.push_back(p);
+	}
+	
+	
+	int i = 0;
 	while (!GraphicsEngine::Closing()) {
 		GraphicsEngine::DrawAndPoll();
-		client.Send(echo, 7);
-		client.Receive(static_cast<void*>(&buffer), 1024);
-
+		Packet p = packets[i % 26];
+		client.Send(p);
+		++i;
+        std::cout << i << " size : " << p.size() << std::endl;
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
-
+	
 	GraphicsEngine::Destroy();
 	system("pause");
 	return 0;
