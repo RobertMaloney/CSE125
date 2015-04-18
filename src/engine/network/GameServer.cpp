@@ -22,6 +22,7 @@ GameServer::~GameServer() {
     clients = nullptr;
 }
 
+
 void GameServer::Initialize() {
     Socket::Initialize();
     this->listener = new TCPListener();
