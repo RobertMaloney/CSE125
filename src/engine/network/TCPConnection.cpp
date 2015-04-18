@@ -220,7 +220,7 @@ int TCPConnection::Send(byte* buffer, int size) {
 #ifdef _WIN32
     return ::send(sock, reinterpret_cast<char*>(buffer), size, 0);
 #else
-    return ::send(sock, reinterpret_cast<char*>(buffer), size, 0);
+    return ::send(sock, reinterpret_cast<void*>(buffer), size, 0);
 #endif
 }
 
@@ -229,7 +229,7 @@ int TCPConnection::Recv(byte* buffer, int size) {
 #ifdef _WIN32
     return ::recv(sock, reinterpret_cast<char*>(buffer), size, 0);
 #else
-    return ::recv(sock, reinterpret_cast<char*>(buffer), size, 0);
+    return ::recv(sock, reinterpret_cast<void*>(buffer), size, 0);
 #endif
 }
 
