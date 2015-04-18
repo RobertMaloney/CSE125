@@ -38,9 +38,11 @@ SocketError TCPConnection::Connect(const string & ip, const string & port) {
         }
         break;
     }
+
     if (iter != nullptr) {
         freeaddrinfo(iter);
     }
+
     return (sock == INACTIVE_SOCKET) ? SE_NOCONNECT : SE_NOERR;
 }
 
@@ -61,10 +63,12 @@ SocketError TCPConnection::Send(const vector<Packet> & packets) {
 
 SocketError TCPConnection::Receive(Packet & packet) {
     unsigned int pos = 0;
+
     if (this->FillFromBuffer(packet, pos)) {
         this->ShiftBuffer(receiveBuffer, pos);
         return SE_NOERR;
     }
+
     SocketError err = this->Receive();
     pos = 0;
     err = (this->FillFromBuffer(packet, pos)) ? SE_NOERR : err;
@@ -77,7 +81,9 @@ void TCPConnection::ShiftBuffer(vector<byte> & buffer, unsigned int nextToRead) 
     if (nextToRead <= 0) {
         return;
     }
+
     unsigned int numToMove = buffer.size() - nextToRead;
+
     for (unsigned int pos = 0; nextToRead < buffer.size();) {
         buffer[pos++] = buffer[nextToRead++];
     }
@@ -101,7 +107,6 @@ SocketError TCPConnection::Receive(vector<Packet> & packets) {
     while (this->FillFromBuffer(p, pos)) {
         packets.push_back(p);
     }
-
     this->ShiftBuffer(receiveBuffer, pos);
     return (packets.size() == 0) ? SE_NODATA : SE_NOERR;
 }
@@ -115,13 +120,11 @@ SocketError TCPConnection::Send() {
     } else if (bytesSent < 0) {     // if less than 0 there was some error so return it
         return this->GetError();
     }
-
     // move all the unsent (leftover) bytes to the front of the buffer
     unsigned int vpos, spos;
     for (vpos = bytesSent, spos = 0; vpos < sendBuffer.size(); ++spos, ++vpos) {
         sendBuffer[spos] = sendBuffer[vpos];
     }
-
     // change the size to be correct after the send
     sendBuffer.resize(sendBuffer.size() - bytesSent);
     return SE_NOERR;
@@ -133,7 +136,6 @@ SocketError TCPConnection::Receive() {
     if (receiveBuffer.size() > MAX_PACKET_SIZE) {
         return SE_PACKETSIZE;
     }
-
     // Caclulate how much buffer space we have. If the buffer is small try to make it bigger
     int bytesAvail = receiveBuffer.capacity() - receiveBuffer.size();
     if (bytesAvail < FREE_THRESHOLD && receiveBuffer.capacity() < MAX_SOCKET_BUFSIZ) {
@@ -183,17 +185,14 @@ bool TCPConnection::WriteToBuffer(const Packet & packet) {
     if (packet.size() == 0) {
         return false;
     }
-
     // if there's a problem with the packet's size return the PACKETSIZE error
     if (packet.size() > MAX_PACKET_SIZE || packet.size() < 0) {
         return false;
     }
-
     // reserve enough space in the buffer to store the entire packet.
     if (packet.size() > sendBuffer.capacity() - sendBuffer.size()) {
         sendBuffer.reserve(sendBuffer.size() + packet.size() + sizeof(packet.size()));
     }
-
     // write the packet size to the buffer
     uint32_t mask = 0xFF000000;
     uint32_t size = HostToNet(static_cast<uint32_t>(packet.size()));
@@ -201,7 +200,6 @@ bool TCPConnection::WriteToBuffer(const Packet & packet) {
         sendBuffer.push_back((size & mask) >> (i * 8));
         mask >>= 8;
     }
-
     // put the body of the packet in the buffer
     for (auto it = packet.begin(); it != packet.end(); ++it) {
         sendBuffer.push_back(*it);
