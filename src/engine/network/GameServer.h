@@ -19,7 +19,8 @@ public:
 
 private:
 
-    ConnectionManager* clients;
+    int maxConnections;
+    TCPListener* listener;
 
 };
 

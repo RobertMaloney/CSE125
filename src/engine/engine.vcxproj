@@ -103,7 +103,6 @@
   <ItemGroup>
     <ClCompile Include="core.cpp" />
     <ClCompile Include="Graphics\GraphicsEngine.cpp" />
-    <ClCompile Include="network\ConnectionManager.cpp" />
     <ClCompile Include="network\GameServer.cpp" />
     <ClCompile Include="Network\Socket.cpp" />
     <ClCompile Include="Network\SocketSelector.cpp" />
@@ -116,7 +115,6 @@
     <ClInclude Include="Graphics\Geometry.h" />
     <ClInclude Include="Graphics\GraphicsEngine.h" />
     <ClInclude Include="Graphics\Renderable.h" />
-    <ClInclude Include="network\ConnectionManager.h" />
     <ClInclude Include="Network\Endianness.h" />
     <ClInclude Include="network\GameServer.h" />
     <ClInclude Include="Network\Socket.h" />
