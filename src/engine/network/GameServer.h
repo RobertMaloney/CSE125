@@ -9,6 +9,8 @@
 #include "TCPConnection.h"
 #include "TCPListener.h"
 
+using std::this_thread::sleep_for;
+using std::chrono::milliseconds;
 using std::to_string;
 using std::unordered_map;
 using std::make_pair;
@@ -30,11 +32,12 @@ public:
 
 private:
 
+    bool ShouldTerminate(SocketError err);
     void PrintUpdates(deque<Packet> & updates);
 
-    unsigned int maxConnections;
     ClientId nextCid;
     TCPListener* listener;
+    unsigned int maxConnections;
     unordered_map<ClientId, TCPConnection*>* clients;
 };
 

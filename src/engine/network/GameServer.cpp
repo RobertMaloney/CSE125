@@ -1,16 +1,5 @@
 #include "GameServer.h"
 
-/*
-namespace std {
-    template<>
-    struct hash<ClientId> {
-    public:
-        size_t operator()(const ClientId & id) const {
-            return static_cast<int>(id);
-        }
-    };
-}*/
-
 
 GameServer::GameServer() {
     this->clients = new unordered_map<ClientId, TCPConnection*>();
@@ -21,6 +10,12 @@ GameServer::~GameServer() {
     if (listener) {
         listener->Close();
         delete listener;
+    }
+    for (auto it = clients->begin(); it != clients->end(); ++it) {
+        if (it->second) {
+            delete it->second;
+            it->second = nullptr;
+        }
     }
 }
 
@@ -51,13 +46,40 @@ void GameServer::Run() {
         }
 
         for (auto it = clients->begin(); it != clients->end(); ++it) {
-            it->second->Receive(updates);
+            SocketError err = it->second->Receive(updates);
+            if (this->ShouldTerminate(err)) {
+                it->second->Close();
+                delete it->second;
+                clients->erase(it->first);
+            }
             this->PrintUpdates(updates);
-          //  it->second->Send(updates);
+            it->second->Send(updates);
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+        sleep_for(milliseconds(200));
     }
 
+}
+
+
+bool GameServer::ShouldTerminate(SocketError err) {
+    switch (err) {
+    case SE_NOERR:
+        return false;
+    case SE_WOULDBLOCK: 
+        return false;
+    case SE_DISCONNECTED:
+        return true;
+    case SE_BADFD:
+        return true;
+    case SE_NOCONNECT:
+        return true;
+    case SE_NODATA:
+        return false;
+    case SE_PACKETSIZE:
+        return true;
+    default:
+        return true;
+    }
 }
 
 
