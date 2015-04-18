@@ -70,16 +70,8 @@ bool GameServer::ShouldTerminate(SocketError err) {
         return false;
     case SE_WOULDBLOCK: 
         return false;
-    case SE_DISCONNECTED:
-        return true;
-    case SE_BADFD:
-        return true;
-    case SE_NOCONNECT:
-        return true;
     case SE_NODATA:
         return false;
-    case SE_PACKETSIZE:
-        return true;
     default:
         return true;
     }
