@@ -26,7 +26,7 @@ TCPConnection::~TCPConnection() {
 
 SocketError TCPConnection::Connect(const string & ip, const string & port) {
     AddressInfo *iter = this->DNSLookup(ip, port, SOCK_STREAM);
-
+    // iterate over available address and try to connect. if ones successful we break
     for (; iter; iter = iter->ai_next) {
         sock = socket(iter->ai_family, iter->ai_socktype, iter->ai_protocol);
         if (sock == INACTIVE_SOCKET) {
@@ -38,22 +38,23 @@ SocketError TCPConnection::Connect(const string & ip, const string & port) {
         }
         break;
     }
-
+    // make sure to release the linked list
     if (iter != nullptr) {
         freeaddrinfo(iter);
     }
-
+    // if we went through everything and the socket isn't valid we couldnt connect
     return (sock == INACTIVE_SOCKET) ? SE_NOCONNECT : SE_NOERR;
 }
 
 
 SocketError TCPConnection::Send(const Packet & packet) {
-    this->WriteToBuffer(packet);
-    return this->Send();
+    this->WriteToBuffer(packet);    // fill the buffer
+    return this->Send();            // send everything we can
 }
 
 
 SocketError TCPConnection::Send(const vector<Packet> & packets) {
+    // put them all in the buffer then send as much as we can
     for (auto it = packets.begin(); it != packets.end(); ++it) {
         this->WriteToBuffer(*it);
     }
@@ -63,12 +64,12 @@ SocketError TCPConnection::Send(const vector<Packet> & packets) {
 
 SocketError TCPConnection::Receive(Packet & packet) {
     unsigned int pos = 0;
-
+    // try to grab a packet from the buffer. if successful shift the buffer to maintain state
     if (this->FillFromBuffer(packet, pos)) {
         this->ShiftBuffer(receiveBuffer, pos);
         return SE_NOERR;
     }
-
+    // we couldnt grab a whole packet, pull data from the OS and try and grab a packet again.
     SocketError err = this->Receive();
     pos = 0;
     err = (this->FillFromBuffer(packet, pos)) ? SE_NOERR : err;
@@ -78,15 +79,17 @@ SocketError TCPConnection::Receive(Packet & packet) {
 
 
 void TCPConnection::ShiftBuffer(vector<byte> & buffer, unsigned int nextToRead) {
+    // theres nothing to do
     if (nextToRead <= 0) {
         return;
     }
-
+    // how many bytes are left that need to be shifted to the front 
     unsigned int numToMove = buffer.size() - nextToRead;
-
+    // shift them all
     for (unsigned int pos = 0; nextToRead < buffer.size();) {
         buffer[pos++] = buffer[nextToRead++];
     }
+    // resize the vector so that we can add new data at buffer.size()
     buffer.resize(numToMove);
 }
 
@@ -100,22 +103,24 @@ uint32_t TCPConnection::ReadHeader(const int start) {
 
 
 SocketError TCPConnection::Receive(vector<Packet> & packets) {
-    Packet p;
-    unsigned int pos = 0;
-    SocketError err = this->Receive();
-
+    Packet p;                            // temporary packet
+    unsigned int pos = 0;                // the position in the receive buffer
+    SocketError err = this->Receive();   // grab a chunk of data
+    // make as many packets as we can and put them in the vector.
     while (this->FillFromBuffer(p, pos)) {
         packets.push_back(p);
+        p.clear();                      // make sure to erase the buffer
     }
-    this->ShiftBuffer(receiveBuffer, pos);
+    this->ShiftBuffer(receiveBuffer, pos); // shift the buffer once at the end
     return (packets.size() == 0) ? SE_NODATA : SE_NOERR;
 }
 
 
 SocketError TCPConnection::Send() {
+    // do a raw send
     int bytesSent = this->Send(sendBuffer.data(), sendBuffer.size());
-
-    if (bytesSent == 0) {
+    // check for errors. 0 means the other end isn't connected
+    if (bytesSent == 0) {         
         return SE_DISCONNECTED;
     } else if (bytesSent < 0) {     // if less than 0 there was some error so return it
         return this->GetError();
@@ -141,10 +146,11 @@ SocketError TCPConnection::Receive() {
     if (bytesAvail < FREE_THRESHOLD && receiveBuffer.capacity() < MAX_SOCKET_BUFSIZ) {
         receiveBuffer.reserve(receiveBuffer.capacity() * 2);
     }
-
+    // save the old size since it's where we will append the first byte of new data
     uint32_t buffPosition = receiveBuffer.size();
-    receiveBuffer.resize(receiveBuffer.capacity());
-
+    receiveBuffer.resize(receiveBuffer.capacity()); // expand the vector to as large as possible
+    
+    // receive everything we can. make sure we put new bytes starting at the end of the buffer
     int bytesRecvd = this->Recv(receiveBuffer.data() + buffPosition, bytesAvail);
 
     // check for errors
@@ -155,24 +161,26 @@ SocketError TCPConnection::Receive() {
         receiveBuffer.resize(buffPosition);
         return this->GetError();
     }
+    // resize the vector so that we can append at .size() next time
     receiveBuffer.resize(buffPosition + bytesRecvd);
     return SE_NOERR;
 }
 
 
 bool TCPConnection::FillFromBuffer(Packet & packet, unsigned int & pos) {
+    // if we cant read the header (4 bytes) we cant do anytthing
     if (receiveBuffer.size() - pos < BYTES_IN_HEADER) {
         return false;
     }
-
+    // read the header, it will tell us how many bytes in this "packet"
     unsigned int nextPacketSize = this->ReadHeader(pos);
-
+    // if we cant get the whole packet do nothing
     if (nextPacketSize > receiveBuffer.size() - pos) {
         return false;
     }
-
+    // skip the header since its still in the buffer
     pos += BYTES_IN_HEADER;
-
+    // read all the data bytes into the packet supplied
     for (; pos < nextPacketSize + BYTES_IN_HEADER; ++pos) {
         packet.push_back(receiveBuffer[pos]);
     }
@@ -207,7 +215,7 @@ bool TCPConnection::WriteToBuffer(const Packet & packet) {
     return true;
 }
 
-
+// raw system calls
 int TCPConnection::Send(byte* buffer, int size) {
 #ifdef _WIN32
     return ::send(sock, reinterpret_cast<char*>(buffer), size, 0);
