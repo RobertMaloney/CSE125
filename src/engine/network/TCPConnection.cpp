@@ -45,18 +45,6 @@ SocketError TCPConnection::Connect(const string & ip, const string & port) {
 }
 
 
-void printBuffer(vector<byte> & buffer, std::string msg) {
-	int oldSize = buffer.size();
-	buffer.resize(buffer.capacity());
-    std::cout << msg << "\t";
-	for (unsigned int i = 0; i < buffer.size(); ++i){
-		std::cout << std::to_string(buffer[i]) << " ";
-	}
-	std::cout << "\n";
-	buffer.resize(oldSize);
-}
-
-
 SocketError TCPConnection::Send(const Packet & packet) {
 	this->WriteToBuffer(packet);
 	return this->Send();
@@ -89,9 +77,7 @@ void TCPConnection::ShiftBuffer(vector<byte> & buffer, unsigned int nextToRead) 
     if (nextToRead <= 0) {
         return;
     }
-
     unsigned int numToMove = buffer.size() - nextToRead;
-
     for (unsigned int pos = 0; nextToRead < buffer.size();) {
         buffer[pos++] = buffer[nextToRead++];
 
@@ -101,7 +87,7 @@ void TCPConnection::ShiftBuffer(vector<byte> & buffer, unsigned int nextToRead) 
 
 
 uint32_t TCPConnection::ReadHeader(const int start){
-    return (receiveBuffer[start] << 24 |
+    return NetToHost(receiveBuffer[start] << 24 |
         receiveBuffer[start + 1] << 16 |
         receiveBuffer[start + 2] << 8 |
         receiveBuffer[start + 3]);
@@ -123,11 +109,7 @@ SocketError TCPConnection::Receive(vector<Packet> & packets) {
 
 
 SocketError TCPConnection::Send() {
-#ifdef _WIN32
-	int bytesSent = ::send(sock, reinterpret_cast<const char*>(sendBuffer.data()), sendBuffer.size(), 0);
-#else
-	int bytesSent = ::send(sock, reinterpret_cast<const char*>(sendBuffer.data()), sendBuffer.size(), 0);
-#endif
+    int bytesSent = this->Send(sendBuffer.data(), sendBuffer.size());
 
 	if (bytesSent == 0) {
 		return SE_DISCONNECTED;
@@ -161,11 +143,9 @@ SocketError TCPConnection::Receive() {
 
 	uint32_t buffPosition = receiveBuffer.size();
 	receiveBuffer.resize(receiveBuffer.capacity());
-#ifdef _WIN32
-	int bytesRecvd = ::recv(sock, reinterpret_cast<char*>(receiveBuffer.data() + buffPosition), bytesAvail, 0);
-#else
-	int bytesRecvd = ::recv(sock, reinterpret_cast<char*>(receiveBuffer.data() + buffPosition), bytesAvail, 0);
-#endif
+
+    int bytesRecvd = this->Recv(receiveBuffer.data() + buffPosition, bytesAvail);
+
 	// check for errors
 	if (bytesRecvd == 0) {          // 0 means the socket isnt connected anymore
 		receiveBuffer.resize(buffPosition);
@@ -217,7 +197,7 @@ bool TCPConnection::WriteToBuffer(const Packet & packet){
 
 	// write the packet size to the buffer
 	uint32_t mask = 0xFF000000;
-	uint32_t size = static_cast<uint32_t>(packet.size());
+	uint32_t size = HostToNet(static_cast<uint32_t>(packet.size()));
 	for (int i = 3; i >= 0; --i) {
 		sendBuffer.push_back((size & mask) >> (i * 8));
 		mask >>= 8;
@@ -228,4 +208,34 @@ bool TCPConnection::WriteToBuffer(const Packet & packet){
 		sendBuffer.push_back(*it);
 	}
 	return true;
+}
+
+
+int TCPConnection::Send(byte* buffer, int size) {
+#ifdef _WIN32
+    return ::send(sock, reinterpret_cast<char*>(buffer), size, 0);
+#else
+    return ::send(sock, reinterpret_cast<char*>(buffer), size, 0);
+#endif
+}
+
+
+int TCPConnection::Recv(byte* buffer, int size) {
+#ifdef _WIN32
+    return ::recv(sock, reinterpret_cast<char*>(buffer), size, 0);
+#else
+    return ::recv(sock, reinterpret_cast<char*>(buffer), size, 0);
+#endif
+}
+
+
+void TCPConnection::PrintBuffer(vector<byte> & buffer, std::string msg) {
+    int oldSize = buffer.size();
+    buffer.resize(buffer.capacity());
+    std::cout << msg << "\t";
+    for (unsigned int i = 0; i < buffer.size(); ++i) {
+        std::cout << std::to_string(buffer[i]) << " ";
+    }
+    std::cout << "\n";
+    buffer.resize(oldSize);
 }

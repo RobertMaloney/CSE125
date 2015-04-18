@@ -39,10 +39,16 @@ protected:
 
 	SocketError Send();
     SocketError Receive();
-    void ShiftBuffer(vector<byte> & buffer, unsigned int lastRead);
 	uint32_t ReadHeader(const int start);
+
 	bool WriteToBuffer(const Packet & packet);
     bool FillFromBuffer(Packet & packet, unsigned int & pos);
+    void ShiftBuffer(vector<byte> & buffer, unsigned int lastRead);
+
+    inline int Send(byte* buffer, int size);
+    inline int Recv(byte* buffer, int size);
+
+    void PrintBuffer(vector<byte> & buffer, std::string msg);
 
     vector<byte> sendBuffer;
     vector<byte> receiveBuffer;
