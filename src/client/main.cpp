@@ -37,6 +37,7 @@ int main(int argc, char* argv[]) {
 	TCPConnection client;
 	char buffer[1024];
 
+    srand(time(NULL));
 	memset((void*)&buffer, 0, 1024);
 	client.Connect(DEFAULT_SERVER_IP, DEFAULT_SERVER_PORT);
 	const char * echo = "echo..";
@@ -44,7 +45,7 @@ int main(int argc, char* argv[]) {
 	vector<Packet> packets;
 	for (int i = 0; i < 26; ++i){
 		p.resize(0);
-		for (int j = 0; j < 3; ++j){
+		for (int j = 0; j < rand() % 10; ++j){
 			p.push_back('a' + i);
 		}
 		packets.push_back(p);

@@ -15,13 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="core.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Network\Socket.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Network\SocketSelector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Network\TCPConnection.cpp">
@@ -45,9 +39,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Network\Socket.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Network\SocketSelector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Network\TCPConnection.h">

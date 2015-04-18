@@ -40,6 +40,7 @@ SocketError TCPConnection::Connect(const string & ip, const string & port) {
     }
     // make sure to release the linked list
     if (iter != nullptr) {
+        memmove(static_cast<void*>(&remoteAddress), static_cast<const void*>(iter->ai_addr), sizeof(*(iter->ai_addr)));
         freeaddrinfo(iter);
     }
     // if we went through everything and the socket isn't valid we couldnt connect
@@ -108,7 +109,6 @@ SocketError TCPConnection::Receive(deque<Packet> & packets) {
     unsigned int pos = 0;                // the position in the receive buffer
     SocketError err = this->Receive();   // grab a chunk of data
     // make as many packets as we can and put them in the vector.
-  //  this->PrintBuffer(receiveBuffer, "receive");
     while (this->FillFromBuffer(p, pos)) {
         packets.push_back(p);
         p.clear();                      // make sure to erase the buffer
