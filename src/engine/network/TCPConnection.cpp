@@ -80,7 +80,6 @@ void TCPConnection::ShiftBuffer(vector<byte> & buffer, unsigned int nextToRead) 
     unsigned int numToMove = buffer.size() - nextToRead;
     for (unsigned int pos = 0; nextToRead < buffer.size();) {
         buffer[pos++] = buffer[nextToRead++];
-
     }
     buffer.resize(numToMove);
 }
