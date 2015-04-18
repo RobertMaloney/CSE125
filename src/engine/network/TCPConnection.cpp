@@ -53,7 +53,7 @@ SocketError TCPConnection::Send(const Packet & packet) {
 }
 
 
-SocketError TCPConnection::Send(const vector<Packet> & packets) {
+SocketError TCPConnection::Send(const deque<Packet> & packets) {
     // put them all in the buffer then send as much as we can
     for (auto it = packets.begin(); it != packets.end(); ++it) {
         this->WriteToBuffer(*it);
@@ -103,7 +103,7 @@ uint32_t TCPConnection::ReadHeader(const int start) {
 }
 
 
-SocketError TCPConnection::Receive(vector<Packet> & packets) {
+SocketError TCPConnection::Receive(deque<Packet> & packets) {
     Packet p;                            // temporary packet
     unsigned int pos = 0;                // the position in the receive buffer
     SocketError err = this->Receive();   // grab a chunk of data

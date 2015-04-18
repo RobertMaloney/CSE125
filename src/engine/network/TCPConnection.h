@@ -8,6 +8,7 @@
 #include "Socket.h"
 
 using std::vector;
+using std::deque;
 
 typedef uint8_t byte;
 typedef vector<byte> Packet;
@@ -38,7 +39,7 @@ public:
     /* Send all the packets in the vector. If one of the packets is larger than
      * MAX_PACKET_SIZE it will be silently dropped.
      */
-    SocketError Send(const vector<Packet> & packets);
+    SocketError Send(const deque<Packet> & packets);
 
     /* Receive a single packet into the packet buffer.
      */
@@ -48,7 +49,7 @@ public:
      * to grab all packets instead of looping on the single receive. This will be
      * more efficient.
      */
-    SocketError Receive(vector<Packet> & packets);
+    SocketError Receive(deque<Packet> & packets);
 
 
 protected:
