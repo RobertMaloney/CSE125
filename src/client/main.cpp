@@ -45,7 +45,8 @@ int main(int argc, char* argv[]) {
 	vector<Packet> packets;
 	for (int i = 0; i < 26; ++i){
 		p.resize(0);
-		for (int j = 0; j < rand() % 10; ++j){
+        int len = rand() % 100;
+        for (int j = 0; j < len; ++j) {
 			p.push_back('a' + i);
 		}
 		packets.push_back(p);
@@ -56,10 +57,9 @@ int main(int argc, char* argv[]) {
 	while (!GraphicsEngine::Closing()) {
 		GraphicsEngine::DrawAndPoll();
 		Packet p = packets[i % 26];
-
-		client.Send(packets[i % 26]);
+		client.Send(p);
 		++i;
-        std::cout << i << std::endl;
+        std::cout << i << " size : " << p.size() << std::endl;
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
 	
