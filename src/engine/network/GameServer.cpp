@@ -10,6 +10,7 @@ GameServer::~GameServer() {
     if (listener) {
         listener->Close();
         delete listener;
+        listener = nullptr;
     }
     for (auto it = clients->begin(); it != clients->end(); ++it) {
         if (it->second) {
@@ -17,6 +18,8 @@ GameServer::~GameServer() {
             it->second = nullptr;
         }
     }
+    delete clients;
+    clients = nullptr;
 }
 
 void GameServer::Initialize() {

@@ -181,7 +181,7 @@ bool TCPConnection::FillFromBuffer(Packet & packet, unsigned int & pos) {
         return false;
     }
     // skip the header since its still in the buffer
-    int endPacket = nextPacketSize + BYTES_IN_HEADER + pos;
+    unsigned int endPacket = nextPacketSize + BYTES_IN_HEADER + pos;
     pos += BYTES_IN_HEADER;
     // read all the data bytes into the packet supplied
     for (; pos < endPacket; ++pos) {
