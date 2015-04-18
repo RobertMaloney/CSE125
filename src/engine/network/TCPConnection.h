@@ -41,7 +41,7 @@ protected:
     SocketError Receive();
 	uint32_t ReadHeader(const int start);
 	bool WriteToBuffer(const Packet & packet);
-    bool FillFromBuffer(Packet & packet);
+    bool FillFromBuffer(unsigned int pos, Packet & packet);
 
 	uint32_t nextPacketSize;
 

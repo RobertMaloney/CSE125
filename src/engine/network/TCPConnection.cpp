@@ -72,10 +72,6 @@ SocketError TCPConnection::Send(const vector<Packet> & packets) {
 
 
 SocketError TCPConnection::Receive(Packet & packet) {
-	// Try to grab a packet from the buffer before calling receive.
-    if (this->FillFromBuffer(packet)) {
-        return SE_NOERR;
-    }
 	SocketError err = this->Receive();
     return (this->FillFromBuffer(packet)) ? SE_NOERR : err;
 }
@@ -90,38 +86,9 @@ uint32_t TCPConnection::ReadHeader(const int start){
 SocketError TCPConnection::Receive(vector<Packet> & packets) {
 	SocketError err = this->Receive();
 
-	// if the buffer is as long as the header read the header so we know how many bytes to grab
-	if (receiveBuffer.size() < BYTES_IN_HEADER || receiveBuffer.size() - BYTES_IN_HEADER < nextPacketSize) {
-		return SE_NODATA;
-	}
 
-	Packet packet;
-	unsigned int bufferPos = 0;
 
-	while (receiveBuffer.size() - bufferPos >= BYTES_IN_HEADER) {
-		nextPacketSize = this->ReadHeader(bufferPos);
-
-		if (nextPacketSize > receiveBuffer.capacity() - bufferPos){
-			break;
-		}
-
-		bufferPos += BYTES_IN_HEADER;
-
-		for (; bufferPos < nextPacketSize; ++bufferPos) {
-			packet.push_back(receiveBuffer[bufferPos]);
-		}
-
-		packets.push_back(packet);
-		packet.resize(0);
-	}
-
-	int bytesRemaining = receiveBuffer.size() - bufferPos;
-
-	for (int i = 0; i < bytesRemaining; ++i) {
-		receiveBuffer[i] = receiveBuffer[i + bufferPos];
-	}
-
-	receiveBuffer.resize(bytesRemaining);
+	
 	return SE_NOERR;
 }
 
@@ -185,7 +152,35 @@ SocketError TCPConnection::Receive() {
 }
 
 
-bool TCPConnection::FillFromBuffer(Packet & packet) {
+bool TCPConnection::FillFromBuffer(unsigned int pos, Packet & packet){
+	Packet packet;
+	unsigned int bufferPos = 0;
+
+	// if the buffer is as long as the header read the header so we know how many bytes to grab
+	if (receiveBuffer.size() < BYTES_IN_HEADER){  
+		return SE_NODATA;
+	}
+
+	nextPacketSize = this->ReadHeader(bufferPos);
+
+	if (receiveBuffer.size() - BYTES_IN_HEADER < nextPacketSize) {
+		return false;
+	}
+
+	if (nextPacketSize > receiveBuffer.capacity() - bufferPos){
+		return false;
+	}
+
+	bufferPos += BYTES_IN_HEADER;
+
+	for (; bufferPos < nextPacketSize; ++bufferPos) {
+		packet.push_back(receiveBuffer[bufferPos]);
+	}
+	return true;
+}
+
+/*
+bool TCPConnection::FillFromBuffer(unsigned int pos, Packet & packet) {
     // if the buffer is as long as the header read the header so we know how many bytes to grab
     if (receiveBuffer.size() < BYTES_IN_HEADER) {
         return false;
