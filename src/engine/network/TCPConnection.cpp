@@ -122,27 +122,7 @@ SocketError TCPConnection::Receive(Packet & packet) {
 	if (receiveBuffer.size() > MAX_PACKET_SIZE) {
         return SE_PACKETSIZE;
     }
-
-    // Caclulate how much buffer space we have. If the buffer is small try to make it bigger
-    int bytesAvail = receiveBuffer.capacity() - receiveBuffer.size();
-    if (bytesAvail < FREE_THRESHOLD && receiveBuffer.capacity() < MAX_SOCKET_BUFSIZ) {
-        this->ExpandReceiveBuff();
-    }
-
-    uint32_t buffPosition = receiveBuffer.size();
-    receiveBuffer.resize(receiveBuffer.capacity());
-    int bytesRecvd = this->Receive(receiveBuffer.data() + buffPosition, bytesAvail);
-
-    // check for errors
-    if (bytesRecvd == 0) {          // 0 means the socket isnt connected anymore
-		receiveBuffer.resize(buffPosition);
-        return SE_DISCONNECTED;
-	} else if (bytesRecvd < 0) {    // < 0 means there was some error
-		receiveBuffer.resize(buffPosition);
-		return this->GetError();
-	}
-
-	receiveBuffer.resize(buffPosition + bytesRecvd);
+	
 	this->GetFromBuffer(packet);
     return SE_NOERR;
 }
@@ -158,12 +138,32 @@ int TCPConnection::Send(const void* data, int size) {
 }
 
 
-int TCPConnection::Receive(void* buffer, int buffSize) {
+SocketError TCPConnection::Receive() {
+	// Caclulate how much buffer space we have. If the buffer is small try to make it bigger
+	int bytesAvail = receiveBuffer.capacity() - receiveBuffer.size();
+	if (bytesAvail < FREE_THRESHOLD && receiveBuffer.capacity() < MAX_SOCKET_BUFSIZ) {
+		this->ExpandReceiveBuff();
+	}
+
+	uint32_t buffPosition = receiveBuffer.size();
+	receiveBuffer.resize(receiveBuffer.capacity());
+
 #ifdef _WIN32
-    return ::recv(sock, static_cast<char*>(buffer), buffSize, 0);
+	int bytesRecvd = ::recv(sock, reinterpret_cast<char*>(receiveBuffer.data() + buffPosition), bytesAvail, 0);
 #else
-    return ::recv(sock, buffer, buffSize, 0);
+	int bytesRecvd = ::recv(sock, static_cast<void*>(receiveBuffer.data() + buffPosition), bytesAvail, 0);
 #endif
+
+	// check for errors
+	if (bytesRecvd == 0) {          // 0 means the socket isnt connected anymore
+		receiveBuffer.resize(buffPosition);
+		return SE_DISCONNECTED;
+	}
+	else if (bytesRecvd < 0) {    // < 0 means there was some error
+		receiveBuffer.resize(buffPosition);
+		return this->GetError();
+	}
+	receiveBuffer.resize(buffPosition + bytesRecvd);
 }
 
 void TCPConnection::GetAllFromBuffer(vector<Packet> & packets){

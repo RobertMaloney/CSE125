@@ -38,10 +38,13 @@ public:
 protected:
 
     int Send(const void* data, int size);
-    int Receive(void* buffer, int buffSize);
+    SocketError Receive();
+
 	void WriteHeader(uint32_t size, vector<byte> buffer);
+
 	void GetAllFromBuffer(vector<Packet> & packets);
     bool GetFromBuffer(Packet & packet);
+
     void ExpandReceiveBuff();
 
 	uint32_t nextPacketSize;
