@@ -64,6 +64,7 @@ SocketError TCPConnection::Send(const vector<Packet> & packets) {
 
 SocketError TCPConnection::Receive(Packet & packet) {
     unsigned int pos = 0;
+    packet.clear();
     // try to grab a packet from the buffer. if successful shift the buffer to maintain state
     if (this->FillFromBuffer(packet, pos)) {
         this->ShiftBuffer(receiveBuffer, pos);
