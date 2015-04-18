@@ -29,19 +29,19 @@ public:
     SocketError Connect(const string & ip, const string & port);
 
     SocketError Send(const Packet & packet);
-	SocketError Send(const vector<Packet> & packets);
+    SocketError Send(const vector<Packet> & packets);
 
     SocketError Receive(Packet & packet);
-	SocketError Receive(vector<Packet> & packets);
+    SocketError Receive(vector<Packet> & packets);
 
 
 protected:
 
-	SocketError Send();
+    SocketError Send();
     SocketError Receive();
-	uint32_t ReadHeader(const int start);
+    uint32_t ReadHeader(const int start);
 
-	bool WriteToBuffer(const Packet & packet);
+    bool WriteToBuffer(const Packet & packet);
     bool FillFromBuffer(Packet & packet, unsigned int & pos);
     void ShiftBuffer(vector<byte> & buffer, unsigned int lastRead);
 
