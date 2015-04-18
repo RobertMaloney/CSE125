@@ -36,7 +36,7 @@ public:
     SocketError Send(const Packet & packet);
 
     /* Send all the packets in the vector. If one of the packets is larger than
-     * 65503 bytes it will be silently dropped.
+     * MAX_PACKET_SIZE it will be silently dropped.
      */
     SocketError Send(const vector<Packet> & packets);
 
