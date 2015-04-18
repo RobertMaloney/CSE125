@@ -44,7 +44,7 @@ void GameServer::Run() {
             if (newClient) {
                 newClient->SetNoDelay(true);
                 newClient->SetNonBlocking(true);
-                clients->insert(make_pair(nextCid, newClient));
+                clients->insert(make_pair(nextCid++, newClient));
             }
         }
 
