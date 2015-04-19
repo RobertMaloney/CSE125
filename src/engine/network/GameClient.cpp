@@ -29,16 +29,16 @@ void GameClient::Initialize() {
 
 
 void GameClient::ReceiveUpdates(deque<Packet> & updates) {
-    SocketError err = connection->Receive(updates);
-    if (this->ShouldTerminate(err)) {
-        connection->Close();
-        throw SocketException("Fata error while receiving updates.");
-    }
+    this->CheckError(connection->Receive(updates));
 }
 
 
 void GameClient::SendEvents(deque<Packet> & events) {
-    SocketError err = connection->Send(events);
+    this->CheckError(connection->Send(events));    
+}
+
+
+void GameClient::CheckError(SocketError err) {
     if (this->ShouldTerminate(err)) {
         connection->Close();
         throw SocketException("Fatal error while sending.");

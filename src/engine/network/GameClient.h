@@ -25,7 +25,8 @@ public:
 
 private:
 
-    bool ShouldTerminate(SocketError err);
+    inline void CheckError(SocketError err);
+    inline bool ShouldTerminate(SocketError err);
     
     TCPConnection* connection;
 

@@ -14,7 +14,7 @@ int main(int argc, char* argv[]) {
 
     GameServer server;
 
-    server.Initialize();
+    server.Initialize(1);
     server.Run();
 
 

@@ -27,7 +27,7 @@ public:
     GameServer();
     ~GameServer();
 
-    void Initialize();
+    void Initialize(int maxPlayers);
     void Run();
     void SendUpdates(deque<Packet> & updates);
     void ReceiveEvents(deque<Packet> & events);
@@ -35,8 +35,10 @@ public:
 private:
 
     void AcceptWaitingClient();
-    bool ShouldTerminate(SocketError err);
     void PrintUpdates(deque<Packet> & updates);
+
+    inline bool ShouldTerminate(SocketError err);
+    inline void CheckError(pair<ClientId, TCPConnection*> conn, SocketError err);
 
     ClientId nextCid;
     TCPListener* listener;

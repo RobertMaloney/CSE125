@@ -23,13 +23,13 @@ GameServer::~GameServer() {
 }
 
 
-void GameServer::Initialize() {
+void GameServer::Initialize(int maxPlayers) {
     Socket::Initialize();
     this->listener = new TCPListener();
     this->listener->Bind(DEFAULT_SERVER_IP, DEFAULT_SERVER_PORT);
-    this->listener->Listen(4);
+    this->listener->Listen(maxPlayers);
     this->listener->SetNonBlocking(true);
-    maxConnections = 1;
+    maxConnections = maxPlayers;
     nextCid = 1;
 }
 
@@ -60,26 +60,25 @@ void GameServer::AcceptWaitingClient() {
 }
 
 
+void GameServer::CheckError(pair<ClientId, TCPConnection*> conn, SocketError err) {
+    if (this->ShouldTerminate(err)) {
+        conn.second->Close();
+        delete conn.second;
+        clients->erase(conn.first);
+    }
+}
+
+
 void GameServer::SendUpdates(deque<Packet> & updates) {
     for (auto it = clients->begin(); it != clients->end(); ++it) {
-        SocketError err = it->second->Send(updates);
-        if (this->ShouldTerminate(err)) {
-            it->second->Close();
-            delete it->second;
-            clients->erase(it->first);
-        }
+        this->CheckError(*it, it->second->Send(updates));
     }
 }
 
 
 void GameServer::ReceiveEvents(deque<Packet> & events) {
     for (auto it = clients->begin(); it != clients->end(); ++it) {
-        SocketError err = it->second->Receive(events);
-        if (this->ShouldTerminate(err)) {
-            it->second->Close();
-            delete it->second;
-            clients->erase(it->first);
-        }
+        this->CheckError(*it, it->second->Receive(events));
     }
 }
 
