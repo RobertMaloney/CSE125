@@ -121,17 +121,16 @@ SocketError TCPConnection::Receive(deque<Packet> & packets) {
 SocketError TCPConnection::Send() {
     // do a raw send
     int bytesSent = this->Send(sendBuffer.data(), sendBuffer.size());
-    // check for errors. 0 means the other end isn't connected
-    if (bytesSent < 0) {     // if less than 0 there was some error so return it
+    // check for errors. 0 means the other end isn't connected for non-blocking sock
+    if (!nonBlocking && bytesSent == 0) {
+        return SE_DISCONNECTED;
+    }
+    // if less than 0 there was some error so return it
+    if (bytesSent < 0) {     
         return this->GetError();
     }
     // move all the unsent (leftover) bytes to the front of the buffer
-    unsigned int vpos, spos;
-    for (vpos = bytesSent, spos = 0; vpos < sendBuffer.size(); ++spos, ++vpos) {
-        sendBuffer[spos] = sendBuffer[vpos];
-    }
-    // change the size to be correct after the send
-    sendBuffer.resize(sendBuffer.size() - bytesSent);
+    this->ShiftBuffer(sendBuffer, bytesSent);
     return SE_NOERR;
 }
 
@@ -152,6 +151,11 @@ SocketError TCPConnection::Receive() {
     
     // receive everything we can. make sure we put new bytes starting at the end of the buffer
     int bytesRecvd = this->Recv(receiveBuffer.data() + buffPosition, bytesAvail);
+
+    if (!nonBlocking && bytesRecvd == 0) {
+        receiveBuffer.resize(buffPosition);
+        return SE_DISCONNECTED;
+    }
 
     if (bytesRecvd < 0) {    // < 0 means there was some error
         receiveBuffer.resize(buffPosition);
