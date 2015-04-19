@@ -102,11 +102,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\GraphicsEngine.cpp" />
+    <ClCompile Include="network\GameClient.cpp" />
     <ClCompile Include="network\GameServer.cpp" />
     <ClCompile Include="Network\Socket.cpp" />
     <ClCompile Include="Network\TCPConnection.cpp" />
     <ClCompile Include="Network\TCPListener.cpp" />
+    <ClCompile Include="utility\EntityMap.cpp" />
+    <ClCompile Include="utility\Location.cpp" />
     <ClCompile Include="Utility\ObjLoader.cpp" />
+    <ClCompile Include="utility\Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\Cube.h" />
@@ -114,11 +118,16 @@
     <ClInclude Include="Graphics\GraphicsEngine.h" />
     <ClInclude Include="Graphics\Renderable.h" />
     <ClInclude Include="Network\Endianness.h" />
+    <ClInclude Include="network\GameClient.h" />
     <ClInclude Include="network\GameServer.h" />
     <ClInclude Include="Network\Socket.h" />
     <ClInclude Include="Network\TCPConnection.h" />
     <ClInclude Include="Network\TCPListener.h" />
+    <ClInclude Include="utility\EntityMap.h" />
+    <ClInclude Include="utility\Location.h" />
     <ClInclude Include="Utility\ObjLoader.h" />
+    <ClInclude Include="utility\Player.h" />
+    <ClInclude Include="utility\World.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Network\Endianness.inl" />

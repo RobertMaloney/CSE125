@@ -29,9 +29,12 @@ public:
 
     void Initialize();
     void Run();
+   
 
 private:
 
+    void AcceptWaitingClient();
+    void GetAllUpdates(deque<Packet> & updates);
     bool ShouldTerminate(SocketError err);
     void PrintUpdates(deque<Packet> & updates);
 
