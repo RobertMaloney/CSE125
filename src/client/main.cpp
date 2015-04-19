@@ -26,7 +26,7 @@ static void keyCallback(int key, int action, int mods) {
 		GraphicsEngine::MoveRight();
 }
 
-
+// used for debugging
 void fillWithDebugPackets(deque<Packet> & packets) {
     Packet p;
     for (int i = 0; i < 26; ++i) {
