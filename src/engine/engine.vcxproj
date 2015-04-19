@@ -102,6 +102,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\GraphicsEngine.cpp" />
+    <ClCompile Include="network\GameClient.cpp" />
     <ClCompile Include="network\GameServer.cpp" />
     <ClCompile Include="Network\Socket.cpp" />
     <ClCompile Include="Network\TCPConnection.cpp" />
@@ -117,6 +118,7 @@
     <ClInclude Include="Graphics\GraphicsEngine.h" />
     <ClInclude Include="Graphics\Renderable.h" />
     <ClInclude Include="Network\Endianness.h" />
+    <ClInclude Include="network\GameClient.h" />
     <ClInclude Include="network\GameServer.h" />
     <ClInclude Include="Network\Socket.h" />
     <ClInclude Include="Network\TCPConnection.h" />

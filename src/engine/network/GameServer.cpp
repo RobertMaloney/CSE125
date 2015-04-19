@@ -36,31 +36,37 @@ void GameServer::Initialize() {
 
 void GameServer::Run() {
     deque<Packet> updates;
-    TCPConnection* newClient = nullptr;
 
     while (true) {
         if (clients->size() < maxConnections) {
-            newClient = listener->Accept();
-            if (newClient) {
-                newClient->SetNoDelay(true);
-                newClient->SetNonBlocking(true);
-                clients->insert(make_pair(nextCid++, newClient));
-            }
+            this->AcceptWaitingClient();
         }
-
-        for (auto it = clients->begin(); it != clients->end(); ++it) {
-            SocketError err = it->second->Receive(updates);
-            if (this->ShouldTerminate(err)) {
-                it->second->Close();
-                delete it->second;
-                clients->erase(it->first);
-            } else {
-                this->PrintUpdates(updates);
-                it->second->Send(updates);
-            }
-        }
+        this->GetAllUpdates(updates);
         sleep_for(milliseconds(200));
     }
+}
+
+
+void GameServer::AcceptWaitingClient() {
+    TCPConnection* newClient = listener->Accept();
+    if (newClient) {
+        newClient->SetNoDelay(true);
+        newClient->SetNonBlocking(true);
+        clients->insert(make_pair(nextCid++, newClient));
+    }
+}
+
+
+void GameServer::GetAllUpdates(deque<Packet> & updates) {
+    for (auto it = clients->begin(); it != clients->end(); ++it) {
+        SocketError err = it->second->Receive(updates);
+        if (this->ShouldTerminate(err)) {
+            it->second->Close();
+            delete it->second;
+            clients->erase(it->first);
+        }
+    }
+    this->PrintUpdates(updates);
 }
 
 
