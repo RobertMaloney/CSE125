@@ -41,7 +41,7 @@ void GameClient::SendEvents(deque<Packet> & events) {
 void GameClient::CheckError(SocketError err) {
     if (this->ShouldTerminate(err)) {
         connection->Close();
-        throw SocketException("Fatal error while sending.");
+        throw SocketException("Fatal error while communicating over TCPConnection.");
     }
 }
 
