@@ -21,12 +21,12 @@ public:
     void Initialize();
     void ReceiveUpdates(deque<Packet> & updates);
     void SendEvents(deque<Packet> & events);
+    void PrintUpdates(deque<Packet> & updates);
 
 private:
 
     bool ShouldTerminate(SocketError err);
-    void PrintUpdates(deque<Packet> & updates);
-
+    
     TCPConnection* connection;
 
 };

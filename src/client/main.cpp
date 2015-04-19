@@ -57,6 +57,7 @@ int main(int argc, char* argv[]) {
 		GraphicsEngine::DrawAndPoll();
         client->SendEvents(packets);
         client->ReceiveUpdates(updates);
+        client->PrintUpdates(updates);
         updates.clear();
 	}
 	

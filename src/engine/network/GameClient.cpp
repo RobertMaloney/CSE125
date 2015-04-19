@@ -34,7 +34,6 @@ void GameClient::ReceiveUpdates(deque<Packet> & updates) {
         connection->Close();
         throw SocketException("Fata error while receiving updates.");
     }
-    this->PrintUpdates(updates);
 }
 
 
