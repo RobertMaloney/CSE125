@@ -30,7 +30,7 @@ void fillWithDebugPackets(deque<Packet> & packets) {
     Packet p;
     for (int i = 0; i < 26; ++i) {
         p.resize(0);
-        int len = rand() % 100;
+        int len = rand() % 1000;
         for (int j = 0; j < len; ++j) {
             p.push_back('a' + i);
         }

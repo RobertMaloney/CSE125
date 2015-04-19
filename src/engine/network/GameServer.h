@@ -38,7 +38,6 @@ private:
     void PrintUpdates(deque<Packet> & updates);
 
     inline bool ShouldTerminate(SocketError err);
-    inline void CheckError(pair<ClientId, TCPConnection*> conn, SocketError err);
 
     ClientId nextCid;
     TCPListener* listener;

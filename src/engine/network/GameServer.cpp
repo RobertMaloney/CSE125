@@ -3,6 +3,7 @@
 
 GameServer::GameServer() {
     this->clients = new unordered_map<ClientId, TCPConnection*>();
+    nextCid = 1;
 }
 
 
@@ -30,7 +31,6 @@ void GameServer::Initialize(int maxPlayers) {
     this->listener->Listen(maxPlayers);
     this->listener->SetNonBlocking(true);
     maxConnections = maxPlayers;
-    nextCid = 1;
 }
 
 
@@ -45,7 +45,7 @@ void GameServer::Run() {
         this->PrintUpdates(events);
         this->SendUpdates(events);
         events.clear();
-        sleep_for(milliseconds(200));
+   //     sleep_for(milliseconds(200));
     }
 }
 
@@ -60,25 +60,32 @@ void GameServer::AcceptWaitingClient() {
 }
 
 
-void GameServer::CheckError(pair<ClientId, TCPConnection*> conn, SocketError err) {
-    if (this->ShouldTerminate(err)) {
-        conn.second->Close();
-        delete conn.second;
-        clients->erase(conn.first);
-    }
-}
 
 
 void GameServer::SendUpdates(deque<Packet> & updates) {
-    for (auto it = clients->begin(); it != clients->end(); ++it) {
-        this->CheckError(*it, it->second->Send(updates));
+    for (auto it = clients->begin(); it != clients->end();) {
+        SocketError err = it->second->Send(updates);
+        if (this->ShouldTerminate(err)) {
+            it->second->Close();
+            delete it->second;
+            it = clients->erase(it);
+        } else {
+            ++it;
+        }
     }
 }
 
 
 void GameServer::ReceiveEvents(deque<Packet> & events) {
-    for (auto it = clients->begin(); it != clients->end(); ++it) {
-        this->CheckError(*it, it->second->Receive(events));
+    for (auto it = clients->begin(); it != clients->end();) {
+        SocketError err = it->second->Receive(events);
+        if (this->ShouldTerminate(err)) {
+            it->second->Close();
+            delete it->second;
+            it = clients->erase(it);
+        } else {
+            ++it;
+        }
     }
 }
 
@@ -101,6 +108,7 @@ void GameServer::PrintUpdates(deque<Packet> & updates) {
     for (auto it = updates.begin(); it != updates.end(); ++it) {
         for (auto p = it->begin(); p != it->end(); ++p) {
             cout << to_string(*p) << " ";
+            break;
         }
         cout << "\n";
     }

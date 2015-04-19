@@ -58,7 +58,7 @@ TCPConnection* TCPListener::Accept() {
 
     clientFd = ::accept(sock, reinterpret_cast<sockaddr*>(&remoteAddress), &size);
 
-    if (clientFd < 0) {
+    if (!nonBlocking && clientFd < 0) {
         cerr << "Error while accepting client. " + this->GetErrorMsg() << endl;
         return nullptr;
     }
