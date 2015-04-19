@@ -52,7 +52,7 @@ void GameServer::Run() {
 
 void GameServer::AcceptWaitingClient() {
     TCPConnection* newClient = listener->Accept();
-    if (newClient) {
+    if (!newClient) {
         newClient->SetNoDelay(true);
         newClient->SetNonBlocking(true);
         clients->insert(make_pair(nextCid++, newClient));
