@@ -44,6 +44,7 @@ private:
     TCPListener* listener;
     unsigned int maxConnections;
     unordered_map<ClientId, TCPConnection*>* clients;
+
 };
 
 

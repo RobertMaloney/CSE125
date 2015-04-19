@@ -9,7 +9,6 @@
 #include "graphics\GraphicsEngine.h"
 
 
-
 using std::cout;
 
 
@@ -38,7 +37,6 @@ void fillWithDebugPackets(deque<Packet> & packets) {
         packets.push_back(p);
     }
 }
-
 
 
 int main(int argc, char* argv[]) {
