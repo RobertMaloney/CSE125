@@ -35,13 +35,16 @@ void GameServer::Initialize() {
 
 
 void GameServer::Run() {
-    deque<Packet> updates;
+    deque<Packet> events;
 
     while (true) {
         if (clients->size() < maxConnections) {
             this->AcceptWaitingClient();
         }
-        this->GetAllUpdates(updates);
+        this->ReceiveEvents(events);
+        this->PrintUpdates(events);
+        this->SendUpdates(events);
+        events.clear();
         sleep_for(milliseconds(200));
     }
 }
@@ -57,16 +60,27 @@ void GameServer::AcceptWaitingClient() {
 }
 
 
-void GameServer::GetAllUpdates(deque<Packet> & updates) {
+void GameServer::SendUpdates(deque<Packet> & updates) {
     for (auto it = clients->begin(); it != clients->end(); ++it) {
-        SocketError err = it->second->Receive(updates);
+        SocketError err = it->second->Send(updates);
         if (this->ShouldTerminate(err)) {
             it->second->Close();
             delete it->second;
             clients->erase(it->first);
         }
     }
-    this->PrintUpdates(updates);
+}
+
+
+void GameServer::ReceiveEvents(deque<Packet> & events) {
+    for (auto it = clients->begin(); it != clients->end(); ++it) {
+        SocketError err = it->second->Receive(events);
+        if (this->ShouldTerminate(err)) {
+            it->second->Close();
+            delete it->second;
+            clients->erase(it->first);
+        }
+    }
 }
 
 

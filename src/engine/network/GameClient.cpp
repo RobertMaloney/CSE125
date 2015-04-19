@@ -40,10 +40,10 @@ void GameClient::ReceiveUpdates(deque<Packet> & updates) {
 
 void GameClient::SendEvents(deque<Packet> & events) {
     SocketError err = connection->Send(events);
-    if (this->ShouldTerminate(err)) {
+   /* if (this->ShouldTerminate(err)) {
         connection->Close();
         throw SocketException("Fatal error while sending.");
-    }
+    }*/
 }
 
 

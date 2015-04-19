@@ -122,9 +122,7 @@ SocketError TCPConnection::Send() {
     // do a raw send
     int bytesSent = this->Send(sendBuffer.data(), sendBuffer.size());
     // check for errors. 0 means the other end isn't connected
-    if (bytesSent == 0) {         
-        return SE_DISCONNECTED;
-    } else if (bytesSent < 0) {     // if less than 0 there was some error so return it
+    if (bytesSent < 0) {     // if less than 0 there was some error so return it
         return this->GetError();
     }
     // move all the unsent (leftover) bytes to the front of the buffer
@@ -155,11 +153,7 @@ SocketError TCPConnection::Receive() {
     // receive everything we can. make sure we put new bytes starting at the end of the buffer
     int bytesRecvd = this->Recv(receiveBuffer.data() + buffPosition, bytesAvail);
 
-    // check for errors
-    if (bytesRecvd == 0) {          // 0 means the socket isnt connected anymore
-        receiveBuffer.resize(buffPosition);
-        return SE_DISCONNECTED;
-    } else if (bytesRecvd < 0) {    // < 0 means there was some error
+    if (bytesRecvd < 0) {    // < 0 means there was some error
         receiveBuffer.resize(buffPosition);
         return this->GetError();
     }

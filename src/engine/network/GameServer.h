@@ -34,7 +34,8 @@ public:
 private:
 
     void AcceptWaitingClient();
-    void GetAllUpdates(deque<Packet> & updates);
+    void SendUpdates(deque<Packet> & updates);
+    void ReceiveEvents(deque<Packet> & events);
     bool ShouldTerminate(SocketError err);
     void PrintUpdates(deque<Packet> & updates);
 

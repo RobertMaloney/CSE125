@@ -40,6 +40,7 @@ void fillWithDebugPackets(deque<Packet> & packets) {
 }
 
 
+
 int main(int argc, char* argv[]) {
 
 	GraphicsEngine::Initialize();
@@ -48,12 +49,15 @@ int main(int argc, char* argv[]) {
     client->Initialize();
     
     deque<Packet> packets;
+    deque<Packet> updates;
     fillWithDebugPackets(packets);
 	
 	int i = 0;
 	while (!GraphicsEngine::Closing()) {
 		GraphicsEngine::DrawAndPoll();
         client->SendEvents(packets);
+        client->ReceiveUpdates(updates);
+        updates.clear();
 	}
 	
 	GraphicsEngine::Destroy();
