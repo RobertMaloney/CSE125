@@ -27,18 +27,23 @@ public:
     GameServer();
     ~GameServer();
 
-    void Initialize();
+    void Initialize(int maxPlayers);
     void Run();
+    void SendUpdates(deque<Packet> & updates);
+    void ReceiveEvents(deque<Packet> & events);
 
 private:
 
-    bool ShouldTerminate(SocketError err);
+    void AcceptWaitingClient();
     void PrintUpdates(deque<Packet> & updates);
+
+    inline bool ShouldTerminate(SocketError err);
 
     ClientId nextCid;
     TCPListener* listener;
     unsigned int maxConnections;
     unordered_map<ClientId, TCPConnection*>* clients;
+
 };
 
 

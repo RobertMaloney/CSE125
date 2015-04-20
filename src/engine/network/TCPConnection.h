@@ -13,7 +13,7 @@ using std::deque;
 typedef uint8_t byte;
 typedef vector<byte> Packet;
 
-const int DEFAULT_SOCKET_BUFSIZ = 1;             // the default size of buffers
+const int DEFAULT_SOCKET_BUFSIZ = 4096;             // the default size of buffers
 const int BYTES_IN_HEADER = 4;                   
 const int FREE_THRESHOLD = 512;                  // min number of avail bytes in buffer before expansion
 const int MAX_SOCKET_BUFSIZ = MAX_PACKET_SIZE;
