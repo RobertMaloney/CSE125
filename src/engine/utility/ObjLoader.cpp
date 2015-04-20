@@ -12,7 +12,7 @@
 using namespace std;
 
 bool ObjLoader::LoadObj(string filePath, vector<float> & vertexData) {
-	const bool debug = true;
+	const bool debug = false;
 
 	vector<tinyobj::shape_t> shapes;
 	vector<tinyobj::material_t> materials;
