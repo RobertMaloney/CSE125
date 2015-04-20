@@ -11,8 +11,6 @@ using namespace std;
 class Geometry : public Renderable {
 public:
 	Geometry(const char * filePath) {
-		m_matrix = glm::scale(m_matrix, glm::vec3(0.01f,0.01f,0.01f));
-
 		vector<GLfloat> gl_data;
 		ObjLoader::LoadObj(filePath, gl_data);
 
