@@ -112,9 +112,8 @@ void GraphicsEngine::Initialize() {
 		m_objects.push_back(new Cube(position, glm::angleAxis(glm::radians((float)i), glm::vec3(0, 0, 1)), glm::vec3(1.f, 1.f, 1.f), 0.02f + 0.08f * (i / (float)100)));
 	}
 	//m_objects.push_back(new Cube(glm::vec3(0, 0, 0), glm::quat(), glm::vec3(1.f, 1.f, 1.f), 0.5f));
-	printf("before teapot");
-	m_player = new Geometry("../../teapot.obj");
-	printf("after teapot");
+	m_player = new Geometry("../../media/pb.obj");
+
 	// view and projection matrix locations in the shader program
 	m_uniView = glGetUniformLocation(m_shaderProgram, "view");
 	m_uniProjection = glGetUniformLocation(m_shaderProgram, "projection");

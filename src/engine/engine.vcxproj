@@ -59,7 +59,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\lib\glew\include;..\..\lib\glm\include;..\..\lib\glfw\include;%(AdditionalLibraryDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\lib\glew\include;..\..\lib\glm\include;..\..\lib\tinyobjloader\include;..\..\lib\jsoncpp\include;..\..\lib\glfw\include;%(AdditionalLibraryDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
@@ -71,7 +71,8 @@
     </Link>
     <Lib>
       <OutputFile>$(SolutionDir)\lib\dusty-core\lib\dusty-core.lib</OutputFile>
-      <AdditionalLibraryDirectories>..\..\lib\glew\lib;..\..\lib\glm\lib;..\..\lib\glfw\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\lib\tinyobjloader\lib;..\..\lib\glew\lib;..\..\lib\glm\lib;..\..\lib\glfw\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>tinyobjloader.lib;glfw3.lib;opengl32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
