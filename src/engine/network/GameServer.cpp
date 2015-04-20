@@ -108,7 +108,6 @@ void GameServer::PrintUpdates(deque<Packet> & updates) {
     for (auto it = updates.begin(); it != updates.end(); ++it) {
         for (auto p = it->begin(); p != it->end(); ++p) {
             cout << to_string(*p) << " ";
-            break;
         }
         cout << "\n";
     }
