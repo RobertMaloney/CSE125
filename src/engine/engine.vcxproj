@@ -72,6 +72,7 @@
     <Lib>
       <OutputFile>$(SolutionDir)\lib\dusty-core\lib\dusty-core.lib</OutputFile>
       <AdditionalLibraryDirectories>..\..\lib\glew\lib;..\..\lib\glm\lib;..\..\lib\glfw\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;glew32s.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
