@@ -1,4 +1,4 @@
-
+#include <Windows.h>
 
 // STL
 #include <stdio.h>
@@ -10,6 +10,7 @@
 #include "GraphicsEngine.h"
 #include "..\graphics\Cube.h"
 #include "..\graphics\Geometry.h"
+#include "..\utility\System.h"
 
 using namespace std;
 
@@ -32,22 +33,6 @@ Renderable			*GraphicsEngine::m_player = NULL;
 
 string version = "#version 150\n";
 
-// Puts a file's contents into a string
-static pair<string, int> TextFromFile(string filename) {
-	pair<string, int> result;
-
-	ifstream in(filename, ifstream::in);
-	if (in.is_open()) {
-		stringstream str_buffer;
-		str_buffer << in.rdbuf();
-		result.first = str_buffer.str();
-		result.second = result.first.size();
-	}
-
-	in.close();
-	return result;
-}
-
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	if (GraphicsEngine::GetKeyCallback()) GraphicsEngine::GetKeyCallback()(key, action, mods);
@@ -62,14 +47,16 @@ void GraphicsEngine::Initialize() {
 	if (!glfwInit())
 		return;
 
-	// Load shader files
-	pair<string, int> vertInfo = TextFromFile("../../../src/engine/graphics/Shaders/test.vert");
-	pair<string, int> fragInfo = TextFromFile("../../../src/engine/graphics/Shaders/test.frag");
+	cout << "Current Dir: " << System::CurrentDirectory() << endl;
 
-	GLchar const* vertFiles[] = { version.c_str(), vertInfo.first.c_str() };
-	GLint vertLengths[] = { version.size(), vertInfo.second };
-	GLchar const* fragFiles[] = { version.c_str(), fragInfo.first.c_str() };
-	GLint fragLengths[] = { version.size(), fragInfo.second };
+	// Load shader files
+	string vertInfo = System::File2String("../engine/graphics/Shaders/test.vert");
+	string fragInfo = System::File2String("../engine/graphics/Shaders/test.frag");
+
+	GLchar const* vertFiles[] = { version.c_str(), vertInfo.c_str() };
+	GLint vertLengths[] = { version.size(), vertInfo.size() };
+	GLchar const* fragFiles[] = { version.c_str(), fragInfo.c_str() };
+	GLint fragLengths[] = { version.size(), fragInfo.size() };
 
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 	m_window = glfwCreateWindow(800, 800, "CSE 125", NULL, NULL);
@@ -125,9 +112,8 @@ void GraphicsEngine::Initialize() {
 		m_objects.push_back(new Cube(position, glm::angleAxis(glm::radians((float)i), glm::vec3(0, 0, 1)), glm::vec3(1.f, 1.f, 1.f), 0.02f + 0.08f * (i / (float)100)));
 	}
 	//m_objects.push_back(new Cube(glm::vec3(0, 0, 0), glm::quat(), glm::vec3(1.f, 1.f, 1.f), 0.5f));
-	printf("before teapot");
-	m_player = new Geometry("../teapot.obj");
-	printf("after teapot");
+	m_player = new Geometry("../../media/pb.obj");
+
 	// view and projection matrix locations in the shader program
 	m_uniView = glGetUniformLocation(m_shaderProgram, "view");
 	m_uniProjection = glGetUniformLocation(m_shaderProgram, "projection");

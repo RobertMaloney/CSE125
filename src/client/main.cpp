@@ -11,6 +11,7 @@
 
 using std::cout;
 
+bool DEBUG = false;
 
 static void keyCallback(int key, int action, int mods) {
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
@@ -53,10 +54,12 @@ int main(int argc, char* argv[]) {
 	int i = 0;
 	while (!GraphicsEngine::Closing()) {
 		GraphicsEngine::DrawAndPoll();
-        client->SendEvents(packets);
-        client->ReceiveUpdates(updates);
-        client->PrintUpdates(updates);
-        updates.clear();
+		if (DEBUG) {
+			client->SendEvents(packets);
+			client->ReceiveUpdates(updates);
+			client->PrintUpdates(updates);
+			updates.clear();
+		}
 	}
 	
 	GraphicsEngine::Destroy();
