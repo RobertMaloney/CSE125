@@ -7,6 +7,6 @@ using namespace std;
 
 class ObjLoader {
 public:
-	static bool LoadObj(const char*, vector<float>&);
+	static bool LoadObj(string, vector<float>&);
 };
 #endif
