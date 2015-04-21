@@ -4,6 +4,7 @@
 #include <vector>
 #include "World.h"
 #include "Player.h"
+#include "BlobModel.h"
 
 using namespace std;
 
@@ -18,7 +19,7 @@ public:
 	GameState();
 	virtual ~GameState();
 
-	void addPlayer(Player::BlobModel bm);
+	void addPlayer(BlobModel bm);
 
 
 };

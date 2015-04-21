@@ -52,6 +52,9 @@
 >>>>>>> 69a1978bd4d0a6cd46689531bfd06825b8dee5fd
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="utility\GameObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Network\Endianness.h">
@@ -111,6 +114,12 @@
     </ClInclude>
     <ClInclude Include="network\GameClient.h">
 >>>>>>> 69a1978bd4d0a6cd46689531bfd06825b8dee5fd
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utility\BlobModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utility\GameObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
