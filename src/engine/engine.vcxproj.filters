@@ -45,6 +45,9 @@
     <ClCompile Include="network\GameClient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="network\Packet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Network\Endianness.h">
@@ -90,6 +93,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="network\GameClient.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="network\Packet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
