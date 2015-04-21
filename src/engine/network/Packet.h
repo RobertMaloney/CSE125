@@ -1,14 +1,11 @@
 #ifndef PACKET_H
 #define PACKET_H
 
-#include <iostream>
 #include <vector>
 #include <cstdint>
 
-
 #include "Endianness.h"
 
-using std::cout;
 using std::vector;
 
 typedef uint8_t byte;

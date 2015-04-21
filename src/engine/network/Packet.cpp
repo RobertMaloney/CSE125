@@ -82,7 +82,7 @@ byte Packet::ReadByte() {
 
 
 bool Packet::ReadBool() {
-    return static_cast<bool>(this->buffer[index++]);
+    return (this->buffer[index++]) ? true : false;
 }
 
 

@@ -181,57 +181,41 @@ bool TCPConnection::FillFromBuffer(Packet & packet, unsigned int & pos) {
     // skip the header since its still in the buffer
     unsigned int endPacket = nextPacketSize + BYTES_IN_HEADER + pos;
     pos += BYTES_IN_HEADER;
+    vector<byte> & pBuffer = packet.buffer;
     // read all the data bytes into the packet supplied
     for (; pos < endPacket; ++pos) {
-        packet.WriteByte(receiveBuffer[pos]);
+        pBuffer.push_back(receiveBuffer[pos]);
     }
     return true;
 }
 
 
 bool TCPConnection::WriteToBuffer(const Packet & packet) {
+    vector<byte> pBuffer = packet.buffer;
     // if theres nothing to send do nothing
-    if (packet.Size() == 0) {
+    if (pBuffer.size() == 0) {
         return false;
     }
     // if there's a problem with the packet's size return the PACKETSIZE error
-    if (packet.Size() > MAX_PACKET_SIZE || packet.Size() < 0) {
+    if (pBuffer.size() > MAX_PACKET_SIZE || pBuffer.size() < 0) {
         return false;
     }
     // reserve enough space in the buffer to store the entire packet.
-    if (packet.Size() > sendBuffer.capacity() - sendBuffer.size()) {
-        sendBuffer.reserve(sendBuffer.size() + packet.Size() + sizeof(packet.Size()));
+    if (pBuffer.size() > sendBuffer.capacity() - sendBuffer.size()) {
+        sendBuffer.reserve(sendBuffer.size() + pBuffer.size() + sizeof(pBuffer.size()));
     }
     // write the packet size to the buffer
     uint32_t mask = 0xFF000000;
-    uint32_t size = HostToNet(static_cast<uint32_t>(packet.Size()));
+    uint32_t size = HostToNet(static_cast<uint32_t>(pBuffer.size()));
     for (int i = 3; i >= 0; --i) {
         sendBuffer.push_back((size & mask) >> (i * 8));
         mask >>= 8;
     }
     // put the body of the packet in the buffer
-    for (auto it = packet.buffer.begin(); it != packet.buffer.end(); ++it) {
+    for (auto it = pBuffer.begin(); it != pBuffer.end(); ++it) {
         sendBuffer.push_back(*it);
     }
     return true;
-}
-
-// raw system calls
-int TCPConnection::Send(byte* buffer, int size) {
-#ifdef _WIN32
-    return ::send(sock, reinterpret_cast<char*>(buffer), size, 0);
-#else
-    return ::send(sock, reinterpret_cast<void*>(buffer), size, 0);
-#endif
-}
-
-
-int TCPConnection::Recv(byte* buffer, int size) {
-#ifdef _WIN32
-    return ::recv(sock, reinterpret_cast<char*>(buffer), size, 0);
-#else
-    return ::recv(sock, reinterpret_cast<void*>(buffer), size, 0);
-#endif
 }
 
 

@@ -11,9 +11,6 @@
 using std::vector;
 using std::deque;
 
-//typedef uint8_t byte;
-//typedef vector<byte> Packet;
-
 const int DEFAULT_SOCKET_BUFSIZ = 4096;             // the default size of buffers
 const int BYTES_IN_HEADER = 4;                   
 const int FREE_THRESHOLD = 512;                  // min number of avail bytes in buffer before expansion
@@ -61,19 +58,38 @@ protected:
 
     bool WriteToBuffer(const Packet & packet); // write to the send buffer
     bool FillFromBuffer(Packet & packet, unsigned int & pos); // read from the receive buffer
-    void ShiftBuffer(vector<byte> & buffer, unsigned int lastRead); // shift from lastRead to size 
-
-    // vanilla send and receive wrappers
-    inline int Send(byte* buffer, int size);
-    inline int Recv(byte* buffer, int size);
+    void ShiftBuffer(vector<byte> & buffer, unsigned int lastRead); // shift from lastRead to size
 
     // prints all values in the specified buffer. useful for debugging.
     void PrintBuffer(vector<byte> & buffer, std::string msg);
+
+    // vanilla send and receive wrappers
+    inline int Recv(byte* buffer, int size);
+    inline int Send(byte* buffer, int size);
 
     // internal buffers for sending and receiving
     vector<byte> sendBuffer;
     vector<byte> receiveBuffer;
 
 };
+
+
+inline int TCPConnection::Send(byte* buffer, int size) {
+#ifdef _WIN32
+    return ::send(sock, reinterpret_cast<char*>(buffer), size, 0);
+#else
+    return ::send(sock, reinterpret_cast<void*>(buffer), size, 0);
+#endif
+}
+
+
+int TCPConnection::Recv(byte* buffer, int size) {
+#ifdef _WIN32
+    return ::recv(sock, reinterpret_cast<char*>(buffer), size, 0);
+#else
+    return ::recv(sock, reinterpret_cast<void*>(buffer), size, 0);
+#endif
+}
+
 
 #endif
