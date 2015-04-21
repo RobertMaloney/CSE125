@@ -1,4 +1,4 @@
-                                                                                                                                                                                                                                                                                             
+
 #include <thread>
 #include <stdio.h>
 #include <fstream>
@@ -7,6 +7,8 @@
 #include <string>
 
 #include "network\GameServer.h"
+
+#include "utility\Event.h"
 
 using std::cout;
 
@@ -18,5 +20,28 @@ int main(int argc, char* argv[]) {
     server.Run();
 
 
+    while (true) {
+        if (!nclient) {
+            nclient = listener.Accept();
+        }
+       numRecvd = nclient->Receive(static_cast<void*>(&buffer), 1024);
+		if (numRecvd == 0){
+			nclient->Close();
+		}
+		if (numRecvd > 0){
+         //cout << buffer;
+			cout << std::string(buffer) << std::endl;
+         e.deserialize(buffer);
+         if (e.theevent == EventType::MOVE_DOWN)
+            cout << "down";
+         else if (e.theevent == EventType::MOVE_UP)
+            cout << "up";
+         else if (e.theevent == EventType::MOVE_LEFT)
+            cout << "left";
+         else if (e.theevent == EventType::MOVE_RIGHT)
+            cout << "right";
+		}
+       nclient->Send(static_cast<void*>(&buffer), numRecvd);
+    }
     return 0;
 }

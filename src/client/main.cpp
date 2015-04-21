@@ -7,7 +7,11 @@
 
 #include "network\GameClient.h"
 #include "graphics\GraphicsEngine.h"
+#include "utility\InputHandler.h"
+#include "utility\Event.h"
 
+using std::cout;
+TCPConnection client;
 
 using std::cout;
 
@@ -64,11 +68,11 @@ int main(int argc, char* argv[]) {
 	GraphicsEngine::SetKeyCallback(keyCallback);
     client = new GameClient();
     client->Initialize();
-    
+
     deque<Packet> packets;
     deque<Packet> updates;
     fillWithDebugPackets(packets);
-	
+
 	int i = 0;
 	while (!GraphicsEngine::Closing()) {
 		GraphicsEngine::DrawAndPoll();
@@ -80,7 +84,7 @@ int main(int argc, char* argv[]) {
 			updates.clear();
 		}
 	}
-	
+
 	GraphicsEngine::Destroy();
 	system("pause");
 	return 0;

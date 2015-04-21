@@ -10,7 +10,8 @@
 #include "GraphicsEngine.h"
 #include "..\graphics\Cube.h"
 #include "..\graphics\Geometry.h"
-#include "..\utility\System.h"
+#include "..\utility\InputHandler.h"
+#include "..\utility\Event.h"
 
 using namespace std;
 
@@ -35,7 +36,8 @@ string version = "#version 150\n";
 
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	if (GraphicsEngine::GetKeyCallback()) GraphicsEngine::GetKeyCallback()(key, action, mods);
+   Event e = InputHandler::handleKey(key, action, mods);
+   if (e.theevent != EventType::DO_NOTHING) InputHandler::eventList.push_back(e);
 }
 
 /**
