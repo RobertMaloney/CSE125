@@ -2,7 +2,7 @@
 
 
 Packet::Packet(int size) {
-    data.reserve(size);
+    buffer.reserve(size);
     index = 0;
 }
 
@@ -12,153 +12,173 @@ Packet::~Packet() {
 }
 
 
-void Packet::WriteBool(bool val) {
+void Packet::writeBool(bool val) {
     this->append(reinterpret_cast<char*>(&val), sizeof(val));
 }
 
 
-void Packet::WriteChar(char val) {
+void Packet::writeChar(char val) {
     this->append(reinterpret_cast<char*>(&val), sizeof(val));
 }
 
 
-void Packet::WriteUChar(unsigned char val) {
+void Packet::writeUChar(unsigned char val) {
     this->append(reinterpret_cast<char*>(&val), sizeof(val));
 }
 
 
-void Packet::WriteShort(short val) {
+void Packet::writeShort(short val) {
     this->append(reinterpret_cast<char*>(&val), sizeof(val));
 }
 
 
-void Packet::WriteUShort(unsigned short val) {
+void Packet::writeUShort(unsigned short val) {
     this->append(reinterpret_cast<char*>(&val), sizeof(val));
 }
 
 
-void Packet::WriteInt(int val) {
+void Packet::writeInt(int val) {
     this->append(reinterpret_cast<char*>(&val), sizeof(val));
 }
 
 
-void Packet::WriteUInt(unsigned int val) {
+void Packet::writeUInt(unsigned int val) {
     this->append(reinterpret_cast<char*>(&val), sizeof(val));
 }
 
 
-void Packet::WriteLong(long val) {
+void Packet::writeLong(long val) {
     this->append(reinterpret_cast<char*>(&val), sizeof(val));
 }
 
 
-void Packet::WriteULong(unsigned long val) {
+void Packet::writeULong(unsigned long val) {
     this->append(reinterpret_cast<char*>(&val), sizeof(val));
 }
 
 
-void Packet::WriteFloat(float val) {
+void Packet::writeFloat(float val) {
     this->append(reinterpret_cast<char*>(&val), sizeof(val));
 }
 
 
-void Packet::WriteDouble(double val) {
+void Packet::writeDouble(double val) {
     this->append(reinterpret_cast<char*>(&val), sizeof(val));
 }
 
 
-bool Packet::ReadBool() {
+bool Packet::readBool() {
     bool buff;
     this->read(reinterpret_cast<char*>(&buff), sizeof(bool));
     return buff;
 }
 
 
-char Packet::ReadChar() {
+char Packet::readChar() {
     char buff;
     this->read(reinterpret_cast<char*>(&buff), sizeof(bool));
     return buff;
 }
 
 
-unsigned char Packet::ReadUChar() {
+unsigned char Packet::readUChar() {
     unsigned char buff;
     this->read(reinterpret_cast<char*>(&buff), sizeof(bool));
     return buff;
 }
 
 
-short Packet::ReadShort() {
+short Packet::readShort() {
     short buff;
     this->read(reinterpret_cast<char*>(&buff), sizeof(bool));
     return buff;
 }
 
 
-unsigned short Packet::ReadUShort() {
+unsigned short Packet::readUShort() {
     unsigned short buff;
     this->read(reinterpret_cast<char*>(&buff), sizeof(bool));
     return buff;
 }
 
 
-int Packet::ReadInt() {
+int Packet::readInt() {
     int buff;
     this->read(reinterpret_cast<char*>(&buff), sizeof(bool));
     return buff;
 }
 
 
-unsigned int Packet::ReadUInt() {
+unsigned int Packet::readUInt() {
     unsigned int buff;
     this->read(reinterpret_cast<char*>(&buff), sizeof(bool));
     return buff;
 }
 
 
-long Packet::ReadLong() {
+long Packet::readLong() {
     long buff;
     this->read(reinterpret_cast<char*>(&buff), sizeof(bool));
     return buff;
 }
 
 
-unsigned long Packet::ReadULong() {
+unsigned long Packet::readULong() {
     unsigned long buff;
     this->read(reinterpret_cast<char*>(&buff), sizeof(bool));
     return buff;
 }
 
 
-float Packet::ReadFloat() {
+float Packet::readFloat() {
     float buff;
     this->read(reinterpret_cast<char*>(&buff), sizeof(bool));
     return buff;
 }
 
 
-double Packet::ReadDouble() {
+double Packet::readDouble() {
     double buff;
     this->read(reinterpret_cast<char*>(&buff), sizeof(bool));
     return buff;
 }
 
 
-void Packet::Reset() {
+byte* Packet::data() {
+    return buffer.data();
+}
+
+
+void Packet::reset() {
     index = 0;
 }
 
 
-unsigned int Packet::Index() {
+unsigned int Packet::size() {
+    return buffer.size();
+}
+
+
+unsigned int Packet::currentIndex() {
     return index;
 }
 
 
-unsigned int Packet::Size() {
-    return data.size();
+void Packet::resize(unsigned int size) {
+    buffer.resize(size);
 }
 
 
-byte* Packet::Data() {
-    return data.data();
+void Packet::reserve(unsigned int cap) {
+    buffer.reserve(cap);
+}
+
+
+vector<byte>::iterator Packet::begin() {
+    return buffer.begin();
+}
+
+
+vector<byte>::iterator Packet::end() {
+    return buffer.end();
 }

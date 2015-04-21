@@ -17,37 +17,41 @@ public:
     Packet(int size);
     ~Packet();
 
-    void WriteBool(bool val);
-    void WriteChar(char val);
-    void WriteUChar(unsigned char val);
-    void WriteShort(short val);
-    void WriteUShort(unsigned short val);
-    void WriteInt(int val);
-    void WriteUInt(unsigned int val);
-    void WriteLong(long val);
-    void WriteULong(unsigned long val);
-    void WriteFloat(float val);
-    void WriteDouble(double val);
+    void writeBool(bool val);
+    void writeChar(char val);
+    void writeUChar(unsigned char val);
+    void writeShort(short val);
+    void writeUShort(unsigned short val);
+    void writeInt(int val);
+    void writeUInt(unsigned int val);
+    void writeLong(long val);
+    void writeULong(unsigned long val);
+    void writeFloat(float val);
+    void writeDouble(double val);
 
-    bool ReadBool();
-    char ReadChar();
-    unsigned char ReadUChar();
-    short ReadShort();
-    unsigned short ReadUShort();
-    int ReadInt();
-    unsigned int ReadUInt();
-    long ReadLong();
-    unsigned long ReadULong();
-    float ReadFloat();
-    double ReadDouble();
+    bool readBool();
+    char readChar();
+    unsigned char readUChar();
+    short readShort();
+    unsigned short readUShort();
+    int readInt();
+    unsigned int readUInt();
+    long readLong();
+    unsigned long readULong();
+    float readFloat();
+    double readDouble();
 
-    void Reset();
-    unsigned int Index();
-    unsigned int Size();
-    byte* Data();
+    byte* data();
+    void reset();
+    unsigned int size();
+    unsigned int currentIndex();
+    void resize(unsigned int size);
+    void reserve(unsigned int cap);
+    vector<byte>::iterator begin();
+    vector<byte>::iterator end();
 
     byte& operator[](int i) {
-        return data[i];
+        return buffer[i];
     }
 
 private:
@@ -57,8 +61,8 @@ private:
         if (size > 1 && !IsBigEndian()) {
             ByteSwap(val, size);
         }
-        data.resize(data.size() + size);
-        memcpy(reinterpret_cast<void*>(&(data[data.size() - size])), reinterpret_cast<void*>(val), size);
+        buffer.resize(buffer.size() + size);
+        memcpy(reinterpret_cast<void*>(&(buffer[buffer.size() - size])), reinterpret_cast<void*>(val), size);
     }
 
 
@@ -66,7 +70,7 @@ private:
         if (size == 0) {
             return;
         }
-        memcpy(reinterpret_cast<void*>(buff), reinterpret_cast<void*>(&data[index]), size);
+        memcpy(reinterpret_cast<void*>(buff), reinterpret_cast<void*>(&buffer[index]), size);
         if (!IsBigEndian()) {
             ByteSwap(buff, size);
         }
@@ -74,7 +78,7 @@ private:
 
 
     unsigned int index;
-    vector<byte> data;
+    vector<byte> buffer;
 
 };
 
