@@ -47,7 +47,6 @@ public:
     unsigned short ReadUShort();
     unsigned int ReadUInt();
     unsigned long ReadULong();
-;
 
     void Reset();
     void Clear();
