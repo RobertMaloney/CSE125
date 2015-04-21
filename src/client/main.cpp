@@ -5,15 +5,13 @@
 #include <iostream>
 #include <string>
 
-#include "network\TCPListener.h"
-#include "network\TCPConnection.h"
-
+#include "network\GameClient.h"
 #include "graphics\GraphicsEngine.h"
-
 
 
 using std::cout;
 
+bool DEBUG = false;
 
 static void keyCallback(int key, int action, int mods) {
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
@@ -28,25 +26,42 @@ static void keyCallback(int key, int action, int mods) {
 		GraphicsEngine::MoveRight();
 }
 
+// used for debugging
+void fillWithDebugPackets(deque<Packet> & packets) {
+    Packet p;
+    for (int i = 0; i < 26; ++i) {
+        p.resize(0);
+        int len = rand() % 1000;
+        for (int j = 0; j < len; ++j) {
+            p.push_back('a' + i);
+        }
+        packets.push_back(p);
+    }
+}
+
+
 int main(int argc, char* argv[]) {
 
 	GraphicsEngine::Initialize();
 	GraphicsEngine::SetKeyCallback(keyCallback);
-
-	TCPConnection client;
-	char buffer[1024];
-
-	memset((void*)&buffer, 0, 1024);
-	client.Connect(DEFAULT_SERVER_IP, DEFAULT_SERVER_PORT);
-	const char * echo = "echo..";
-
+    GameClient* client = new GameClient();
+    client->Initialize();
+    
+    deque<Packet> packets;
+    deque<Packet> updates;
+    fillWithDebugPackets(packets);
+	
+	int i = 0;
 	while (!GraphicsEngine::Closing()) {
 		GraphicsEngine::DrawAndPoll();
-		client.Send(echo, 7);
-		client.Receive(static_cast<void*>(&buffer), 1024);
-
+		if (DEBUG) {
+			client->SendEvents(packets);
+			client->ReceiveUpdates(updates);
+			client->PrintUpdates(updates);
+			updates.clear();
+		}
 	}
-
+	
 	GraphicsEngine::Destroy();
 	system("pause");
 	return 0;

@@ -1,15 +1,13 @@
 #include "TCPListener.h"
 
-TCPListener::TCPListener() {
-    this->Initialize();
-}
+TCPListener::TCPListener() : Socket() {}
 
 
 TCPListener::~TCPListener() {
     this->Close();
 }
 
-bool TCPListener::Bind(const string & ip, const string & port) {
+SocketError TCPListener::Bind(const string & ip, const string & port) {
     AddressInfo* iter = this->DNSLookup(ip, port, SOCK_STREAM);
 
     for (; iter; iter = iter->ai_next) {
@@ -28,11 +26,13 @@ bool TCPListener::Bind(const string & ip, const string & port) {
         break;
     }
     
-    if (!iter) { return false; }
+    if (!iter) { 
+        return SE_UNKNOWN; 
+    }
 
     memcpy(static_cast<void*>(&this->listenAddr), static_cast<void*>(iter->ai_addr), sizeof(SocketAddress));
     freeaddrinfo(iter);
-    return true;
+    return SE_NOERR;
 }
 
 void TCPListener::Listen(int maxPending) {
@@ -59,7 +59,9 @@ TCPConnection* TCPListener::Accept() {
     clientFd = ::accept(sock, reinterpret_cast<sockaddr*>(&remoteAddress), &size);
 
     if (clientFd < 0) {
-        cerr << "Error while accepting client. " + this->GetErrorMsg() << endl;
+		if (!nonBlocking){
+			cerr << "Error while accepting client. " + this->GetErrorMsg() << endl;
+		}
         return nullptr;
     }
     return new TCPConnection(clientFd, remoteAddress);

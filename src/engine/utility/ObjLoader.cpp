@@ -1,77 +1,61 @@
 #include "ObjLoader.h"
+#include <tiny_obj_loader.h>
 
 #include <fstream>
 #include <sstream>
 #include <iostream>
 #include <string>
 #include <algorithm>
+#include <Windows.h>
+#include <tchar.h>
 
 using namespace std;
 
-bool ObjLoader::LoadObj(const char * filePath, vector<float> & vertexData) {
-	vector<float> v, vt, vn, index;
+bool ObjLoader::LoadObj(string filePath, vector<float> & vertexData) {
+	const bool debug = false;
 
-	ifstream in(filePath);
-	if (!in.is_open()) {
-		cout << "File not found." << endl;
-		return false;
+	vector<tinyobj::shape_t> shapes;
+	vector<tinyobj::material_t> materials;
+
+	string dir = filePath.substr(0, filePath.find_last_of('/')+1);
+
+	string err = tinyobj::LoadObj(shapes, materials, filePath.c_str(), dir.c_str());
+
+	if (!err.empty()) {
+		std::cerr << err << std::endl;
+		exit(1);
 	}
 
-	const float cMin = -1000000000.f;
-	const float cMax = 1000000000.f;
-	float x_min = cMax, x_max = cMin, y_min = cMax, y_max = cMin, z_min = cMax, z_max = cMin;
+	if (debug) cout << "# shapes: " << shapes.size() << endl;
+	if (debug) cout << "# mats: " << materials.size() << endl;
 
-	string line;
-	while (getline(in, line)) {
-		stringstream iss;
-		string token;
-
-		iss << line;
-		getline(iss, token, ' ');
-		if (token.compare("v") == 0) {
-			getline(iss, token, ' ');
-			float val = stof(token);
-			x_max = max(x_max, val);
-			x_min = min(x_min, val);
-			v.push_back(val);
-
-			getline(iss, token, ' ');
-			val = stof(token);
-			y_max = max(y_max, val);
-			y_min = min(y_min, val);
-			v.push_back(val);
-
-			getline(iss, token, ' ');
-			val = stof(token);
-			z_max = max(z_max, val);
-			z_min = min(z_min, val);
-			v.push_back(val);
+	for (int i = 0; i < shapes.size(); ++i) {
+		tinyobj::mesh_t _mesh = shapes[i].mesh;
+		if (debug) {
+			cout << "# pos: " << _mesh.positions.size() << endl;
+			cout << "# norm: " << _mesh.normals.size() << endl;
+			cout << "# ind: " << _mesh.indices.size() << endl;
+			cout << "# mat_id: " << _mesh.material_ids.size() << endl;
 		}
-		else if (token.compare("vt") == 0) {
-			while (getline(iss, token, ' ')) vt.push_back(stof(token));
-		}
-		else if (token.compare("vn") == 0) {
-			while (getline(iss, token, ' ')) vn.push_back(stof(token));
-		}
-		else if (token.compare("f") == 0) {
-			while (getline(iss, token, ' ')) index.push_back(stoi(token));
-		}
-	}
 
-	float x_offset = (x_max + x_min) / 2;
-	float y_offset = (y_max + y_min) / 2;
-	float z_offset = (z_max + z_min) / 2;
-	//cout << "Object center: (" << x_offset << ", " << y_offset << ", " << z_offset << ")\n";
+		bool doNorms = _mesh.normals.size() > 2;
+		bool doTex = _mesh.texcoords.size() > 1;
 
-	for (int i = 0; i < index.size(); ++i) {
-		int ind = index[i] - 1;
-		// position
-		vertexData.push_back(v[3 * ind + 0] - x_offset);
-		vertexData.push_back(v[3 * ind + 1] - y_offset);
-		vertexData.push_back(v[3 * ind + 2] - z_offset);
-		// normal
-		for (int j = 0; j < 3; ++j) vertexData.push_back(vn[3 * ind + j]);
-		// color
-		for (int j = 0; j < 3; ++j) vertexData.push_back(1.f);
+		for (int j = 0; j < _mesh.indices.size(); ++j) {
+			int index = (int) _mesh.indices[j];
+			// positions
+			for (int k = 0; k < 3; ++k) {
+				vertexData.push_back(_mesh.positions[3 * index + k]);
+			}
+			// normals
+			for (int k = 0; k < 3; ++k) {
+				vertexData.push_back(((doNorms) ? _mesh.normals[3 * index + k] : 0.f));
+			}
+			// colors
+			int mat_id = _mesh.material_ids[j / 3];
+			for (int k = 0; k < 3; ++k) {
+				vertexData.push_back(materials[mat_id].diffuse[k]);
+			}
+		}
 	}
 }

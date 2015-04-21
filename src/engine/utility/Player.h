@@ -7,7 +7,7 @@
 using namespace std;
 
 class Player {
-	enum BlobModel { OB, PB, BB, GB };//TODO put it outside
+
 protected:
 
 	int pid;
@@ -25,6 +25,8 @@ public:
 
 	Player() :Player(OB) {};
 	Player(BlobModel thebm);
+public:
+	Player();
 	virtual ~Player();
 
 	int getSpeed();

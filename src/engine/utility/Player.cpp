@@ -4,6 +4,7 @@
 int numOfPlayers = 0;
 
 //TODO Config file
+
 Player::Player(BlobModel thebm) {
 	numOfPlayers++;
 	this->pid = numOfPlayers;
@@ -11,7 +12,9 @@ Player::Player(BlobModel thebm) {
 	this->speed = 0;
 	this->power = 0;
 	this->loc = Location(0, 0, 0);
+
 	this->bm = thebm;
+
 }
 
 int Player::getSpeed() {

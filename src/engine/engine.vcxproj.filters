@@ -15,13 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="core.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Network\Socket.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Network\SocketSelector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Network\TCPConnection.cpp">
@@ -36,6 +30,12 @@
     <ClCompile Include="Utility\ObjLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD
+=======
+    <ClCompile Include="network\GameServer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+>>>>>>> 69a1978bd4d0a6cd46689531bfd06825b8dee5fd
     <ClCompile Include="utility\EntityMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -45,7 +45,11 @@
     <ClCompile Include="utility\Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="utility\GameState.cpp">
+=======
+    <ClCompile Include="network\GameClient.cpp">
+>>>>>>> 69a1978bd4d0a6cd46689531bfd06825b8dee5fd
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -54,9 +58,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Network\Socket.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Network\SocketSelector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Network\TCPConnection.h">
@@ -80,19 +81,36 @@
     <ClInclude Include="Graphics\Geometry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="utility\EntityMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="utility\Player.h">
+=======
+    <ClInclude Include="network\GameServer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utility\EntityMap.h">
+>>>>>>> 69a1978bd4d0a6cd46689531bfd06825b8dee5fd
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="utility\Location.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="utility\World.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="utility\GameState.h">
+=======
+    <ClInclude Include="utility\Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utility\World.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="network\GameClient.h">
+>>>>>>> 69a1978bd4d0a6cd46689531bfd06825b8dee5fd
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
