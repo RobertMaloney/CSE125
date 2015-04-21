@@ -45,7 +45,7 @@ void GameServer::Run() {
         this->PrintUpdates(events);
         this->SendUpdates(events);
         events.clear();
-   //     sleep_for(milliseconds(200));
+        sleep_for(milliseconds(200));
     }
 }
 
