@@ -31,7 +31,7 @@ public:
     GameServer();
     ~GameServer();
 
-    void Initialize(int maxPlayers);
+    void Initialize(int maxConns);
     void Run();
     void SendUpdates(deque<Packet> & updates);
     void ReceiveEvents(deque<Packet> & events);
@@ -53,5 +53,18 @@ private:
 
 };
 
+
+bool GameServer::ShouldTerminate(SocketError err) {
+    switch (err) {
+    case SE_NOERR:
+        return false;
+    case SE_WOULDBLOCK:
+        return false;
+    case SE_NODATA:
+        return false;
+    default:
+        return true;
+    }
+}
 
 #endif

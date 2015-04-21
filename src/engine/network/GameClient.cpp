@@ -38,27 +38,6 @@ void GameClient::SendEvents(deque<Packet> & events) {
 }
 
 
-void GameClient::CheckError(SocketError err) {
-    if (this->ShouldTerminate(err)) {
-        connection->Close();
-        throw SocketException("Fatal error while communicating over TCPConnection.");
-    }
-}
-
-
-bool GameClient::ShouldTerminate(SocketError err) {
-    switch (err) {
-    case SE_NOERR:
-        return false;
-    case SE_WOULDBLOCK:
-        return false;
-    case SE_NODATA:
-        return false;
-    default:
-        return true;
-    }
-}
-
 void GameClient::PrintUpdates(deque<Packet> & updates) {
     for (auto it = updates.begin(); it != updates.end(); ++it) {
         for (unsigned int i = 0; i < it->Size(); ++it) {
