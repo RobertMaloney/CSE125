@@ -3,6 +3,7 @@
 
 GameServer::GameServer() {
     this->clients = new unordered_map<ClientId, TCPConnection*>();
+    nextCid = 1;
 }
 
 
@@ -23,43 +24,68 @@ GameServer::~GameServer() {
 }
 
 
-void GameServer::Initialize() {
+void GameServer::Initialize(int maxPlayers) {
     Socket::Initialize();
     this->listener = new TCPListener();
     this->listener->Bind(DEFAULT_SERVER_IP, DEFAULT_SERVER_PORT);
-    this->listener->Listen(4);
+    this->listener->Listen(maxPlayers);
     this->listener->SetNonBlocking(true);
-    maxConnections = 1;
-    nextCid = 1;
+    maxConnections = maxPlayers;
 }
 
 
 void GameServer::Run() {
-    deque<Packet> updates;
-    TCPConnection* newClient = nullptr;
+    deque<Packet> events;
 
     while (true) {
         if (clients->size() < maxConnections) {
-            newClient = listener->Accept();
-            if (newClient) {
-                newClient->SetNoDelay(true);
-                newClient->SetNonBlocking(true);
-                clients->insert(make_pair(nextCid++, newClient));
-            }
+            this->AcceptWaitingClient();
         }
-
-        for (auto it = clients->begin(); it != clients->end(); ++it) {
-            SocketError err = it->second->Receive(updates);
-            if (this->ShouldTerminate(err)) {
-                it->second->Close();
-                delete it->second;
-                clients->erase(it->first);
-            } else {
-                this->PrintUpdates(updates);
-                it->second->Send(updates);
-            }
-        }
+        this->ReceiveEvents(events);
+        this->PrintUpdates(events);
+        this->SendUpdates(events);
+        events.clear();
         sleep_for(milliseconds(200));
+    }
+}
+
+
+void GameServer::AcceptWaitingClient() {
+    TCPConnection* newClient = listener->Accept();
+    if (newClient) {
+        newClient->SetNoDelay(true);
+        newClient->SetNonBlocking(true);
+        clients->insert(make_pair(nextCid++, newClient));
+    }
+}
+
+
+
+
+void GameServer::SendUpdates(deque<Packet> & updates) {
+    for (auto it = clients->begin(); it != clients->end();) {
+        SocketError err = it->second->Send(updates);
+        if (this->ShouldTerminate(err)) {
+            it->second->Close();
+            delete it->second;
+            it = clients->erase(it);
+        } else {
+            ++it;
+        }
+    }
+}
+
+
+void GameServer::ReceiveEvents(deque<Packet> & events) {
+    for (auto it = clients->begin(); it != clients->end();) {
+        SocketError err = it->second->Receive(events);
+        if (this->ShouldTerminate(err)) {
+            it->second->Close();
+            delete it->second;
+            it = clients->erase(it);
+        } else {
+            ++it;
+        }
     }
 }
 

@@ -1,0 +1,1 @@
+xcopy "..\engine\graphics\Shaders" "..\..\bin\win32\release\client" /e /i /y
