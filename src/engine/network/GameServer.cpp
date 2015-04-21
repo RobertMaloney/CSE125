@@ -24,13 +24,13 @@ GameServer::~GameServer() {
 }
 
 
-void GameServer::Initialize(int maxPlayers) {
+void GameServer::Initialize(int maxConns) {
     Socket::Initialize();
     this->listener = new TCPListener();
     this->listener->Bind(DEFAULT_SERVER_IP, DEFAULT_SERVER_PORT);
-    this->listener->Listen(maxPlayers);
+    this->listener->Listen(maxConns);
     this->listener->SetNonBlocking(true);
-    maxConnections = maxPlayers;
+    maxConnections = maxConns;
 }
 
 
@@ -120,20 +120,6 @@ void GameServer::ReceiveEvents(deque<Packet> & events) {
         } else {
             ++it;
         }
-    }
-}
-
-
-bool GameServer::ShouldTerminate(SocketError err) {
-    switch (err) {
-    case SE_NOERR:
-        return false;
-    case SE_WOULDBLOCK: 
-        return false;
-    case SE_NODATA:
-        return false;
-    default:
-        return true;
     }
 }
 

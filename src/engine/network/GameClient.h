@@ -33,4 +33,25 @@ private:
 };
 
 
+void GameClient::CheckError(SocketError err) {
+    if (this->ShouldTerminate(err)) {
+        connection->Close();
+        throw SocketException("Fatal error while communicating over TCPConnection.");
+    }
+}
+
+
+bool GameClient::ShouldTerminate(SocketError err) {
+    switch (err) {
+    case SE_NOERR:
+        return false;
+    case SE_WOULDBLOCK:
+        return false;
+    case SE_NODATA:
+        return false;
+    default:
+        return true;
+    }
+}
+
 #endif

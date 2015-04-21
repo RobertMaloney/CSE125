@@ -65,7 +65,7 @@ SocketError TCPConnection::Send(const deque<Packet> & packets) {
 
 SocketError TCPConnection::Receive(Packet & packet) {
     unsigned int pos = 0;
-    packet.Clear();
+    packet.buffer.clear();
     // try to grab a packet from the buffer. if successful shift the buffer to maintain state
     if (this->FillFromBuffer(packet, pos)) {
         this->ShiftBuffer(receiveBuffer, pos);
@@ -111,7 +111,7 @@ SocketError TCPConnection::Receive(deque<Packet> & packets) {
     // make as many packets as we can and put them in the vector.
     while (this->FillFromBuffer(p, pos)) {
         packets.push_back(p);
-        p.Clear();                      // make sure to erase the buffer
+        p.buffer.clear();                      // make sure to erase the buffer
     }
     this->ShiftBuffer(receiveBuffer, pos); // shift the buffer once at the end
     return (packets.size() == 0) ? SE_NODATA : SE_NOERR;
@@ -191,7 +191,7 @@ bool TCPConnection::FillFromBuffer(Packet & packet, unsigned int & pos) {
 
 
 bool TCPConnection::WriteToBuffer(const Packet & packet) {
-    vector<byte> pBuffer = packet.buffer;
+    const vector<byte> & pBuffer = packet.buffer;
     // if theres nothing to send do nothing
     if (pBuffer.size() == 0) {
         return false;
