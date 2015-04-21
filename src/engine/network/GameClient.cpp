@@ -61,7 +61,7 @@ bool GameClient::ShouldTerminate(SocketError err) {
 
 void GameClient::PrintUpdates(deque<Packet> & updates) {
     for (auto it = updates.begin(); it != updates.end(); ++it) {
-        for (auto p = it->begin(); p != it->end(); ++p) {
+        for (auto p = it->Begin(); p != it->End(); ++p) {
             cout << to_string(*p) << " ";
             
         }

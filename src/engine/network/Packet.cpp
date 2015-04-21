@@ -1,5 +1,8 @@
 #include "Packet.h"
 
+Packet::Packet() {
+    buffer.reserve(DEFAULT_PACKET_SIZE);
+}
 
 Packet::Packet(int size) {
     buffer.reserve(size);
@@ -158,12 +161,17 @@ void Packet::Reset() {
 }
 
 
-unsigned int Packet::Size() {
+void Packet::Clear() {
+    buffer.clear();
+}
+
+
+unsigned int Packet::Size() const {
     return buffer.size();
 }
 
 
-unsigned int Packet::Index() {
+unsigned int Packet::Index() const {
     return index;
 }
 
@@ -178,11 +186,11 @@ void Packet::Reserve(unsigned int cap) {
 }
 
 
-vector<byte>::iterator Packet::Begin() {
+vector<byte>::const_iterator Packet::Begin() const {
     return buffer.begin();
 }
 
 
-vector<byte>::iterator Packet::End() {
+vector<byte>::const_iterator Packet::End() const {
     return buffer.end();
 }

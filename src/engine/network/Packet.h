@@ -10,10 +10,13 @@ using std::vector;
 
 typedef uint8_t byte;
 
+const int DEFAULT_PACKET_SIZE = 40;
+
 class Packet {
 
 public:
 
+    Packet();
     Packet(int size);
     ~Packet();
 
@@ -45,12 +48,13 @@ public:
 
     byte* Data();
     void Reset();
-    unsigned int Size();
-    unsigned int Index();
+    void Clear();
+    unsigned int Size() const;
+    unsigned int Index() const;
     void Resize(unsigned int size);
     void Reserve(unsigned int cap);
-    vector<byte>::iterator Begin();
-    vector<byte>::iterator End();
+    vector<byte>::const_iterator Begin() const;
+    vector<byte>::const_iterator End() const;
 
     byte& operator[](int i) {
         return buffer[i];

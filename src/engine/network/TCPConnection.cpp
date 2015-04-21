@@ -65,7 +65,7 @@ SocketError TCPConnection::Send(const deque<Packet> & packets) {
 
 SocketError TCPConnection::Receive(Packet & packet) {
     unsigned int pos = 0;
-    packet.clear();
+    packet.Clear();
     // try to grab a packet from the buffer. if successful shift the buffer to maintain state
     if (this->FillFromBuffer(packet, pos)) {
         this->ShiftBuffer(receiveBuffer, pos);
@@ -111,7 +111,7 @@ SocketError TCPConnection::Receive(deque<Packet> & packets) {
     // make as many packets as we can and put them in the vector.
     while (this->FillFromBuffer(p, pos)) {
         packets.push_back(p);
-        p.clear();                      // make sure to erase the buffer
+        p.Clear();                      // make sure to erase the buffer
     }
     this->ShiftBuffer(receiveBuffer, pos); // shift the buffer once at the end
     return (packets.size() == 0) ? SE_NODATA : SE_NOERR;
@@ -183,7 +183,7 @@ bool TCPConnection::FillFromBuffer(Packet & packet, unsigned int & pos) {
     pos += BYTES_IN_HEADER;
     // read all the data bytes into the packet supplied
     for (; pos < endPacket; ++pos) {
-        packet.push_back(receiveBuffer[pos]);
+        packet.WriteByte(receiveBuffer[pos]);
     }
     return true;
 }
@@ -191,26 +191,26 @@ bool TCPConnection::FillFromBuffer(Packet & packet, unsigned int & pos) {
 
 bool TCPConnection::WriteToBuffer(const Packet & packet) {
     // if theres nothing to send do nothing
-    if (packet.size() == 0) {
+    if (packet.Size() == 0) {
         return false;
     }
     // if there's a problem with the packet's size return the PACKETSIZE error
-    if (packet.size() > MAX_PACKET_SIZE || packet.size() < 0) {
+    if (packet.Size() > MAX_PACKET_SIZE || packet.Size() < 0) {
         return false;
     }
     // reserve enough space in the buffer to store the entire packet.
-    if (packet.size() > sendBuffer.capacity() - sendBuffer.size()) {
-        sendBuffer.reserve(sendBuffer.size() + packet.size() + sizeof(packet.size()));
+    if (packet.Size() > sendBuffer.capacity() - sendBuffer.size()) {
+        sendBuffer.reserve(sendBuffer.size() + packet.Size() + sizeof(packet.Size()));
     }
     // write the packet size to the buffer
     uint32_t mask = 0xFF000000;
-    uint32_t size = HostToNet(static_cast<uint32_t>(packet.size()));
+    uint32_t size = HostToNet(static_cast<uint32_t>(packet.Size()));
     for (int i = 3; i >= 0; --i) {
         sendBuffer.push_back((size & mask) >> (i * 8));
         mask >>= 8;
     }
     // put the body of the packet in the buffer
-    for (auto it = packet.begin(); it != packet.end(); ++it) {
+    for (auto it = packet.Begin(); it != packet.End(); ++it) {
         sendBuffer.push_back(*it);
     }
     return true;

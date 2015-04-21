@@ -11,6 +11,7 @@
 #include <vector>
 #include <deque>
 #include "Renderable.h"
+#include "..\network\Packet.h"
 
 using namespace std;
 
@@ -29,7 +30,7 @@ public:
 	static void MoveDown();
 	static void MoveRight();
 	static KeyCallback GetKeyCallback();
-	static void UpdatePlayer(deque<vector<byte>> &);
+	static void UpdatePlayer(deque<Packet> &);
 
 private:
 	static glm::mat4				m_view, m_projection;

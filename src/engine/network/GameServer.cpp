@@ -54,7 +54,7 @@ void GameServer::Run() {
 
 void GameServer::ParsePlayer(deque<Packet> & in, deque<Packet> & out) {
 	for (unsigned int i = 0; i < in.size(); ++i) {
-		if (in[i].size() > 0) {
+		if (in[i].Size() > 0) {
 			Packet p;
 			switch (in[i][0]) {
 			case 0:
@@ -76,7 +76,7 @@ void GameServer::ParsePlayer(deque<Packet> & in, deque<Packet> & out) {
 			}
 			byte * matP = (byte *)glm::value_ptr(m_player);
 			for (int j = 0; j < 16 * sizeof(float); ++j)
-				p.push_back(matP[j]);
+				p.WriteByte(matP[j]);
 
 			out.push_back(p);
 		}
@@ -140,7 +140,7 @@ bool GameServer::ShouldTerminate(SocketError err) {
 
 void GameServer::PrintUpdates(deque<Packet> & updates) {
     for (auto it = updates.begin(); it != updates.end(); ++it) {
-        for (auto p = it->begin(); p != it->end(); ++p) {
+        for (auto p = it->Begin(); p != it->End(); ++p) {
             cout << to_string(*p) << " ";
         }
         cout << "\n";

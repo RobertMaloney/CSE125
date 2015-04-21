@@ -6,12 +6,13 @@
 #include <deque>
 
 #include "Socket.h"
+#include "Packet.h"
 
 using std::vector;
 using std::deque;
 
-typedef uint8_t byte;
-typedef vector<byte> Packet;
+//typedef uint8_t byte;
+//typedef vector<byte> Packet;
 
 const int DEFAULT_SOCKET_BUFSIZ = 4096;             // the default size of buffers
 const int BYTES_IN_HEADER = 4;                   

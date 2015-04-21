@@ -23,22 +23,22 @@ static void keyCallback(int key, int action, int mods) {
 	else if (key == GLFW_KEY_W && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
 		cout << "client move forward" << endl;
 		//GraphicsEngine::MoveUp();
-		p.push_back((byte)0);
+		p.WriteByte((byte)0);
 	}
 	else if (key == GLFW_KEY_A && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
 		cout << "client move left" << endl;
 		//GraphicsEngine::MoveLeft();
-		p.push_back((byte)1);
+		p.WriteByte((byte)1);
 	}
 	else if (key == GLFW_KEY_S && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
 		cout << "client move backward" << endl;
 		//GraphicsEngine::MoveDown();
-		p.push_back((byte)2);
+		p.WriteByte((byte)2);
 	}
 	else if (key == GLFW_KEY_D && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
 		cout << "client move right" << endl;
 		//GraphicsEngine::MoveRight();
-		p.push_back((byte)3);
+		p.WriteByte((byte)3);
 	}
 	packets.push_back(p);
 	client->SendEvents(packets);
@@ -48,10 +48,10 @@ static void keyCallback(int key, int action, int mods) {
 void fillWithDebugPackets(deque<Packet> & packets) {
     Packet p;
     for (int i = 0; i < 26; ++i) {
-        p.resize(0);
+        p.Resize(0);
         int len = rand() % 1000;
         for (int j = 0; j < len; ++j) {
-            p.push_back('a' + i);
+            p.WriteChar('a' + i);
         }
         packets.push_back(p);
     }
