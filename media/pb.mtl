@@ -1,19 +1,10 @@
-# Blender MTL File: 'bb.blend'
-# Material Count: 6
+# Blender MTL File: 'pb.blend'
+# Material Count: 5
 
-newmtl Material.011
+newmtl Green_mouth
 Ns 96.078431
 Ka 0.000000 0.000000 0.000000
-Kd 0.639282 0.000000 0.000000
-Ks 0.500000 0.500000 0.500000
-Ni 1.000000
-d 1.000000
-illum 2
-
-newmtl blue_blob
-Ns 96.078431
-Ka 0.000000 0.000000 0.000000
-Kd 0.038537 0.124741 0.639282
+Kd 0.000000 0.134616 0.002677
 Ks 0.500000 0.500000 0.500000
 Ni 1.000000
 d 1.000000
@@ -37,16 +28,16 @@ Ni 1.000000
 d 1.000000
 illum 2
 
-newmtl orange_blob
+newmtl purple_blob
 Ns 96.078431
 Ka 0.000000 0.000000 0.000000
-Kd 0.639282 0.137153 0.022741
+Kd 0.277363 0.000000 0.639282
 Ks 0.500000 0.500000 0.500000
 Ni 1.000000
 d 1.000000
 illum 2
 
-newmtl teeth
+newmtl white
 Ns 96.078431
 Ka 0.000000 0.000000 0.000000
 Kd 0.639282 0.639282 0.639282
