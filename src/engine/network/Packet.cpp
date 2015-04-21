@@ -2,6 +2,7 @@
 
 Packet::Packet() {
     buffer.reserve(DEFAULT_PACKET_SIZE);
+    index = 0;
 }
 
 Packet::Packet(int size) {
@@ -97,62 +98,57 @@ unsigned char Packet::ReadUChar() {
 
 short Packet::ReadShort() {
     short buff;
-    this->read(reinterpret_cast<char*>(&buff), sizeof(bool));
+    this->read(reinterpret_cast<char*>(&buff), sizeof(short));
     return buff;
 }
 
 
 unsigned short Packet::ReadUShort() {
     unsigned short buff;
-    this->read(reinterpret_cast<char*>(&buff), sizeof(bool));
+    this->read(reinterpret_cast<char*>(&buff), sizeof(unsigned short));
     return buff;
 }
 
 
 int Packet::ReadInt() {
     int buff;
-    this->read(reinterpret_cast<char*>(&buff), sizeof(bool));
+    this->read(reinterpret_cast<char*>(&buff), sizeof(int));
     return buff;
 }
 
 
 unsigned int Packet::ReadUInt() {
     unsigned int buff;
-    this->read(reinterpret_cast<char*>(&buff), sizeof(bool));
+    this->read(reinterpret_cast<char*>(&buff), sizeof(unsigned int));
     return buff;
 }
 
 
 long Packet::ReadLong() {
     long buff;
-    this->read(reinterpret_cast<char*>(&buff), sizeof(bool));
+    this->read(reinterpret_cast<char*>(&buff), sizeof(long));
     return buff;
 }
 
 
 unsigned long Packet::ReadULong() {
     unsigned long buff;
-    this->read(reinterpret_cast<char*>(&buff), sizeof(bool));
+    this->read(reinterpret_cast<char*>(&buff), sizeof(unsigned long));
     return buff;
 }
 
 
 float Packet::ReadFloat() {
     float buff;
-    this->read(reinterpret_cast<char*>(&buff), sizeof(bool));
+    this->read(reinterpret_cast<char*>(&buff), sizeof(float));
     return buff;
 }
 
 
 double Packet::ReadDouble() {
     double buff;
-    this->read(reinterpret_cast<char*>(&buff), sizeof(bool));
+    this->read(reinterpret_cast<char*>(&buff), sizeof(double));
     return buff;
-}
-
-
-byte* Packet::Data() {
-    return buffer.data();
 }
 
 
@@ -163,16 +159,12 @@ void Packet::Reset() {
 
 void Packet::Clear() {
     buffer.clear();
+    index = 0;
 }
 
 
 unsigned int Packet::Size() const {
     return buffer.size();
-}
-
-
-unsigned int Packet::Index() const {
-    return index;
 }
 
 
@@ -186,11 +178,6 @@ void Packet::Reserve(unsigned int cap) {
 }
 
 
-vector<byte>::const_iterator Packet::Begin() const {
-    return buffer.begin();
-}
-
-
-vector<byte>::const_iterator Packet::End() const {
-    return buffer.end();
+byte Packet::At(int index) {
+    return buffer[index];
 }

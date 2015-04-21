@@ -237,9 +237,15 @@ void GraphicsEngine::MoveRight() {
 void GraphicsEngine::UpdatePlayer(deque<Packet> & data) {
 	if (data.size() > 0 && data[0].Size() > 0) {
 		float * matPointer = glm::value_ptr(m_player->getMatrix());
-		float * newData = (float*)&data[0][0];
+		/*float * newData = (float*)&data[0][0];
 		for (int i = 0; i < 16; ++i) {
 			matPointer[i] = newData[i];
-		}
+		}*/
+        for (auto it = data.begin(); it != data.end(); ++it) {
+            for(int i = 0; i < 16; ++i) {
+                matPointer[i] = it->ReadFloat();
+            }
+        }
+        
 	}
 }

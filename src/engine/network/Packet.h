@@ -1,11 +1,14 @@
 #ifndef PACKET_H
 #define PACKET_H
 
+#include <iostream>
 #include <vector>
 #include <cstdint>
 
+
 #include "Endianness.h"
 
+using std::cout;
 using std::vector;
 
 typedef uint8_t byte;
@@ -23,39 +26,39 @@ public:
     void WriteByte(byte val);
     void WriteBool(bool val);
     void WriteChar(char val);
-    void WriteUChar(unsigned char val);
     void WriteShort(short val);
-    void WriteUShort(unsigned short val);
-    void WriteInt(int val);
-    void WriteUInt(unsigned int val);
+    void WriteInt(int val); 
     void WriteLong(long val);
-    void WriteULong(unsigned long val);
     void WriteFloat(float val);
     void WriteDouble(double val);
+
+    void WriteUChar(unsigned char val);
+    void WriteUShort(unsigned short val);
+    void WriteUInt(unsigned int val);
+    void WriteULong(unsigned long val);
 
     byte ReadByte();
     bool ReadBool();
     char ReadChar();
-    unsigned char ReadUChar();
     short ReadShort();
-    unsigned short ReadUShort();
     int ReadInt();
-    unsigned int ReadUInt();
     long ReadLong();
-    unsigned long ReadULong();
     float ReadFloat();
     double ReadDouble();
 
-    byte* Data();
+    unsigned char ReadUChar();
+    unsigned short ReadUShort();
+    unsigned int ReadUInt();
+    unsigned long ReadULong();
+;
+
     void Reset();
     void Clear();
     unsigned int Size() const;
-    unsigned int Index() const;
     void Resize(unsigned int size);
     void Reserve(unsigned int cap);
-    vector<byte>::const_iterator Begin() const;
-    vector<byte>::const_iterator End() const;
-
+    
+    byte At(int index);
     byte& operator[](int i) {
         return buffer[i];
     }
@@ -63,7 +66,7 @@ public:
 private:
 
 
-    inline void append(char* val, unsigned int size) {         
+    inline void append(char* val, unsigned int size) { 
         if (size > 1 && !IsBigEndian()) {
             ByteSwap(val, size);
         }
@@ -71,7 +74,7 @@ private:
             buffer.reserve(buffer.capacity() * 2);
         }
         buffer.resize(buffer.size() + size);
-        memcpy(reinterpret_cast<void*>(&(buffer[buffer.size() - size])), reinterpret_cast<void*>(val), size);
+        memcpy(reinterpret_cast<void*>(&buffer[buffer.size() - size]), reinterpret_cast<void*>(val), size);
     }
 
 
@@ -80,6 +83,7 @@ private:
             return;
         }
         memcpy(reinterpret_cast<void*>(buff), reinterpret_cast<void*>(&buffer[index]), size);
+        index += size;
         if (!IsBigEndian()) {
             ByteSwap(buff, size);
         }
@@ -89,6 +93,8 @@ private:
     unsigned int index;
     vector<byte> buffer;
 
+    friend class TCPConnection;
+    
 };
 
 

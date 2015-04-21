@@ -210,7 +210,7 @@ bool TCPConnection::WriteToBuffer(const Packet & packet) {
         mask >>= 8;
     }
     // put the body of the packet in the buffer
-    for (auto it = packet.Begin(); it != packet.End(); ++it) {
+    for (auto it = packet.buffer.begin(); it != packet.buffer.end(); ++it) {
         sendBuffer.push_back(*it);
     }
     return true;
