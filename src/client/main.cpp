@@ -11,19 +11,37 @@
 
 using std::cout;
 
-bool DEBUG = false;
+bool DEBUG = true;
+GameClient* client;
 
 static void keyCallback(int key, int action, int mods) {
+	deque<Packet> packets;
+	Packet p;
+
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		GraphicsEngine::CloseGame();
-	else if (key == GLFW_KEY_W && (action == GLFW_PRESS || action == GLFW_REPEAT))
-		GraphicsEngine::MoveUp();
-	else if (key == GLFW_KEY_A && (action == GLFW_PRESS || action == GLFW_REPEAT))
-		GraphicsEngine::MoveLeft();
-	else if (key == GLFW_KEY_S && (action == GLFW_PRESS || action == GLFW_REPEAT))
-		GraphicsEngine::MoveDown();
-	else if (key == GLFW_KEY_D && (action == GLFW_PRESS || action == GLFW_REPEAT))
-		GraphicsEngine::MoveRight();
+	else if (key == GLFW_KEY_W && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+		cout << "client move forward" << endl;
+		//GraphicsEngine::MoveUp();
+		p.push_back((byte)0);
+	}
+	else if (key == GLFW_KEY_A && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+		cout << "client move left" << endl;
+		//GraphicsEngine::MoveLeft();
+		p.push_back((byte)1);
+	}
+	else if (key == GLFW_KEY_S && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+		cout << "client move backward" << endl;
+		//GraphicsEngine::MoveDown();
+		p.push_back((byte)2);
+	}
+	else if (key == GLFW_KEY_D && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+		cout << "client move right" << endl;
+		//GraphicsEngine::MoveRight();
+		p.push_back((byte)3);
+	}
+	packets.push_back(p);
+	client->SendEvents(packets);
 }
 
 // used for debugging
@@ -44,7 +62,7 @@ int main(int argc, char* argv[]) {
 
 	GraphicsEngine::Initialize();
 	GraphicsEngine::SetKeyCallback(keyCallback);
-    GameClient* client = new GameClient();
+    client = new GameClient();
     client->Initialize();
     
     deque<Packet> packets;
@@ -55,9 +73,10 @@ int main(int argc, char* argv[]) {
 	while (!GraphicsEngine::Closing()) {
 		GraphicsEngine::DrawAndPoll();
 		if (DEBUG) {
-			client->SendEvents(packets);
+			//client->SendEvents(packets);
 			client->ReceiveUpdates(updates);
-			client->PrintUpdates(updates);
+			//client->PrintUpdates(updates);
+			GraphicsEngine::UpdatePlayer(updates);
 			updates.clear();
 		}
 	}

@@ -9,7 +9,10 @@
 #include <gtc\type_ptr.hpp>
 
 #include <vector>
+#include <deque>
 #include "Renderable.h"
+
+using namespace std;
 
 typedef void (*KeyCallback) (int,int,int);
 
@@ -26,6 +29,7 @@ public:
 	static void MoveDown();
 	static void MoveRight();
 	static KeyCallback GetKeyCallback();
+	static void UpdatePlayer(deque<vector<byte>> &);
 
 private:
 	static glm::mat4				m_view, m_projection;

@@ -6,6 +6,10 @@
 #include <iostream>
 #include <unordered_map>
 
+#include <glm.hpp>
+#include <gtc\matrix_transform.hpp>
+#include <gtc\type_ptr.hpp>
+
 #include "TCPConnection.h"
 #include "TCPListener.h"
 
@@ -36,6 +40,7 @@ private:
 
     void AcceptWaitingClient();
     void PrintUpdates(deque<Packet> & updates);
+	void ParsePlayer(deque<Packet> & in, deque<Packet> & out);
 
     inline bool ShouldTerminate(SocketError err);
 
@@ -43,6 +48,8 @@ private:
     TCPListener* listener;
     unsigned int maxConnections;
     unordered_map<ClientId, TCPConnection*>* clients;
+
+	glm::mat4 m_player;
 
 };
 

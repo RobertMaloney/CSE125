@@ -233,3 +233,13 @@ void GraphicsEngine::MoveRight() {
 	if (m_player)
 	m_player->getMatrix() = glm::translate(m_player->getMatrix(), glm::vec3(-1, 0, 0));
 }
+
+void GraphicsEngine::UpdatePlayer(deque<vector<byte>> & data) {
+	if (data.size() > 0 && data[0].size() > 0) {
+		float * matPointer = glm::value_ptr(m_player->getMatrix());
+		float * newData = (float*)&data[0][0];
+		for (int i = 0; i < 16; ++i) {
+			matPointer[i] = newData[i];
+		}
+	}
+}

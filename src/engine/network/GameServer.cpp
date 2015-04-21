@@ -36,17 +36,51 @@ void GameServer::Initialize(int maxPlayers) {
 
 void GameServer::Run() {
     deque<Packet> events;
+	deque<Packet> sends;
 
     while (true) {
         if (clients->size() < maxConnections) {
             this->AcceptWaitingClient();
         }
         this->ReceiveEvents(events);
-        this->PrintUpdates(events);
-        this->SendUpdates(events);
+		this->ParsePlayer(events, sends);
+        //this->PrintUpdates(events);
+        this->SendUpdates(sends);
         events.clear();
+		sends.clear();
    //     sleep_for(milliseconds(200));
     }
+}
+
+void GameServer::ParsePlayer(deque<Packet> & in, deque<Packet> & out) {
+	for (int i = 0; i < in.size(); ++i) {
+		if (in[i].size() > 0) {
+			Packet p;
+			switch (in[i][0]) {
+			case 0:
+				cout << "Moving player forward..." << endl;
+				m_player = glm::translate(m_player, glm::vec3(0, -1.f, 0));
+				break;
+			case 1:
+				cout << "Moving player left..." << endl;
+				m_player = glm::translate(m_player, glm::vec3(1.f, 0, 0));
+				break;
+			case 2:
+				cout << "Moving player backward..." << endl;
+				m_player = glm::translate(m_player, glm::vec3(0, 1.f, 0));
+				break;
+			case 3:
+				cout << "Moving player right..." << endl;
+				m_player = glm::translate(m_player, glm::vec3(-1.f, 0, 0));
+				break;
+			}
+			byte * matP = (byte *)glm::value_ptr(m_player);
+			for (int j = 0; j < 16 * sizeof(float); ++j)
+				p.push_back(matP[j]);
+
+			out.push_back(p);
+		}
+	}
 }
 
 
