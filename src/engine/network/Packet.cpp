@@ -12,173 +12,177 @@ Packet::~Packet() {
 }
 
 
-void Packet::writeBool(bool val) {
+void Packet::WriteByte(byte val) {
+    this->buffer.push_back(val);
+}
+
+
+void Packet::WriteBool(bool val) {
+    this->buffer.push_back(val);
+}
+
+
+void Packet::WriteChar(char val) {
+    this->buffer.push_back(val);
+}
+
+
+void Packet::WriteUChar(unsigned char val) {
+    this->buffer.push_back(val);
+}
+
+
+void Packet::WriteShort(short val) {
     this->append(reinterpret_cast<char*>(&val), sizeof(val));
 }
 
 
-void Packet::writeChar(char val) {
+void Packet::WriteUShort(unsigned short val) {
     this->append(reinterpret_cast<char*>(&val), sizeof(val));
 }
 
 
-void Packet::writeUChar(unsigned char val) {
+void Packet::WriteInt(int val) {
     this->append(reinterpret_cast<char*>(&val), sizeof(val));
 }
 
 
-void Packet::writeShort(short val) {
+void Packet::WriteUInt(unsigned int val) {
     this->append(reinterpret_cast<char*>(&val), sizeof(val));
 }
 
 
-void Packet::writeUShort(unsigned short val) {
+void Packet::WriteLong(long val) {
     this->append(reinterpret_cast<char*>(&val), sizeof(val));
 }
 
 
-void Packet::writeInt(int val) {
+void Packet::WriteULong(unsigned long val) {
     this->append(reinterpret_cast<char*>(&val), sizeof(val));
 }
 
 
-void Packet::writeUInt(unsigned int val) {
+void Packet::WriteFloat(float val) {
     this->append(reinterpret_cast<char*>(&val), sizeof(val));
 }
 
 
-void Packet::writeLong(long val) {
+void Packet::WriteDouble(double val) {
     this->append(reinterpret_cast<char*>(&val), sizeof(val));
 }
 
 
-void Packet::writeULong(unsigned long val) {
-    this->append(reinterpret_cast<char*>(&val), sizeof(val));
+byte Packet::ReadByte() {
+    return this->buffer[index++];
 }
 
 
-void Packet::writeFloat(float val) {
-    this->append(reinterpret_cast<char*>(&val), sizeof(val));
+bool Packet::ReadBool() {
+    return static_cast<bool>(this->buffer[index++]);
 }
 
 
-void Packet::writeDouble(double val) {
-    this->append(reinterpret_cast<char*>(&val), sizeof(val));
+char Packet::ReadChar() {
+    return this->buffer[index++];
 }
 
 
-bool Packet::readBool() {
-    bool buff;
-    this->read(reinterpret_cast<char*>(&buff), sizeof(bool));
-    return buff;
+unsigned char Packet::ReadUChar() {
+    return this->buffer[index++];
 }
 
 
-char Packet::readChar() {
-    char buff;
-    this->read(reinterpret_cast<char*>(&buff), sizeof(bool));
-    return buff;
-}
-
-
-unsigned char Packet::readUChar() {
-    unsigned char buff;
-    this->read(reinterpret_cast<char*>(&buff), sizeof(bool));
-    return buff;
-}
-
-
-short Packet::readShort() {
+short Packet::ReadShort() {
     short buff;
     this->read(reinterpret_cast<char*>(&buff), sizeof(bool));
     return buff;
 }
 
 
-unsigned short Packet::readUShort() {
+unsigned short Packet::ReadUShort() {
     unsigned short buff;
     this->read(reinterpret_cast<char*>(&buff), sizeof(bool));
     return buff;
 }
 
 
-int Packet::readInt() {
+int Packet::ReadInt() {
     int buff;
     this->read(reinterpret_cast<char*>(&buff), sizeof(bool));
     return buff;
 }
 
 
-unsigned int Packet::readUInt() {
+unsigned int Packet::ReadUInt() {
     unsigned int buff;
     this->read(reinterpret_cast<char*>(&buff), sizeof(bool));
     return buff;
 }
 
 
-long Packet::readLong() {
+long Packet::ReadLong() {
     long buff;
     this->read(reinterpret_cast<char*>(&buff), sizeof(bool));
     return buff;
 }
 
 
-unsigned long Packet::readULong() {
+unsigned long Packet::ReadULong() {
     unsigned long buff;
     this->read(reinterpret_cast<char*>(&buff), sizeof(bool));
     return buff;
 }
 
 
-float Packet::readFloat() {
+float Packet::ReadFloat() {
     float buff;
     this->read(reinterpret_cast<char*>(&buff), sizeof(bool));
     return buff;
 }
 
 
-double Packet::readDouble() {
+double Packet::ReadDouble() {
     double buff;
     this->read(reinterpret_cast<char*>(&buff), sizeof(bool));
     return buff;
 }
 
 
-byte* Packet::data() {
+byte* Packet::Data() {
     return buffer.data();
 }
 
 
-void Packet::reset() {
+void Packet::Reset() {
     index = 0;
 }
 
 
-unsigned int Packet::size() {
+unsigned int Packet::Size() {
     return buffer.size();
 }
 
 
-unsigned int Packet::currentIndex() {
+unsigned int Packet::Index() {
     return index;
 }
 
 
-void Packet::resize(unsigned int size) {
+void Packet::Resize(unsigned int size) {
     buffer.resize(size);
 }
 
 
-void Packet::reserve(unsigned int cap) {
+void Packet::Reserve(unsigned int cap) {
     buffer.reserve(cap);
 }
 
 
-vector<byte>::iterator Packet::begin() {
+vector<byte>::iterator Packet::Begin() {
     return buffer.begin();
 }
 
 
-vector<byte>::iterator Packet::end() {
+vector<byte>::iterator Packet::End() {
     return buffer.end();
 }

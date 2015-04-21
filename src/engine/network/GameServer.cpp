@@ -53,7 +53,7 @@ void GameServer::Run() {
 }
 
 void GameServer::ParsePlayer(deque<Packet> & in, deque<Packet> & out) {
-	for (int i = 0; i < in.size(); ++i) {
+	for (unsigned int i = 0; i < in.size(); ++i) {
 		if (in[i].size() > 0) {
 			Packet p;
 			switch (in[i][0]) {
