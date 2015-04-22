@@ -9,10 +9,6 @@
 #include "graphics\GraphicsEngine.h"
 #include "utility\InputHandler.h"
 #include "utility\Event.h"
-
-using std::cout;
-TCPConnection client;
-
 using std::cout;
 
 bool DEBUG = true;
