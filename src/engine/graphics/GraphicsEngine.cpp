@@ -236,6 +236,18 @@ void GraphicsEngine::MoveRight() {
 	m_player->getMatrix() = glm::translate(m_player->getMatrix(), glm::vec3(-1, 0, 0));
 }
 
+void GraphicsEngine::ScaleUp()
+{
+	if (m_player)
+		m_player->getMatrix() = glm::scale(m_player->getMatrix(), glm::vec3(1.2, 1.2, 1.2));
+}
+
+void GraphicsEngine::ScaleDown()
+{
+	if (m_player)
+		m_player->getMatrix() = glm::scale(m_player->getMatrix(), glm::vec3(0.8, 0.8, 0.8));
+}
+
 void GraphicsEngine::UpdatePlayer(deque<Packet> & data) {
 	if (data.size() > 0 && data[0].Size() > 0) {
 		float * matPointer = glm::value_ptr(m_player->getMatrix());

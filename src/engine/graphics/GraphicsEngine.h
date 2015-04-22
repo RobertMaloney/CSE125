@@ -30,6 +30,8 @@ public:
 	static void MoveLeft();
 	static void MoveDown();
 	static void MoveRight();
+	static void ScaleUp();
+	static void ScaleDown();
 	static KeyCallback GetKeyCallback();
 	static void UpdatePlayer(deque<Packet> &);
    static int getKeyState(int);

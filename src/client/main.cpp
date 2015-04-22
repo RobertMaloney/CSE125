@@ -40,6 +40,12 @@ static void keyCallback(int key, int action, int mods) {
 		//GraphicsEngine::MoveRight();
 		p.WriteByte((byte)3);
 	}
+	else if (key == GLFW_KEY_Q && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+		GraphicsEngine::ScaleUp();
+	}
+	else if (key == GLFW_KEY_E && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+		GraphicsEngine::ScaleDown();
+	}
 	packets.push_back(p);
 	client->SendEvents(packets);
 }
