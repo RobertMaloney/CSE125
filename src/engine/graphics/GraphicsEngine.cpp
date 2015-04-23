@@ -133,7 +133,7 @@ void GraphicsEngine::Initialize() {
 	}
 	Renderable* playerModel = new Geometry("../../media/pb.obj");
 	Geode* playerGeode = new Geode();
-	playerGeode->setRenderable(cube);
+	playerGeode->setRenderable(playerModel);
 	m_player = new MatrixNode();
 	m_player->addChild(playerGeode);
 	m_scene->addChild(m_player);
