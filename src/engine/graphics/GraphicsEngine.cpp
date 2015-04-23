@@ -17,7 +17,7 @@
 using namespace std;
 
 // Graphics Engine Static Members
-vector<Renderable*> GraphicsEngine::m_objects;
+vector<MatrixNode*> GraphicsEngine::m_objects;
 glm::mat4			GraphicsEngine::m_view, GraphicsEngine::m_projection;
 bool				GraphicsEngine::m_initialized = false;
 GLFWwindow			*GraphicsEngine::m_window;
@@ -31,7 +31,8 @@ GLuint				GraphicsEngine::m_vertexShader,
 
 KeyCallback			GraphicsEngine::m_keyCallback = NULL;
 
-Renderable			*GraphicsEngine::m_player = NULL;
+MatrixNode			*GraphicsEngine::m_player = NULL,
+					*GraphicsEngine::m_scene = NULL;
 
 string version = "#version 150\n";
 
@@ -50,6 +51,7 @@ void GraphicsEngine::Initialize() {
 		return;
 
 	cout << "Current Dir: " << System::CurrentDirectory() << endl;
+	m_scene = new MatrixNode();
 
 	// Load shader files
 	string vertInfo = System::File2String("../engine/graphics/Shaders/test.vert");
@@ -108,13 +110,30 @@ void GraphicsEngine::Initialize() {
 	glEnable(GL_DEPTH_TEST);
 
 	// Testing renderables
-	const int CUBE_COUNT = 0;
+	const int CUBE_COUNT = 100;
+	Renderable* cube = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 1.f, 1.f), 1.f);
 	for (int i = 0; i < CUBE_COUNT; ++i) {
 		glm::vec3 position(-2.f + 0.4f*(i % 10), -2.f + 0.4f*(i / 10), 0.1f);
-		m_objects.push_back(new Cube(position, glm::angleAxis(glm::radians((float)i), glm::vec3(0, 0, 1)), glm::vec3(1.f, 1.f, 1.f), 0.02f + 0.08f * (i / (float)100)));
+		Geode* cubeGeode = new Geode();
+		cubeGeode->setRenderable(cube);
+		m_objects.push_back(new MatrixNode());
+		m_objects[i]->addChild(cubeGeode);
+		glm::mat4 cubeMat;
+		cubeMat = glm::translate(cubeMat, position);
+		cubeMat = glm::rotate(cubeMat, glm::radians((float)i), glm::vec3(0, 0, 1));
+		float scale = 0.02f + 0.08f * (i / (float)100);
+		cubeMat = glm::scale(cubeMat, glm::vec3(scale, scale, scale));
+		m_objects[i]->setMatrix(cubeMat);
+		m_scene->addChild(m_objects[i]);
+		//m_objects.push_back(new Cube(position, glm::angleAxis(glm::radians((float)i), glm::vec3(0, 0, 1)), glm::vec3(1.f, 1.f, 1.f), 0.02f + 0.08f * (i / (float)100)));
 	}
 	//m_objects.push_back(new Cube(glm::vec3(0, 0, 0), glm::quat(), glm::vec3(1.f, 1.f, 1.f), 0.5f));
-	m_player = new Geometry("../../media/pb.obj");
+	Renderable* playerModel = new Geometry("../../media/pb.obj");
+	Geode* playerGeode = new Geode();
+	playerGeode->setRenderable(playerModel);
+	m_player = new MatrixNode();
+	m_player->addChild(playerGeode);
+	m_scene->addChild(m_player);
 
 	// view and projection matrix locations in the shader program
 	m_uniView = glGetUniformLocation(m_shaderProgram, "view");
@@ -178,14 +197,37 @@ void GraphicsEngine::DrawAndPoll() {
 	// render objects
 	int renderableCount = m_objects.size();
 	for (int i = 0; i < renderableCount; ++i) {
-		//m_objects[i]->getMatrix() = glm::translate(m_objects[i]->getMatrix(), glm::vec3(0, 0, -0.01f));
-		m_objects[i]->render();
+		m_objects[i]->getMatrix() = glm::rotate(m_objects[i]->getMatrix(), glm::radians(1.f), glm::vec3(0, 0, 1.f));
 	}
 
-	m_player->render();
+	glm::mat4 identity;
+	renderScene(m_scene, &identity);
 
 	glfwSwapBuffers(m_window);
 	glfwPollEvents();
+}
+
+/**
+* GraphicsEngine::renderScene(Node*, glm::mat4*)
+* Description: This function renders the scene graph using depth traversal.
+*/
+void GraphicsEngine::renderScene(Node* node, glm::mat4* matrix) {
+	Geode *geode = node->asGeode();
+	MatrixNode *mnode = node->asMatrixNode();
+
+	if (geode) {
+		// render geode
+		//cout << glm::to_string(*matrix) << endl << endl;
+		geode->getRenderable()->render(matrix);
+	}
+	else {
+		int numChildren = mnode->getNumChildren();
+		glm::mat4 newmat = *matrix;
+		mnode->postMult(newmat);
+		for (int i = 0; i < numChildren; ++i) {
+			renderScene(mnode->getChild(i), &newmat);
+		}
+	}
 }
 
 /**

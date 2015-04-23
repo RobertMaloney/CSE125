@@ -118,8 +118,11 @@
   <ItemGroup>
     <ClInclude Include="Graphics\Cube.h" />
     <ClInclude Include="graphics\ActionEvent.h" />
+    <ClInclude Include="graphics\Geode.h" />
     <ClInclude Include="Graphics\Geometry.h" />
     <ClInclude Include="Graphics\GraphicsEngine.h" />
+    <ClInclude Include="graphics\MatrixNode.h" />
+    <ClInclude Include="graphics\Node.h" />
     <ClInclude Include="Graphics\Renderable.h" />
     <ClInclude Include="Network\Endianness.h" />
     <ClInclude Include="network\GameClient.h" />

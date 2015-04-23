@@ -116,10 +116,10 @@ protected:
 	}
 
 public:
-	void render(void) {
+	void render(glm::mat4* matrix) {
 		if (m_valid) {
 			glBindVertexArray(m_vao);
-			glUniformMatrix4fv(m_model, 1, GL_FALSE, glm::value_ptr(m_matrix));
+			glUniformMatrix4fv(m_model, 1, GL_FALSE, glm::value_ptr(*matrix));
 			switch (m_renderMode) {
 				case ELEMENTS: glDrawElements(m_drawType, m_numElems, GL_UNSIGNED_INT, 0); break;
 				case VERTICES: glDrawArrays(m_drawType, 0, m_numVerts / 9); break; // 3 vec3 per triangle
