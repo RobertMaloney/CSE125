@@ -1,6 +1,9 @@
 #include "GameClient.h"
 
 
+deque<Packet> GameClient::input;
+
+
 GameClient::GameClient() {
     connection = new TCPConnection();
 }

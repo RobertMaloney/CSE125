@@ -11,7 +11,7 @@
 #include <vector>
 #include <deque>
 #include "Renderable.h"
-#include "../utility/Event.h"
+#include "..\utility\InputHandler.h"
 #include "..\network\Packet.h"
 
 using namespace std;

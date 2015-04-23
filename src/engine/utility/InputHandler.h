@@ -1,4 +1,4 @@
-#ifndef INPUT_HANLDER_H
+#ifndef INPUT_HANDLER_H
 #define INPUT_HANDLER_H
 #include "..\GameClient.h"
 #include "..\graphics\GraphicsEngine.h"

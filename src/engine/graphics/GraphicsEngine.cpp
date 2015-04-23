@@ -1,4 +1,4 @@
-#include <Windows.h>
+//#include <Windows.h>
 
 // STL
 #include <stdio.h>
@@ -11,7 +11,6 @@
 #include "..\graphics\Cube.h"
 #include "..\graphics\Geometry.h"
 #include "..\utility\System.h"
-#include "..\utility\InputHandler.h"
 #include "..\utility\Event.h"
 
 using namespace std;

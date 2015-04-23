@@ -3,9 +3,12 @@
 
 #include <thread>
 #include <iostream>
+#include <deque>
 
 #include "network\TCPConnection.h"
 #include "graphics\GraphicsEngine.h"
+#include "network\Packet.h"
+
 
 using std::this_thread::sleep_for;
 using std::chrono::milliseconds;
