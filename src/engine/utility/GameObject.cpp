@@ -8,8 +8,7 @@ GameObject::GameObject(int nx, int ny, int nz) {
 	this->loc = Location(nx, ny, nz);
 }
 
-
-string GameObject::getId() {
+int GameObject::getId() {
 	return id;
 }
 

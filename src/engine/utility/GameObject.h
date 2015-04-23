@@ -10,7 +10,7 @@ class GameObject {
 	//TODO put it outside
 protected:
 
-	string id;
+	int id;
 	Location loc;
 	static int numOfObjects;
 
@@ -22,7 +22,7 @@ public:
 
 	virtual ~GameObject();
 
-	string getId();
+	int getId();
 
 	int getX();
 	int getY();
