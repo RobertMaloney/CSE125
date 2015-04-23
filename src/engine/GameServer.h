@@ -10,8 +10,8 @@
 #include <gtc\matrix_transform.hpp>
 #include <gtc\type_ptr.hpp>
 
-#include "TCPConnection.h"
-#include "TCPListener.h"
+#include "network\TCPConnection.h"
+#include "network\TCPListener.h"
 
 using std::this_thread::sleep_for;
 using std::chrono::milliseconds;

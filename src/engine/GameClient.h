@@ -4,7 +4,8 @@
 #include <thread>
 #include <iostream>
 
-#include "TCPConnection.h"
+#include "network\TCPConnection.h"
+#include "graphics\GraphicsEngine.h"
 
 using std::this_thread::sleep_for;
 using std::chrono::milliseconds;
@@ -15,9 +16,12 @@ class GameClient {
 
 public:
 
+	static deque<Packet> input;
+
     GameClient();
     ~GameClient();
 
+	void run();
     void Initialize();
     void ReceiveUpdates(deque<Packet> & updates);
     void SendEvents(deque<Packet> & events);
@@ -25,33 +29,9 @@ public:
 
 private:
 
+	TCPConnection* connection;
+
     inline void CheckError(SocketError err);
     inline bool ShouldTerminate(SocketError err);
-    
-    TCPConnection* connection;
-
 };
-
-
-void GameClient::CheckError(SocketError err) {
-    if (this->ShouldTerminate(err)) {
-        connection->Close();
-        throw SocketException("Fatal error while communicating over TCPConnection.");
-    }
-}
-
-
-bool GameClient::ShouldTerminate(SocketError err) {
-    switch (err) {
-    case SE_NOERR:
-        return false;
-    case SE_WOULDBLOCK:
-        return false;
-    case SE_NODATA:
-        return false;
-    default:
-        return true;
-    }
-}
-
 #endif

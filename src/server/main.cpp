@@ -6,7 +6,7 @@
 #include <iostream>
 #include <string>
 
-#include "network\GameServer.h"
+#include "GameServer.h"
 
 #include "utility\Event.h"
 

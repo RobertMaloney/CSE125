@@ -102,9 +102,9 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameClient.cpp" />
+    <ClCompile Include="GameServer.cpp" />
     <ClCompile Include="Graphics\GraphicsEngine.cpp" />
-    <ClCompile Include="network\GameClient.cpp" />
-    <ClCompile Include="network\GameServer.cpp" />
     <ClCompile Include="network\Packet.cpp" />
     <ClCompile Include="Network\Socket.cpp" />
     <ClCompile Include="Network\TCPConnection.cpp" />
@@ -116,14 +116,14 @@
     <ClCompile Include="utility\Player.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GameClient.h" />
+    <ClInclude Include="GameServer.h" />
     <ClInclude Include="Graphics\Cube.h" />
     <ClInclude Include="graphics\ActionEvent.h" />
     <ClInclude Include="Graphics\Geometry.h" />
     <ClInclude Include="Graphics\GraphicsEngine.h" />
     <ClInclude Include="Graphics\Renderable.h" />
     <ClInclude Include="Network\Endianness.h" />
-    <ClInclude Include="network\GameClient.h" />
-    <ClInclude Include="network\GameServer.h" />
     <ClInclude Include="network\Packet.h" />
     <ClInclude Include="Network\Socket.h" />
     <ClInclude Include="Network\TCPConnection.h" />
