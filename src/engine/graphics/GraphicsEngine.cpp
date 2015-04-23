@@ -34,6 +34,8 @@ MatrixNode			*GraphicsEngine::m_player = NULL,
 					*GraphicsEngine::m_scene = NULL;
 CameraNode			*GraphicsEngine::m_mainCamera = NULL;
 
+glm::vec3			GraphicsEngine::m_testPolar;
+
 string version = "#version 150\n";
 
 /**
@@ -138,6 +140,8 @@ void GraphicsEngine::Initialize() {
 	m_player->addChild(playerGeode);
 	m_scene->addChild(m_player);
 
+	m_testPolar = glm::vec3(1.f, 0, 0);
+
 	// CAMERA
 	glm::mat4 camview = glm::lookAt(
 		glm::vec3(0.f, 3.f, 2.f),
@@ -195,9 +199,6 @@ void GraphicsEngine::DrawAndPoll() {
 		1.f, 1000.f);
 
 	glm::mat4 view = m_mainCamera->getFlatViewMatrix();
-	//cout << glm::to_string(view) << endl;
-	//cout << glm::to_string(m_view) << endl;
-	//system("pause");
 	glUniformMatrix4fv(m_uniView, 1, GL_FALSE, glm::value_ptr(view));
 	glUniformMatrix4fv(m_uniProjection, 1, GL_FALSE, glm::value_ptr(m_projection));
 
@@ -211,11 +212,15 @@ void GraphicsEngine::DrawAndPoll() {
 	glUniform3fv(light, 1, glm::value_ptr(lightpos));
 
 	// render objects
+	m_testPolar.y += 1.f;
+	if (m_testPolar.y > 360.f) m_testPolar.y -= 360;
+
 	int renderableCount = m_objects.size();
 	for (int i = 0; i < renderableCount; ++i) {
 		m_objects[i]->getMatrix() = glm::rotate(m_objects[i]->getMatrix(), glm::radians(1.f), glm::vec3(0, 0, 1.f));
 	}
 
+	// render scene
 	glm::mat4 identity;
 	renderScene(m_scene, &identity);
 

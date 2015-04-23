@@ -51,6 +51,7 @@ private:
 	static MatrixNode				*m_player;
 	static CameraNode				*m_mainCamera;
 	static MatrixNode				*m_scene;
+	static glm::vec3				m_testPolar;
 	
 	static void renderScene(Node*, glm::mat4*);
 };
