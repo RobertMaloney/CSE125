@@ -38,6 +38,7 @@
     <ClInclude Include="utility\Player.h" />
     <ClInclude Include="utility\World.h" />
     <ClInclude Include="graphics\CameraNode.h" />
+    <ClInclude Include="graphics\TextureLoad.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Network\Endianness.inl" />
