@@ -2,11 +2,11 @@
 #define MATRIX_NODE_H
 
 #include "Node.h"
-#include "Geode.h"
 #include <glm.hpp>
 #include <gtc\matrix_transform.hpp>
 #include <gtc\type_ptr.hpp>
 #include <vector>
+#include <iostream>
 
 class MatrixNode : public Node {
 private:
@@ -14,10 +14,17 @@ private:
 	std::vector<Node*> m_children;
 
 public:
+	MatrixNode() {
+		m_parent = 0;
+	}
+
 	virtual MatrixNode* asMatrixNode() {
 		return this;
 	}
 	virtual Geode* asGeode() {
+		return 0;
+	}
+	virtual CameraNode* asCamera() {
 		return 0;
 	}
 	virtual std::string getName() {
@@ -32,6 +39,9 @@ public:
 	void postMult(glm::mat4 & matrix) {
 		matrix = matrix * m_matrix;
 	}
+	void preMult(glm::mat4 & matrix) {
+		matrix = m_matrix * matrix;
+	}
 	int getNumChildren() {
 		return m_children.size();
 	}
@@ -40,6 +50,7 @@ public:
 	}
 	void addChild(Node* child) {
 		m_children.push_back(child);
+			child->setParent(this);
 	}
 };
 #endif

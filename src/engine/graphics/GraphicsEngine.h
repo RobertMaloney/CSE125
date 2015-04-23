@@ -13,6 +13,7 @@
 #include <deque>
 #include "MatrixNode.h"
 #include "Geode.h"
+#include "CameraNode.h"
 #include "Renderable.h"
 #include "..\utility\InputHandler.h"
 #include "..\network\Packet.h"
@@ -48,6 +49,7 @@ private:
 	static GLuint					m_vertexShader, m_fragmentShader, m_shaderProgram;
 	static KeyCallback				m_keyCallback;
 	static MatrixNode				*m_player;
+	static CameraNode				*m_mainCamera;
 	static MatrixNode				*m_scene;
 	
 	static void renderScene(Node*, glm::mat4*);

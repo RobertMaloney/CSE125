@@ -118,6 +118,7 @@
   <ItemGroup>
     <ClInclude Include="GameClient.h" />
     <ClInclude Include="GameServer.h" />
+    <ClInclude Include="graphics\CameraNode.h" />
     <ClInclude Include="Graphics\Cube.h" />
     <ClInclude Include="graphics\ActionEvent.h" />
     <ClInclude Include="graphics\Geode.h" />

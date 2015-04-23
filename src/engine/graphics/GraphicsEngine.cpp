@@ -32,6 +32,7 @@ KeyCallback			GraphicsEngine::m_keyCallback = NULL;
 
 MatrixNode			*GraphicsEngine::m_player = NULL,
 					*GraphicsEngine::m_scene = NULL;
+CameraNode			*GraphicsEngine::m_mainCamera = NULL;
 
 string version = "#version 150\n";
 
@@ -130,20 +131,28 @@ void GraphicsEngine::Initialize() {
 		m_scene->addChild(m_objects[i]);
 		//m_objects.push_back(new Cube(position, glm::angleAxis(glm::radians((float)i), glm::vec3(0, 0, 1)), glm::vec3(1.f, 1.f, 1.f), 0.02f + 0.08f * (i / (float)100)));
 	}
-	//m_objects.push_back(new Cube(glm::vec3(0, 0, 0), glm::quat(), glm::vec3(1.f, 1.f, 1.f), 0.5f));
 	Renderable* playerModel = new Geometry("../../media/pb.obj");
 	Geode* playerGeode = new Geode();
-	playerGeode->setRenderable(playerModel);
+	playerGeode->setRenderable(cube);
 	m_player = new MatrixNode();
 	m_player->addChild(playerGeode);
 	m_scene->addChild(m_player);
+
+	// CAMERA
+	glm::mat4 camview = glm::lookAt(
+		glm::vec3(0.f, 3.f, 2.f),
+		glm::vec3(0.f, 0.f, 0.f),
+		glm::vec3(0.f, 0.f, 1.f));
+	m_mainCamera = new CameraNode();
+	m_mainCamera->setViewMatrix(camview);
+	m_player->addChild(m_mainCamera);
 
 	// view and projection matrix locations in the shader program
 	m_uniView = glGetUniformLocation(m_shaderProgram, "view");
 	m_uniProjection = glGetUniformLocation(m_shaderProgram, "projection");
 
 	m_view = glm::lookAt(
-		glm::vec3(0.f, 3.f, 2.f),
+		glm::vec3(0.f, 6.f, 4.f),
 		glm::vec3(0.f, 0.f, 0.f),
 		glm::vec3(0.f, 0.f, 1.f));
 
@@ -185,7 +194,11 @@ void GraphicsEngine::DrawAndPoll() {
 		((float)height) / width,
 		1.f, 1000.f);
 
-	glUniformMatrix4fv(m_uniView, 1, GL_FALSE, glm::value_ptr(m_view));
+	glm::mat4 view = m_mainCamera->getFlatViewMatrix();
+	//cout << glm::to_string(view) << endl;
+	//cout << glm::to_string(m_view) << endl;
+	//system("pause");
+	glUniformMatrix4fv(m_uniView, 1, GL_FALSE, glm::value_ptr(view));
 	glUniformMatrix4fv(m_uniProjection, 1, GL_FALSE, glm::value_ptr(m_projection));
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -223,7 +236,7 @@ void GraphicsEngine::renderScene(Node* node, glm::mat4* matrix) {
 		//cout << glm::to_string(*matrix) << endl << endl;
 		geode->getRenderable()->render(matrix);
 	}
-	else {
+	else if (mnode) {
 		int numChildren = mnode->getNumChildren();
 		glm::mat4 newmat = *matrix;
 		mnode->postMult(newmat);
@@ -305,6 +318,5 @@ void GraphicsEngine::UpdatePlayer(deque<Packet> & data) {
                 matPointer[i] = it->ReadFloat();
             }
         }
-        
 	}
 }

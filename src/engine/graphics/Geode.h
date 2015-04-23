@@ -2,7 +2,6 @@
 #define GEODE_H
 
 #include "Node.h"
-#include "MatrixNode.h"
 #include "Renderable.h"
 
 class Geode : public Node {
@@ -15,6 +14,9 @@ public:
 	}
 	virtual Geode* asGeode() {
 		return this;
+	}
+	virtual CameraNode* asCamera() {
+		return 0;
 	}
 	virtual std::string getName() {
 		return "Geode";
