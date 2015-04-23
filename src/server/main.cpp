@@ -1,4 +1,4 @@
-                                                                                                                                                                                                                                                                                             
+
 #include <thread>
 #include <stdio.h>
 #include <fstream>
@@ -6,7 +6,9 @@
 #include <iostream>
 #include <string>
 
-#include "network\GameServer.h"
+#include "GameServer.h"
+
+#include "utility\Event.h"
 
 using std::cout;
 
@@ -16,7 +18,6 @@ int main(int argc, char* argv[]) {
 
     server.Initialize(1);
     server.Run();
-
 
     return 0;
 }

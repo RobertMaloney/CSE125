@@ -3,8 +3,12 @@
 
 #include <thread>
 #include <iostream>
+#include <deque>
 
-#include "TCPConnection.h"
+#include "network\TCPConnection.h"
+#include "graphics\GraphicsEngine.h"
+#include "network\Packet.h"
+
 
 using std::this_thread::sleep_for;
 using std::chrono::milliseconds;
@@ -15,9 +19,12 @@ class GameClient {
 
 public:
 
+	static deque<Packet> input;
+
     GameClient();
     ~GameClient();
 
+	void run();
     void Initialize();
     void ReceiveUpdates(deque<Packet> & updates);
     void SendEvents(deque<Packet> & events);
@@ -25,12 +32,9 @@ public:
 
 private:
 
+	TCPConnection* connection;
+
     inline void CheckError(SocketError err);
     inline bool ShouldTerminate(SocketError err);
-    
-    TCPConnection* connection;
-
 };
-
-
 #endif

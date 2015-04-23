@@ -6,8 +6,12 @@
 #include <iostream>
 #include <unordered_map>
 
-#include "TCPConnection.h"
-#include "TCPListener.h"
+#include <glm.hpp>
+#include <gtc\matrix_transform.hpp>
+#include <gtc\type_ptr.hpp>
+
+#include "network\TCPConnection.h"
+#include "network\TCPListener.h"
 
 using std::this_thread::sleep_for;
 using std::chrono::milliseconds;
@@ -27,7 +31,7 @@ public:
     GameServer();
     ~GameServer();
 
-    void Initialize(int maxPlayers);
+    void Initialize(int maxConns);
     void Run();
     void SendUpdates(deque<Packet> & updates);
     void ReceiveEvents(deque<Packet> & events);
@@ -36,6 +40,7 @@ private:
 
     void AcceptWaitingClient();
     void PrintUpdates(deque<Packet> & updates);
+	void ParsePlayer(deque<Packet> & in, deque<Packet> & out);
 
     inline bool ShouldTerminate(SocketError err);
 
@@ -44,7 +49,22 @@ private:
     unsigned int maxConnections;
     unordered_map<ClientId, TCPConnection*>* clients;
 
+	glm::mat4 m_player;
+
 };
 
+
+bool GameServer::ShouldTerminate(SocketError err) {
+    switch (err) {
+    case SE_NOERR:
+        return false;
+    case SE_WOULDBLOCK:
+        return false;
+    case SE_NODATA:
+        return false;
+    default:
+        return true;
+    }
+}
 
 #endif
