@@ -14,7 +14,7 @@
 #include "MatrixNode.h"
 #include "Geode.h"
 #include "Renderable.h"
-#include "../utility/Event.h"
+#include "..\utility\InputHandler.h"
 #include "..\network\Packet.h"
 
 using namespace std;

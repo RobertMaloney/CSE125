@@ -1,4 +1,4 @@
-#include <Windows.h>
+//#include <Windows.h>
 
 // STL
 #include <stdio.h>
@@ -11,7 +11,6 @@
 #include "..\graphics\Cube.h"
 #include "..\graphics\Geometry.h"
 #include "..\utility\System.h"
-#include "..\utility\InputHandler.h"
 #include "..\utility\Event.h"
 
 using namespace std;
@@ -36,9 +35,13 @@ MatrixNode			*GraphicsEngine::m_player = NULL,
 
 string version = "#version 150\n";
 
+/**
+ * Description: This function is called when glfwPollEvents() is called.
+ */
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	if (GraphicsEngine::GetKeyCallback()) GraphicsEngine::GetKeyCallback()(key, action, mods);
+	//if (GraphicsEngine::GetKeyCallback()) GraphicsEngine::GetKeyCallback()(key, action, mods);
+	InputHandler::handleKey(key, action, mods);
 }
 
 /**

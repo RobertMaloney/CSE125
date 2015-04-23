@@ -1,16 +1,14 @@
-#ifndef INPUT_HANLDER_H
+#ifndef INPUT_HANDLER_H
 #define INPUT_HANDLER_H
-#include <glfw3.h>
-#include "Event.h"
+#include "..\GameClient.h"
+#include "..\graphics\GraphicsEngine.h"
 #include <deque>
 
 class InputHandler
 {
 public:
-   static std::deque<Event> eventList;
 
-   static Event handleKey(int key, int state, int mods);
-   static void processEvents();
+   static void handleKey(int key, int action, int mods);
 };
 
 #endif
