@@ -116,7 +116,7 @@ void GraphicsEngine::Initialize() {
 	glEnable(GL_DEPTH_TEST);
 
 	// Testing renderables
-	const int CUBE_COUNT = 100;
+	const int CUBE_COUNT = 0;
 	Renderable* cube = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 1.f, 1.f), 1.f);
 	for (int i = 0; i < CUBE_COUNT; ++i) {
 		glm::vec3 position(-2.f + 0.4f*(i % 10), -2.f + 0.4f*(i / 10), 0.1f);
@@ -144,7 +144,7 @@ void GraphicsEngine::Initialize() {
 
 	// CAMERA
 	glm::mat4 camview = glm::lookAt(
-		glm::vec3(0.f, 3.f, 2.f),
+		glm::vec3(0.f, 12.f, 8.f),
 		glm::vec3(0.f, 0.f, 0.f),
 		glm::vec3(0.f, 0.f, 1.f));
 	m_mainCamera = new CameraNode();
@@ -311,6 +311,16 @@ void GraphicsEngine::ScaleDown()
 		m_player->getMatrix() = glm::scale(m_player->getMatrix(), glm::vec3(0.8, 0.8, 0.8));
 }
 
+void GraphicsEngine::RotateRight(){
+	if (m_player)
+		m_player->getMatrix() = glm::rotate(m_player->getMatrix(), glm::radians(-1.f), glm::vec3(0, 0, 1));
+}
+
+void GraphicsEngine::RotateLeft(){
+	if (m_player)
+		m_player->getMatrix() = glm::rotate(m_player->getMatrix(), glm::radians(1.f), glm::vec3(0, 0, 1));
+}
+
 void GraphicsEngine::UpdatePlayer(deque<Packet> & data) {
 	if (data.size() > 0 && data[0].Size() > 0) {
 		float * matPointer = glm::value_ptr(m_player->getMatrix());
@@ -324,4 +334,8 @@ void GraphicsEngine::UpdatePlayer(deque<Packet> & data) {
             }
         }
 	}
+}
+
+void GraphicsEngine::UpdatePlayer(glm::mat4 & newmatrix) {
+	m_player->getMatrix() = newmatrix;
 }

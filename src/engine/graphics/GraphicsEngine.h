@@ -36,8 +36,11 @@ public:
 	static void MoveRight();
 	static void ScaleUp();
 	static void ScaleDown();
+	static void RotateLeft();
+	static void RotateRight();
 	static KeyCallback GetKeyCallback();
 	static void UpdatePlayer(deque<Packet> &);
+	static void UpdatePlayer(glm::mat4 &);
    static int getKeyState(int);
 
 private:
