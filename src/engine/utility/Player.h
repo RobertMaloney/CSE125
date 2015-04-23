@@ -3,43 +3,36 @@
 
 #include <string>
 #include "Location.h"
+#include "BlobModel.h"
+#include "GameObject.h"
 
 using namespace std;
 
-class Player {
-
+class Player: public GameObject {
+	//TODO put it outside
 protected:
 
 	int pid;
-	string id;
 	int speed;
 	int power;
-	Location loc;
 	static int numOfPlayers;
 
+	BlobModel bm;
+
 public:
-	Player();
+
+	Player() :Player(OB_TYPE) {};
+	Player(BlobModel thebm) :Player(thebm, 0, 0, 0) {};
+	Player(BlobModel thebm, int nx, int ny, int nz);
+
 	virtual ~Player();
 
 	int getSpeed();
 	int getPower();
 	int getPid();
-    string getId();
-
-	int getX();
-	int getY();
-	int getZ();
-
-	Location getLoc();
 
 	void setSpeed(int newSpeed);
 	void setPower(int newPower);
-
-	void setX(int newX);
-	void setY(int newY);
-	void setZ(int newZ);
-
-	void setLoc(Location newLoc);
 
 };
 
