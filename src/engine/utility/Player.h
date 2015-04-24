@@ -12,7 +12,7 @@ class Player: public GameObject {
 	//TODO put it outside
 protected:
 
-	int pid;
+	ObjectId pid;
 	int speed;
 	int power;
 	static int numOfPlayers;
@@ -29,7 +29,8 @@ public:
 
 	int getSpeed();
 	int getPower();
-	int getPid();
+
+	ObjectId getPid();
 
 	void setSpeed(int newSpeed);
 	void setPower(int newPower);

@@ -19,6 +19,7 @@ public:
 	GameState();
 	virtual ~GameState();
 
+	void init();
 	void addPlayer(BlobModel bm);
 
 

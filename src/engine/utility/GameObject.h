@@ -6,13 +6,15 @@
 
 using namespace std;
 
+typedef unsigned int ObjectId;
+
 class GameObject {
 	//TODO put it outside
 protected:
 
-	int id;
+	ObjectId id;
 	Location loc;
-	static int numOfObjects;
+	static ObjectId numOfObjects;
 
 public:
 
@@ -22,7 +24,7 @@ public:
 
 	virtual ~GameObject();
 
-	int getId();
+	ObjectId getId();
 
 	int getX();
 	int getY();

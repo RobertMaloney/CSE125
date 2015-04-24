@@ -4,11 +4,11 @@
 //TODO Config file
 GameObject::GameObject(int nx, int ny, int nz) {
 	this->numOfObjects++;
-	this->id = "GO" + numOfObjects;
+	this->id = numOfObjects;
 	this->loc = Location(nx, ny, nz);
 }
 
-int GameObject::getId() {
+ObjectId GameObject::getId() {
 	return id;
 }
 
