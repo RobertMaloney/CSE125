@@ -2,8 +2,8 @@
 
 
 GameServer::GameServer() {
-    this->clients = new unordered_map<ClientId, TCPConnection*>();
-    nextCid = 1;
+	this->clients = new unordered_map<TCPConnection*, ObjectId>();
+    nextObjId = 1;
 }
 
 
@@ -14,9 +14,8 @@ GameServer::~GameServer() {
         listener = nullptr;
     }
     for (auto it = clients->begin(); it != clients->end(); ++it) {
-        if (it->second) {
-            delete it->second;
-            it->second = nullptr;
+        if (it->first) {
+            delete it->first;
         }
     }
     delete clients;
@@ -35,24 +34,17 @@ void GameServer::Initialize(int maxConns) {
 
 
 void GameServer::Run() {
-    deque<Packet> events;
-	deque<Packet> sends;
 
     while (true) {
         if (clients->size() < maxConnections) {
             this->AcceptWaitingClient();
         }
-        this->ReceiveEvents(events);
-		this->ParsePlayer(events, sends);
-        //this->PrintUpdates(events);
-        this->SendUpdates(sends);
-        events.clear();
-		sends.clear();
-   //     sleep_for(milliseconds(200));
+
     }
 }
 
 void GameServer::ParsePlayer(deque<Packet> & in, deque<Packet> & out) {
+	glm::mat4 m_player;
 	for (unsigned int i = 0; i < in.size(); ++i) {
 		if (in[i].Size() > 0) {
 			Packet p;
@@ -89,12 +81,12 @@ void GameServer::AcceptWaitingClient() {
     if (newClient) {
         newClient->SetNoDelay(true);
         newClient->SetNonBlocking(true);
-        clients->insert(make_pair(nextCid++, newClient));
+		clients->insert(make_pair(newClient, nextObjId++));
     }
 }
 
 
-
+/*
 
 void GameServer::SendUpdates(deque<Packet> & updates) {
     for (auto it = clients->begin(); it != clients->end();) {
@@ -132,3 +124,4 @@ void GameServer::PrintUpdates(deque<Packet> & updates) {
         cout << "\n";
     }
 }
+*/

@@ -18,8 +18,7 @@ GameClient::~GameClient() {
 
 
 // used for debugging
-void fillWithDebugPackets(deque<Packet> & packets)
-{
+void fillWithDebugPackets(deque<Packet> & packets) {
 	Packet p;
 	for (int i = 0; i < 26; ++i) {
 		p.Resize(0);
@@ -32,8 +31,7 @@ void fillWithDebugPackets(deque<Packet> & packets)
 }
 
 
-void GameClient::run()
-{
+void GameClient::Run() {
 	bool DEBUG = true;
 
 	GraphicsEngine::Initialize();

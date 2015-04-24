@@ -24,7 +24,7 @@ public:
     GameClient();
     ~GameClient();
 
-	void run();
+	void Run();
     void Initialize();
     void ReceiveUpdates(deque<Packet> & updates);
     void SendEvents(deque<Packet> & events);

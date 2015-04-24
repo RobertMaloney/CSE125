@@ -10,6 +10,7 @@
 #include <gtc\matrix_transform.hpp>
 #include <gtc\type_ptr.hpp>
 
+#include "network\PacketHandler.h"
 #include "network\TCPConnection.h"
 #include "network\TCPListener.h"
 
@@ -22,7 +23,7 @@ using std::pair;
 using std::hash;
 using std::cout;
 
-typedef int ClientId;
+static ObjectId nextObjId;
 
 class GameServer {
 
@@ -33,8 +34,9 @@ public:
 
     void Initialize(int maxConns);
     void Run();
-    void SendUpdates(deque<Packet> & updates);
-    void ReceiveEvents(deque<Packet> & events);
+
+  //  void SendUpdates(deque<Packet> & updates);
+  //  void ReceiveEvents(deque<Packet> & events);
 
 private:
 
@@ -43,13 +45,10 @@ private:
 	void ParsePlayer(deque<Packet> & in, deque<Packet> & out);
 
     inline bool ShouldTerminate(SocketError err);
-
-    ClientId nextCid;
-    TCPListener* listener;
-    unsigned int maxConnections;
-    unordered_map<ClientId, TCPConnection*>* clients;
-
-	glm::mat4 m_player;
+    
+	TCPListener* listener;
+	unsigned int maxConnections;
+	unordered_map<TCPConnection*, ObjectId>* clients;
 
 };
 
