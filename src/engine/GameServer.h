@@ -1,8 +1,9 @@
 #ifndef GAMESERVER_H
 #define GAMESERVER_H
 
-#include <string>
+#include <chrono>
 #include <thread>
+#include <string>
 #include <iostream>
 #include <unordered_map>
 
@@ -10,21 +11,22 @@
 #include <gtc\matrix_transform.hpp>
 #include <gtc\type_ptr.hpp>
 
-//#include "network\PacketHandler.h"
+#include "network\PacketHandler.h"
 #include "network\TCPConnection.h"
 #include "network\TCPListener.h"
 
-using std::this_thread::sleep_for;
-using std::chrono::milliseconds;
 using std::to_string;
+using std::this_thread::sleep_for;
+using std::chrono::high_resolution_clock;
+using std::chrono::duration_cast;
+using std::chrono::milliseconds;
+using std::chrono::duration;
 using std::unordered_map;
 using std::make_pair;
 using std::pair;
-using std::hash;
 using std::cout;
 
-typedef unsigned int ObjectId;
-static ObjectId nextObjId;
+class PacketHandler;
 
 class GameServer {
 
@@ -36,8 +38,8 @@ public:
     void initialize(int maxConns);
     void run();
 
-  //  void SendUpdates(deque<Packet> & updates);
-  //  void ReceiveEvents(deque<Packet> & events);
+    void tick();
+    void receiveAndUpdate();
 
 private:
 
@@ -47,8 +49,10 @@ private:
 
     inline bool shouldTerminate(SocketError err);
     
-	TCPListener* listener;
-	unsigned int maxConnections;
+    unsigned int maxConnections;
+
+    TCPListener* listener;
+    PacketHandler* handler;
 	unordered_map<TCPConnection*, ObjectId>* clients;
 
 };

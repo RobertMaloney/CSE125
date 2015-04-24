@@ -39,9 +39,9 @@
     <ClInclude Include="utility\Player.h" />
     <ClInclude Include="utility\World.h" />
     <ClInclude Include="graphics\CameraNode.h" />
-    <ClInclude Include="network\PacketHandler.h" />
     <ClInclude Include="utility\MoveEvent.h" />
     <ClInclude Include="utility\System.h" />
+    <ClInclude Include="network\PacketHandler.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Network\Endianness.inl" />

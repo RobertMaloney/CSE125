@@ -1,13 +1,4 @@
-
-#include <thread>
-#include <stdio.h>
-#include <fstream>
-#include <sstream>
-#include <iostream>
-#include <string>
-
 #include "GameServer.h"
-
 #include "utility\Event.h"
 
 using std::cout;

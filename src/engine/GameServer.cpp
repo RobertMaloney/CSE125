@@ -3,6 +3,7 @@
 
 GameServer::GameServer() {
 	this->clients = new unordered_map<TCPConnection*, ObjectId>();
+    this->handler = new PacketHandler();
     nextObjId = 1;
 }
 
@@ -35,11 +36,23 @@ void GameServer::initialize(int maxConns) {
 
 void GameServer::run() {
 
+    long long elapsed;
+    high_resolution_clock::time_point begin;
+    high_resolution_clock::time_point end;
+
     while (true) {
+        begin = high_resolution_clock::now();
+
         if (clients->size() < maxConnections) {
             this->acceptWaitingClient();
         }
 
+        this->receiveAndUpdate();
+        this->tick();
+
+        end = high_resolution_clock::now();
+        elapsed = duration_cast<milliseconds>(end - begin).count();
+ 
     }
 }
 
@@ -86,42 +99,39 @@ void GameServer::acceptWaitingClient() {
 }
 
 
-/*
 
-void GameServer::SendUpdates(deque<Packet> & updates) {
+
+void GameServer::tick() {
+
+}
+
+
+void GameServer::receiveAndUpdate() {
+    deque<Packet> events;
+
     for (auto it = clients->begin(); it != clients->end();) {
-        SocketError err = it->second->Send(updates);
-        if (this->ShouldTerminate(err)) {
-            it->second->Close();
-            delete it->second;
+        SocketError err = it->first->receive(events);
+
+        if (this->shouldTerminate(err)) {
+            it->first->close();
+            delete it->first;
             it = clients->erase(it);
-        } else {
-            ++it;
+            events.clear();
+            continue;
         }
+
+        handler->dispatch(it->second, events);
+        events.clear();
+        ++it;
     }
 }
 
 
-void GameServer::ReceiveEvents(deque<Packet> & events) {
-    for (auto it = clients->begin(); it != clients->end();) {
-        SocketError err = it->second->Receive(events);
-        if (this->ShouldTerminate(err)) {
-            it->second->Close();
-            delete it->second;
-            it = clients->erase(it);
-        } else {
-            ++it;
-        }
-    }
-}
-
-
-void GameServer::PrintUpdates(deque<Packet> & updates) {
+void GameServer::printUpdates(deque<Packet> & updates) {
     for (auto it = updates.begin(); it != updates.end(); ++it) {
-        for (unsigned int i = 0; i < it->Size(); ++it) {
-            cout << to_string(it->At(i)) << " ";
+        for (unsigned int i = 0; i < it->size(); ++it) {
+            cout << to_string(it->at(i)) << " ";
         }
         cout << "\n";
     }
 }
-*/

@@ -26,6 +26,7 @@ public:
 
 	void run();
     void initialize();
+
     void receiveUpdates(deque<Packet> & updates);
     void sendEvents(deque<Packet> & events);
     void printUpdates(deque<Packet> & updates);
