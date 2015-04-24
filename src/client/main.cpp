@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
 	GameClient *client = new GameClient();
 
 	//run it
-	client->Run();
+	client->run();
 
 	delete client;
 

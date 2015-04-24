@@ -16,8 +16,8 @@ int main(int argc, char* argv[]) {
 
     GameServer server;
 
-    server.Initialize(1);
-    server.Run();
+    server.initialize(1);
+    server.run();
 
     return 0;
 }

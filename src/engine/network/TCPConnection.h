@@ -27,45 +27,45 @@ public:
     /* Connect to the specified ip and port. If the socket can not connect
      * an SE_NOCONNECT error will be returned
      */
-    SocketError Connect(const string & ip, const string & port);
+    SocketError connect(const string & ip, const string & port);
 
     /* Send a single packet. Can return many errors. Check Socket.h SocketError
      * enum for relevant errors to the situation you are using it in.
      */
-    SocketError Send(const Packet & packet);
+    SocketError send(const Packet & packet);
 
     /* Send all the packets in the vector. If one of the packets is larger than
      * MAX_PACKET_SIZE it will be silently dropped.
      */
-    SocketError Send(const deque<Packet> & packets);
+    SocketError send(const deque<Packet> & packets);
 
     /* Receive a single packet into the packet buffer.
      */
-    SocketError Receive(Packet & packet);
+    SocketError receive(Packet & packet);
 
     /* Get all the packets you can from the internal buffer. Use this if you need
      * to grab all packets instead of looping on the single receive. This will be
      * more efficient.
      */
-    SocketError Receive(deque<Packet> & packets);
+    SocketError receive(deque<Packet> & packets);
 
 
 protected:
 
-    SocketError Send();                   // internally used send and recvs'
-    SocketError Receive();
-    uint32_t ReadHeader(const int start); // read the next packet size
+    SocketError send();                   // internally used send and recvs'
+    SocketError receive();
+    uint32_t readHeader(const int start); // read the next packet size
 
-    bool WriteToBuffer(const Packet & packet); // write to the send buffer
-    bool FillFromBuffer(Packet & packet, unsigned int & pos); // read from the receive buffer
-    void ShiftBuffer(vector<byte> & buffer, unsigned int lastRead); // shift from lastRead to size
+    bool writeToBuffer(const Packet & packet); // write to the send buffer
+    bool fillFromBuffer(Packet & packet, unsigned int & pos); // read from the receive buffer
+    void shiftBuffer(vector<byte> & buffer, unsigned int lastRead); // shift from lastRead to size
 
     // prints all values in the specified buffer. useful for debugging.
-    void PrintBuffer(vector<byte> & buffer, std::string msg);
+    void printBuffer(vector<byte> & buffer, std::string msg);
 
     // vanilla send and receive wrappers
-    inline int Recv(byte* buffer, int size);
-    inline int Send(byte* buffer, int size);
+    inline int recv(byte* buffer, int size);
+    inline int send(byte* buffer, int size);
 
     // internal buffers for sending and receiving
     vector<byte> sendBuffer;
@@ -74,7 +74,7 @@ protected:
 };
 
 
-inline int TCPConnection::Send(byte* buffer, int size) {
+inline int TCPConnection::send(byte* buffer, int size) {
 #ifdef _WIN32
     return ::send(sock, reinterpret_cast<char*>(buffer), size, 0);
 #else
@@ -83,7 +83,7 @@ inline int TCPConnection::Send(byte* buffer, int size) {
 }
 
 
-int TCPConnection::Recv(byte* buffer, int size) {
+int TCPConnection::recv(byte* buffer, int size) {
 #ifdef _WIN32
     return ::recv(sock, reinterpret_cast<char*>(buffer), size, 0);
 #else

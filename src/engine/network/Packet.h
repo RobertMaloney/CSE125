@@ -20,41 +20,41 @@ public:
     Packet(int size);
     ~Packet();
 
-    void WriteByte(byte val);
-    void WriteBool(bool val);
-    void WriteChar(char val);
-    void WriteShort(short val);
-    void WriteInt(int val); 
-    void WriteLong(long val);
-    void WriteFloat(float val);
-    void WriteDouble(double val);
+    void writeByte(byte val);
+    void writeBool(bool val);
+    void writeChar(char val);
+    void writeShort(short val);
+    void writeInt(int val); 
+    void writeLong(long val);
+    void writeFloat(float val);
+    void writeDouble(double val);
 
-    void WriteUChar(unsigned char val);
-    void WriteUShort(unsigned short val);
-    void WriteUInt(unsigned int val);
-    void WriteULong(unsigned long val);
+    void writeUChar(unsigned char val);
+    void writeUShort(unsigned short val);
+    void writeUInt(unsigned int val);
+    void writeULong(unsigned long val);
 
-    byte ReadByte();
-    bool ReadBool();
-    char ReadChar();
-    short ReadShort();
-    int ReadInt();
-    long ReadLong();
-    float ReadFloat();
-    double ReadDouble();
+    byte readByte();
+    bool readBool();
+    char readChar();
+    short readShort();
+    int readInt();
+    long readLong();
+    float readFloat();
+    double readDouble();
 
-    unsigned char ReadUChar();
-    unsigned short ReadUShort();
-    unsigned int ReadUInt();
-    unsigned long ReadULong();
+    unsigned char readUChar();
+    unsigned short readUShort();
+    unsigned int readUInt();
+    unsigned long readULong();
 
-    void Reset();
-    void Clear();
-    unsigned int Size() const;
-    void Resize(unsigned int size);
-    void Reserve(unsigned int cap);
+    void reset();
+    void clear();
+    unsigned int size() const;
+    void resize(unsigned int size);
+    void reserve(unsigned int cap);
     
-    byte At(int index);
+    byte at(int index);
     byte& operator[](int i) {
         return buffer[i];
     }
@@ -63,8 +63,8 @@ private:
 
 
     inline void append(char* val, unsigned int size) { 
-        if (size > 1 && !IsBigEndian()) {
-            ByteSwap(val, size);
+        if (size > 1 && !isBigEndian()) {
+            byteSwap(val, size);
         }
         if (buffer.size() + size > buffer.capacity()) {
             buffer.reserve(buffer.capacity() * 2);
@@ -80,8 +80,8 @@ private:
         }
         memcpy(reinterpret_cast<void*>(buff), reinterpret_cast<void*>(&buffer[index]), size);
         index += size;
-        if (!IsBigEndian()) {
-            ByteSwap(buff, size);
+        if (!isBigEndian()) {
+            byteSwap(buff, size);
         }
     }
 

@@ -20,12 +20,12 @@ TCPConnection::TCPConnection(int sockFd, SocketAddress remAddr) : Socket() {
 
 
 TCPConnection::~TCPConnection() {
-    this->Close();
+    this->close();
 }
 
 
-SocketError TCPConnection::Connect(const string & ip, const string & port) {
-    AddressInfo *iter = this->DNSLookup(ip, port, SOCK_STREAM);
+SocketError TCPConnection::connect(const string & ip, const string & port) {
+    AddressInfo *iter = this->dnsLookup(ip, port, SOCK_STREAM);
     // iterate over available address and try to connect. if ones successful we break
     for (; iter; iter = iter->ai_next) {
         sock = socket(iter->ai_family, iter->ai_socktype, iter->ai_protocol);
@@ -33,7 +33,7 @@ SocketError TCPConnection::Connect(const string & ip, const string & port) {
             continue;
         }
         if (::connect(sock, iter->ai_addr, iter->ai_addrlen) != 0) {
-            this->Close(sock);
+            this->close(sock);
             continue;
         }
         break;
@@ -48,39 +48,39 @@ SocketError TCPConnection::Connect(const string & ip, const string & port) {
 }
 
 
-SocketError TCPConnection::Send(const Packet & packet) {
-    this->WriteToBuffer(packet);    // fill the buffer
-    return this->Send();            // send everything we can
+SocketError TCPConnection::send(const Packet & packet) {
+    this->writeToBuffer(packet);    // fill the buffer
+    return this->send();            // send everything we can
 }
 
 
-SocketError TCPConnection::Send(const deque<Packet> & packets) {
+SocketError TCPConnection::send(const deque<Packet> & packets) {
     // put them all in the buffer then send as much as we can
     for (auto it = packets.begin(); it != packets.end(); ++it) {
-        this->WriteToBuffer(*it);
+        this->writeToBuffer(*it);
     }
-    return this->Send();
+    return this->send();
 }
 
 
-SocketError TCPConnection::Receive(Packet & packet) {
+SocketError TCPConnection::receive(Packet & packet) {
     unsigned int pos = 0;
     packet.buffer.clear();
     // try to grab a packet from the buffer. if successful shift the buffer to maintain state
-    if (this->FillFromBuffer(packet, pos)) {
-        this->ShiftBuffer(receiveBuffer, pos);
+    if (this->fillFromBuffer(packet, pos)) {
+        this->shiftBuffer(receiveBuffer, pos);
         return SE_NOERR;
     }
     // we couldnt grab a whole packet, pull data from the OS and try and grab a packet again.
-    SocketError err = this->Receive();
+    SocketError err = this->receive();
     pos = 0;
-    err = (this->FillFromBuffer(packet, pos)) ? SE_NOERR : err;
-    this->ShiftBuffer(receiveBuffer, pos);
+    err = (this->fillFromBuffer(packet, pos)) ? SE_NOERR : err;
+    this->shiftBuffer(receiveBuffer, pos);
     return err;
 }
 
 
-void TCPConnection::ShiftBuffer(vector<byte> & buffer, unsigned int nextToRead) {
+void TCPConnection::shiftBuffer(vector<byte> & buffer, unsigned int nextToRead) {
     // theres nothing to do
     if (nextToRead <= 0) {
         return;
@@ -96,46 +96,46 @@ void TCPConnection::ShiftBuffer(vector<byte> & buffer, unsigned int nextToRead) 
 }
 
 
-uint32_t TCPConnection::ReadHeader(const int start) {
-    return NetToHost(receiveBuffer[start] << 24 |
+uint32_t TCPConnection::readHeader(const int start) {
+    return netToHost(receiveBuffer[start] << 24 |
         receiveBuffer[start + 1] << 16 |
         receiveBuffer[start + 2] << 8 |
         receiveBuffer[start + 3]);
 }
 
 
-SocketError TCPConnection::Receive(deque<Packet> & packets) {
+SocketError TCPConnection::receive(deque<Packet> & packets) {
     Packet p;                            // temporary packet
     unsigned int pos = 0;                // the position in the receive buffer
-    SocketError err = this->Receive();   // grab a chunk of data
+    SocketError err = this->receive();   // grab a chunk of data
     // make as many packets as we can and put them in the vector.
-    while (this->FillFromBuffer(p, pos)) {
+    while (this->fillFromBuffer(p, pos)) {
         packets.push_back(p);
         p.buffer.clear();                      // make sure to erase the buffer
     }
-    this->ShiftBuffer(receiveBuffer, pos); // shift the buffer once at the end
+    this->shiftBuffer(receiveBuffer, pos); // shift the buffer once at the end
     return (packets.size() == 0) ? SE_NODATA : SE_NOERR;
 }
 
 
-SocketError TCPConnection::Send() {
+SocketError TCPConnection::send() {
     // do a raw send
-    int bytesSent = this->Send(sendBuffer.data(), sendBuffer.size());
+    int bytesSent = this->send(sendBuffer.data(), sendBuffer.size());
     // check for errors. 0 means the other end isn't connected for non-blocking sock
     if (!nonBlocking && bytesSent == 0) {
         return SE_DISCONNECTED;
     }
     // if less than 0 there was some error so return it
     if (bytesSent < 0) {     
-        return this->GetError();
+        return this->getError();
     }
     // move all the unsent (leftover) bytes to the front of the buffer
-    this->ShiftBuffer(sendBuffer, bytesSent);
+    this->shiftBuffer(sendBuffer, bytesSent);
     return SE_NOERR;
 }
 
 
-SocketError TCPConnection::Receive() {
+SocketError TCPConnection::receive() {
     // if the buffer is full and we havent gotten a packet the packet's too large.
     if (receiveBuffer.size() > MAX_PACKET_SIZE) {
         return SE_PACKETSIZE;
@@ -150,7 +150,7 @@ SocketError TCPConnection::Receive() {
     receiveBuffer.resize(receiveBuffer.capacity()); // expand the vector to as large as possible
     
     // receive everything we can. make sure we put new bytes starting at the end of the buffer
-    int bytesRecvd = this->Recv(receiveBuffer.data() + buffPosition, bytesAvail);
+    int bytesRecvd = this->recv(receiveBuffer.data() + buffPosition, bytesAvail);
 
     if (!nonBlocking && bytesRecvd == 0) {
         receiveBuffer.resize(buffPosition);
@@ -159,7 +159,7 @@ SocketError TCPConnection::Receive() {
 
     if (bytesRecvd < 0) {    // < 0 means there was some error
         receiveBuffer.resize(buffPosition);
-        return this->GetError();
+        return this->getError();
     }
     // resize the vector so that we can append at .size() next time
     receiveBuffer.resize(buffPosition + bytesRecvd);
@@ -167,13 +167,13 @@ SocketError TCPConnection::Receive() {
 }
 
 
-bool TCPConnection::FillFromBuffer(Packet & packet, unsigned int & pos) {
+bool TCPConnection::fillFromBuffer(Packet & packet, unsigned int & pos) {
     // if we cant read the header (4 bytes) we cant do anytthing
     if (receiveBuffer.size() - pos < BYTES_IN_HEADER) {
         return false;
     }
     // read the header, it will tell us how many bytes in this "packet"
-    unsigned int nextPacketSize = this->ReadHeader(pos);
+    unsigned int nextPacketSize = this->readHeader(pos);
     // if we cant get the whole packet do nothing
     if (nextPacketSize + BYTES_IN_HEADER > receiveBuffer.size() - pos) {
         return false;
@@ -190,7 +190,7 @@ bool TCPConnection::FillFromBuffer(Packet & packet, unsigned int & pos) {
 }
 
 
-bool TCPConnection::WriteToBuffer(const Packet & packet) {
+bool TCPConnection::writeToBuffer(const Packet & packet) {
     const vector<byte> & pBuffer = packet.buffer;
     // if theres nothing to send do nothing
     if (pBuffer.size() == 0) {
@@ -206,7 +206,7 @@ bool TCPConnection::WriteToBuffer(const Packet & packet) {
     }
     // write the packet size to the buffer
     uint32_t mask = 0xFF000000;
-    uint32_t size = HostToNet(static_cast<uint32_t>(pBuffer.size()));
+    uint32_t size = hostToNet(static_cast<uint32_t>(pBuffer.size()));
     for (int i = 3; i >= 0; --i) {
         sendBuffer.push_back((size & mask) >> (i * 8));
         mask >>= 8;
@@ -219,7 +219,7 @@ bool TCPConnection::WriteToBuffer(const Packet & packet) {
 }
 
 
-void TCPConnection::PrintBuffer(vector<byte> & buffer, std::string msg) {
+void TCPConnection::printBuffer(vector<byte> & buffer, std::string msg) {
     int oldSize = buffer.size();
     buffer.resize(buffer.capacity());
     std::cout << msg << "\t";

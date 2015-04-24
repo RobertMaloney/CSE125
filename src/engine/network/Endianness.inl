@@ -1,7 +1,7 @@
 
 
 
-inline void ByteSwap(char* first, unsigned int size) {
+inline void byteSwap(char* first, unsigned int size) {
     if (size < 2) {
         return;
     }
@@ -22,93 +22,93 @@ inline void ByteSwap(char* first, unsigned int size) {
 }
 
 
-inline bool IsBigEndian() {
+inline bool isBigEndian() {
     int x = 1;
-    return ((*(char*) &x) == 0);
+    return ((*reinterpret_cast<char*>(&x)) == 0);
 }
 
 
-inline short HostToNet(short bytes) {
-    if (IsBigEndian()) { return bytes; }
-    ByteSwap((char*) &bytes, sizeof(bytes));
+inline short hostToNet(short bytes) {
+    if (isBigEndian()) { return bytes; }
+    byteSwap((char*) &bytes, sizeof(bytes));
     return bytes;
 }
 
 
-inline int HostToNet(int bytes) {
-    if (IsBigEndian()) { return bytes; }
-    ByteSwap((char*) &bytes, sizeof(bytes));
+inline int hostToNet(int bytes) {
+    if (isBigEndian()) { return bytes; }
+    byteSwap((char*) &bytes, sizeof(bytes));
     return bytes;
 }
 
 
-inline long HostToNet(long bytes) {
-    if (IsBigEndian()) { return bytes; }
-    ByteSwap((char*) &bytes, sizeof(bytes));
+inline long hostToNet(long bytes) {
+    if (isBigEndian()) { return bytes; }
+    byteSwap((char*) &bytes, sizeof(bytes));
     return bytes;
 }
 
 
-inline float HostToNet(float bytes) {
-    if (IsBigEndian()) { return bytes; }
-    ByteSwap((char*) &bytes, sizeof(bytes));
+inline float hostToNet(float bytes) {
+    if (isBigEndian()) { return bytes; }
+    byteSwap((char*) &bytes, sizeof(bytes));
     return bytes;
 }
 
 
-inline double HostToNet(double bytes) {
-    if (IsBigEndian()) { return bytes; }
-    ByteSwap((char*) &bytes, sizeof(bytes));
+inline double hostToNet(double bytes) {
+    if (isBigEndian()) { return bytes; }
+    byteSwap((char*) &bytes, sizeof(bytes));
     return bytes;
 }
 
 
-inline short NetToHost(short bytes) {
-    if (IsBigEndian()) { return bytes; }
-    ByteSwap((char*) &bytes, sizeof(bytes));
+inline short netToHost(short bytes) {
+    if (isBigEndian()) { return bytes; }
+    byteSwap((char*) &bytes, sizeof(bytes));
     return bytes;
 }
 
-inline size_t HostToNet(size_t bytes) {
-	if (IsBigEndian()) {
+inline size_t hostToNet(size_t bytes) {
+	if (isBigEndian()) {
 		return bytes;
 	}
-	ByteSwap((char*)&bytes, sizeof(bytes));
+	byteSwap((char*)&bytes, sizeof(bytes));
 	return bytes;
 }
 
 
-inline int NetToHost(int bytes) {
-    if (IsBigEndian()) { return bytes; }
-    ByteSwap((char*) &bytes, sizeof(bytes));
+inline int netToHost(int bytes) {
+    if (isBigEndian()) { return bytes; }
+    byteSwap((char*) &bytes, sizeof(bytes));
     return bytes;
 }
 
 
-inline long NetToHost(long bytes) {
-    if (IsBigEndian()) { return bytes; }
-    ByteSwap((char*) &bytes, sizeof(bytes));
+inline long netToHost(long bytes) {
+    if (isBigEndian()) { return bytes; }
+    byteSwap((char*) &bytes, sizeof(bytes));
     return bytes;
 }
 
 
-inline float NetToHost(float bytes) {
-    if (IsBigEndian()) { return bytes; }
-    ByteSwap((char*) &bytes, sizeof(bytes));
+inline float netToHost(float bytes) {
+    if (isBigEndian()) { return bytes; }
+    byteSwap((char*) &bytes, sizeof(bytes));
     return bytes;
 }
 
 
-inline double NetToHost(double bytes) {
-    if (IsBigEndian()) { return bytes; }
-    ByteSwap((char*) &bytes, sizeof(bytes));
+inline double netToHost(double bytes) {
+    if (isBigEndian()) { return bytes; }
+    byteSwap((char*) &bytes, sizeof(bytes));
     return bytes;
 }
 
-inline size_t NetToHost(size_t bytes) {
-	if (IsBigEndian()) {
+inline size_t netToHost(size_t bytes) {
+	if (isBigEndian()) {
 		return bytes;
 	}
-	ByteSwap((char*)&bytes, sizeof(bytes));
+	byteSwap((char*)&bytes, sizeof(bytes));
 	return bytes;
 }

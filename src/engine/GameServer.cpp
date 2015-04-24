@@ -9,7 +9,7 @@ GameServer::GameServer() {
 
 GameServer::~GameServer() {
     if (listener) {
-        listener->Close();
+        listener->close();
         delete listener;
         listener = nullptr;
     }
@@ -23,30 +23,30 @@ GameServer::~GameServer() {
 }
 
 
-void GameServer::Initialize(int maxConns) {
-    Socket::Initialize();
+void GameServer::initialize(int maxConns) {
+    Socket::initialize();
     this->listener = new TCPListener();
-    this->listener->Bind(DEFAULT_SERVER_IP, DEFAULT_SERVER_PORT);
-    this->listener->Listen(maxConns);
-    this->listener->SetNonBlocking(true);
+    this->listener->bind(DEFAULT_SERVER_IP, DEFAULT_SERVER_PORT);
+    this->listener->listen(maxConns);
+    this->listener->setNonBlocking(true);
     maxConnections = maxConns;
 }
 
 
-void GameServer::Run() {
+void GameServer::run() {
 
     while (true) {
         if (clients->size() < maxConnections) {
-            this->AcceptWaitingClient();
+            this->acceptWaitingClient();
         }
 
     }
 }
 
-void GameServer::ParsePlayer(deque<Packet> & in, deque<Packet> & out) {
+void GameServer::parsePlayer(deque<Packet> & in, deque<Packet> & out) {
 	glm::mat4 m_player;
 	for (unsigned int i = 0; i < in.size(); ++i) {
-		if (in[i].Size() > 0) {
+		if (in[i].size() > 0) {
 			Packet p;
 			switch (in[i][0]) {
 			case 0:
@@ -68,7 +68,7 @@ void GameServer::ParsePlayer(deque<Packet> & in, deque<Packet> & out) {
 			}
 			float * matP = glm::value_ptr(m_player);
 			for (int j = 0; j < 16 ; ++j)
-				p.WriteFloat(matP[j]);
+				p.writeFloat(matP[j]);
 
 			out.push_back(p);
 		}
@@ -76,11 +76,11 @@ void GameServer::ParsePlayer(deque<Packet> & in, deque<Packet> & out) {
 }
 
 
-void GameServer::AcceptWaitingClient() {
-    TCPConnection* newClient = listener->Accept();
+void GameServer::acceptWaitingClient() {
+    TCPConnection* newClient = listener->accept();
     if (newClient) {
-        newClient->SetNoDelay(true);
-        newClient->SetNonBlocking(true);
+        newClient->setNoDelay(true);
+        newClient->setNonBlocking(true);
 		clients->insert(make_pair(newClient, nextObjId++));
     }
 }

@@ -59,27 +59,27 @@ public:
 
     virtual ~Socket();
 
-    void Close();            // close the socket belonging to this class
-    void Close(int fd);      // close the socket fd
+    void close();            // close the socket belonging to this class
+    void close(int fd);      // close the socket fd
 
-    /* SetNoDelay disables Nagle's algorithm that buffers bytes in the OS
+    /* setNoDelay disables Nagle's algorithm that buffers bytes in the OS
      * so that packets sent use more bandwidth (more efficient). This is bad
      * for anything real-time since it can delay your message being sent
      */
-    SocketError SetNoDelay(bool on);
+    SocketError setNoDelay(bool on);
 
-    /* SetNonBlocking disables blocking operations. Instead if they can not
+    /* setNonBlocking disables blocking operations. Instead if they can not
      * complete when called, they will return SE_WOULDBLOCK. 
      */
-    SocketError SetNonBlocking(bool on);
+    SocketError setNonBlocking(bool on);
 
-    string GetErrorMsg();     // platform independent string error message
-    static SocketError GetError(); // gets the SocketError value that most recently occurred
+    string getErrorMsg();     // platform independent string error message
+    static SocketError getError(); // gets the SocketError value that most recently occurred
     
     /* Initializes the socket layer (for windows) must be called once at the beginning 
      * of a program (not for each new socket)
      */
-    static void Initialize();   
+    static void initialize();   
 
     /* Performs an address lookup on the ip and port specified. sockType is usually either
      * SOCK_STREAM or SOCK_DGRAM (for TCP or UDP respectively). The function returns
@@ -87,7 +87,7 @@ public:
      * parameters. NOTE: the return value must be freed after it is no longer needed
      * using freeaddrinfo();
      */
-    static AddressInfo* DNSLookup(const string& ip, const string& port, int sockType);
+    static AddressInfo* dnsLookup(const string& ip, const string& port, int sockType);
 
 protected:
 
@@ -95,15 +95,15 @@ protected:
     Socket(int sockfd);
 
     // Checks if the socket is valid (currently open)
-    inline bool IsSocketActive();
+    inline bool isSocketActive();
 
     // Set and Get the values of socket options
-    SocketError SetSockOpt(int optLevel, int optName, int val);
-    int GetSockOpt(int level, int optName);
+    SocketError setSockOpt(int optLevel, int optName, int val);
+    int getSockOpt(int level, int optName);
 
     // Kills the program. Something really bad happened. Can provide a
     // string error message;
-    void DieWithError(const string & errMsg = "");
+    void dieWithError(const string & errMsg = "");
 
     int sock;                      // socket fd for this class
     bool nonBlocking;              // is the socket in non-blocking mode
@@ -119,8 +119,8 @@ public:
     SocketException(int err);
     SocketException(string msg);
 
-    int GetError();
-    const string & GetErrMsg();
+    int getError();
+    const string & getErrMsg();
 
 private:
 

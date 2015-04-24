@@ -10,7 +10,7 @@
 #include <gtc\matrix_transform.hpp>
 #include <gtc\type_ptr.hpp>
 
-#include "network\PacketHandler.h"
+//#include "network\PacketHandler.h"
 #include "network\TCPConnection.h"
 #include "network\TCPListener.h"
 
@@ -23,6 +23,7 @@ using std::pair;
 using std::hash;
 using std::cout;
 
+typedef unsigned int ObjectId;
 static ObjectId nextObjId;
 
 class GameServer {
@@ -32,19 +33,19 @@ public:
     GameServer();
     ~GameServer();
 
-    void Initialize(int maxConns);
-    void Run();
+    void initialize(int maxConns);
+    void run();
 
   //  void SendUpdates(deque<Packet> & updates);
   //  void ReceiveEvents(deque<Packet> & events);
 
 private:
 
-    void AcceptWaitingClient();
-    void PrintUpdates(deque<Packet> & updates);
-	void ParsePlayer(deque<Packet> & in, deque<Packet> & out);
+    void acceptWaitingClient();
+    void printUpdates(deque<Packet> & updates);
+	void parsePlayer(deque<Packet> & in, deque<Packet> & out);
 
-    inline bool ShouldTerminate(SocketError err);
+    inline bool shouldTerminate(SocketError err);
     
 	TCPListener* listener;
 	unsigned int maxConnections;
@@ -53,7 +54,7 @@ private:
 };
 
 
-bool GameServer::ShouldTerminate(SocketError err) {
+bool GameServer::shouldTerminate(SocketError err) {
     switch (err) {
     case SE_NOERR:
         return false;

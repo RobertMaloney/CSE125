@@ -24,17 +24,17 @@ public:
     GameClient();
     ~GameClient();
 
-	void Run();
-    void Initialize();
-    void ReceiveUpdates(deque<Packet> & updates);
-    void SendEvents(deque<Packet> & events);
-    void PrintUpdates(deque<Packet> & updates);
+	void run();
+    void initialize();
+    void receiveUpdates(deque<Packet> & updates);
+    void sendEvents(deque<Packet> & events);
+    void printUpdates(deque<Packet> & updates);
 
 private:
 
 	TCPConnection* connection;
 
-    inline void CheckError(SocketError err);
-    inline bool ShouldTerminate(SocketError err);
+    inline void checkError(SocketError err);
+    inline bool shouldTerminate(SocketError err);
 };
 #endif

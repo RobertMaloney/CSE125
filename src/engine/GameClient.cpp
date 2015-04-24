@@ -21,24 +21,24 @@ GameClient::~GameClient() {
 void fillWithDebugPackets(deque<Packet> & packets) {
 	Packet p;
 	for (int i = 0; i < 26; ++i) {
-		p.Resize(0);
+		p.resize(0);
 		int len = rand() % 1000;
 		for (int j = 0; j < len; ++j) {
-			p.WriteChar('a' + i);
+			p.writeChar('a' + i);
 		}
 		packets.push_back(p);
 	}
 }
 
 
-void GameClient::Run() {
+void GameClient::run() {
 	bool DEBUG = true;
 
 	GraphicsEngine::Initialize();
 	//GraphicsEngine::SetKeyCallback(keyCallback);
 	//client = new GameClient();
-	//client->Initialize();
-	this->Initialize();
+	//client->initialize();
+	this->initialize();
 
 	deque<Packet> packets;
 	deque<Packet> updates;
@@ -53,9 +53,9 @@ void GameClient::Run() {
 		if (DEBUG) {
 
 			//send user input
-			this->SendEvents(GameClient::input);
+			this->sendEvents(GameClient::input);
 
-			this->ReceiveUpdates(updates);
+			this->receiveUpdates(updates);
 			//client->PrintUpdates(updates);
 			GraphicsEngine::UpdatePlayer(updates);
 
@@ -70,49 +70,49 @@ void GameClient::Run() {
 }
 
 
-void GameClient::Initialize() {
-    Socket::Initialize();
-    SocketError err = connection->Connect(DEFAULT_SERVER_IP, DEFAULT_SERVER_PORT);
-    if (ShouldTerminate(err)) {
-        connection->Close();
+void GameClient::initialize() {
+    Socket::initialize();
+    SocketError err = connection->connect(DEFAULT_SERVER_IP, DEFAULT_SERVER_PORT);
+    if (this->shouldTerminate(err)) {
+        connection->close();
         delete connection;
         connection = nullptr;
         throw SocketException("Connection Failure.");
     }
-    connection->SetNoDelay(true);
-    connection->SetNonBlocking(true);
+    connection->setNoDelay(true);
+    connection->setNonBlocking(true);
 }
 
 
-void GameClient::ReceiveUpdates(deque<Packet> & updates) {
-    this->CheckError(connection->Receive(updates));
+void GameClient::receiveUpdates(deque<Packet> & updates) {
+    this->checkError(connection->receive(updates));
 }
 
 
-void GameClient::SendEvents(deque<Packet> & events) {
-    this->CheckError(connection->Send(events));    
+void GameClient::sendEvents(deque<Packet> & events) {
+    this->checkError(connection->send(events));    
 }
 
 
-void GameClient::PrintUpdates(deque<Packet> & updates) {
+void GameClient::printUpdates(deque<Packet> & updates) {
     for (auto it = updates.begin(); it != updates.end(); ++it) {
-        for (unsigned int i = 0; i < it->Size(); ++it) {
-            cout << to_string(it->At(i)) << " ";
+        for (unsigned int i = 0; i < it->size(); ++it) {
+            cout << to_string(it->at(i)) << " ";
         }
         cout << "\n";
     }
 }
 
 
-void GameClient::CheckError(SocketError err) {
-	if (this->ShouldTerminate(err)) {
-		connection->Close();
+void GameClient::checkError(SocketError err) {
+	if (this->shouldTerminate(err)) {
+		connection->close();
 		throw SocketException("Fatal error while communicating over TCPConnection.");
 	}
 }
 
 
-bool GameClient::ShouldTerminate(SocketError err) {
+bool GameClient::shouldTerminate(SocketError err) {
 	switch (err) {
 	case SE_NOERR:
 		return false;

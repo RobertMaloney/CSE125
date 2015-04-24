@@ -106,7 +106,6 @@
     <ClCompile Include="GameServer.cpp" />
     <ClCompile Include="Graphics\GraphicsEngine.cpp" />
     <ClCompile Include="network\Packet.cpp" />
-    <ClCompile Include="network\PacketHandler.cpp" />
     <ClCompile Include="Network\Socket.cpp" />
     <ClCompile Include="Network\TCPConnection.cpp" />
     <ClCompile Include="Network\TCPListener.cpp" />
@@ -130,7 +129,6 @@
     <ClInclude Include="Graphics\Renderable.h" />
     <ClInclude Include="Network\Endianness.h" />
     <ClInclude Include="network\Packet.h" />
-    <ClInclude Include="network\PacketHandler.h" />
     <ClInclude Include="Network\Socket.h" />
     <ClInclude Include="Network\TCPConnection.h" />
     <ClInclude Include="Network\TCPListener.h" />
