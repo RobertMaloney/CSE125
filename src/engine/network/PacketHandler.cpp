@@ -27,12 +27,10 @@ void PacketHandler::dispatch(ObjectId clientId, deque<Packet> & received) {
 		}
 
 		EventType eventType = static_cast<EventType>(it->at(0));
-		auto handler = eventHandlers.find(eventType);
 
-		if (handler == eventHandlers.end()) {
-			continue;
-		}
-		eventHandlers[eventType](clientId);
+		if (eventHandlers.find(eventType) != eventHandlers.end()) {
+            eventHandlers[eventType](clientId);
+        }
 	}
 }
 
