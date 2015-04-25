@@ -41,7 +41,7 @@ void GameServer::run() {
 
 		this->receiveAndUpdate();
 		this->tick();
-		sleep_for(milliseconds(200));
+		sleep_for(milliseconds(1000));
 	}
 }
 
@@ -64,13 +64,15 @@ void GameServer::tick() {
 	deque<Packet> updates;
 	ObjectDB::getInstance().getObjectState(updates);
 
-	for (auto it = clients->begin(); it != clients->end(); ++it) {
+	for (auto it = clients->begin(); it != clients->end(); ) {
 		SocketError err = it->first->send(updates);
 		if (this->shouldTerminate(err)){
 			it->first->close();
 			delete it->first;
 			it = clients->erase(it);
-		}
+        } else {
+            ++it;
+        }
 	}
 }
 
@@ -78,18 +80,18 @@ void GameServer::tick() {
 void GameServer::receiveAndUpdate() {
 	deque<Packet> events;
 
-	for (auto it = clients->begin(); it != clients->end();) {
+	for (auto it = clients->begin(); it != clients->end(); ) {
 		SocketError err = it->first->receive(events);
 		if (this->shouldTerminate(err)) {
 			it->first->close();
 			delete it->first;
 			it = clients->erase(it);
 			events.clear();
-			continue;
-		}
-		handler->dispatch(it->second, events);
-		events.clear();
-		++it;
+        } else {
+            handler->dispatch(it->second, events);
+            events.clear();
+            ++it;
+        }
 	}
 }
 
@@ -104,35 +106,3 @@ void GameServer::printUpdates(deque<Packet> & updates) {
 	}
 }
 
-/*void GameServer::parsePlayer(deque<Packet> & in, deque<Packet> & out) {
-	glm::mat4 m_player;
-	for (unsigned int i = 0; i < in.size(); ++i) {
-		if (in[i].size() > 0) {
-			Packet p;
-			switch (in[i][0]) {
-			case 0:
-				cout << "Moving player forward..." << endl;
-				m_player = glm::translate(m_player, glm::vec3(0, -1.f, 0));
-				break;
-			case 1:
-				cout << "Moving player left..." << endl;
-				m_player = glm::translate(m_player, glm::vec3(1.f, 0, 0));
-				break;
-			case 2:
-				cout << "Moving player backward..." << endl;
-				m_player = glm::translate(m_player, glm::vec3(0, 1.f, 0));
-				break;
-			case 3:
-				cout << "Moving player right..." << endl;
-				m_player = glm::translate(m_player, glm::vec3(-1.f, 0, 0));
-				break;
-			}
-			float * matP = glm::value_ptr(m_player);
-			for (int j = 0; j < 16; ++j)
-				p.writeFloat(matP[j]);
-
-			out.push_back(p);
-		}
-	}
-}
-*/

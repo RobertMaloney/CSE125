@@ -33,8 +33,9 @@ ObjectDB::~ObjectDB() {
 
 
 ObjectId ObjectDB::add(GameObject* object) {
-	objects.insert(make_pair(nextId, object));
-	return nextId++;
+    ObjectId newId = nextId++;
+	objects.insert(make_pair(newId, object));
+	return newId;
 }
 
 

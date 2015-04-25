@@ -298,24 +298,3 @@ void GraphicsEngine::UpdatePlayer(deque<Packet> & data) {
 	}
 }
 
-/*
-void GraphicsEngine::MoveUp() {
-if (m_player)
-m_player->getMatrix() = glm::translate(m_player->getMatrix(), glm::vec3(0, -1, 0));
-}
-
-void GraphicsEngine::MoveLeft() {
-if (m_player)
-m_player->getMatrix() = glm::translate(m_player->getMatrix(), glm::vec3(1, 0, 0));
-}
-
-void GraphicsEngine::MoveDown() {
-if (m_player)
-m_player->getMatrix() = glm::translate(m_player->getMatrix(), glm::vec3(0, 1, 0));
-}
-
-void GraphicsEngine::MoveRight() {
-if (m_player)
-m_player->getMatrix() = glm::translate(m_player->getMatrix(), glm::vec3(-1, 0, 0));
-}
-*/

@@ -14,29 +14,13 @@ GameClient::~GameClient() {
 }
 
 
-// used for debugging
-void fillWithDebugPackets(deque<Packet> & packets) {
-	Packet p;
-	for (int i = 0; i < 26; ++i) {
-		p.resize(0);
-		int len = rand() % 1000;
-		for (int j = 0; j < len; ++j) {
-			p.writeChar('a' + i);
-		}
-		packets.push_back(p);
-	}
-}
-
-
 void GameClient::run() {
 	bool DEBUG = true;
+    deque<Packet> updates;
 
 	GraphicsEngine::Initialize();
 	this->initialize();
 
-	deque<Packet> updates;
-
-	//main game loop
 	while (!GraphicsEngine::Closing()) {
 		GraphicsEngine::DrawAndPoll();
 		
