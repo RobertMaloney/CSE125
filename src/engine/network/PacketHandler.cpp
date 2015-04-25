@@ -6,35 +6,6 @@ using glm::mat4;
 using glm::vec3;
 #include <iostream>
 
-
-PacketHandler::PacketHandler(){
-	eventHandlers[EventType::MOVE_FORWARD] = EventHandler(forwardHandler);
-	eventHandlers[EventType::MOVE_BACKWARD] = EventHandler(backwardHandler);
-	eventHandlers[EventType::MOVE_LEFT] = EventHandler(leftHandler);
-	eventHandlers[EventType::MOVE_RIGHT] = EventHandler(rightHandler);
-}
-
-
-PacketHandler::~PacketHandler() {
-
-}
-
-
-void PacketHandler::dispatch(ObjectId clientId, deque<Packet> & received) {
-	for (auto it = received.begin(); it != received.end(); ++it) {
-		if (it->size() <= 0) {
-			continue;
-		}
-
-		EventType eventType = static_cast<EventType>(it->at(0));
-
-		if (eventHandlers.find(eventType) != eventHandlers.end()) {
-            eventHandlers[eventType](clientId);
-        }
-	}
-}
-
-
 void forwardHandler(ObjectId id) {
     GameObject* player = ObjectDB::getInstance().get(id);
 
@@ -69,4 +40,33 @@ void rightHandler(ObjectId id) {
         player->location = glm::translate(player->location, vec3(-1.f, 0.f, 0.f));
     }
 }
+
+
+PacketHandler::PacketHandler(){
+	eventHandlers[EventType::MOVE_FORWARD] = EventHandler(forwardHandler);
+	eventHandlers[EventType::MOVE_BACKWARD] = EventHandler(backwardHandler);
+	eventHandlers[EventType::MOVE_LEFT] = EventHandler(leftHandler);
+	eventHandlers[EventType::MOVE_RIGHT] = EventHandler(rightHandler);
+}
+
+
+PacketHandler::~PacketHandler() {
+
+}
+
+
+void PacketHandler::dispatch(ObjectId clientId, deque<Packet> & received) {
+	for (auto it = received.begin(); it != received.end(); ++it) {
+		if (it->size() <= 0) {
+			continue;
+		}
+
+		EventType eventType = static_cast<EventType>(it->at(0));
+
+		if (eventHandlers.find(eventType) != eventHandlers.end()) {
+            eventHandlers[eventType](clientId);
+        }
+	}
+}
+
 
