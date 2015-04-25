@@ -61,8 +61,9 @@ void GameServer::acceptWaitingClient() {
 
 
 void GameServer::tick() {
-	deque<Packet> updates = ObjectDB::getInstance().getObjectState();
-	printUpdates(updates);
+	deque<Packet> updates;
+	ObjectDB::getInstance().getObjectState(updates);
+
 	for (auto it = clients->begin(); it != clients->end(); ++it) {
 		SocketError err = it->first->send(updates);
 		if (this->shouldTerminate(err)){

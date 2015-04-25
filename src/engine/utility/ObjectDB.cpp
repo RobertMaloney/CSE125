@@ -58,15 +58,13 @@ GameObject* ObjectDB::get(ObjectId objectId) {
 }
 
 
-deque<Packet> ObjectDB::getObjectState() {
+void ObjectDB::getObjectState(deque<Packet> & state) {
 	Packet p;
-	deque<Packet> result;
 	for (auto it = objects.begin(); it != objects.end(); ++it){
 		it->second->serialize(p);
-		result.push_back(p);
+		state.push_back(p);
 		p.clear();
 	}
-	return result;	
 }
 
 

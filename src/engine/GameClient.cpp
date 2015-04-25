@@ -73,12 +73,13 @@ void GameClient::receiveUpdates(deque<Packet> & updates) {
 
 
 void GameClient::sendEvents(deque<Event> & events) {
+	deque<Packet> updates;
 	Packet p;
 	for (auto it = events.begin(); it != events.end(); ++it){
 		it->serialize(p);
-		this->checkError(connection->send(p));
-		p.clear();
+		updates.push_back(p);
 	}
+	connection->send(updates);
 	events.clear();
 }
 

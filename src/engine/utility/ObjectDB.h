@@ -41,7 +41,7 @@ public:
 	bool remove(ObjectId objectId);
 	GameObject* get(ObjectId objectId);
 
-	deque<Packet> getObjectState();
+	void getObjectState(deque<Packet> & state);
 
 	static ObjectDB & getInstance();
 
