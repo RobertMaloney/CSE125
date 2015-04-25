@@ -27,7 +27,7 @@ public:
     void initialize();
 
     void receiveUpdates(deque<Packet> & updates);
-    void sendEvents(deque<Event> & events);
+    void sendEvents(deque<Packet> & events);
 
 private:
 

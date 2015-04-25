@@ -72,14 +72,8 @@ void GameClient::receiveUpdates(deque<Packet> & updates) {
 }
 
 
-void GameClient::sendEvents(deque<Event> & events) {
-	deque<Packet> updates;
-	Packet p;
-	for (auto it = events.begin(); it != events.end(); ++it){
-		it->serialize(p);
-		updates.push_back(p);
-	}
-	connection->send(updates);
+void GameClient::sendEvents(deque<Packet> & events) {
+	connection->send(events);
 	events.clear();
 }
 

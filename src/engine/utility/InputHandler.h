@@ -2,7 +2,7 @@
 #define INPUT_HANDLER_H
 
 #include <deque>
-
+#include "../network/Packet.h"
 #include "..\utility\Event.h"
 #include "..\graphics\GraphicsEngine.h"
 
@@ -12,7 +12,7 @@ class InputHandler
 {
 public:
 	
-   static deque<Event> input;
+   static deque<Packet> input;
    static void handleKey(int key, int action, int mods);
 
 
