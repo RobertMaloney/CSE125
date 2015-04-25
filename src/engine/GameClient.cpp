@@ -1,9 +1,6 @@
 #include "GameClient.h"
 
 
-deque<Packet> GameClient::input;
-
-
 GameClient::GameClient() {
     connection = new TCPConnection();
 }
@@ -35,33 +32,19 @@ void GameClient::run() {
 	bool DEBUG = true;
 
 	GraphicsEngine::Initialize();
-	//GraphicsEngine::SetKeyCallback(keyCallback);
-	//client = new GameClient();
-	//client->initialize();
 	this->initialize();
 
-	deque<Packet> packets;
 	deque<Packet> updates;
-	fillWithDebugPackets(packets);
-	Packet p;
-
-	int i = 0;
 
 	//main game loop
 	while (!GraphicsEngine::Closing()) {
 		GraphicsEngine::DrawAndPoll();
-		if (DEBUG) {
-
-			//send user input
-			this->sendEvents(GameClient::input);
-
+		
+		if (DEBUG) {	
+			this->sendEvents(InputHandler::input);		
 			this->receiveUpdates(updates);
-			//client->PrintUpdates(updates);
 			GraphicsEngine::UpdatePlayer(updates);
-
-			//clear events
 			updates.clear();
-			GameClient::input.clear();
 		}
 	}
 
@@ -89,18 +72,14 @@ void GameClient::receiveUpdates(deque<Packet> & updates) {
 }
 
 
-void GameClient::sendEvents(deque<Packet> & events) {
-    this->checkError(connection->send(events));    
-}
-
-
-void GameClient::printUpdates(deque<Packet> & updates) {
-    for (auto it = updates.begin(); it != updates.end(); ++it) {
-        for (unsigned int i = 0; i < it->size(); ++it) {
-            cout << to_string(it->at(i)) << " ";
-        }
-        cout << "\n";
-    }
+void GameClient::sendEvents(deque<Event> & events) {
+	Packet p;
+	for (auto it = events.begin(); it != events.end(); ++it){
+		it->serialize(p);
+		this->checkError(connection->send(p));
+		p.clear();
+	}
+	events.clear();
 }
 
 

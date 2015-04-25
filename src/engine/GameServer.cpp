@@ -3,60 +3,107 @@
 
 GameServer::GameServer() {
 	this->clients = new unordered_map<TCPConnection*, ObjectId>();
-    this->handler = new PacketHandler();
-    nextObjId = 1;
+	this->handler = new PacketHandler();
 }
 
 
 GameServer::~GameServer() {
-    if (listener) {
-        listener->close();
-        delete listener;
-        listener = nullptr;
-    }
-    for (auto it = clients->begin(); it != clients->end(); ++it) {
-        if (it->first) {
-            delete it->first;
-        }
-    }
-    delete clients;
-    clients = nullptr;
+	if (listener) {
+		listener->close();
+		delete listener;
+		listener = nullptr;
+	}
+	for (auto it = clients->begin(); it != clients->end(); ++it) {
+		if (it->first) {
+			delete it->first;
+		}
+	}
+	delete clients;
+	clients = nullptr;
 }
 
 
 void GameServer::initialize(int maxConns) {
-    Socket::initialize();
-    this->listener = new TCPListener();
-    this->listener->bind(DEFAULT_SERVER_IP, DEFAULT_SERVER_PORT);
-    this->listener->listen(maxConns);
-    this->listener->setNonBlocking(true);
-    maxConnections = maxConns;
+	Socket::initialize();
+	this->listener = new TCPListener();
+	this->listener->bind(DEFAULT_SERVER_IP, DEFAULT_SERVER_PORT);
+	this->listener->listen(maxConns);
+	this->listener->setNonBlocking(true);
+	maxConnections = maxConns;
 }
 
 
 void GameServer::run() {
+	while (true) {
+		if (clients->size() < maxConnections) {
+			this->acceptWaitingClient();
+		}
 
-    long long elapsed;
-    high_resolution_clock::time_point begin;
-    high_resolution_clock::time_point end;
-
-    while (true) {
-        begin = high_resolution_clock::now();
-
-        if (clients->size() < maxConnections) {
-            this->acceptWaitingClient();
-        }
-
-        this->receiveAndUpdate();
-        this->tick();
-
-        end = high_resolution_clock::now();
-        elapsed = duration_cast<milliseconds>(end - begin).count();
- 
-    }
+		this->receiveAndUpdate();
+		this->tick();
+		sleep_for(milliseconds(200));
+	}
 }
 
-void GameServer::parsePlayer(deque<Packet> & in, deque<Packet> & out) {
+
+
+void GameServer::acceptWaitingClient() {
+	TCPConnection* newClient = listener->accept();
+	if (!newClient) {
+		return;
+	}
+	ObjectId player = ObjectDB::getInstance().add(new GameObject());
+	newClient->setNoDelay(true);
+	newClient->setNonBlocking(true);
+	clients->insert(make_pair(newClient, player));	
+}
+
+
+
+void GameServer::tick() {
+	deque<Packet> updates = ObjectDB::getInstance().getObjectState();
+	printUpdates(updates);
+	for (auto it = clients->begin(); it != clients->end(); ++it) {
+		SocketError err = it->first->send(updates);
+		if (this->shouldTerminate(err)){
+			it->first->close();
+			delete it->first;
+			it = clients->erase(it);
+		}
+	}
+}
+
+
+void GameServer::receiveAndUpdate() {
+	deque<Packet> events;
+
+	for (auto it = clients->begin(); it != clients->end();) {
+		SocketError err = it->first->receive(events);
+		if (this->shouldTerminate(err)) {
+			it->first->close();
+			delete it->first;
+			it = clients->erase(it);
+			events.clear();
+			continue;
+		}
+		handler->dispatch(it->second, events);
+		events.clear();
+		++it;
+	}
+}
+
+
+void GameServer::printUpdates(deque<Packet> & updates) {
+	for (auto it = updates.begin(); it != updates.end(); ++it) {
+		for (unsigned int i = 0; i < it->size(); ++i) {
+			cout << to_string((*it)[i]) << " ";
+		}
+		cout << "\n";
+		
+	}
+}
+
+/*void GameServer::parsePlayer(deque<Packet> & in, deque<Packet> & out) {
 	glm::mat4 m_player;
 	for (unsigned int i = 0; i < in.size(); ++i) {
 		if (in[i].size() > 0) {
@@ -80,58 +127,11 @@ void GameServer::parsePlayer(deque<Packet> & in, deque<Packet> & out) {
 				break;
 			}
 			float * matP = glm::value_ptr(m_player);
-			for (int j = 0; j < 16 ; ++j)
+			for (int j = 0; j < 16; ++j)
 				p.writeFloat(matP[j]);
 
 			out.push_back(p);
 		}
 	}
 }
-
-
-void GameServer::acceptWaitingClient() {
-    TCPConnection* newClient = listener->accept();
-    if (newClient) {
-        newClient->setNoDelay(true);
-        newClient->setNonBlocking(true);
-		clients->insert(make_pair(newClient, nextObjId++));
-    }
-}
-
-
-
-
-void GameServer::tick() {
-
-}
-
-
-void GameServer::receiveAndUpdate() {
-    deque<Packet> events;
-
-    for (auto it = clients->begin(); it != clients->end();) {
-        SocketError err = it->first->receive(events);
-
-        if (this->shouldTerminate(err)) {
-            it->first->close();
-            delete it->first;
-            it = clients->erase(it);
-            events.clear();
-            continue;
-        }
-
-        handler->dispatch(it->second, events);
-        events.clear();
-        ++it;
-    }
-}
-
-
-void GameServer::printUpdates(deque<Packet> & updates) {
-    for (auto it = updates.begin(); it != updates.end(); ++it) {
-        for (unsigned int i = 0; i < it->size(); ++it) {
-            cout << to_string(it->at(i)) << " ";
-        }
-        cout << "\n";
-    }
-}
+*/

@@ -74,6 +74,14 @@ private:
     }
 
 
+	inline void readRaw(char* buff, unsigned int size){
+		if (size <= 0){
+			return;
+		}
+		memcpy(reinterpret_cast<void*>(buff), reinterpret_cast<void*>(&buffer[index]), size);
+		index += size;
+	}
+
     inline void read(char* buff, unsigned int size) {
         if (size == 0) {
             return;

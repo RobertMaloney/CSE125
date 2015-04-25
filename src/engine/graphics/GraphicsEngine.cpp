@@ -11,7 +11,7 @@
 #include "..\graphics\Cube.h"
 #include "..\graphics\Geometry.h"
 #include "..\utility\System.h"
-#include "..\utility\Event.h"
+#include "..\utility\InputHandler.h"
 
 using namespace std;
 
@@ -274,26 +274,6 @@ KeyCallback GraphicsEngine::GetKeyCallback() {
 	return m_keyCallback;
 }
 
-void GraphicsEngine::MoveUp() {
-	if (m_player)
-	m_player->getMatrix() = glm::translate(m_player->getMatrix(), glm::vec3(0, -1, 0));
-}
-
-void GraphicsEngine::MoveLeft() {
-	if (m_player)
-	m_player->getMatrix() = glm::translate(m_player->getMatrix(), glm::vec3(1, 0, 0));
-}
-
-void GraphicsEngine::MoveDown() {
-	if (m_player)
-	m_player->getMatrix() = glm::translate(m_player->getMatrix(), glm::vec3(0, 1, 0));
-}
-
-void GraphicsEngine::MoveRight() {
-	if (m_player)
-	m_player->getMatrix() = glm::translate(m_player->getMatrix(), glm::vec3(-1, 0, 0));
-}
-
 void GraphicsEngine::ScaleUp()
 {
 	if (m_player)
@@ -309,10 +289,7 @@ void GraphicsEngine::ScaleDown()
 void GraphicsEngine::UpdatePlayer(deque<Packet> & data) {
 	if (data.size() > 0 && data[0].size() > 0) {
 		float * matPointer = glm::value_ptr(m_player->getMatrix());
-		/*float * newData = (float*)&data[0][0];
-		for (int i = 0; i < 16; ++i) {
-			matPointer[i] = newData[i];
-		}*/
+
         for (auto it = data.begin(); it != data.end(); ++it) {
             for(int i = 0; i < 16; ++i) {
                 matPointer[i] = it->readFloat();
@@ -320,3 +297,25 @@ void GraphicsEngine::UpdatePlayer(deque<Packet> & data) {
         }
 	}
 }
+
+/*
+void GraphicsEngine::MoveUp() {
+if (m_player)
+m_player->getMatrix() = glm::translate(m_player->getMatrix(), glm::vec3(0, -1, 0));
+}
+
+void GraphicsEngine::MoveLeft() {
+if (m_player)
+m_player->getMatrix() = glm::translate(m_player->getMatrix(), glm::vec3(1, 0, 0));
+}
+
+void GraphicsEngine::MoveDown() {
+if (m_player)
+m_player->getMatrix() = glm::translate(m_player->getMatrix(), glm::vec3(0, 1, 0));
+}
+
+void GraphicsEngine::MoveRight() {
+if (m_player)
+m_player->getMatrix() = glm::translate(m_player->getMatrix(), glm::vec3(-1, 0, 0));
+}
+*/

@@ -2,27 +2,48 @@
 #define EVENT_H
 
 #include <string.h>
-// Note: move to client game class
+
+#include "Serializable.h"
+
 enum EventType {
-   DO_NOTHING,
-   MOVE_UP,
-   MOVE_DOWN,
+   MOVE_FORWARD,
+   MOVE_BACKWARD,
    MOVE_LEFT,
    MOVE_RIGHT
 };
 
-struct Event {
+class Event : public Serializable {
 
-   EventType theevent;
+public:
 
-   void serialize(char * buffer)
-   {
-      memcpy(buffer, this, sizeof(EventType));
-   }
+	Event();
+	Event(EventType e);
+	~Event();
 
-   void deserialize(char* buffer)
-   {
-      memcpy(this, buffer, sizeof(EventType));
-   }
+	void setType(EventType t);
+	EventType getType();
+
+	void serialize(Packet & p);
+	void deserialize(Packet & p);
+
+protected:
+	
+	EventType type;
+
 };
+
 #endif
+
+
+
+/*
+
+void serialize(char * buffer)
+{
+	memcpy(buffer, this, sizeof(EventType));
+}
+
+void deserialize(char* buffer)
+{
+	memcpy(this, buffer, sizeof(EventType));
+}*/

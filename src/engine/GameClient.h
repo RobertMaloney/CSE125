@@ -6,6 +6,7 @@
 #include <deque>
 
 #include "network\TCPConnection.h"
+#include "utility\InputHandler.h"
 #include "graphics\GraphicsEngine.h"
 #include "network\Packet.h"
 
@@ -19,8 +20,6 @@ class GameClient {
 
 public:
 
-	static deque<Packet> input;
-
     GameClient();
     ~GameClient();
 
@@ -28,8 +27,7 @@ public:
     void initialize();
 
     void receiveUpdates(deque<Packet> & updates);
-    void sendEvents(deque<Packet> & events);
-    void printUpdates(deque<Packet> & updates);
+    void sendEvents(deque<Event> & events);
 
 private:
 

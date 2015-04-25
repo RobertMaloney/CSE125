@@ -110,9 +110,11 @@
     <ClCompile Include="Network\Socket.cpp" />
     <ClCompile Include="Network\TCPConnection.cpp" />
     <ClCompile Include="Network\TCPListener.cpp" />
+    <ClCompile Include="utility\Event.cpp" />
     <ClCompile Include="utility\InputHandler.cpp" />
     <ClCompile Include="utility\EntityMap.cpp" />
     <ClCompile Include="utility\Location.cpp" />
+    <ClCompile Include="utility\ObjectDB.cpp" />
     <ClCompile Include="Utility\ObjLoader.cpp" />
     <ClCompile Include="utility\Player.cpp" />
   </ItemGroup>
@@ -139,8 +141,10 @@
     <ClInclude Include="utility\EntityMap.h" />
     <ClInclude Include="utility\Location.h" />
     <ClInclude Include="utility\MoveEvent.h" />
+    <ClInclude Include="utility\ObjectDB.h" />
     <ClInclude Include="Utility\ObjLoader.h" />
     <ClInclude Include="utility\Player.h" />
+    <ClInclude Include="utility\Serializable.h" />
     <ClInclude Include="utility\System.h" />
     <ClInclude Include="utility\World.h" />
   </ItemGroup>

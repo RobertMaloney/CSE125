@@ -7,16 +7,13 @@
 
 #include "Packet.h"
 #include "../utility/Event.h"
+#include "../utility/ObjectDB.h"
 
 using std::deque;
 using std::function;
 using std::unordered_map;
 
-
-typedef unsigned int ObjectId;
-static ObjectId nextObjId;
-
-typedef function <void(ObjectId, Event)> EventHandler;
+typedef function <void(ObjectId)> EventHandler;
 
 class PacketHandler {
 
