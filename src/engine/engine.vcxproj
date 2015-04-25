@@ -110,7 +110,6 @@
     <ClCompile Include="Network\Socket.cpp" />
     <ClCompile Include="Network\TCPConnection.cpp" />
     <ClCompile Include="Network\TCPListener.cpp" />
-    <ClCompile Include="utility\Event.cpp" />
     <ClCompile Include="utility\InputHandler.cpp" />
     <ClCompile Include="utility\EntityMap.cpp" />
     <ClCompile Include="utility\Location.cpp" />

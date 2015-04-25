@@ -9,41 +9,27 @@ enum EventType {
    MOVE_FORWARD,
    MOVE_BACKWARD,
    MOVE_LEFT,
-   MOVE_RIGHT
+   MOVE_RIGHT,
+   OBJECT_UPDATE
 };
 
-class Event : public Serializable {
-
-public:
-
-	Event();
-	Event(EventType e);
-	~Event();
-
-	void setType(EventType t);
-	EventType getType();
-
-	void serialize(Packet & p);
-	void deserialize(Packet & p);
-
-protected:
+struct Event
+{
+	EventType theevent;
 	
-	EventType type;
 
+	void serialize(char * buffer)
+	{
+		memcpy(buffer, this, sizeof(EventType));
+	}
+
+	void deserialize(char* buffer)
+	{
+		memcpy(this, buffer, sizeof(EventType));
+	}
 };
 
 #endif
 
 
 
-/*
-
-void serialize(char * buffer)
-{
-	memcpy(buffer, this, sizeof(EventType));
-}
-
-void deserialize(char* buffer)
-{
-	memcpy(this, buffer, sizeof(EventType));
-}*/

@@ -1,20 +1,20 @@
 #include "ObjectDB.h"
 
 void GameObject::serialize(Packet & p) {
+	p.writeUInt(id);
 	float* loc = glm::value_ptr(location);
 	for (int i = 0; i < 16; ++i){
 		p.writeFloat(loc[i]);
 	}
-	p.writeUInt(id);
 }
 
 
 void GameObject::deserialize(Packet & p) {
+	this->id = p.readUInt();
 	float* loc = glm::value_ptr(location);
 	for (int i = 0; i < 16; ++i){
 		loc[i] = p.readFloat();
 	}
-	this->id = p.readUInt();
 }
 
 
@@ -62,6 +62,7 @@ GameObject* ObjectDB::get(ObjectId objectId) {
 void ObjectDB::getObjectState(deque<Packet> & state) {
 	Packet p;
 	for (auto it = objects.begin(); it != objects.end(); ++it){
+		p.writeByte(EventType::OBJECT_UPDATE);
 		it->second->serialize(p);
 		state.push_back(p);
 		p.clear();

@@ -8,6 +8,7 @@
 #include <gtc\type_ptr.hpp>
 #include <gtx\string_cast.hpp>
 #include "Serializable.h"
+#include "../utility/Event.h"
 
 using glm::mat4;
 using glm::vec3;

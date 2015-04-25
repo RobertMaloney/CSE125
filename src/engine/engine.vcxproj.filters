@@ -14,7 +14,6 @@
     <ClCompile Include="Utility\ObjLoader.cpp" />
     <ClCompile Include="utility\Player.cpp" />
     <ClCompile Include="network\PacketHandler.cpp" />
-    <ClCompile Include="utility\Event.cpp" />
     <ClCompile Include="utility\ObjectDB.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -46,6 +45,7 @@
     <ClInclude Include="network\PacketHandler.h" />
     <ClInclude Include="utility\Serializable.h" />
     <ClInclude Include="utility\ObjectDB.h" />
+    <ClInclude Include="graphics\TextureLoad.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Network\Endianness.inl" />

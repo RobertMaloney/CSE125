@@ -53,7 +53,9 @@ public:
     unsigned int size() const;
     void resize(unsigned int size);
     void reserve(unsigned int cap);
-    
+	unsigned int getIndex();
+	void setIndex(unsigned int nIndex);
+
     byte at(int index);
     byte& operator[](int i) {
         return buffer[i];

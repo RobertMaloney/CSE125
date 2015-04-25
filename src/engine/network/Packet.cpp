@@ -178,6 +178,16 @@ void Packet::reserve(unsigned int cap) {
 }
 
 
+unsigned int Packet::getIndex(void) {
+	return this->index;
+}
+
+
+void Packet::setIndex(unsigned int nIndex) {
+	this->index = nIndex;
+}
+
+
 byte Packet::at(int index) {
     return buffer[index];
 }
