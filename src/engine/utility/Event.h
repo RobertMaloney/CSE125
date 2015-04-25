@@ -9,7 +9,9 @@ enum EventType {
    MOVE_FORWARD,
    MOVE_BACKWARD,
    MOVE_LEFT,
-   MOVE_RIGHT
+   MOVE_RIGHT,
+   JOIN_GAME,
+   OBJECT_UPDATE
 };
 
 class Event : public Serializable {

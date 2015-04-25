@@ -49,6 +49,7 @@ public:
     unsigned long readULong();
 
     void reset();
+	void retreat(unsigned int num);
     void clear();
     unsigned int size() const;
     void resize(unsigned int size);

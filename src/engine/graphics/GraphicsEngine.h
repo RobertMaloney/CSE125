@@ -1,6 +1,11 @@
 #ifndef GRAPHICS_ENGINE_H
 #define GRAPHICS_ENGINE_H
-
+// STL
+#include <stdio.h>
+#include <fstream>
+#include <sstream>
+#include <iostream>
+#include <string>
 #define GLEW_STATIC
 #include <glew.h>
 #include <glm.hpp>
@@ -15,8 +20,10 @@
 #include "Geode.h"
 #include "CameraNode.h"
 #include "Renderable.h"
-#include "..\utility\InputHandler.h"
+
 #include "..\network\Packet.h"
+
+typedef unsigned int ObjectId;
 
 using namespace std;
 
@@ -39,7 +46,7 @@ public:
 	static KeyCallback GetKeyCallback();
 	static void UpdatePlayer(deque<Packet> &);
    static int getKeyState(int);
-
+   static void Login(ObjectId playerId);
 private:
 	static glm::mat4				m_view, m_projection;
 	static bool						m_initialized;

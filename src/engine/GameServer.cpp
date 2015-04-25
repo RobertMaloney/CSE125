@@ -56,6 +56,9 @@ void GameServer::acceptWaitingClient() {
 	connection->setNoDelay(true);
 	connection->setNonBlocking(true);
 	clients->insert(make_pair(connection, player));	
+	Packet response;
+	response.writeUInt(player);
+	connection->send(response);
 }
 
 

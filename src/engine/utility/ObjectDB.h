@@ -8,6 +8,7 @@
 #include <gtc\type_ptr.hpp>
 #include <gtx\string_cast.hpp>
 #include "Serializable.h"
+#include "../graphics/GraphicsEngine.h"
 
 using glm::mat4;
 using glm::vec3;
@@ -27,7 +28,7 @@ public:
 
 	mat4 location;
 	ObjectId id;
-
+	MatrixNode* node;
 };
 
 class ObjectDB {
@@ -38,6 +39,7 @@ public:
 	~ObjectDB();
 
 	ObjectId add(GameObject* object);
+	bool ObjectDB::add(ObjectId id, GameObject* object);
 	bool remove(ObjectId objectId);
 	GameObject* get(ObjectId objectId);
 
