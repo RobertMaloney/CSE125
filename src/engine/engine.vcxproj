@@ -130,6 +130,7 @@
     <ClInclude Include="graphics\MatrixNode.h" />
     <ClInclude Include="graphics\Node.h" />
     <ClInclude Include="Graphics\Renderable.h" />
+    <ClInclude Include="graphics\TextureLoad.h" />
     <ClInclude Include="Network\Endianness.h" />
     <ClInclude Include="network\Packet.h" />
     <ClInclude Include="network\PacketHandler.h" />
