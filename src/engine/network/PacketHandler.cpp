@@ -7,43 +7,6 @@ using glm::vec3;
 #include <iostream>
 
 
-void forwardHandler(ObjectId id){
-	GameObject* player = ObjectDB::getInstance().get(id);
-
-	if (player != nullptr) {
-		player->location = glm::translate(player->location, vec3(0.f, -1.f, 0.f));
-	}
-}
-
-
-void backwardHandler(ObjectId id) {
-	GameObject* player = ObjectDB::getInstance().get(id);
-
-	if (player != nullptr) {
-		player->location = glm::translate(player->location, vec3(0.f, 1.f, 0.f));
-	}
-}
-
-
-void leftHandler(ObjectId id) {
-	GameObject* player = ObjectDB::getInstance().get(id);	
-
-	if (player != nullptr) {
-		player->location = glm::translate(player->location, vec3(1.f, 0.f, 0.f));
-	}
-}
-
-
-void rightHandler(ObjectId id) {
-	GameObject* player = ObjectDB::getInstance().get(id);
-
-	if (player != nullptr) {
-		player->location = glm::translate(player->location, vec3(-1.f, 0.f, 0.f));
-	}
-}
-
-
-
 PacketHandler::PacketHandler(){
 	eventHandlers[EventType::MOVE_FORWARD] = EventHandler(forwardHandler);
 	eventHandlers[EventType::MOVE_BACKWARD] = EventHandler(backwardHandler);
@@ -52,7 +15,9 @@ PacketHandler::PacketHandler(){
 }
 
 
-PacketHandler::~PacketHandler() {}
+PacketHandler::~PacketHandler() {
+
+}
 
 
 void PacketHandler::dispatch(ObjectId clientId, deque<Packet> & received) {
@@ -69,5 +34,41 @@ void PacketHandler::dispatch(ObjectId clientId, deque<Packet> & received) {
 		}
 		eventHandlers[eventType](clientId);
 	}
+}
+
+
+void forwardHandler(ObjectId id) {
+    GameObject* player = ObjectDB::getInstance().get(id);
+
+    if (player != nullptr) {
+        player->location = glm::translate(player->location, vec3(0.f, -1.f, 0.f));
+    }
+}
+
+
+void backwardHandler(ObjectId id) {
+    GameObject* player = ObjectDB::getInstance().get(id);
+
+    if (player != nullptr) {
+        player->location = glm::translate(player->location, vec3(0.f, 1.f, 0.f));
+    }
+}
+
+
+void leftHandler(ObjectId id) {
+    GameObject* player = ObjectDB::getInstance().get(id);
+
+    if (player != nullptr) {
+        player->location = glm::translate(player->location, vec3(1.f, 0.f, 0.f));
+    }
+}
+
+
+void rightHandler(ObjectId id) {
+    GameObject* player = ObjectDB::getInstance().get(id);
+
+    if (player != nullptr) {
+        player->location = glm::translate(player->location, vec3(-1.f, 0.f, 0.f));
+    }
 }
 
