@@ -48,14 +48,14 @@ void GameServer::run() {
 
 
 void GameServer::acceptWaitingClient() {
-	TCPConnection* newClient = listener->accept();
-	if (!newClient) {
+	TCPConnection* connection = listener->accept();
+	if (!connection) {
 		return;
 	}
 	ObjectId player = ObjectDB::getInstance().add(new GameObject());
-	newClient->setNoDelay(true);
-	newClient->setNonBlocking(true);
-	clients->insert(make_pair(newClient, player));	
+	connection->setNoDelay(true);
+	connection->setNonBlocking(true);
+	clients->insert(make_pair(connection, player));	
 }
 
 
@@ -86,12 +86,11 @@ void GameServer::receiveAndUpdate() {
 			it->first->close();
 			delete it->first;
 			it = clients->erase(it);
-			events.clear();
         } else {
             handler->dispatch(it->second, events);
-            events.clear();
             ++it;
         }
+        events.clear();
 	}
 }
 
@@ -102,7 +101,6 @@ void GameServer::printUpdates(deque<Packet> & updates) {
 			cout << to_string((*it)[i]) << " ";
 		}
 		cout << "\n";
-		
 	}
 }
 
