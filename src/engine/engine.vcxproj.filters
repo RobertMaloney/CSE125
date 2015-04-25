@@ -1,101 +1,53 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
+    <ClCompile Include="GameClient.cpp" />
+    <ClCompile Include="GameServer.cpp" />
+    <ClCompile Include="Graphics\GraphicsEngine.cpp" />
+    <ClCompile Include="network\Packet.cpp" />
+    <ClCompile Include="Network\Socket.cpp" />
+    <ClCompile Include="Network\TCPConnection.cpp" />
+    <ClCompile Include="Network\TCPListener.cpp" />
+    <ClCompile Include="utility\InputHandler.cpp" />
+    <ClCompile Include="utility\EntityMap.cpp" />
+    <ClCompile Include="utility\Location.cpp" />
+    <ClCompile Include="Utility\ObjLoader.cpp" />
+    <ClCompile Include="utility\Player.cpp" />
+    <ClCompile Include="network\PacketHandler.cpp" />
+    <ClCompile Include="utility\Event.cpp" />
+    <ClCompile Include="utility\ObjectDB.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Network\Socket.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Network\TCPConnection.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Network\TCPListener.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\GraphicsEngine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Utility\ObjLoader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="network\GameServer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="utility\EntityMap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="utility\Location.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="utility\Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="network\GameClient.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClInclude Include="GameClient.h" />
+    <ClInclude Include="GameServer.h" />
+    <ClInclude Include="Graphics\Cube.h" />
+    <ClInclude Include="graphics\ActionEvent.h" />
+    <ClInclude Include="graphics\Geode.h" />
+    <ClInclude Include="Graphics\Geometry.h" />
+    <ClInclude Include="Graphics\GraphicsEngine.h" />
+    <ClInclude Include="graphics\MatrixNode.h" />
+    <ClInclude Include="graphics\Node.h" />
+    <ClInclude Include="Graphics\Renderable.h" />
+    <ClInclude Include="Network\Endianness.h" />
+    <ClInclude Include="network\Packet.h" />
+    <ClInclude Include="Network\Socket.h" />
+    <ClInclude Include="Network\TCPConnection.h" />
+    <ClInclude Include="Network\TCPListener.h" />
+    <ClInclude Include="utility\Event.h" />
+    <ClInclude Include="utility\InputHandler.h" />
+    <ClInclude Include="utility\EntityMap.h" />
+    <ClInclude Include="utility\Location.h" />
+    <ClInclude Include="Utility\ObjLoader.h" />
+    <ClInclude Include="utility\Player.h" />
+    <ClInclude Include="utility\World.h" />
+    <ClInclude Include="graphics\CameraNode.h" />
+    <ClInclude Include="utility\MoveEvent.h" />
+    <ClInclude Include="utility\System.h" />
+    <ClInclude Include="network\PacketHandler.h" />
+    <ClInclude Include="utility\Serializable.h" />
+    <ClInclude Include="utility\ObjectDB.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Network\Endianness.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Network\Socket.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Network\TCPConnection.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Network\TCPListener.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Cube.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\GraphicsEngine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Renderable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Utility\ObjLoader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Geometry.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="network\GameServer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="utility\EntityMap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="utility\Location.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="utility\Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="utility\World.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="network\GameClient.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Network\Endianness.inl">
-      <Filter>Header Files</Filter>
-    </None>
+    <None Include="Network\Endianness.inl" />
   </ItemGroup>
 </Project>

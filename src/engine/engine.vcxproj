@@ -102,32 +102,50 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameClient.cpp" />
+    <ClCompile Include="GameServer.cpp" />
     <ClCompile Include="Graphics\GraphicsEngine.cpp" />
-    <ClCompile Include="network\GameClient.cpp" />
-    <ClCompile Include="network\GameServer.cpp" />
+    <ClCompile Include="network\Packet.cpp" />
+    <ClCompile Include="network\PacketHandler.cpp" />
     <ClCompile Include="Network\Socket.cpp" />
     <ClCompile Include="Network\TCPConnection.cpp" />
     <ClCompile Include="Network\TCPListener.cpp" />
+    <ClCompile Include="utility\Event.cpp" />
+    <ClCompile Include="utility\InputHandler.cpp" />
     <ClCompile Include="utility\EntityMap.cpp" />
     <ClCompile Include="utility\Location.cpp" />
+    <ClCompile Include="utility\ObjectDB.cpp" />
     <ClCompile Include="Utility\ObjLoader.cpp" />
     <ClCompile Include="utility\Player.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GameClient.h" />
+    <ClInclude Include="GameServer.h" />
+    <ClInclude Include="graphics\CameraNode.h" />
     <ClInclude Include="Graphics\Cube.h" />
+    <ClInclude Include="graphics\ActionEvent.h" />
+    <ClInclude Include="graphics\Geode.h" />
     <ClInclude Include="Graphics\Geometry.h" />
     <ClInclude Include="Graphics\GraphicsEngine.h" />
+    <ClInclude Include="graphics\MatrixNode.h" />
+    <ClInclude Include="graphics\Node.h" />
     <ClInclude Include="Graphics\Renderable.h" />
     <ClInclude Include="Network\Endianness.h" />
-    <ClInclude Include="network\GameClient.h" />
-    <ClInclude Include="network\GameServer.h" />
+    <ClInclude Include="network\Packet.h" />
+    <ClInclude Include="network\PacketHandler.h" />
     <ClInclude Include="Network\Socket.h" />
     <ClInclude Include="Network\TCPConnection.h" />
     <ClInclude Include="Network\TCPListener.h" />
+    <ClInclude Include="utility\Event.h" />
+    <ClInclude Include="utility\InputHandler.h" />
     <ClInclude Include="utility\EntityMap.h" />
     <ClInclude Include="utility\Location.h" />
+    <ClInclude Include="utility\MoveEvent.h" />
+    <ClInclude Include="utility\ObjectDB.h" />
     <ClInclude Include="Utility\ObjLoader.h" />
     <ClInclude Include="utility\Player.h" />
+    <ClInclude Include="utility\Serializable.h" />
+    <ClInclude Include="utility\System.h" />
     <ClInclude Include="utility\World.h" />
   </ItemGroup>
   <ItemGroup>

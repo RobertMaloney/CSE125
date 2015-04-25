@@ -12,12 +12,12 @@ Socket::Socket(int sockfd) : sock(sockfd), nonBlocking(false) {}
 
 // Destructor
 Socket::~Socket() {
-    this->Close();
+    this->close();
 }
 
 
-void Socket::Close() {
-    if (!this->IsSocketActive()) {
+void Socket::close() {
+    if (!this->isSocketActive()) {
         return;
     }
 #ifdef _WIN32
@@ -29,7 +29,7 @@ void Socket::Close() {
 }
 
 
-void Socket::Close(int fd) {
+void Socket::close(int fd) {
     if (fd == INACTIVE_SOCKET) {
         return;
     }
@@ -41,27 +41,27 @@ void Socket::Close(int fd) {
 }
 
 
-SocketError Socket::SetNoDelay(bool on) {
-    if (!this->IsSocketActive()) {           // cant change options on inactive sockets
+SocketError Socket::setNoDelay(bool on) {
+    if (!this->isSocketActive()) {           // cant change options on inactive sockets
         return SE_BADFD;
     }
-    return this->SetSockOpt(SOL_SOCKET, TCP_NODELAY, on ? 1 : 0);
+    return this->setSockOpt(SOL_SOCKET, TCP_NODELAY, on ? 1 : 0);
 }
 
 
-SocketError Socket::SetNonBlocking(bool on) {
-    if (!this->IsSocketActive()) {            // cant change options on inactive sockets
+SocketError Socket::setNonBlocking(bool on) {
+    if (!this->isSocketActive()) {            // cant change options on inactive sockets
         return SE_BADFD;
     }
 #ifdef _WIN32
     u_long flags = on ? 1 : 0;
     if (::ioctlsocket(sock, FIONBIO, &flags) != NO_ERROR) {
-        return this->GetError();
+        return this->getError();
     }
 #else
     int flags = on ? 1 : 0;
     if(ioctl(sock, FIONBIO, &flags) != 0) {
-        return this->GetError();
+        return this->getError();
     }
 #endif
     nonBlocking = on;     
@@ -69,7 +69,7 @@ SocketError Socket::SetNonBlocking(bool on) {
 }
 
 
-SocketError Socket::GetError() {
+SocketError Socket::getError() {
 #ifdef _WIN32
     switch (WSAGetLastError()) {
     case WSAEWOULDBLOCK:
@@ -113,7 +113,7 @@ SocketError Socket::GetError() {
 }
 
 
-string Socket::GetErrorMsg() {
+string Socket::getErrorMsg() {
 #ifdef _WIN32
     int err = WSAGetLastError();             // gets the last error on windows (like errno)
     LPSTR errString = NULL;
@@ -133,32 +133,32 @@ string Socket::GetErrorMsg() {
 }
 
 
-inline bool Socket::IsSocketActive() {
+inline bool Socket::isSocketActive() {
     return sock != INACTIVE_SOCKET;          // INACTIVE_SOCKET is -1. 
 }
 
 
-SocketError Socket::SetSockOpt(int optLevel, int optName, int val) {
+SocketError Socket::setSockOpt(int optLevel, int optName, int val) {
 #ifdef _WIN32
     const char opt = static_cast<char>(val);
 #else
     int opt = val;
 #endif
-    if(setsockopt(sock, optLevel, optName, &opt, sizeof(opt)) != 0){
-        return this->GetError();
+    if(::setsockopt(sock, optLevel, optName, &opt, sizeof(opt)) != 0){
+        return this->getError();
     }
     return SE_NOERR;
 }
 
 
-int Socket::GetSockOpt(int optLevel, int optName) {
+int Socket::getSockOpt(int optLevel, int optName) {
 #ifdef _WIN32
     char opt = 0;
 #else
     int opt = 0;
 #endif
     int optLen = sizeof(opt);
-    if (getsockopt(sock, optLevel, optName, &opt, &optLen) != 0) {
+    if (::getsockopt(sock, optLevel, optName, &opt, &optLen) != 0) {
         return -1;
     }
     return opt;
@@ -167,7 +167,7 @@ int Socket::GetSockOpt(int optLevel, int optName) {
 
 /* This only needs to be called once at the beginning of a program on windows. 
  */
-void Socket::Initialize() {
+void Socket::initialize() {
 #ifdef _WIN32
     WSAData wsaData;
     WORD wsaVerRequested = MAKEWORD(2, 2);
@@ -178,7 +178,7 @@ void Socket::Initialize() {
 }
 
 
-AddressInfo* Socket::DNSLookup(const string& ip, const string& port, int sockType) {
+AddressInfo* Socket::dnsLookup(const string& ip, const string& port, int sockType) {
     AddressInfo hints;
     AddressInfo *servinfo;
 
@@ -187,7 +187,6 @@ AddressInfo* Socket::DNSLookup(const string& ip, const string& port, int sockTyp
     hints.ai_socktype = sockType; // whatever type of socket you want (SOCK_STREAM or SOCK_DGRAM)
 
     if (getaddrinfo(ip.c_str(), port.c_str(), &hints, &servinfo) != 0) {
-		std::cout << WSAGetLastError() << std::endl;
 		if (servinfo){
 			freeaddrinfo(servinfo);
 		}
@@ -197,10 +196,10 @@ AddressInfo* Socket::DNSLookup(const string& ip, const string& port, int sockTyp
 }
 
 
-void Socket::DieWithError(const string & errMsg) {
-    cerr << errMsg << "\tSYSTEM ERROR: " << this->GetErrorMsg() << endl;
-    this->Close();
-    throw SocketException(this->GetError());
+void Socket::dieWithError(const string & errMsg) {
+    cerr << errMsg << "\tSYSTEM ERROR: " << this->getErrorMsg() << endl;
+    this->close();
+    throw SocketException(this->getError());
 }
 
 
@@ -218,11 +217,11 @@ SocketException::SocketException(string msg) {
 }
 
 
-int SocketException::GetError() {
+int SocketException::getError() {
     return error;
 }
 
 
-const string & SocketException::GetErrMsg() {
+const string & SocketException::getErrMsg() {
     return this->errMsg;
 }
