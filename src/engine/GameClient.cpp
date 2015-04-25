@@ -16,10 +16,17 @@ GameClient::~GameClient() {
 
 void GameClient::run() {
 	bool DEBUG = true;
+	bool loggedIn = false;
     deque<Packet> updates;
 
 	GraphicsEngine::Initialize();
 	this->initialize();
+	Packet p;
+
+	connection->setNonBlocking(false);
+	connection->receive(p);
+	GraphicsEngine::Login(p.readUInt());
+	connection->setNonBlocking(true);
 
 	while (!GraphicsEngine::Closing()) {
 		GraphicsEngine::DrawAndPoll();

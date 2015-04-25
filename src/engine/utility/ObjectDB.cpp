@@ -10,7 +10,7 @@ void GameObject::serialize(Packet & p) {
 
 
 void GameObject::deserialize(Packet & p) {
-	this->id = p.readUInt();
+	//this->id = p.readUInt();
 	float* loc = glm::value_ptr(location);
 	for (int i = 0; i < 16; ++i){
 		loc[i] = p.readFloat();
@@ -34,8 +34,26 @@ ObjectDB::~ObjectDB() {
 
 ObjectId ObjectDB::add(GameObject* object) {
     ObjectId newId = nextId++;
+	object->id = newId;
 	objects.insert(make_pair(newId, object));
 	return newId;
+}
+
+
+bool ObjectDB::add(ObjectId id, GameObject* object) {
+	if (!object) {
+		return false;
+	}
+	auto found = objects.find(id);
+	if (found == objects.end()) {
+		object->id = id;
+		objects.insert(make_pair(id, object));
+		if (id >= nextId) {
+			nextId = id + 1;
+		}
+		return true;
+	}
+	return false;
 }
 
 
@@ -62,7 +80,6 @@ GameObject* ObjectDB::get(ObjectId objectId) {
 void ObjectDB::getObjectState(deque<Packet> & state) {
 	Packet p;
 	for (auto it = objects.begin(); it != objects.end(); ++it){
-		p.writeByte(EventType::OBJECT_UPDATE);
 		it->second->serialize(p);
 		state.push_back(p);
 		p.clear();

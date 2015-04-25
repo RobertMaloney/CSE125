@@ -157,6 +157,10 @@ void Packet::reset() {
 }
 
 
+void Packet::retreat(unsigned int i) {
+	this->index -= i;
+}
+
 void Packet::clear() {
     buffer.clear();
     index = 0;

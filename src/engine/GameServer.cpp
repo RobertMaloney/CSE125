@@ -41,7 +41,7 @@ void GameServer::run() {
 
 		this->receiveAndUpdate();
 		this->tick();
-		sleep_for(milliseconds(1000));
+		sleep_for(milliseconds(34));
 	}
 }
 
@@ -56,6 +56,9 @@ void GameServer::acceptWaitingClient() {
 	connection->setNoDelay(true);
 	connection->setNonBlocking(true);
 	clients->insert(make_pair(connection, player));	
+	Packet response;
+	response.writeUInt(player);
+	connection->send(response);
 }
 
 

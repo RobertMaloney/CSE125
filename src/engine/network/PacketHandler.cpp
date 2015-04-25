@@ -6,6 +6,7 @@ using glm::mat4;
 using glm::vec3;
 #include <iostream>
 
+
 void forwardHandler(ObjectId id) {
     GameObject* player = ObjectDB::getInstance().get(id);
 
@@ -41,7 +42,6 @@ void rightHandler(ObjectId id) {
     }
 }
 
-
 PacketHandler::PacketHandler(){
 	eventHandlers[EventType::MOVE_FORWARD] = EventHandler(forwardHandler);
 	eventHandlers[EventType::MOVE_BACKWARD] = EventHandler(backwardHandler);
@@ -68,5 +68,7 @@ void PacketHandler::dispatch(ObjectId clientId, deque<Packet> & received) {
         }
 	}
 }
+
+
 
 
