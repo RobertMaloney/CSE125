@@ -41,7 +41,7 @@ void GameServer::run() {
 
 		this->receiveAndUpdate();
 		this->tick();
-		sleep_for(milliseconds(1000));
+		sleep_for(milliseconds(34));
 	}
 }
 

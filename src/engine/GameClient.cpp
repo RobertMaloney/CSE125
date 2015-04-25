@@ -37,7 +37,6 @@ void GameClient::run() {
 			GraphicsEngine::UpdatePlayer(updates);
 			updates.clear();
 		}
-		this_thread::sleep_for(milliseconds(200));
 	}
 
 	GraphicsEngine::Destroy();
