@@ -114,6 +114,7 @@
     <ClCompile Include="utility\Location.cpp" />
     <ClCompile Include="Utility\ObjLoader.cpp" />
     <ClCompile Include="utility\Player.cpp" />
+    <ClCompile Include="utility\World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\Cube.h" />
