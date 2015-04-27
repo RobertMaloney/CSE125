@@ -5,6 +5,7 @@
 #include <glm.hpp>
 #include <gtc\matrix_transform.hpp>
 #include <gtc\type_ptr.hpp>
+#include <gtx\quaternion.hpp>
 #include <vector>
 #include <iostream>
 
@@ -55,10 +56,19 @@ public:
 
 	// TODO add support for normal rotation
 	static glm::mat4 sphere2xyz(glm::vec4 & spherePos) {
+		// position
 		glm::vec3 xyz(spherePos.x, 0, 0);
 		xyz = glm::angleAxis(glm::radians(spherePos.y), glm::vec3(0, 0, 1)) * xyz;
 		xyz = glm::angleAxis(glm::radians(spherePos.z), glm::vec3(0, 1, 0)) * xyz;
-		return glm::translate(glm::mat4(), xyz);
+
+		// set relative up
+		glm::vec3 norm_pos = glm::normalize(xyz);
+		glm::quat new_up = glm::rotation(glm::vec3(0, 0, 1), norm_pos);
+
+		glm::mat4 result = glm::translate(glm::mat4(), xyz);
+		result = result * glm::toMat4(new_up);
+
+		return result;
 	}
 };
 #endif

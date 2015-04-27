@@ -23,7 +23,7 @@ typedef unsigned int ObjectId;
 class GameObject : Serializable {
 
 public:
-	GameObject() : orientation(500, 0, 0, 0) {}
+	GameObject() : orientation(505, 0, 0, 0) {}
 	void serialize(Packet & p);
 	void deserialize(Packet & p);
 

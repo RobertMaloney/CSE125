@@ -334,7 +334,6 @@ void GraphicsEngine::UpdatePlayer(deque<Packet> & data) {
 			m_scene->addChild(player->node);
 		}
 		player->deserialize(*packet);
-		cout << glm::to_string(player->orientation) << endl;
 		player->node->getMatrix() = MatrixNode::sphere2xyz(player->orientation);
 	}
 }

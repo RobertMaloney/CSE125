@@ -28,6 +28,6 @@ void main()
 	vec3 dirlight_norm = normalize(dirLight);
 	dotted = dot(dirlight_norm, worldNorm);
 
-	if (dotted < 0) Color += vec3(-dotted,-dotted,-dotted);
+	if (dotted < 0) Color += color * vec3(-dotted);
 }
 
