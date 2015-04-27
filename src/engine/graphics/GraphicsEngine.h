@@ -17,6 +17,7 @@
 #include "Renderable.h"
 #include "..\utility\InputHandler.h"
 #include "..\network\Packet.h"
+#include "..\utility\Player.h"
 
 using namespace std;
 
@@ -51,10 +52,11 @@ private:
 	static std::vector<MatrixNode*> m_objects;
 	static GLuint					m_vertexShader, m_fragmentShader, m_shaderProgram;
 	static KeyCallback				m_keyCallback;
-	static MatrixNode				*m_player;
+	static MatrixNode				*m_player_node;
 	static CameraNode				*m_mainCamera;
 	static MatrixNode				*m_scene;
 	static glm::vec3				m_testPolar;
+	static Player					*m_player;
 	
 	static void renderScene(Node*, glm::mat4*);
 };

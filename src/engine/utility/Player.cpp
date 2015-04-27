@@ -4,18 +4,21 @@
 int numOfPlayers = 0;
 
 //TODO Config file
-Player::Player(BlobModel thebm, int nx, int ny, int nz) : GameObject(nx, nx, nz) {
+Player::Player(BlobModel thebm, float radius, float theta, float azimuth, float direction) {//: GameObject(radius, theta, ) {
 	this->numOfPlayers++;
 	this->pid = numOfPlayers;
-	this->id = "Player" + this->pid;
+	//this->id = "Player" + this->pid;
 	this->speed = 0;
 	this->power = 0;
-	this->loc = Location(nx, ny, nz);
+	//this->loc = Location(nx, ny, nz);
+	orientation = glm::vec4(radius, theta, azimuth, direction);
 	this->bm = thebm;
 
 }
 
-
+glm::vec4 & Player::getOrientation() {
+	return orientation;
+}
 
 int Player::getSpeed() {
 	return speed;

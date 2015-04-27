@@ -39,5 +39,11 @@ void InputHandler::handleKey(int key, int action, int mods)
 	else if (key == GLFW_KEY_RIGHT && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
 		GraphicsEngine::RotateRight();
 	}
+	else if (key == GLFW_KEY_UP && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+		GraphicsEngine::MoveUp();
+	}
+	else if (key == GLFW_KEY_DOWN && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+		GraphicsEngine::MoveDown();
+	}
 	GameClient::input.push_back(p);
 }

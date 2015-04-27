@@ -38,7 +38,7 @@ public:
 		return result;
 	}
 
-	static glm::mat4 sphere2xyz(glm::vec3 spherePos) {
+	static glm::mat4 sphere2xyz(glm::vec4 & spherePos) {
 		glm::vec3 xyz(spherePos.x, 0, 0);
 		xyz = glm::angleAxis(glm::radians(spherePos.y), glm::vec3(0, 0, 1)) * xyz;
 		xyz = glm::angleAxis(glm::radians(spherePos.z), glm::vec3(0, 1, 0)) * xyz;

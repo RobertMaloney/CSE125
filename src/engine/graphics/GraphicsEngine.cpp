@@ -30,9 +30,11 @@ GLuint				GraphicsEngine::m_vertexShader,
 
 KeyCallback			GraphicsEngine::m_keyCallback = NULL;
 
-MatrixNode			*GraphicsEngine::m_player = NULL,
+MatrixNode			*GraphicsEngine::m_player_node = NULL,
 					*GraphicsEngine::m_scene = NULL;
 CameraNode			*GraphicsEngine::m_mainCamera = NULL;
+
+Player				*GraphicsEngine::m_player = NULL;
 
 glm::vec3			GraphicsEngine::m_testPolar;
 
@@ -133,12 +135,22 @@ void GraphicsEngine::Initialize() {
 		m_scene->addChild(m_objects[i]);
 		//m_objects.push_back(new Cube(position, glm::angleAxis(glm::radians((float)i), glm::vec3(0, 0, 1)), glm::vec3(1.f, 1.f, 1.f), 0.02f + 0.08f * (i / (float)100)));
 	}
+
+	// WORLD
+	Renderable *worldModel = new Geometry("../../media/sphere.obj");
+	Geode *worldGeode = new Geode();
+	worldGeode->setRenderable(worldModel);
+	m_scene->addChild(worldGeode);
+
+	// PLAYER
 	Renderable* playerModel = new Geometry("../../media/pb.obj");
 	Geode* playerGeode = new Geode();
 	playerGeode->setRenderable(playerModel);
-	m_player = new MatrixNode();
-	m_player->addChild(playerGeode);
-	m_scene->addChild(m_player);
+	m_player_node = new MatrixNode();
+	m_player_node->addChild(playerGeode);
+	m_scene->addChild(m_player_node);
+
+	m_player = new Player(BlobModel::PB_TYPE, 1, 0, 0, 0);
 
 	m_testPolar = glm::vec3(1.f, 0, 0);
 
@@ -149,7 +161,7 @@ void GraphicsEngine::Initialize() {
 		glm::vec3(0.f, 0.f, 1.f));
 	m_mainCamera = new CameraNode();
 	m_mainCamera->setViewMatrix(camview);
-	m_player->addChild(m_mainCamera);
+	m_player_node->addChild(m_mainCamera);
 
 	// view and projection matrix locations in the shader program
 	m_uniView = glGetUniformLocation(m_shaderProgram, "view");
@@ -280,50 +292,56 @@ KeyCallback GraphicsEngine::GetKeyCallback() {
 }
 
 void GraphicsEngine::MoveUp() {
-	if (m_player)
-	m_player->getMatrix() = glm::translate(m_player->getMatrix(), glm::vec3(0, -1, 0));
+	if (m_player_node && m_player) {
+		m_player->getOrientation().y += 1.f;
+		//m_player_node->getMatrix() = glm::translate(m_player_node->getMatrix(), glm::vec3(0, 1, 0));
+		UpdatePlayer(System::sphere2xyz(m_player->getOrientation()));
+	}
 }
 
 void GraphicsEngine::MoveLeft() {
-	if (m_player)
-	m_player->getMatrix() = glm::translate(m_player->getMatrix(), glm::vec3(1, 0, 0));
+	if (m_player_node)
+		m_player_node->getMatrix() = glm::translate(m_player_node->getMatrix(), glm::vec3(1, 0, 0));
 }
 
 void GraphicsEngine::MoveDown() {
-	if (m_player)
-	m_player->getMatrix() = glm::translate(m_player->getMatrix(), glm::vec3(0, 1, 0));
+	if (m_player_node && m_player) {
+		m_player->getOrientation().y -= 1.f;
+		//m_player_node->getMatrix() = glm::translate(m_player_node->getMatrix(), glm::vec3(0, 1, 0));
+		UpdatePlayer(System::sphere2xyz(m_player->getOrientation()));
+	}
 }
 
 void GraphicsEngine::MoveRight() {
-	if (m_player)
-	m_player->getMatrix() = glm::translate(m_player->getMatrix(), glm::vec3(-1, 0, 0));
+	if (m_player_node)
+		m_player_node->getMatrix() = glm::translate(m_player_node->getMatrix(), glm::vec3(-1, 0, 0));
 }
 
 void GraphicsEngine::ScaleUp()
 {
-	if (m_player)
-		m_player->getMatrix() = glm::scale(m_player->getMatrix(), glm::vec3(1.2, 1.2, 1.2));
+	if (m_player_node)
+		m_player_node->getMatrix() = glm::scale(m_player_node->getMatrix(), glm::vec3(1.2, 1.2, 1.2));
 }
 
 void GraphicsEngine::ScaleDown()
 {
-	if (m_player)
-		m_player->getMatrix() = glm::scale(m_player->getMatrix(), glm::vec3(0.8, 0.8, 0.8));
+	if (m_player_node)
+		m_player_node->getMatrix() = glm::scale(m_player_node->getMatrix(), glm::vec3(0.8, 0.8, 0.8));
 }
 
 void GraphicsEngine::RotateRight(){
-	if (m_player)
-		m_player->getMatrix() = glm::rotate(m_player->getMatrix(), glm::radians(-1.f), glm::vec3(0, 0, 1));
+	if (m_player_node)
+		m_player_node->getMatrix() = glm::rotate(m_player_node->getMatrix(), glm::radians(-1.f), glm::vec3(0, 0, 1));
 }
 
 void GraphicsEngine::RotateLeft(){
-	if (m_player)
-		m_player->getMatrix() = glm::rotate(m_player->getMatrix(), glm::radians(1.f), glm::vec3(0, 0, 1));
+	if (m_player_node)
+		m_player_node->getMatrix() = glm::rotate(m_player_node->getMatrix(), glm::radians(1.f), glm::vec3(0, 0, 1));
 }
 
 void GraphicsEngine::UpdatePlayer(deque<Packet> & data) {
 	if (data.size() > 0 && data[0].Size() > 0) {
-		float * matPointer = glm::value_ptr(m_player->getMatrix());
+		float * matPointer = glm::value_ptr(m_player_node->getMatrix());
 		/*float * newData = (float*)&data[0][0];
 		for (int i = 0; i < 16; ++i) {
 			matPointer[i] = newData[i];
@@ -337,5 +355,5 @@ void GraphicsEngine::UpdatePlayer(deque<Packet> & data) {
 }
 
 void GraphicsEngine::UpdatePlayer(glm::mat4 & newmatrix) {
-	m_player->getMatrix() = newmatrix;
+	m_player_node->getMatrix() = newmatrix;
 }
