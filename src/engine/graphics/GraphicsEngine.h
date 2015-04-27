@@ -45,8 +45,9 @@ public:
 	static void ScaleDown();
 	static KeyCallback GetKeyCallback();
 	static void UpdatePlayer(deque<Packet> &);
-   static int getKeyState(int);
-   static void Login(ObjectId playerId);
+	static int getKeyState(int);
+	static void Login(ObjectId playerId);
+
 private:
 	static glm::mat4				m_view, m_projection;
 	static bool						m_initialized;
