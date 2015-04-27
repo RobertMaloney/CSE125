@@ -25,7 +25,8 @@ void main()
 	if (dotted < 0) Color += color / length(lightvec) * -dotted;
 
 	// Direction Light
-	dotted = dot(dirLight, worldNorm);
+	vec3 dirlight_norm = normalize(dirLight);
+	dotted = dot(dirlight_norm, worldNorm);
 
 	if (dotted < 0) Color += vec3(-dotted,-dotted,-dotted);
 }

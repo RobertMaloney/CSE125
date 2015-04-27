@@ -12,6 +12,7 @@
 
 using glm::mat4;
 using glm::vec3;
+using glm::vec4;
 using std::pair;
 using std::deque;
 using std::make_pair;
@@ -22,11 +23,12 @@ typedef unsigned int ObjectId;
 class GameObject : Serializable {
 
 public:
-	 
+	GameObject() : orientation(500, 0, 0, 0) {}
 	void serialize(Packet & p);
 	void deserialize(Packet & p);
 
 	mat4 location;
+	vec4 orientation;
 	ObjectId id;
 	MatrixNode* node;
 };

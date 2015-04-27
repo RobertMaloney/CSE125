@@ -2,18 +2,18 @@
 
 void GameObject::serialize(Packet & p) {
 	p.writeUInt(id);
-	float* loc = glm::value_ptr(location);
-	for (int i = 0; i < 16; ++i){
-		p.writeFloat(loc[i]);
+	float* ori = glm::value_ptr(orientation);
+	for (int i = 0; i < 4; ++i){
+		p.writeFloat(ori[i]);
 	}
 }
 
 
 void GameObject::deserialize(Packet & p) {
 	//this->id = p.readUInt();
-	float* loc = glm::value_ptr(location);
-	for (int i = 0; i < 16; ++i){
-		loc[i] = p.readFloat();
+	float* ori = glm::value_ptr(orientation);
+	for (int i = 0; i < 4; ++i){
+		ori[i] = p.readFloat();
 	}
 }
 

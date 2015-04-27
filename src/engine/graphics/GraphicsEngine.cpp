@@ -110,7 +110,7 @@ void GraphicsEngine::Initialize() {
 	glEnable(GL_DEPTH_TEST);
 
 	// Testing renderables
-	const int CUBE_COUNT = 100;
+	const int CUBE_COUNT = 0;
 	Renderable* cube = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 1.f, 1.f), 1.f);
 	for (int i = 0; i < CUBE_COUNT; ++i) {
 		glm::vec3 position(-2.f + 0.4f*(i % 10), -2.f + 0.4f*(i / 10), 0.1f);
@@ -127,7 +127,14 @@ void GraphicsEngine::Initialize() {
 		m_scene->addChild(m_objects[i]);
 		//m_objects.push_back(new Cube(position, glm::angleAxis(glm::radians((float)i), glm::vec3(0, 0, 1)), glm::vec3(1.f, 1.f, 1.f), 0.02f + 0.08f * (i / (float)100)));
 	}
+
+	// WORLD
+	Renderable* worldModel = new Geometry("../../media/sphere.obj");
+	Geode* worldGeode = new Geode();
+	worldGeode->setRenderable(worldModel);
+	m_scene->addChild(worldGeode);
 	
+	// PLAYER
 	Renderable* playerModel = new Geometry("../../media/pb.obj");
 	Geode* playerGeode = new Geode();
 	playerGeode->setRenderable(playerModel);
@@ -137,7 +144,7 @@ void GraphicsEngine::Initialize() {
 	
 	// CAMERA
 	glm::mat4 camview = glm::lookAt(
-		glm::vec3(0.f, 3.f, 2.f),
+		glm::vec3(0.f, 24.f, 16.f),
 		glm::vec3(0.f, 0.f, 0.f),
 		glm::vec3(0.f, 0.f, 1.f));
 	m_mainCamera = new CameraNode();
@@ -212,10 +219,10 @@ void GraphicsEngine::DrawAndPoll() {
 	glUniform3fv(dirLight, 1, glm::value_ptr(dirLightVec));
 
 	// render objects
-	int renderableCount = m_objects.size();
+	/*int renderableCount = m_objects.size();
 	for (int i = 0; i < renderableCount; ++i) {
 		m_objects[i]->getMatrix() = glm::rotate(m_objects[i]->getMatrix(), glm::radians(1.f), glm::vec3(0, 0, 1.f));
-	}
+	}*/
 
 	glm::mat4 identity;
 	renderScene(m_scene, &identity);
@@ -290,6 +297,7 @@ void GraphicsEngine::ScaleDown()
 void GraphicsEngine::Login(ObjectId playerId) {
 	ObjectDB & db = ObjectDB::getInstance();
 	GameObject* player = new GameObject();
+	//player->orientation.r = 500.f;
 	std::cout << "logging in id " << playerId << std::endl;
 	db.add(playerId, player);
 	player->node = m_player;
@@ -316,6 +324,7 @@ void GraphicsEngine::UpdatePlayer(deque<Packet> & data) {
 
 		if (!player) {
 			player = new GameObject();
+			//player->orientation.r = 500.f;
 			objects.add(playerId, player);
 			Renderable* playerModel = new Geometry("../../media/ob.obj");
 			Geode* playerGeode = new Geode();
@@ -325,7 +334,8 @@ void GraphicsEngine::UpdatePlayer(deque<Packet> & data) {
 			m_scene->addChild(player->node);
 		}
 		player->deserialize(*packet);
-		player->node->getMatrix() = player->location;
+		cout << glm::to_string(player->orientation) << endl;
+		player->node->getMatrix() = MatrixNode::sphere2xyz(player->orientation);
 	}
 }
 
