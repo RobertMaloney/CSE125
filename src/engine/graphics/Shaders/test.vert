@@ -7,7 +7,8 @@ out vec3 Color;
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
-uniform vec3 lightPosition;
+uniform vec3 pointLight;
+uniform vec3 dirLight;
 
 void main()
 {
@@ -16,10 +17,16 @@ void main()
 
 	gl_Position = projection * view * worldPos;
 
-	vec3 lightvec = normalize(vec3(worldPos) - lightPosition);
+	// Point light
+	vec3 lightvec = normalize(vec3(worldPos) - pointLight);
 	float dotted = dot(lightvec, worldNorm);
 
-	if (dotted > 0) Color = vec3(0);
-	else Color = color / length(lightvec) * -dotted;
+	Color = vec3(0);
+	if (dotted < 0) Color += color / length(lightvec) * -dotted;
+
+	// Direction Light
+	dotted = dot(dirLight, worldNorm);
+
+	if (dotted < 0) Color += vec3(-dotted,-dotted,-dotted);
 }
 
