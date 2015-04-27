@@ -28,17 +28,17 @@ static void keyCallback(int key, int action, int mods) {
 
 // used for debugging
 void fillWithDebugPackets(deque<Packet> & packets) {
-    Packet p;
+	Packet p;
     for (int i = 0; i < 26; ++i) {
-        p.resize(0);
+		p.resize(0);
         int len = rand() % 1000;
         for (int j = 0; j < len; ++j) {
-            p.push_back('a' + i);
-        }
-        packets.push_back(p);
-    }
+			p.push_back('a' + i);
+		}
+		packets.push_back(p);
+	}
 }
-
+	
 
 int main(int argc, char* argv[]) {
 

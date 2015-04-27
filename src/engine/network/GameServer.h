@@ -32,6 +32,7 @@ public:
     void SendUpdates(deque<Packet> & updates);
     void ReceiveEvents(deque<Packet> & events);
 
+
 private:
 
     void AcceptWaitingClient();

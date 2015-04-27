@@ -52,12 +52,12 @@ void GameServer::Run() {
 
 void GameServer::AcceptWaitingClient() {
     TCPConnection* newClient = listener->Accept();
-    if (newClient) {
-        newClient->SetNoDelay(true);
-        newClient->SetNonBlocking(true);
-        clients->insert(make_pair(nextCid++, newClient));
-    }
-}
+            if (newClient) {
+                newClient->SetNoDelay(true);
+                newClient->SetNonBlocking(true);
+                clients->insert(make_pair(nextCid++, newClient));
+            }
+        }
 
 
 
@@ -65,9 +65,9 @@ void GameServer::AcceptWaitingClient() {
 void GameServer::SendUpdates(deque<Packet> & updates) {
     for (auto it = clients->begin(); it != clients->end();) {
         SocketError err = it->second->Send(updates);
-        if (this->ShouldTerminate(err)) {
-            it->second->Close();
-            delete it->second;
+            if (this->ShouldTerminate(err)) {
+                it->second->Close();
+                delete it->second;
             it = clients->erase(it);
         } else {
             ++it;
@@ -87,6 +87,7 @@ void GameServer::ReceiveEvents(deque<Packet> & events) {
             ++it;
         }
     }
+    this->PrintUpdates(updates);
 }
 
 
