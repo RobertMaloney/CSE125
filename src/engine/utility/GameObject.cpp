@@ -20,20 +20,16 @@ GameObject::~GameObject() {
 
 void GameObject::serialize(Packet & p) {
 	p.writeUInt(id);
-	vec4 refLoc = loc;
-	float* loc = glm::value_ptr(refLoc);
 	for (int i = 0; i < 4; ++i){
-		p.writeFloat(loc[i]);
+		p.writeFloat(this->loc[i]);
 	}
 }
 
 
 void GameObject::deserialize(Packet & p) {
 	//this->id = p.readUInt();
-    vec4 refLoc = loc;
-	float* loc = glm::value_ptr(refLoc);
 	for (int i = 0; i < 4; ++i){
-		loc[i] = p.readFloat();
+		this->loc[i] = p.readFloat();
 	}
 }
 
