@@ -9,6 +9,7 @@
 #include <gtx\string_cast.hpp>
 #include "Serializable.h"
 #include "../graphics/GraphicsEngine.h"
+#include "GameObject.h"
 
 using glm::mat4;
 using glm::vec3;
@@ -37,7 +38,6 @@ public:
 
 private:
 
-	ObjectId nextId;
 	unordered_map<ObjectId, GameObject*> objects;
 };
 

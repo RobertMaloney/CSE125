@@ -8,6 +8,7 @@
 #include "Packet.h"
 #include "../utility/Event.h"
 #include "../utility/ObjectDB.h"
+#include "../utility/Player.h"
 
 using std::deque;
 using std::function;
