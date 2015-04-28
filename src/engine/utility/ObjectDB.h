@@ -17,19 +17,6 @@ using std::deque;
 using std::make_pair;
 using std::unordered_map;
 
-typedef unsigned int ObjectId;
-
-class GameObject : Serializable {
-
-public:
-	 
-	void serialize(Packet & p);
-	void deserialize(Packet & p);
-
-	mat4 location;
-	ObjectId id;
-	MatrixNode* node;
-};
 
 class ObjectDB {
 
@@ -39,7 +26,7 @@ public:
 	~ObjectDB();
 
 	ObjectId add(GameObject* object);
-	bool ObjectDB::add(ObjectId id, GameObject* object);
+
 	bool remove(ObjectId objectId);
 	GameObject* get(ObjectId objectId);
 

@@ -3,18 +3,39 @@
 
 #include <string>
 #include "Location.h"
+//#include <deque>
+//#include <unordered_map>
+//#include <glm.hpp>
+//#include <gtc\matrix_transform.hpp>
+//#include <gtc\type_ptr.hpp>
+//#include <gtx\string_cast.hpp>
+#include "Serializable.h"
+#include "../graphics/GraphicsEngine.h"
 
+//using glm::vec3;
+//using std::pair;
+//using std::deque;
+//using std::make_pair;
+//using std::unordered_map;
+
+using glm::mat4;
 using namespace std;
 
 typedef unsigned int ObjectId;
 
-class GameObject {
+class GameObject : Serializable  {
 	//TODO put it outside
 protected:
 
 	ObjectId id;
 	Location loc;
 	static ObjectId numOfObjects;
+
+
+	mat4 location;
+
+	MatrixNode* node;//
+
 
 public:
 
@@ -23,6 +44,9 @@ public:
 	GameObject(Location loc);
 
 	virtual ~GameObject();
+
+	void serialize(Packet & p);
+	void deserialize(Packet & p);
 
 	ObjectId getId();
 

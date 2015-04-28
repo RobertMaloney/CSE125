@@ -6,8 +6,10 @@
 #include "BlobModel.h"
 #include "GameObject.h"
 
-using namespace std;
 #include <glm.hpp>
+
+using namespace std;
+
 
 class Player {
 	//TODO put it outside
@@ -17,8 +19,10 @@ protected:
 	int speed;
 	int power;
 	static int numOfPlayers;
-	glm::vec4 orientation;
+
 	BlobModel bm;
+
+	glm::vec4 orientation;
 
 public:
 

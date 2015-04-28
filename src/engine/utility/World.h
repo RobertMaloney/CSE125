@@ -1,7 +1,7 @@
 #ifndef WORLD_H
 #define WORLD_H
 
-#include "EntityMap.h"
+#include "ObjectDB.h"
 #include "GameObject.h"
 
 class World {
@@ -12,15 +12,15 @@ protected:
 	//a list of NPCs?
 	//a map of everything?
 	//a map of resources?
-	EntityMap<ObjectId, GameObject>  map;
+	ObjectDB map;
 public:
 	World();
 	virtual ~World();
 
 	void init();
-	void insert(GameObject go);
+	void insert(GameObject * go);
 	void remove(ObjectId id);
-	void replace(ObjectId id, GameObject go);
+	void replace(ObjectId id, GameObject * go);
 	void get(ObjectId id);
 
 };

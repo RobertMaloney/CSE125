@@ -1,13 +1,18 @@
 //#include <Windows.h>
 
+// STL
+#include <stdio.h>
+#include <fstream>
+#include <sstream>
+#include <iostream>
+#include <string>
+
 #include "GraphicsEngine.h"
-
-#include "..\utility\InputHandler.h"
-
-#include "..\utility\ObjectDB.h"
 #include "..\graphics\Cube.h"
 #include "..\graphics\Geometry.h"
 #include "..\utility\System.h"
+#include "..\utility\Event.h"
+
 using namespace std;
 
 // Graphics Engine Static Members
@@ -17,17 +22,16 @@ bool				GraphicsEngine::m_initialized = false;
 GLFWwindow			*GraphicsEngine::m_window;
 
 GLint				GraphicsEngine::m_uniView,
-					GraphicsEngine::m_uniProjection;
+GraphicsEngine::m_uniProjection;
 
 GLuint				GraphicsEngine::m_vertexShader,
-					GraphicsEngine::m_fragmentShader,
-					GraphicsEngine::m_shaderProgram;
+GraphicsEngine::m_fragmentShader,
+GraphicsEngine::m_shaderProgram;
 
 KeyCallback			GraphicsEngine::m_keyCallback = NULL;
 
 MatrixNode			*GraphicsEngine::m_player_node = NULL,
-					*GraphicsEngine::m_scene = NULL;
-
+*GraphicsEngine::m_scene = NULL;
 CameraNode			*GraphicsEngine::m_mainCamera = NULL;
 
 Player				*GraphicsEngine::m_player = NULL;
@@ -37,8 +41,8 @@ glm::vec3			GraphicsEngine::m_testPolar;
 string version = "#version 150\n";
 
 /**
- * Description: This function is called when glfwPollEvents() is called.
- */
+* Description: This function is called when glfwPollEvents() is called.
+*/
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	//if (GraphicsEngine::GetKeyCallback()) GraphicsEngine::GetKeyCallback()(key, action, mods);
@@ -46,10 +50,10 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 }
 
 /**
- * GraphicsEngine::Initialize()
- * Description: This function initializes the graphics pipeline, compiles the
- * shaders, creates the window, and sets up the view and projection matrices
- */
+* GraphicsEngine::Initialize()
+* Description: This function initializes the graphics pipeline, compiles the
+* shaders, creates the window, and sets up the view and projection matrices
+*/
 void GraphicsEngine::Initialize() {
 	if (!glfwInit())
 		return;
@@ -176,27 +180,27 @@ void GraphicsEngine::Initialize() {
 }
 
 /**
- * GraphicsEngine::Closing()
- * Description: The bool callback used to tell the main game loop that it
- * should close.
- */
+* GraphicsEngine::Closing()
+* Description: The bool callback used to tell the main game loop that it
+* should close.
+*/
 bool GraphicsEngine::Closing() {
 	return !m_initialized || glfwWindowShouldClose(m_window);
 }
 
 /**
- * GraphicsEngine::CloseGame()
- * Description: This function tells the main loop to shut down
- */
+* GraphicsEngine::CloseGame()
+* Description: This function tells the main loop to shut down
+*/
 void GraphicsEngine::CloseGame() {
 	glfwSetWindowShouldClose(m_window, GL_TRUE);
 }
 
 /**
- * GraphicsEngine::DrawAndPoll()
- * Description: This function should be called within in the main game loop to
- * draw the next frame and poll for user input
- */
+* GraphicsEngine::DrawAndPoll()
+* Description: This function should be called within in the main game loop to
+* draw the next frame and poll for user input
+*/
 void GraphicsEngine::DrawAndPoll() {
 	int height, width;
 	glfwGetWindowSize(m_window, &width, &height);
@@ -211,7 +215,7 @@ void GraphicsEngine::DrawAndPoll() {
 	glUniformMatrix4fv(m_uniProjection, 1, GL_FALSE, glm::value_ptr(m_projection));
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
+
 	GLint light = glGetUniformLocation(m_shaderProgram, "lightPosition");
 	const float radius = 2.f;
 	float sine = radius*glm::sin(glm::radians(90 * glfwGetTime()));
@@ -260,10 +264,10 @@ void GraphicsEngine::renderScene(Node* node, glm::mat4* matrix) {
 }
 
 /**
- * GraphicsEngine::Destroy()
- * Description: This function cleans up the assets used by the graphics engine
- * before shutting down.
- */
+* GraphicsEngine::Destroy()
+* Description: This function cleans up the assets used by the graphics engine
+* before shutting down.
+*/
 void GraphicsEngine::Destroy() {
 	if (m_initialized) {
 		int renderableCount = m_objects.size();
@@ -335,30 +339,21 @@ void GraphicsEngine::RotateLeft(){
 		m_player_node->getMatrix() = glm::rotate(m_player_node->getMatrix(), glm::radians(1.f), glm::vec3(0, 0, 1));
 }
 
-/*
 void GraphicsEngine::UpdatePlayer(deque<Packet> & data) {
 	if (data.size() > 0 && data[0].Size() > 0) {
 		float * matPointer = glm::value_ptr(m_player_node->getMatrix());
 		/*float * newData = (float*)&data[0][0];
 		for (int i = 0; i < 16; ++i) {
-			matPointer[i] = newData[i];
+		matPointer[i] = newData[i];
 		}*/
-        for (auto it = data.begin(); it != data.end(); ++it) {
-            for(int i = 0; i < 16; ++i) {
-                matPointer[i] = it->readFloat();
-        }
+		for (auto it = data.begin(); it != data.end(); ++it) {
+			for (int i = 0; i < 16; ++i) {
+				matPointer[i] = it->ReadFloat();
+			}
+		}
 	}
 }
 
 void GraphicsEngine::UpdatePlayer(glm::mat4 & newmatrix) {
 	m_player_node->getMatrix() = newmatrix;
 }
-}*/
-/*
-Renderable* playerModel = new Geometry("../../media/pb.obj");
-Geode* playerGeode = new Geode();
-playerGeode->setRenderable(playerModel);
-m_player = new MatrixNode();
-m_player->addChild(playerGeode);
-m_scene->addChild(m_player);
-*/

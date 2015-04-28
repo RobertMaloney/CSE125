@@ -110,8 +110,8 @@
     <ClCompile Include="Network\Socket.cpp" />
     <ClCompile Include="Network\TCPConnection.cpp" />
     <ClCompile Include="Network\TCPListener.cpp" />
+    <ClCompile Include="utility\GameObject.cpp" />
     <ClCompile Include="utility\InputHandler.cpp" />
-    <ClCompile Include="utility\EntityMap.cpp" />
     <ClCompile Include="utility\Location.cpp" />
     <ClCompile Include="utility\ObjectDB.cpp" />
     <ClCompile Include="Utility\ObjLoader.cpp" />
@@ -137,9 +137,10 @@
     <ClInclude Include="Network\Socket.h" />
     <ClInclude Include="Network\TCPConnection.h" />
     <ClInclude Include="Network\TCPListener.h" />
+    <ClInclude Include="utility\BlobModel.h" />
     <ClInclude Include="utility\Event.h" />
+    <ClInclude Include="utility\GameObject.h" />
     <ClInclude Include="utility\InputHandler.h" />
-    <ClInclude Include="utility\EntityMap.h" />
     <ClInclude Include="utility\Location.h" />
     <ClInclude Include="utility\MoveEvent.h" />
     <ClInclude Include="utility\ObjectDB.h" />

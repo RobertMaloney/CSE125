@@ -1,5 +1,6 @@
 #include "GameObject.h"
 #include "Location.h"
+#include "../network/Packet.h"
 
 //TODO Config file
 GameObject::GameObject(int nx, int ny, int nz) {
@@ -7,6 +8,24 @@ GameObject::GameObject(int nx, int ny, int nz) {
 	this->id = numOfObjects;
 	this->loc = Location(nx, ny, nz);
 }
+
+void GameObject::serialize(Packet & p) {
+	p.writeUInt(id);
+	float* loc = glm::value_ptr(location);
+	for (int i = 0; i < 16; ++i){
+		p.writeFloat(loc[i]);
+	}
+}
+
+
+void GameObject::deserialize(Packet & p) {
+	//this->id = p.readUInt();
+	float* loc = glm::value_ptr(location);
+	for (int i = 0; i < 16; ++i){
+		loc[i] = p.readFloat();
+	}
+}
+
 
 ObjectId GameObject::getId() {
 	return id;

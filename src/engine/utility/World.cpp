@@ -5,15 +5,15 @@ void World::init(){
 	//map.insert?
 }
 
-void World::insert(GameObject go){
-	map.put(go.getId(), go);
+void World::insert(GameObject * go){
+	map.add(go);
 }
 
 void World::remove(ObjectId id){
 	map.remove(id);
 }
 
-void World::replace(ObjectId id, GameObject go){
+void World::replace(ObjectId id, GameObject * go){
 	this->remove(id);
 	this->insert(go);
 }

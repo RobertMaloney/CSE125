@@ -1,5 +1,6 @@
 #include "InputHandler.h"
 
+
 deque<Packet> InputHandler::input;
 
 void InputHandler::handleKey(int key, int action, int mods)
@@ -46,6 +47,6 @@ void InputHandler::handleKey(int key, int action, int mods)
 	else if (key == GLFW_KEY_DOWN && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
 		GraphicsEngine::MoveDown();
 	}
-	GameClient::input.push_back(p);
+	input.push_back(p);
 }
 

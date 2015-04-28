@@ -7,7 +7,6 @@ ObjectId numOfPlayers = 0;
 Player::Player(BlobModel thebm, float radius, float theta, float azimuth, float direction) {//: GameObject(radius, theta, ) {
 	this->numOfPlayers++;
 	this->pid = numOfPlayers;
-	this->id = "Player" + this->pid;
 	this->speed = 0;
 	this->power = 0;
 	//this->loc = Location(nx, ny, nz);
