@@ -12,6 +12,7 @@
 
 using glm::mat4;
 using glm::vec3;
+using glm::vec4;
 using std::pair;
 using std::deque;
 using std::make_pair;

@@ -22,16 +22,16 @@ bool				GraphicsEngine::m_initialized = false;
 GLFWwindow			*GraphicsEngine::m_window;
 
 GLint				GraphicsEngine::m_uniView,
-GraphicsEngine::m_uniProjection;
+					GraphicsEngine::m_uniProjection;
 
 GLuint				GraphicsEngine::m_vertexShader,
-GraphicsEngine::m_fragmentShader,
-GraphicsEngine::m_shaderProgram;
+					GraphicsEngine::m_fragmentShader,
+					GraphicsEngine::m_shaderProgram;
 
 KeyCallback			GraphicsEngine::m_keyCallback = NULL;
 
 MatrixNode			*GraphicsEngine::m_player_node = NULL,
-*GraphicsEngine::m_scene = NULL;
+					*GraphicsEngine::m_scene = NULL;
 CameraNode			*GraphicsEngine::m_mainCamera = NULL;
 
 Player				*GraphicsEngine::m_player = NULL;
@@ -41,8 +41,8 @@ glm::vec3			GraphicsEngine::m_testPolar;
 string version = "#version 150\n";
 
 /**
-* Description: This function is called when glfwPollEvents() is called.
-*/
+ * Description: This function is called when glfwPollEvents() is called.
+ */
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	//if (GraphicsEngine::GetKeyCallback()) GraphicsEngine::GetKeyCallback()(key, action, mods);
@@ -50,10 +50,10 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 }
 
 /**
-* GraphicsEngine::Initialize()
-* Description: This function initializes the graphics pipeline, compiles the
-* shaders, creates the window, and sets up the view and projection matrices
-*/
+ * GraphicsEngine::Initialize()
+ * Description: This function initializes the graphics pipeline, compiles the
+ * shaders, creates the window, and sets up the view and projection matrices
+ */
 void GraphicsEngine::Initialize() {
 	if (!glfwInit())
 		return;
@@ -135,33 +135,29 @@ void GraphicsEngine::Initialize() {
 		m_scene->addChild(m_objects[i]);
 		//m_objects.push_back(new Cube(position, glm::angleAxis(glm::radians((float)i), glm::vec3(0, 0, 1)), glm::vec3(1.f, 1.f, 1.f), 0.02f + 0.08f * (i / (float)100)));
 	}
-
+	
 	// WORLD
-	Renderable *worldModel = new Geometry("../../media/sphere.obj");
-	Geode *worldGeode = new Geode();
+	Renderable* worldModel = new Geometry("../../media/sphere.obj");
+	Geode* worldGeode = new Geode();
 	worldGeode->setRenderable(worldModel);
 	m_scene->addChild(worldGeode);
-
+	
 	// PLAYER
 	Renderable* playerModel = new Geometry("../../media/pb.obj");
 	Geode* playerGeode = new Geode();
 	playerGeode->setRenderable(playerModel);
-	m_player_node = new MatrixNode();
-	m_player_node->addChild(playerGeode);
-	m_scene->addChild(m_player_node);
-
-	m_player = new Player(BlobModel::PB_TYPE, 1, 0, 0, 0);
-
-	m_testPolar = glm::vec3(1.f, 0, 0);
-
+	m_player = new MatrixNode();
+	m_player->addChild(playerGeode);
+	m_scene->addChild(m_player);
+	
 	// CAMERA
 	glm::mat4 camview = glm::lookAt(
-		glm::vec3(0.f, 12.f, 8.f),
+		glm::vec3(0.f, 24.f, 16.f),
 		glm::vec3(0.f, 0.f, 0.f),
 		glm::vec3(0.f, 0.f, 1.f));
 	m_mainCamera = new CameraNode();
 	m_mainCamera->setViewMatrix(camview);
-	m_player_node->addChild(m_mainCamera);
+	m_player->addChild(m_mainCamera);
 
 	// view and projection matrix locations in the shader program
 	m_uniView = glGetUniformLocation(m_shaderProgram, "view");
@@ -180,27 +176,27 @@ void GraphicsEngine::Initialize() {
 }
 
 /**
-* GraphicsEngine::Closing()
-* Description: The bool callback used to tell the main game loop that it
-* should close.
-*/
+ * GraphicsEngine::Closing()
+ * Description: The bool callback used to tell the main game loop that it
+ * should close.
+ */
 bool GraphicsEngine::Closing() {
 	return !m_initialized || glfwWindowShouldClose(m_window);
 }
 
 /**
-* GraphicsEngine::CloseGame()
-* Description: This function tells the main loop to shut down
-*/
+ * GraphicsEngine::CloseGame()
+ * Description: This function tells the main loop to shut down
+ */
 void GraphicsEngine::CloseGame() {
 	glfwSetWindowShouldClose(m_window, GL_TRUE);
 }
 
 /**
-* GraphicsEngine::DrawAndPoll()
-* Description: This function should be called within in the main game loop to
-* draw the next frame and poll for user input
-*/
+ * GraphicsEngine::DrawAndPoll()
+ * Description: This function should be called within in the main game loop to
+ * draw the next frame and poll for user input
+ */
 void GraphicsEngine::DrawAndPoll() {
 	int height, width;
 	glfwGetWindowSize(m_window, &width, &height);
@@ -211,28 +207,31 @@ void GraphicsEngine::DrawAndPoll() {
 		1.f, 1000.f);
 
 	glm::mat4 view = m_mainCamera->getFlatViewMatrix();
+	//cout << glm::to_string(view) << endl;
+	//cout << glm::to_string(m_view) << endl;
+	//system("pause");
 	glUniformMatrix4fv(m_uniView, 1, GL_FALSE, glm::value_ptr(view));
 	glUniformMatrix4fv(m_uniProjection, 1, GL_FALSE, glm::value_ptr(m_projection));
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	GLint light = glGetUniformLocation(m_shaderProgram, "lightPosition");
+	
+	GLint light = glGetUniformLocation(m_shaderProgram, "pointLight");
 	const float radius = 2.f;
 	float sine = radius*glm::sin(glm::radians(90 * glfwGetTime()));
 	float cosine = radius*glm::cos(glm::radians(90 * glfwGetTime()));
 	glm::vec3 lightpos(cosine, sine, 1);
 	glUniform3fv(light, 1, glm::value_ptr(lightpos));
 
-	// render objects
-	m_testPolar.y += 1.f;
-	if (m_testPolar.y > 360.f) m_testPolar.y -= 360;
+	GLint dirLight = glGetUniformLocation(m_shaderProgram, "dirLight");
+	glm::vec3 dirLightVec(-1, -1, -1);
+	glUniform3fv(dirLight, 1, glm::value_ptr(dirLightVec));
 
+	// render objects
 	int renderableCount = m_objects.size();
 	for (int i = 0; i < renderableCount; ++i) {
 		m_objects[i]->getMatrix() = glm::rotate(m_objects[i]->getMatrix(), glm::radians(1.f), glm::vec3(0, 0, 1.f));
-	}
+	}*/
 
-	// render scene
 	glm::mat4 identity;
 	renderScene(m_scene, &identity);
 
@@ -264,10 +263,10 @@ void GraphicsEngine::renderScene(Node* node, glm::mat4* matrix) {
 }
 
 /**
-* GraphicsEngine::Destroy()
-* Description: This function cleans up the assets used by the graphics engine
-* before shutting down.
-*/
+ * GraphicsEngine::Destroy()
+ * Description: This function cleans up the assets used by the graphics engine
+ * before shutting down.
+ */
 void GraphicsEngine::Destroy() {
 	if (m_initialized) {
 		int renderableCount = m_objects.size();
@@ -291,69 +290,70 @@ KeyCallback GraphicsEngine::GetKeyCallback() {
 	return m_keyCallback;
 }
 
-void GraphicsEngine::MoveUp() {
-	if (m_player_node && m_player) {
-		m_player->getOrientation().y += 1.f;
-		//m_player_node->getMatrix() = glm::translate(m_player_node->getMatrix(), glm::vec3(0, 1, 0));
-		UpdatePlayer(System::sphere2xyz(m_player->getOrientation()));
-	}
-}
-
-void GraphicsEngine::MoveLeft() {
-	if (m_player_node)
-		m_player_node->getMatrix() = glm::translate(m_player_node->getMatrix(), glm::vec3(1, 0, 0));
-}
-
-void GraphicsEngine::MoveDown() {
-	if (m_player_node && m_player) {
-		m_player->getOrientation().y -= 1.f;
-		//m_player_node->getMatrix() = glm::translate(m_player_node->getMatrix(), glm::vec3(0, 1, 0));
-		UpdatePlayer(System::sphere2xyz(m_player->getOrientation()));
-	}
-}
-
-void GraphicsEngine::MoveRight() {
-	if (m_player_node)
-		m_player_node->getMatrix() = glm::translate(m_player_node->getMatrix(), glm::vec3(-1, 0, 0));
-}
-
 void GraphicsEngine::ScaleUp()
 {
-	if (m_player_node)
-		m_player_node->getMatrix() = glm::scale(m_player_node->getMatrix(), glm::vec3(1.2, 1.2, 1.2));
+	if (m_player)
+		m_player->getMatrix() = glm::scale(m_player->getMatrix(), glm::vec3(1.2, 1.2, 1.2));
 }
 
 void GraphicsEngine::ScaleDown()
 {
-	if (m_player_node)
-		m_player_node->getMatrix() = glm::scale(m_player_node->getMatrix(), glm::vec3(0.8, 0.8, 0.8));
+	if (m_player)
+		m_player->getMatrix() = glm::scale(m_player->getMatrix(), glm::vec3(0.8, 0.8, 0.8));
 }
 
-void GraphicsEngine::RotateRight(){
-	if (m_player_node)
-		m_player_node->getMatrix() = glm::rotate(m_player_node->getMatrix(), glm::radians(-1.f), glm::vec3(0, 0, 1));
-}
-
-void GraphicsEngine::RotateLeft(){
-	if (m_player_node)
-		m_player_node->getMatrix() = glm::rotate(m_player_node->getMatrix(), glm::radians(1.f), glm::vec3(0, 0, 1));
+void GraphicsEngine::Login(ObjectId playerId) {
+	ObjectDB & db = ObjectDB::getInstance();
+	GameObject* player = new GameObject();
+	//player->orientation.r = 500.f;
+	std::cout << "logging in id " << playerId << std::endl;
+	db.add(playerId, player);
+	player->node = m_player;
 }
 
 void GraphicsEngine::UpdatePlayer(deque<Packet> & data) {
-	if (data.size() > 0 && data[0].Size() > 0) {
-		float * matPointer = glm::value_ptr(m_player_node->getMatrix());
-		/*float * newData = (float*)&data[0][0];
-		for (int i = 0; i < 16; ++i) {
-		matPointer[i] = newData[i];
-		}*/
-		for (auto it = data.begin(); it != data.end(); ++it) {
-			for (int i = 0; i < 16; ++i) {
-				matPointer[i] = it->ReadFloat();
-			}
+	if (data.size() <= 0) {
+		return;
+	}
+
+	ObjectId playerId;
+	GameObject* player = nullptr;
+	ObjectDB & objects = ObjectDB::getInstance();
+
+	for (auto packet = data.begin(); packet != data.end(); ++packet) {
+		if (packet->size() <= 0) {
+			continue;
 		}
+
+		playerId = packet->readUInt();
+	
+		player = objects.get(playerId);
+
+
+		if (!player) {
+			player = new GameObject();
+			//player->orientation.r = 500.f;
+			objects.add(playerId, player);
+			Renderable* playerModel = new Geometry("../../media/ob.obj");
+			Geode* playerGeode = new Geode();
+			playerGeode->setRenderable(playerModel);
+			player->node = new MatrixNode();
+			player->node->addChild(playerGeode);
+			m_scene->addChild(player->node);
+		}
+		player->deserialize(*packet);
+		player->node->getMatrix() = MatrixNode::sphere2xyz(player->orientation);
 	}
 }
 
-void GraphicsEngine::UpdatePlayer(glm::mat4 & newmatrix) {
-	m_player_node->getMatrix() = newmatrix;
-}
+/*
+void GraphicsEngine::UpdatePlayer(deque<Packet> & data) {
+	if (data.size() > 0 && data[0].size() > 0) {
+		float * matPointer = glm::value_ptr(m_player->getMatrix());
+
+        for (auto it = data.begin(); it != data.end(); ++it) {
+            for(int i = 0; i < 16; ++i) {
+                matPointer[i] = it->readFloat();
+            }
+        }
+	}

@@ -11,7 +11,8 @@ void forwardHandler(ObjectId id) {
     GameObject* player = ObjectDB::getInstance().get(id);
 
     if (player != nullptr) {
-        player->location = glm::translate(player->location, vec3(0.f, -1.f, 0.f));
+        //player->location = glm::translate(player->location, vec3(0.f, -1.f, 0.f));
+		player->orientation.g += 1.f;
     }
 }
 
@@ -20,7 +21,8 @@ void backwardHandler(ObjectId id) {
     GameObject* player = ObjectDB::getInstance().get(id);
 
     if (player != nullptr) {
-        player->location = glm::translate(player->location, vec3(0.f, 1.f, 0.f));
+        //player->location = glm::translate(player->location, vec3(0.f, 1.f, 0.f));
+		player->orientation.g -= 1.f;
     }
 }
 
@@ -29,7 +31,8 @@ void leftHandler(ObjectId id) {
     GameObject* player = ObjectDB::getInstance().get(id);
 
     if (player != nullptr) {
-        player->location = glm::translate(player->location, vec3(1.f, 0.f, 0.f));
+        //player->location = glm::translate(player->location, vec3(1.f, 0.f, 0.f));
+		player->orientation.b -= 1.f;
     }
 }
 
@@ -38,7 +41,8 @@ void rightHandler(ObjectId id) {
     GameObject* player = ObjectDB::getInstance().get(id);
 
     if (player != nullptr) {
-        player->location = glm::translate(player->location, vec3(-1.f, 0.f, 0.f));
+        //player->location = glm::translate(player->location, vec3(-1.f, 0.f, 0.f));
+		player->orientation.b += 1.f;
     }
 }
 
