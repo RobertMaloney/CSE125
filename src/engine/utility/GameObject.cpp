@@ -13,7 +13,7 @@ GameObject::GameObject(float radius, float theta, float azimuth, float direction
 }
 
 GameObject::~GameObject() {
-
+	// have to remove from tree
 	delete node;
 }
 
@@ -22,7 +22,7 @@ void GameObject::serialize(Packet & p) {
 	p.writeUInt(id);
 	vec4 refLoc = loc;
 	float* loc = glm::value_ptr(refLoc);
-	for (int i = 0; i < 16; ++i){
+	for (int i = 0; i < 4; ++i){
 		p.writeFloat(loc[i]);
 	}
 }
@@ -32,7 +32,7 @@ void GameObject::deserialize(Packet & p) {
 	//this->id = p.readUInt();
     vec4 refLoc = loc;
 	float* loc = glm::value_ptr(refLoc);
-	for (int i = 0; i < 16; ++i){
+	for (int i = 0; i < 4; ++i){
 		loc[i] = p.readFloat();
 	}
 }
