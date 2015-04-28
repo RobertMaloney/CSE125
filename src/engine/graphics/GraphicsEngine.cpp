@@ -25,10 +25,14 @@ GLuint				GraphicsEngine::m_vertexShader,
 
 KeyCallback			GraphicsEngine::m_keyCallback = NULL;
 
-MatrixNode			*GraphicsEngine::m_player = NULL,
+MatrixNode			*GraphicsEngine::m_player_node = NULL,
 					*GraphicsEngine::m_scene = NULL;
 
 CameraNode			*GraphicsEngine::m_mainCamera = NULL;
+
+Player				*GraphicsEngine::m_player = NULL;
+
+glm::vec3			GraphicsEngine::m_testPolar;
 
 string version = "#version 150\n";
 
@@ -110,7 +114,7 @@ void GraphicsEngine::Initialize() {
 	glEnable(GL_DEPTH_TEST);
 
 	// Testing renderables
-	const int CUBE_COUNT = 100;
+	const int CUBE_COUNT = 0;
 	Renderable* cube = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 1.f, 1.f), 1.f);
 	for (int i = 0; i < CUBE_COUNT; ++i) {
 		glm::vec3 position(-2.f + 0.4f*(i % 10), -2.f + 0.4f*(i / 10), 0.1f);
@@ -127,22 +131,33 @@ void GraphicsEngine::Initialize() {
 		m_scene->addChild(m_objects[i]);
 		//m_objects.push_back(new Cube(position, glm::angleAxis(glm::radians((float)i), glm::vec3(0, 0, 1)), glm::vec3(1.f, 1.f, 1.f), 0.02f + 0.08f * (i / (float)100)));
 	}
-	
+
+	// WORLD
+	Renderable *worldModel = new Geometry("../../media/sphere.obj");
+	Geode *worldGeode = new Geode();
+	worldGeode->setRenderable(worldModel);
+	m_scene->addChild(worldGeode);
+
+	// PLAYER
 	Renderable* playerModel = new Geometry("../../media/pb.obj");
 	Geode* playerGeode = new Geode();
 	playerGeode->setRenderable(playerModel);
-	m_player = new MatrixNode();
-	m_player->addChild(playerGeode);
-	m_scene->addChild(m_player);
-	
+	m_player_node = new MatrixNode();
+	m_player_node->addChild(playerGeode);
+	m_scene->addChild(m_player_node);
+
+	m_player = new Player(BlobModel::PB_TYPE, 1, 0, 0, 0);
+
+	m_testPolar = glm::vec3(1.f, 0, 0);
+
 	// CAMERA
 	glm::mat4 camview = glm::lookAt(
-		glm::vec3(0.f, 3.f, 2.f),
+		glm::vec3(0.f, 12.f, 8.f),
 		glm::vec3(0.f, 0.f, 0.f),
 		glm::vec3(0.f, 0.f, 1.f));
 	m_mainCamera = new CameraNode();
 	m_mainCamera->setViewMatrix(camview);
-	m_player->addChild(m_mainCamera);
+	m_player_node->addChild(m_mainCamera);
 
 	// view and projection matrix locations in the shader program
 	m_uniView = glGetUniformLocation(m_shaderProgram, "view");
@@ -192,9 +207,6 @@ void GraphicsEngine::DrawAndPoll() {
 		1.f, 1000.f);
 
 	glm::mat4 view = m_mainCamera->getFlatViewMatrix();
-	//cout << glm::to_string(view) << endl;
-	//cout << glm::to_string(m_view) << endl;
-	//system("pause");
 	glUniformMatrix4fv(m_uniView, 1, GL_FALSE, glm::value_ptr(view));
 	glUniformMatrix4fv(m_uniProjection, 1, GL_FALSE, glm::value_ptr(m_projection));
 
@@ -208,11 +220,15 @@ void GraphicsEngine::DrawAndPoll() {
 	glUniform3fv(light, 1, glm::value_ptr(lightpos));
 
 	// render objects
+	m_testPolar.y += 1.f;
+	if (m_testPolar.y > 360.f) m_testPolar.y -= 360;
+
 	int renderableCount = m_objects.size();
 	for (int i = 0; i < renderableCount; ++i) {
 		m_objects[i]->getMatrix() = glm::rotate(m_objects[i]->getMatrix(), glm::radians(1.f), glm::vec3(0, 0, 1.f));
 	}
 
+	// render scene
 	glm::mat4 identity;
 	renderScene(m_scene, &identity);
 
@@ -271,71 +287,72 @@ KeyCallback GraphicsEngine::GetKeyCallback() {
 	return m_keyCallback;
 }
 
+void GraphicsEngine::MoveUp() {
+	if (m_player_node && m_player) {
+		m_player->getOrientation().y += 1.f;
+		//m_player_node->getMatrix() = glm::translate(m_player_node->getMatrix(), glm::vec3(0, 1, 0));
+		UpdatePlayer(System::sphere2xyz(m_player->getOrientation()));
+	}
+}
+
+void GraphicsEngine::MoveLeft() {
+	if (m_player_node)
+		m_player_node->getMatrix() = glm::translate(m_player_node->getMatrix(), glm::vec3(1, 0, 0));
+}
+
+void GraphicsEngine::MoveDown() {
+	if (m_player_node && m_player) {
+		m_player->getOrientation().y -= 1.f;
+		//m_player_node->getMatrix() = glm::translate(m_player_node->getMatrix(), glm::vec3(0, 1, 0));
+		UpdatePlayer(System::sphere2xyz(m_player->getOrientation()));
+	}
+}
+
+void GraphicsEngine::MoveRight() {
+	if (m_player_node)
+		m_player_node->getMatrix() = glm::translate(m_player_node->getMatrix(), glm::vec3(-1, 0, 0));
+}
+
 void GraphicsEngine::ScaleUp()
 {
-	if (m_player)
-		m_player->getMatrix() = glm::scale(m_player->getMatrix(), glm::vec3(1.2, 1.2, 1.2));
+	if (m_player_node)
+		m_player_node->getMatrix() = glm::scale(m_player_node->getMatrix(), glm::vec3(1.2, 1.2, 1.2));
 }
 
 void GraphicsEngine::ScaleDown()
 {
-	if (m_player)
-		m_player->getMatrix() = glm::scale(m_player->getMatrix(), glm::vec3(0.8, 0.8, 0.8));
+	if (m_player_node)
+		m_player_node->getMatrix() = glm::scale(m_player_node->getMatrix(), glm::vec3(0.8, 0.8, 0.8));
 }
 
-void GraphicsEngine::Login(ObjectId playerId) {
-	ObjectDB & db = ObjectDB::getInstance();
-	GameObject* player = new GameObject();
-	std::cout << "logging in id " << playerId << std::endl;
-	db.add(playerId, player);
-	player->node = m_player;
+void GraphicsEngine::RotateRight(){
+	if (m_player_node)
+		m_player_node->getMatrix() = glm::rotate(m_player_node->getMatrix(), glm::radians(-1.f), glm::vec3(0, 0, 1));
 }
 
-void GraphicsEngine::UpdatePlayer(deque<Packet> & data) {
-	if (data.size() <= 0) {
-		return;
-	}
-
-	ObjectId playerId;
-	GameObject* player = nullptr;
-	ObjectDB & objects = ObjectDB::getInstance();
-
-	for (auto packet = data.begin(); packet != data.end(); ++packet) {
-		if (packet->size() <= 0) {
-			continue;
-		}
-
-		playerId = packet->readUInt();
-	
-		player = objects.get(playerId);
-
-
-		if (!player) {
-			player = new GameObject();
-			objects.add(playerId, player);
-			Renderable* playerModel = new Geometry("../../media/ob.obj");
-			Geode* playerGeode = new Geode();
-			playerGeode->setRenderable(playerModel);
-			player->node = new MatrixNode();
-			player->node->addChild(playerGeode);
-			m_scene->addChild(player->node);
-		}
-		player->deserialize(*packet);
-		player->node->getMatrix() = player->location;
-	}
+void GraphicsEngine::RotateLeft(){
+	if (m_player_node)
+		m_player_node->getMatrix() = glm::rotate(m_player_node->getMatrix(), glm::radians(1.f), glm::vec3(0, 0, 1));
 }
 
 /*
 void GraphicsEngine::UpdatePlayer(deque<Packet> & data) {
-	if (data.size() > 0 && data[0].size() > 0) {
-		float * matPointer = glm::value_ptr(m_player->getMatrix());
-
+	if (data.size() > 0 && data[0].Size() > 0) {
+		float * matPointer = glm::value_ptr(m_player_node->getMatrix());
+		/*float * newData = (float*)&data[0][0];
+		for (int i = 0; i < 16; ++i) {
+			matPointer[i] = newData[i];
+		}*/
         for (auto it = data.begin(); it != data.end(); ++it) {
             for(int i = 0; i < 16; ++i) {
                 matPointer[i] = it->readFloat();
-            }
         }
 	}
+}
+
+void GraphicsEngine::UpdatePlayer(glm::mat4 & newmatrix) {
+	m_player_node->getMatrix() = newmatrix;
+}
 }*/
 /*
 Renderable* playerModel = new Geometry("../../media/pb.obj");

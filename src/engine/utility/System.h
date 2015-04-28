@@ -4,6 +4,9 @@
 #include <string>
 #include <Windows.h>
 #include <stdlib.h>
+#include <glm.hpp>
+#include <gtc\matrix_transform.hpp>
+#include <gtc\type_ptr.hpp>
 
 using namespace std;
 
@@ -33,6 +36,13 @@ public:
 
 		in.close();
 		return result;
+	}
+
+	static glm::mat4 sphere2xyz(glm::vec4 & spherePos) {
+		glm::vec3 xyz(spherePos.x, 0, 0);
+		xyz = glm::angleAxis(glm::radians(spherePos.y), glm::vec3(0, 0, 1)) * xyz;
+		xyz = glm::angleAxis(glm::radians(spherePos.z), glm::vec3(0, 1, 0)) * xyz;
+		return glm::translate(glm::mat4(), xyz);
 	}
 };
 #endif

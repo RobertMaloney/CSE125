@@ -22,6 +22,7 @@
 #include "Renderable.h"
 
 #include "..\network\Packet.h"
+#include "..\utility\Player.h"
 
 typedef unsigned int ObjectId;
 
@@ -43,8 +44,11 @@ public:
 	static void MoveRight();
 	static void ScaleUp();
 	static void ScaleDown();
+	static void RotateLeft();
+	static void RotateRight();
 	static KeyCallback GetKeyCallback();
 	static void UpdatePlayer(deque<Packet> &);
+	static void UpdatePlayer(glm::mat4 &);
    static int getKeyState(int);
    static void Login(ObjectId playerId);
 private:
@@ -55,9 +59,11 @@ private:
 	static std::vector<MatrixNode*> m_objects;
 	static GLuint					m_vertexShader, m_fragmentShader, m_shaderProgram;
 	static KeyCallback				m_keyCallback;
-	static MatrixNode				*m_player;
+	static MatrixNode				*m_player_node;
 	static CameraNode				*m_mainCamera;
 	static MatrixNode				*m_scene;
+	static glm::vec3				m_testPolar;
+	static Player					*m_player;
 	
 	static void renderScene(Node*, glm::mat4*);
 };
