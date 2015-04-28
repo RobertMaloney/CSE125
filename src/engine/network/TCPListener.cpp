@@ -4,23 +4,23 @@ TCPListener::TCPListener() : Socket() {}
 
 
 TCPListener::~TCPListener() {
-    this->Close();
+    this->close();
 }
 
-SocketError TCPListener::Bind(const string & ip, const string & port) {
-    AddressInfo* iter = this->DNSLookup(ip, port, SOCK_STREAM);
+SocketError TCPListener::bind(const string & ip, const string & port) {
+    AddressInfo* iter = this->dnsLookup(ip, port, SOCK_STREAM);
 
     for (; iter; iter = iter->ai_next) {
         sock = socket(iter->ai_family, iter->ai_socktype, iter->ai_protocol);
         if (sock == INACTIVE_SOCKET) {
             continue;
         }
-        if (this->SetSockOpt(SOL_SOCKET, SO_REUSEADDR, 1) != 0) {
-            this->Close(sock);
+        if (this->setSockOpt(SOL_SOCKET, SO_REUSEADDR, 1) != 0) {
+            this->close(sock);
             continue;
         }
         if (::bind(sock, iter->ai_addr, iter->ai_addrlen) != 0) {
-            this->Close(sock);
+            this->close(sock);
             continue;
         }
         break;
@@ -35,22 +35,22 @@ SocketError TCPListener::Bind(const string & ip, const string & port) {
     return SE_NOERR;
 }
 
-void TCPListener::Listen(int maxPending) {
-    if (!this->IsSocketActive()) {
-        this->DieWithError("Tring to listen on inactive socket.");
+void TCPListener::listen(int maxPending) {
+    if (!this->isSocketActive()) {
+        this->dieWithError("Tring to listen on inactive socket.");
     }
 
     if (::listen(sock, maxPending) != 0) {
-        this->DieWithError("Error in listening in Listen.");
+        this->dieWithError("Error in listening in Listen.");
     }
 
     isListening = true;
 }
 
 
-TCPConnection* TCPListener::Accept() {
+TCPConnection* TCPListener::accept() {
     if (!this->isListening) {
-        this->DieWithError("Trying to accept while not listening.");
+        this->dieWithError("Trying to accept while not listening.");
     }
 
     int clientFd = 0;
@@ -60,7 +60,7 @@ TCPConnection* TCPListener::Accept() {
 
     if (clientFd < 0) {
 		if (!nonBlocking){
-			cerr << "Error while accepting client. " + this->GetErrorMsg() << endl;
+			cerr << "Error while accepting client. " + this->getErrorMsg() << endl;
 		}
         return nullptr;
     }
