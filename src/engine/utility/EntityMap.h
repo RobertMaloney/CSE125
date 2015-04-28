@@ -2,6 +2,7 @@
 #define ENTITY_MAP_H
 
 using namespace std;
+#include <unordered_map>
 
 template<typename K, typename V>
 class EntityMap {
