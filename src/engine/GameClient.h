@@ -33,7 +33,7 @@ public:
 
     void receiveUpdates(deque<Packet> & updates);
     void sendEvents(deque<Packet> & events);
-
+	void updateGameState(deque<Packet> & updates);
 
 private:
 

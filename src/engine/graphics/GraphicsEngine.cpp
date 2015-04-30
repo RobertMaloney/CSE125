@@ -29,6 +29,7 @@ MatrixNode			*GraphicsEngine::m_player = NULL,
 *GraphicsEngine::m_scene = NULL;
 
 CameraNode			*GraphicsEngine::m_mainCamera = NULL;
+unordered_map<ObjectId, MatrixNode*> GraphicsEngine::objNodeMap;
 
 string version = "#version 150\n";
 
@@ -134,13 +135,7 @@ void GraphicsEngine::Initialize() {
 	worldGeode->setRenderable(worldModel);
 	m_scene->addChild(worldGeode);
 
-	// PLAYER
-	Renderable* playerModel = new Geometry("../../media/pb.obj");
-	Geode* playerGeode = new Geode();
-	playerGeode->setRenderable(playerModel);
-	m_player = new MatrixNode();
-	m_player->addChild(playerGeode);
-	m_scene->addChild(m_player);
+
 
 	// CAMERA
 	glm::mat4 camview = glm::lookAt(
@@ -149,7 +144,10 @@ void GraphicsEngine::Initialize() {
 		glm::vec3(0.f, 0.f, 1.f));
 	m_mainCamera = new CameraNode();
 	m_mainCamera->setViewMatrix(camview);
-	m_player->addChild(m_mainCamera);
+
+	// PLAYER
+	m_player = GraphicsEngine::addNode("../../media/pb.obj");//TODO
+	m_player->addChild(m_mainCamera);//TODO
 
 	// view and projection matrix locations in the shader program
 	m_uniView = glGetUniformLocation(m_shaderProgram, "view");
@@ -167,6 +165,16 @@ void GraphicsEngine::Initialize() {
 	m_initialized = true;
 }
 
+
+MatrixNode* GraphicsEngine::addNode(const char * modelPath){
+	Renderable* objModel = new Geometry(modelPath);// "../../media/pb.obj");
+	Geode* objGeode = new Geode();
+	objGeode->setRenderable(objModel);
+	MatrixNode * m_node = new MatrixNode();
+	m_node->addChild(objGeode);
+	m_scene->addChild(m_node);
+	return m_node;
+}
 /**
 * GraphicsEngine::Closing()
 * Description: The bool callback used to tell the main game loop that it
@@ -294,15 +302,12 @@ void GraphicsEngine::ScaleDown()
 		m_player->getMatrix() = glm::scale(m_player->getMatrix(), glm::vec3(0.8, 0.8, 0.8));
 }
 
-void GraphicsEngine::Login(GameObject* player) {
-	//ObjectDB & db = ObjectDB::getInstance(); //??
-	//GameObject* player = new GameObject();
-	//std::cout << "logging in id " << playerId << std::endl;
-	//db.add(playerId, player);
-	player->node = m_player;
+void GraphicsEngine::bindPlayerNode(GameObject* player) {
+	///player->node = m_player;
+	GraphicsEngine::insertObject(player->getId(), m_player);
 }
 
-void GraphicsEngine::UpdatePlayer(deque<Packet> & data, GameState & gstate) {
+/*void GraphicsEngine::UpdatePlayer(deque<Packet> & data, GameState & gstate) {
 	if (data.size() <= 0) {
 		return;
 	}
@@ -331,9 +336,29 @@ void GraphicsEngine::UpdatePlayer(deque<Packet> & data, GameState & gstate) {
 			m_scene->addChild(player->node);
 		}
 		player->deserialize(*packet);
-		player->node->getMatrix() = MatrixNode::sphere2xyz(player->getLoc());
+
+		//player->node->getMatrix() = MatrixNode::sphere2xyz(player->getLoc());
+		GraphicsEngine::updateObject(player->getId(), player->getLoc());
+	}
+}*/
+
+
+
+void GraphicsEngine::updateObject(ObjectId objId, glm::vec4 & v) {
+	objNodeMap[objId]->getMatrix() = MatrixNode::sphere2xyz(v);
+}
+
+void GraphicsEngine::insertObject(ObjectId objId, MatrixNode* n) {
+
+	auto found = objNodeMap.find(objId);
+	if (found == objNodeMap.end()) {
+		objNodeMap.insert(make_pair(objId, n));
+	}
+	else{
+		//TODO exception duplicate node
 	}
 }
+
 
 /*
 void GraphicsEngine::UpdatePlayer(deque<Packet> & data) {

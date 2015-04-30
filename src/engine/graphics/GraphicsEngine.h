@@ -48,9 +48,12 @@ public:
 	static KeyCallback GetKeyCallback();
 	static void UpdatePlayer(deque<Packet> &, GameState &);
     static int getKeyState(int);
-    static void Login(GameObject* player);
 
-	//static void updateObject(GameObject* go, glm::vec4 v) {
+    static void bindPlayerNode(GameObject* player);
+	static void updateObject(ObjectId objId, glm::vec4 & v);
+	static void insertObject(ObjectId objId, MatrixNode*);
+
+	static MatrixNode* addNode(const char * modelPath);
 
 private:
 	static glm::mat4				m_view, m_projection;
@@ -64,7 +67,7 @@ private:
 	static CameraNode				*m_mainCamera;
 	static MatrixNode				*m_scene;
 
-	//static unordered_map<ObjectId, MatrixNode*> objNodeMap;
+	static unordered_map<ObjectId, MatrixNode*> objNodeMap;
 	
 	static void renderScene(Node*, glm::mat4*);
 };

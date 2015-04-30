@@ -13,7 +13,7 @@
 #include "Serializable.h"
 //#include "../graphics/GraphicsEngine.h"
 #include "IdGenerator.h"
-#include "..\graphics\MatrixNode.h"
+//#include "..\graphics\MatrixNode.h"
 
 
 //using std::pair;
@@ -38,7 +38,7 @@ protected:
 
 public:
 
-	MatrixNode* node;//
+	//MatrixNode* node;//
 
 	GameObject() :GameObject(505, 0, 0, 0) {};
 	GameObject(float radius, float theta, float azimuth, float direction);

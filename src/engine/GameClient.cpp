@@ -31,8 +31,7 @@ void GameClient::run() {
 	std::cout << "logging in id " << playerId << std::endl;
 	player = gstate.map.add(playerId, player);
 
-
-	GraphicsEngine::Login(player);//TODO remove node, remove Login..
+	GraphicsEngine::bindPlayerNode(player);
 
 
 	connection->setNonBlocking(true);
@@ -43,13 +42,49 @@ void GameClient::run() {
 		if (DEBUG) {	
 			this->sendEvents(InputHandler::input);		
 			this->receiveUpdates(updates);
-			GraphicsEngine::UpdatePlayer(updates, gstate);
+			this->updateGameState(updates);
+			//GraphicsEngine::UpdatePlayer(updates, gstate);
 			updates.clear();
 		}
 	}
 
 	GraphicsEngine::Destroy();
 	system("pause");
+}
+
+
+void GameClient::updateGameState(deque<Packet> & data) {
+	if (data.size() <= 0) {
+		return;
+	}
+
+	ObjectId objId;
+	GameObject* obj = nullptr;
+
+	for (auto packet = data.begin(); packet != data.end(); ++packet) {
+		if (packet->size() <= 0) {
+			continue;
+		}
+
+		objId = packet->readUInt();
+		obj = gstate.map.get(objId);
+
+		//Object is new 
+		if (!obj) {
+			obj = new GameObject();
+			obj = gstate.map.add(objId, obj);
+
+
+			//addNode and add object-node mapping
+			GraphicsEngine::insertObject(obj->getId(), GraphicsEngine::addNode("../../media/ob.obj"));
+		}
+
+		//Update the object in game state
+		obj->deserialize(*packet);//update obj (pos) in game state
+
+		//Update the object in node (GraphicsEngine)
+		GraphicsEngine::updateObject(obj->getId(), obj->getLoc()); //update obj (pos) in NODE 
+	}
 }
 
 
