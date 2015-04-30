@@ -24,6 +24,7 @@ GraphicsEngine::m_fragmentShader,
 GraphicsEngine::m_shaderProgram;
 
 KeyCallback			GraphicsEngine::m_keyCallback = NULL;
+Geode				* playerGeode;
 
 MatrixNode			*GraphicsEngine::m_player = NULL,
 *GraphicsEngine::m_scene = NULL;
@@ -135,8 +136,8 @@ void GraphicsEngine::Initialize() {
 	m_scene->addChild(worldGeode);
 
 	// PLAYER
-	Renderable* playerModel = new Geometry("../../media/pb.obj");
-	Geode* playerGeode = new Geode();
+	Renderable* playerModel = new Geometry("../../media/bb.obj");
+	playerGeode = new Geode();
 	playerGeode->setRenderable(playerModel);
 	m_player = new MatrixNode();
 	m_player->addChild(playerGeode);
@@ -302,6 +303,26 @@ void GraphicsEngine::Login(ObjectId playerId) {
 	std::cout << "logging in id " << playerId << std::endl;
 	db.add(playerId, player);
 	player->node = m_player;
+	//delete playerGeode->getRenderable();
+	Renderable* newModel;
+	switch (playerId % 3){
+		case 0:
+			newModel = new Geometry("../../media/bb.obj");
+			break;
+		case 1:
+			//newModel = new Geometry("../../media/gb.obj"); //gb model doesnt work
+			//break;
+		//case 2:
+			newModel = new Geometry("../../media/ob.obj");
+			break;
+		case 2:
+			newModel = new Geometry("../../media/pb.obj");
+			break;
+		default:
+			newModel = new Geometry("../../media/bb.obj");
+			break;
+	}
+	playerGeode->setRenderable(newModel);
 }
 
 void GraphicsEngine::UpdatePlayer(deque<Packet> & data) {
@@ -326,12 +347,32 @@ void GraphicsEngine::UpdatePlayer(deque<Packet> & data) {
 		if (!player) {
 			player = new GameObject();
 			//player->orientation.r = 500.f;
-			player = objects.add(playerId, player); 
-			Renderable* playerModel = new Geometry("../../media/ob.obj");
-			Geode* playerGeode = new Geode();
-			playerGeode->setRenderable(playerModel);
+			player = objects.add(playerId, player);
+			Renderable* newModel;
+
+			//look for player's model from it's id
+			switch (playerId % 3){
+				case 0:
+					newModel = new Geometry("../../media/bb.obj");
+					break;
+				//case 1:
+					//newModel = new Geometry("../../media/gb.obj"); //gb doenst work
+					//break;
+				case 1:
+					newModel = new Geometry("../../media/ob.obj");
+					break;
+				case 2:
+					newModel = new Geometry("../../media/pb.obj");
+					break;
+				default:
+					newModel = new Geometry("../../media/bb.obj");
+					break;
+			}
+
+			Geode* newGeode = new Geode();
+			newGeode->setRenderable(newModel);
 			player->node = new MatrixNode();
-			player->node->addChild(playerGeode);
+			player->node->addChild(newGeode);
 			m_scene->addChild(player->node);
 		}
 		player->deserialize(*packet);
