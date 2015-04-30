@@ -6,7 +6,10 @@ void World::init(){
 }
 
 void World::insert(GameObject * go){
-	map.add(go);
+	if (!(go->getId())){
+		//TODO Exception
+	}
+	map.add(go->getId(), go);
 }
 
 void World::remove(ObjectId id){

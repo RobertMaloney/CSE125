@@ -19,15 +19,18 @@ using std::deque;
 using std::make_pair;
 using std::unordered_map;
 
+//ObjectId ObjectDB::numOfObjects = 0;
 
 class ObjectDB {
 
 public:
+	//static ObjectId numOfObjects;
 
 	ObjectDB();
 	~ObjectDB();
 
-	ObjectId add(GameObject* object);
+
+	GameObject* add(ObjectId theId, GameObject* object);
 
 	bool remove(ObjectId objectId);
 	GameObject* get(ObjectId objectId);

@@ -15,9 +15,24 @@ ObjectDB::~ObjectDB() {
 }
 
 
-ObjectId ObjectDB::add(GameObject* object) {
-	objects.insert(make_pair(object->getId(), object));
-	return object->getId();
+GameObject* ObjectDB::add(ObjectId theId, GameObject* object) {
+
+
+	if (!object) {
+		return NULL;
+	}
+	if (object->getId()){// should not have id?
+		//throw exception TODO
+	}
+
+	auto found = objects.find(theId);
+	if (found == objects.end()) {
+		object->setId(theId);
+		objects.insert(make_pair(theId, object));
+
+		return object;
+	}
+	return NULL;
 }
 
 

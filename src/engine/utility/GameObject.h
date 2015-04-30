@@ -23,15 +23,12 @@ using glm::mat4;
 using glm::vec4;
 using namespace std;
 
-typedef unsigned int ObjectId;
-
 class GameObject : public Serializable  {
 	//TODO put it outside
 protected:
 
 	ObjectId id;
 	//Location loc;
-	static ObjectId numOfObjects;
 
 
 	//mat4 location;
@@ -54,6 +51,7 @@ public:
 	void deserialize(Packet & p);
 
 	ObjectId getId();
+	void setId(ObjectId theId);
 
 	//int getX();
 	//int getY();

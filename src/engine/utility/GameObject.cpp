@@ -2,12 +2,10 @@
 //#include "Location.h"
 #include "../network/Packet.h"
 
-ObjectId GameObject::numOfObjects = 0;
+
 
 //TODO Config file
 GameObject::GameObject(float radius, float theta, float azimuth, float direction) {
-	this->numOfObjects++;
-	this->id = numOfObjects;
 	//this->loc = Location(nx, ny, nz);
 	this->loc = glm::vec4(radius, theta, azimuth, direction);
 }
@@ -36,6 +34,10 @@ void GameObject::deserialize(Packet & p) {
 
 ObjectId GameObject::getId() {
 	return id;
+}
+
+void GameObject::setId(ObjectId theId) {
+	this->id = theId;
 }
 
 /*int GameObject::getX() {
