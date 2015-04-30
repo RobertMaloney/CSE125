@@ -15,6 +15,7 @@
 #include "network\TCPConnection.h"
 #include "network\TCPListener.h"
 #include "utility\ObjectDB.h"
+#include "utility\IdGenerator.h"
 
 using std::to_string;
 using std::this_thread::sleep_for;
@@ -41,6 +42,8 @@ public:
 
     void tick();
     void receiveAndUpdate();
+
+	IdGenerator idGen;
 
 private:
 

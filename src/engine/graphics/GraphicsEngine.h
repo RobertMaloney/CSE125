@@ -47,6 +47,7 @@ public:
 	static void UpdatePlayer(deque<Packet> &);
    static int getKeyState(int);
    static void Login(ObjectId playerId);
+
 private:
 	static glm::mat4				m_view, m_projection;
 	static bool						m_initialized;

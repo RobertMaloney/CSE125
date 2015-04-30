@@ -4,6 +4,7 @@
 GameServer::GameServer() {
 	this->clients = new unordered_map<TCPConnection*, ObjectId>();
 	this->handler = new PacketHandler();
+	this->idGen = IdGenerator::getInstance();
 }
 
 
@@ -52,12 +53,18 @@ void GameServer::acceptWaitingClient() {
 	if (!connection) {
 		return;
 	}
-	ObjectId player = ObjectDB::getInstance().add(new GameObject());
+	ObjectId playerId = idGen.getNextId();
+	GameObject* player = ObjectDB::getInstance().add(playerId, new GameObject());
+	if (!player){
+		//throw exception (get NULL => not added)
+	}
+	idGen.update(playerId);
+
 	connection->setNoDelay(true);
 	connection->setNonBlocking(true);
-	clients->insert(make_pair(connection, player));	
+	clients->insert(make_pair(connection, playerId));	
 	Packet response;
-	response.writeUInt(player);
+	response.writeUInt(playerId);
 	connection->send(response);
 }
 

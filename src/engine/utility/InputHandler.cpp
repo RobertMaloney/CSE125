@@ -35,6 +35,5 @@ void InputHandler::handleKey(int key, int action, int mods)
 		GraphicsEngine::ScaleDown();
 	}
 
-	
-}
 
+}

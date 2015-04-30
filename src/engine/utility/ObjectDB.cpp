@@ -1,25 +1,8 @@
 #include "ObjectDB.h"
 
-void GameObject::serialize(Packet & p) {
-	p.writeUInt(id);
-	float* loc = glm::value_ptr(location);
-	for (int i = 0; i < 16; ++i){
-		p.writeFloat(loc[i]);
-	}
-}
-
-
-void GameObject::deserialize(Packet & p) {
-	//this->id = p.readUInt();
-	float* loc = glm::value_ptr(location);
-	for (int i = 0; i < 16; ++i){
-		loc[i] = p.readFloat();
-	}
-}
 
 
 ObjectDB::ObjectDB() {
-	nextId = 0;
 }
 
 
@@ -32,28 +15,24 @@ ObjectDB::~ObjectDB() {
 }
 
 
-ObjectId ObjectDB::add(GameObject* object) {
-    ObjectId newId = nextId++;
-	object->id = newId;
-	objects.insert(make_pair(newId, object));
-	return newId;
-}
+GameObject* ObjectDB::add(ObjectId theId, GameObject* object) {
 
 
-bool ObjectDB::add(ObjectId id, GameObject* object) {
 	if (!object) {
-		return false;
+		return NULL;
 	}
-	auto found = objects.find(id);
+	if (object->getId()){// should not have id?
+		//throw exception TODO
+	}
+
+	auto found = objects.find(theId);
 	if (found == objects.end()) {
-		object->id = id;
-		objects.insert(make_pair(id, object));
-		if (id >= nextId) {
-			nextId = id + 1;
-		}
-		return true;
+		object->setId(theId);
+		objects.insert(make_pair(theId, object));
+
+		return object;
 	}
-	return false;
+	return NULL;
 }
 
 

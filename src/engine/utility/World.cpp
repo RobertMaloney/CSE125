@@ -5,19 +5,22 @@ void World::init(){
 	//map.insert?
 }
 
-void World::insert(GameObject go){
-	map.put(go.getId(), go);
+void World::insert(GameObject * go){
+	if (!(go->getId())){
+		//TODO Exception
+	}
+	map.add(go->getId(), go);
 }
 
-void World::remove(int id){
+void World::remove(ObjectId id){
 	map.remove(id);
 }
 
-void World::replace(int id, GameObject go){
+void World::replace(ObjectId id, GameObject * go){
 	this->remove(id);
 	this->insert(go);
 }
 
-void World::get(int id){
+void World::get(ObjectId id){
 	map.get(id);
 }

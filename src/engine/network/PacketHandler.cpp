@@ -8,10 +8,13 @@ using glm::vec3;
 
 
 void forwardHandler(ObjectId id) {
+    //Player* player = dynamic_cast<Player*>(ObjectDB::getInstance().get(id));/////??????????????
     GameObject* player = ObjectDB::getInstance().get(id);
 
     if (player != nullptr) {
-        player->location = glm::translate(player->location, vec3(0.f, -1.f, 0.f));
+        //player->location = glm::translate(player->location, vec3(0.f, -1.f, 0.f));
+		std::cout << "Player " << id << " moving forward\n";
+		player->getLoc().g += 1.f;
     }
 }
 
@@ -20,7 +23,9 @@ void backwardHandler(ObjectId id) {
     GameObject* player = ObjectDB::getInstance().get(id);
 
     if (player != nullptr) {
-        player->location = glm::translate(player->location, vec3(0.f, 1.f, 0.f));
+        //player->location = glm::translate(player->location, vec3(0.f, 1.f, 0.f));
+		std::cout << "Player " << id << " moving back\n";
+		player->getLoc().g -= 1.f;
     }
 }
 
@@ -29,7 +34,9 @@ void leftHandler(ObjectId id) {
     GameObject* player = ObjectDB::getInstance().get(id);
 
     if (player != nullptr) {
-        player->location = glm::translate(player->location, vec3(1.f, 0.f, 0.f));
+        //player->location = glm::translate(player->location, vec3(1.f, 0.f, 0.f));
+		std::cout << "Player " << id << " moving left\n";
+		player->getLoc().b -= 1.f;
     }
 }
 
@@ -38,7 +45,9 @@ void rightHandler(ObjectId id) {
     GameObject* player = ObjectDB::getInstance().get(id);
 
     if (player != nullptr) {
-        player->location = glm::translate(player->location, vec3(-1.f, 0.f, 0.f));
+        //player->location = glm::translate(player->location, vec3(-1.f, 0.f, 0.f));
+		std::cout << "Player " << id << " moving right\n";
+		player->getLoc().b += 1.f;
     }
 }
 
