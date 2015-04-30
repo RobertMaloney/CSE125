@@ -10,7 +10,7 @@
 using namespace std;
 
 
-class Player: public GameObject {
+class Player : public GameObject {
 	//TODO put it outside
 protected:
 

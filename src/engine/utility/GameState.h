@@ -2,26 +2,28 @@
 #define GAME_STATE_H
 
 #include <vector>
-#include "World.h"
+//#include "World.h"
+#include "ObjectDB.h"
 #include "Player.h"
-#include "BlobModel.h"
+
+
 
 using namespace std;
 
 class GameState {
 
 protected:
-	World *world;
-	vector<Player*> players;
 	int numOfPlayers;
 
 public:
-	GameState();
-	virtual ~GameState();
+	ObjectDB map;
+	vector<Player*> players;
+	
 
 	void init();
-	void addPlayer(BlobModel bm);
 
+	GameObject* addPlayer(ObjectId theId, Player* p);
+	static GameState & getInstance();
 
 };
 

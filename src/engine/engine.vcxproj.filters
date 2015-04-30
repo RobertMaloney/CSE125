@@ -15,9 +15,9 @@
     <ClCompile Include="utility\Player.cpp" />
     <ClCompile Include="network\PacketHandler.cpp" />
     <ClCompile Include="utility\ObjectDB.cpp" />
-    <ClCompile Include="utility\World.cpp" />
     <ClCompile Include="utility\IdGenerator.cpp" />
     <ClCompile Include="utility\GameObject.cpp" />
+    <ClCompile Include="utility\GameState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameClient.h" />
@@ -41,7 +41,6 @@
     <ClInclude Include="utility\Location.h" />
     <ClInclude Include="utility\ObjLoader.h" />
     <ClInclude Include="utility\Player.h" />
-    <ClInclude Include="utility\World.h" />
     <ClInclude Include="graphics\CameraNode.h" />
     <ClInclude Include="utility\MoveEvent.h" />
     <ClInclude Include="utility\System.h" />
@@ -52,6 +51,7 @@
     <ClInclude Include="utility\IdGenerator.h" />
     <ClInclude Include="utility\GameObject.h" />
     <ClInclude Include="utility\BlobModel.h" />
+    <ClInclude Include="utility\GameState.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Network\Endianness.inl" />

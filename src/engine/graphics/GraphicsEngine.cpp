@@ -4,7 +4,7 @@
 
 #include "..\utility\InputHandler.h"
 
-#include "..\utility\ObjectDB.h"
+//#include "..\utility\ObjectDB.h"
 #include "..\graphics\Cube.h"
 #include "..\graphics\Geometry.h"
 #include "..\utility\System.h"
@@ -294,24 +294,21 @@ void GraphicsEngine::ScaleDown()
 		m_player->getMatrix() = glm::scale(m_player->getMatrix(), glm::vec3(0.8, 0.8, 0.8));
 }
 
-void GraphicsEngine::Login(ObjectId playerId) {
-	ObjectDB & db = ObjectDB::getInstance(); //??
-	GameObject* player = new GameObject();
-
-	//player->orientation.r = 500.f;
-	std::cout << "logging in id " << playerId << std::endl;
-	db.add(playerId, player);
+void GraphicsEngine::Login(GameObject* player) {
+	//ObjectDB & db = ObjectDB::getInstance(); //??
+	//GameObject* player = new GameObject();
+	//std::cout << "logging in id " << playerId << std::endl;
+	//db.add(playerId, player);
 	player->node = m_player;
 }
 
-void GraphicsEngine::UpdatePlayer(deque<Packet> & data) {
+void GraphicsEngine::UpdatePlayer(deque<Packet> & data, GameState & gstate) {
 	if (data.size() <= 0) {
 		return;
 	}
 
 	ObjectId playerId;
 	GameObject* player = nullptr;
-	ObjectDB & objects = ObjectDB::getInstance();
 
 	for (auto packet = data.begin(); packet != data.end(); ++packet) {
 		if (packet->size() <= 0) {
@@ -320,13 +317,12 @@ void GraphicsEngine::UpdatePlayer(deque<Packet> & data) {
 
 		playerId = packet->readUInt();
 
-		player = objects.get(playerId);
+		player = gstate.map.get(playerId);
 
 
 		if (!player) {
 			player = new GameObject();
-			//player->orientation.r = 500.f;
-			player = objects.add(playerId, player); 
+			player = gstate.map.add(playerId, player); 
 			Renderable* playerModel = new Geometry("../../media/ob.obj");
 			Geode* playerGeode = new Geode();
 			playerGeode->setRenderable(playerModel);

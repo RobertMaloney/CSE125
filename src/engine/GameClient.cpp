@@ -25,7 +25,16 @@ void GameClient::run() {
 
 	connection->setNonBlocking(false);
 	connection->receive(p);
-	GraphicsEngine::Login(p.readUInt());
+
+	ObjectId playerId = p.readUInt();
+    GameObject* player = new Player();
+	std::cout << "logging in id " << playerId << std::endl;
+	player = gstate.map.add(playerId, player);
+
+
+	GraphicsEngine::Login(player);//TODO remove node, remove Login..
+
+
 	connection->setNonBlocking(true);
 
 	while (!GraphicsEngine::Closing()) {
@@ -34,7 +43,7 @@ void GameClient::run() {
 		if (DEBUG) {	
 			this->sendEvents(InputHandler::input);		
 			this->receiveUpdates(updates);
-			GraphicsEngine::UpdatePlayer(updates);
+			GraphicsEngine::UpdatePlayer(updates, gstate);
 			updates.clear();
 		}
 	}
@@ -55,6 +64,7 @@ void GameClient::initialize() {
     }
     connection->setNoDelay(true);
     connection->setNonBlocking(true);
+	gstate.init();
 }
 
 

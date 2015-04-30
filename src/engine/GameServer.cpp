@@ -31,6 +31,8 @@ void GameServer::initialize(int maxConns) {
 	this->listener->listen(maxConns);
 	this->listener->setNonBlocking(true);
 	maxConnections = maxConns;
+
+	gstate.init();
 }
 
 
@@ -54,7 +56,7 @@ void GameServer::acceptWaitingClient() {
 		return;
 	}
 	ObjectId playerId = idGen.getNextId();
-	GameObject* player = ObjectDB::getInstance().add(playerId, new GameObject());
+	GameObject* player = gstate.addPlayer(playerId, new Player());// ObjectDB::getInstance().add(playerId, new GameObject());
 	if (!player){
 		//throw exception (get NULL => not added)
 	}
@@ -72,7 +74,8 @@ void GameServer::acceptWaitingClient() {
 
 void GameServer::tick() {
 	deque<Packet> updates;
-	ObjectDB::getInstance().getObjectState(updates);
+	//ObjectDB::getInstance().getObjectState(updates);
+	gstate.map.getObjectState(updates);
 
 	for (auto it = clients->begin(); it != clients->end(); ) {
 		SocketError err = it->first->send(updates);
