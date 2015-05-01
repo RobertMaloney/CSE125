@@ -44,7 +44,7 @@ public:
     void tick();
     void receiveAndUpdate();
 
-	IdGenerator idGen;
+	IdGenerator * idGen;
 	GameState gstate;
 
 private:

@@ -16,9 +16,8 @@ protected:
 	int numOfPlayers;
 
 public:
-	ObjectDB map;
+	ObjectDB * map;
 	vector<Player*> players;
-	
 
 	void init();
 

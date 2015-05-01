@@ -29,7 +29,8 @@ void GameClient::run() {
 	ObjectId playerId = p.readUInt();
     GameObject* player = new Player();
 	std::cout << "logging in id " << playerId << std::endl;
-	player = gstate.map.add(playerId, player);
+	//player = gstate.map->add(playerId, player);
+	player = ObjectDB::getInstance().add(playerId, player);
 
 	GraphicsEngine::bindPlayerNode(player);
 
@@ -67,14 +68,17 @@ void GameClient::updateGameState(deque<Packet> & data) {
 		}
 
 		objId = packet->readUInt();
-		obj = gstate.map.get(objId);
+		obj = gstate.map->get(objId);
+
+		//std::cout << "g " << gstate.map->getSize() << std::endl;
+		//std::cout << "o " << ObjectDB::getInstance().getSize() << std::endl;
 
 		//Object is new 
 		if (!obj) {
 			obj = new GameObject();
-			obj = gstate.map.add(objId, obj);
+			obj = gstate.map->add(objId, obj);
 
-
+			std::cout << "new " << std::endl;
 			//addNode and add object-node mapping
 			GraphicsEngine::insertObject(obj->getId(), GraphicsEngine::addNode("../../media/ob.obj"));
 		}

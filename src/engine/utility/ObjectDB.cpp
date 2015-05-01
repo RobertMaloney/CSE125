@@ -65,6 +65,9 @@ void ObjectDB::getObjectState(deque<Packet> & state) {
 	}
 }
 
+int ObjectDB::getSize(){
+	return objects.size();
+}
 
 ObjectDB & ObjectDB::getInstance() {
 	static ObjectDB db;
