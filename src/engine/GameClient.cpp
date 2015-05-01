@@ -19,13 +19,24 @@ void GameClient::run() {
 	bool loggedIn = false;
     deque<Packet> updates;
 
-	GraphicsEngine::Initialize();
 	this->initialize();
+
 	Packet p;
 
 	connection->setNonBlocking(false);
 	connection->receive(p);
-	GraphicsEngine::Login(p.readUInt());
+
+	ObjectId playerId = p.readUInt();
+    GameObject* player = new Player();
+	std::cout << "logging in id " << playerId << std::endl;
+	player = gstate.map->add(playerId, player);
+	//player = ObjectDB::getInstance().add(playerId, player);
+
+	GraphicsEngine::Initialize(playerId);
+	
+	GraphicsEngine::bindPlayerNode(player);
+
+
 	connection->setNonBlocking(true);
 
 	while (!GraphicsEngine::Closing()) {
@@ -34,13 +45,52 @@ void GameClient::run() {
 		if (DEBUG) {	
 			this->sendEvents(InputHandler::input);		
 			this->receiveUpdates(updates);
-			GraphicsEngine::UpdatePlayer(updates);
+			this->updateGameState(updates);
+			//GraphicsEngine::UpdatePlayer(updates, gstate);
 			updates.clear();
 		}
 	}
 
 	GraphicsEngine::Destroy();
 	system("pause");
+}
+
+
+void GameClient::updateGameState(deque<Packet> & data) {
+	if (data.size() <= 0) {
+		return;
+	}
+
+	ObjectId objId;
+	GameObject* obj = nullptr;
+
+	for (auto packet = data.begin(); packet != data.end(); ++packet) {
+		if (packet->size() <= 0) {
+			continue;
+		}
+
+		objId = packet->readUInt();
+		obj = gstate.map->get(objId);
+
+		//std::cout << "g " << gstate.map->getSize() << std::endl;
+		//std::cout << "o " << ObjectDB::getInstance().getSize() << std::endl;
+
+		//Object is new 
+		if (!obj) {
+			obj = new GameObject();
+			obj = gstate.map->add(objId, obj);
+
+			//std::cout << "new " << std::endl;
+			//addNode and add object-node mapping
+			GraphicsEngine::insertObject(obj->getId(), GraphicsEngine::addNode(GraphicsEngine::selectModel(objId)));
+		}
+
+		//Update the object in game state
+		obj->deserialize(*packet);//update obj (pos) in game state
+
+		//Update the object in node (GraphicsEngine)
+		GraphicsEngine::updateObject(obj->getId(), obj->getLoc()); //update obj (pos) in NODE 
+	}
 }
 
 
@@ -55,6 +105,7 @@ void GameClient::initialize() {
     }
     connection->setNoDelay(true);
     connection->setNonBlocking(true);
+	gstate.init();
 }
 
 

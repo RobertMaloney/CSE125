@@ -22,6 +22,8 @@
 #include "Renderable.h"
 
 #include "..\network\Packet.h"
+#include "..\utility\GameObject.h"
+#include "..\utility\GameState.h"
 
 typedef unsigned int ObjectId;
 
@@ -31,7 +33,7 @@ typedef void (*KeyCallback) (int,int,int);
 
 class GraphicsEngine {
 public:
-	static void Initialize();
+	static void Initialize(ObjectId playerId);
 	static bool Closing();
 	static void CloseGame();
 	static void DrawAndPoll();
@@ -44,9 +46,15 @@ public:
 	static void ScaleUp();
 	static void ScaleDown();
 	static KeyCallback GetKeyCallback();
-	static void UpdatePlayer(deque<Packet> &);
-   static int getKeyState(int);
-   static void Login(ObjectId playerId);
+	static void UpdatePlayer(deque<Packet> &, GameState &);
+    static int getKeyState(int);
+
+    static void bindPlayerNode(GameObject* player);
+	static void updateObject(ObjectId objId, glm::vec4 & v);
+	static void insertObject(ObjectId objId, MatrixNode*);
+
+	static MatrixNode* addNode(Renderable*);
+	static Renderable* selectModel(ObjectId playerId);
 
 private:
 	static glm::mat4				m_view, m_projection;
@@ -59,6 +67,8 @@ private:
 	static MatrixNode				*m_player;
 	static CameraNode				*m_mainCamera;
 	static MatrixNode				*m_scene;
+
+	static unordered_map<ObjectId, MatrixNode*> objNodeMap;
 	
 	static void renderScene(Node*, glm::mat4*);
 };

@@ -12,7 +12,7 @@ GameObject::GameObject(float radius, float theta, float azimuth, float direction
 
 GameObject::~GameObject() {
 	// have to remove from tree
-	delete node;
+	//delete node;
 }
 
 

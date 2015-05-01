@@ -1,17 +1,23 @@
 #include "GameState.h"
 
-GameState::GameState(){
-	world = new World();
-	numOfPlayers = 0;
-}
+
+//ObjectDB & map = ObjectDB::getInstance();
 
 void GameState::init(){
-	world->init();
+	//world = new World();
+	numOfPlayers = 0;
+	//world->init();
+	map = &(ObjectDB::getInstance());
 }
 
-void GameState::addPlayer(BlobModel bm) {
-	Player* ptr = new Player(bm);
-	players.push_back(ptr);
-	world->insert(*ptr);
+GameObject* GameState::addPlayer(ObjectId theId, Player* p) {
+	GameObject* o = map->add(theId, p);
+	players.push_back(p);
 	numOfPlayers++;
+	return o;
+}
+
+GameState & GameState::getInstance(){
+	static GameState gstate;
+	return gstate;
 }

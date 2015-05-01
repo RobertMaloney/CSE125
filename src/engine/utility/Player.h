@@ -10,7 +10,7 @@
 using namespace std;
 
 
-class Player: public GameObject {
+class Player : public GameObject {
 	//TODO put it outside
 protected:
 
@@ -24,7 +24,7 @@ protected:
 public:
 
 	Player() :Player(OB_TYPE) {};
-	Player(BlobModel thebm) : Player(thebm, 0, 0, 0, 0) {};
+	Player(BlobModel thebm) : Player(thebm, 505, 0, 0, 0) {};
 	Player(BlobModel, float, float, float, float);
 
     ~Player();

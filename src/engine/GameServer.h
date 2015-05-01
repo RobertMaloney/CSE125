@@ -16,6 +16,7 @@
 #include "network\TCPListener.h"
 #include "utility\ObjectDB.h"
 #include "utility\IdGenerator.h"
+#include "utility\GameState.h"
 
 using std::to_string;
 using std::this_thread::sleep_for;
@@ -43,7 +44,8 @@ public:
     void tick();
     void receiveAndUpdate();
 
-	IdGenerator idGen;
+	IdGenerator * idGen;
+	GameState gstate;
 
 private:
 
