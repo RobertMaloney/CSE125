@@ -55,6 +55,9 @@ void GameServer::acceptWaitingClient() {
 	if (!connection) {
 		return;
 	}
+
+	//Note: Server generates id for client/player, and addes the player to gamestate
+	//Note: default position foor player is 505,0,0,0
 	ObjectId playerId = idGen->getNextId();
 	GameObject* player = gstate.addPlayer(playerId, new Player());// ObjectDB::getInstance().add(playerId, new GameObject());
 	if (!player){

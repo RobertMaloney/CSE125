@@ -145,10 +145,10 @@ void GraphicsEngine::Initialize(ObjectId playerId) {
 	m_mainCamera = new CameraNode();
 	m_mainCamera->setViewMatrix(camview);
 
-	// PLAYER
+	// PLAYER  (Player node is created by default)
 	Renderable * model = GraphicsEngine::selectModel(playerId);
-	m_player = GraphicsEngine::addNode(model);//TODO
-	m_player->addChild(m_mainCamera);//TODO
+	m_player = GraphicsEngine::addNode(model);
+	m_player->addChild(m_mainCamera);
 
 	// view and projection matrix locations in the shader program
 	m_uniView = glGetUniformLocation(m_shaderProgram, "view");
@@ -200,9 +200,8 @@ void GraphicsEngine::DrawAndPoll() {
 		1.f, 1000.f);
 
 	glm::mat4 view = m_mainCamera->getFlatViewMatrix();
-	//cout << glm::to_string(view) << endl;
-	//cout << glm::to_string(m_view) << endl;
-	//system("pause");
+
+
 	glUniformMatrix4fv(m_uniView, 1, GL_FALSE, glm::value_ptr(view));
 	glUniformMatrix4fv(m_uniProjection, 1, GL_FALSE, glm::value_ptr(m_projection));
 
@@ -219,11 +218,7 @@ void GraphicsEngine::DrawAndPoll() {
 	glm::vec3 dirLightVec(-1, -1, -1);
 	glUniform3fv(dirLight, 1, glm::value_ptr(dirLightVec));
 
-	// render objects
-	/*int renderableCount = m_objects.size();
-	for (int i = 0; i < renderableCount; ++i) {
-	m_objects[i]->getMatrix() = glm::rotate(m_objects[i]->getMatrix(), glm::radians(1.f), glm::vec3(0, 0, 1.f));
-	}*/
+
 
 	glm::mat4 identity;
 	renderScene(m_scene, &identity);
@@ -296,47 +291,12 @@ void GraphicsEngine::ScaleDown()
 }
 
 
-
-/*void GraphicsEngine::UpdatePlayer(deque<Packet> & data, GameState & gstate) {
-	if (data.size() <= 0) {
-		return;
-	}
-
-	ObjectId playerId;
-	GameObject* player = nullptr;
-
-	for (auto packet = data.begin(); packet != data.end(); ++packet) {
-		if (packet->size() <= 0) {
-			continue;
-		}
-
-		playerId = packet->readUInt();
-
-		player = gstate.map.get(playerId);
-
-
-		if (!player) {
-			player = new GameObject();
-			player = gstate.map.add(playerId, player); 
-			Renderable* playerModel = new Geometry("../../media/ob.obj");
-			Geode* playerGeode = new Geode();
-			playerGeode->setRenderable(playerModel);
-			player->node = new MatrixNode();
-			player->node->addChild(playerGeode);
-			m_scene->addChild(player->node);
-		}
-		player->deserialize(*packet);
-
-		//player->node->getMatrix() = MatrixNode::sphere2xyz(player->getLoc());
-		GraphicsEngine::updateObject(player->getId(), player->getLoc());
-	}
-}*/
-
 void GraphicsEngine::bindPlayerNode(GameObject* player) {
-	///player->node = m_player;
-    GraphicsEngine::insertObject(player->getId(), m_player);
+    GraphicsEngine::insertObject(player->getId(), m_player);// (player->node = m_player;)
 }
 
+
+//Add node into scene graph using a model
 MatrixNode* GraphicsEngine::addNode(Renderable* objModel){
 	//Renderable* objModel = new Geometry(modelPath);// "../../media/pb.obj");
 	Geode* objGeode = new Geode();
@@ -347,6 +307,7 @@ MatrixNode* GraphicsEngine::addNode(Renderable* objModel){
 	return m_node;
 }
 
+// Select blob model based on playerId, will be changed later
 Renderable * GraphicsEngine::selectModel(ObjectId playerId){
 	Renderable* newModel;
 	switch (playerId % 3){
@@ -369,11 +330,12 @@ Renderable * GraphicsEngine::selectModel(ObjectId playerId){
 	return newModel;
 }
 
-
+// Translate from vec4 postion to matrix in the node of scene graph??
 void GraphicsEngine::updateObject(ObjectId objId, glm::vec4 & v) {
 	objNodeMap[objId]->getMatrix() = MatrixNode::sphere2xyz(v);
 }
 
+//A mapping from ObjectId to node in scene graph
 void GraphicsEngine::insertObject(ObjectId objId, MatrixNode* n) {
 
 	auto found = objNodeMap.find(objId);
@@ -384,24 +346,3 @@ void GraphicsEngine::insertObject(ObjectId objId, MatrixNode* n) {
 		//TODO exception duplicate node
 	}
 }
-
-
-/*
-void GraphicsEngine::UpdatePlayer(deque<Packet> & data) {
-if (data.size() > 0 && data[0].size() > 0) {
-float * matPointer = glm::value_ptr(m_player->getMatrix());
-for (auto it = data.begin(); it != data.end(); ++it) {
-for(int i = 0; i < 16; ++i) {
-matPointer[i] = it->readFloat();
-}
-}
-}
-}*/
-/*
-Renderable* playerModel = new Geometry("../../media/pb.obj");
-Geode* playerGeode = new Geode();
-playerGeode->setRenderable(playerModel);
-m_player = new MatrixNode();
-m_player->addChild(playerGeode);
-m_scene->addChild(m_player);
-*/
