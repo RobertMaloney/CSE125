@@ -17,11 +17,17 @@ protected:
 	//ObjectId pid;
 	int speed;
 	int power;
-	//static int numOfPlayers;
+	bool moves[4];
 
 	BlobModel bm;
 
 public:
+	enum {
+		UP = 0,
+		RIGHT,
+		DOWN,
+		LEFT
+	};
 
 	Player() :Player(OB_TYPE) {};
 	Player(BlobModel thebm) : Player(thebm, 505, 0, 0, 0) {};
@@ -38,6 +44,9 @@ public:
 
 	void setSpeed(int newSpeed);
 	void setPower(int newPower);
+
+	bool getMoving(int);
+	void setMoving(int, bool);
 };
 
 #endif
