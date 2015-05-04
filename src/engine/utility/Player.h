@@ -3,7 +3,7 @@
 
 #include <string>
 //#include "Location.h"
-#include "BlobModel.h"
+#include "ResourceModel.h"
 #include "GameObject.h"
 
 
@@ -20,13 +20,11 @@ protected:
    int score;
 	//static int numOfPlayers;
 
-	BlobModel bm;
-
 public:
 
 	Player() :Player(OB_TYPE) {};
-	Player(BlobModel thebm) : Player(thebm, 0, 0, 0, 0) {};
-	Player(BlobModel, float, float, float, float);
+	Player(ResourceModel thebm) : Player(thebm, 0, 0, 0, 0) {};
+	Player(ResourceModel, float, float, float, float);
 
     ~Player();
 

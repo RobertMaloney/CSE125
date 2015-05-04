@@ -4,7 +4,7 @@
 //ObjectId numOfPlayers = 0;
 
 //TODO Config file
-Player::Player(BlobModel thebm, float radius, float theta, float azimuth, float direction) : GameObject(radius, theta, azimuth, direction) {
+Player::Player(ResourceModel thebm, float radius, float theta, float azimuth, float direction) : GameObject(radius, theta, azimuth, direction) {
 	//this->numOfPlayers++;
 	//this->pid = numOfPlayers;
 	this->speed = 0;
@@ -12,7 +12,7 @@ Player::Player(BlobModel thebm, float radius, float theta, float azimuth, float 
    this->score = 0;
 	//this->loc = Location(nx, ny, nz);
 	this->loc = glm::vec4(radius, theta, azimuth, direction);
-	this->bm = thebm;
+	this->rm = thebm;
 }
 
 /*glm::vec4 & Player::getOrientation() {

@@ -22,6 +22,5 @@ public:
 	void remove(ObjectId id);
 	void replace(ObjectId id, GameObject * go);
 	void get(ObjectId id);
-
 };
 #endif

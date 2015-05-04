@@ -11,7 +11,7 @@
 #include <gtc\type_ptr.hpp>
 //#include <gtx\string_cast.hpp>
 #include "Serializable.h"
-#include "ResourceMap.h"
+#include "ResourceModel.h"
 #include "../graphics/GraphicsEngine.h"
 
 

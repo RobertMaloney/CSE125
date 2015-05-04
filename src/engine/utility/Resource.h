@@ -2,6 +2,7 @@
 #define RESOURCE_H_
 
 #include "ResourceModel.h"
+#include "GameObject.h"
 
 class Resource : public GameObject {
 protected:   
@@ -11,7 +12,8 @@ protected:
 
 public:
    Resource() : Resource(TREE, 5) {};
-   Resource(ResourceModel rm, int points);
+   Resource(ResourceModel rm, int points) : Resource(rm, points, 505, 0, 0, 0){};
+   Resource(ResourceModel rm, int points, float radius, float theta, float azimuth, float direction);
 
    ~Resource();
    

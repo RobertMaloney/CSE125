@@ -1,5 +1,5 @@
-#ifndef RESOURCE_MAP_H
-#define RESOURCE_MAP_H
+#ifndef RESOURCE_MODEL_H
+#define RESOURCE_MODEL_H
 
 #include <map>
 #include <string>

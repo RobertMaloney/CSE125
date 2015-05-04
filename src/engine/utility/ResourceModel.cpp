@@ -1,4 +1,4 @@
-#include "ResourceMap.h"
+#include "ResourceModel.h"
 #include <string>
 
 std::map<ResourceModel, char *> map = {
