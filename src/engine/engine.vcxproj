@@ -114,7 +114,6 @@
     <ClCompile Include="utility\GameState.cpp" />
     <ClCompile Include="utility\IdGenerator.cpp" />
     <ClCompile Include="utility\InputHandler.cpp" />
-    <ClCompile Include="utility\Location.cpp" />
     <ClCompile Include="utility\ObjectDB.cpp" />
     <ClCompile Include="Utility\ObjLoader.cpp" />
     <ClCompile Include="utility\Player.cpp" />
@@ -144,7 +143,6 @@
     <ClInclude Include="utility\GameState.h" />
     <ClInclude Include="utility\IdGenerator.h" />
     <ClInclude Include="utility\InputHandler.h" />
-    <ClInclude Include="utility\Location.h" />
     <ClInclude Include="utility\MoveEvent.h" />
     <ClInclude Include="utility\ObjectDB.h" />
     <ClInclude Include="Utility\ObjLoader.h" />
