@@ -4,7 +4,7 @@
 
 #include "..\utility\InputHandler.h"
 
-#include "..\utility\ObjectDB.h"
+//#include "..\utility\ObjectDB.h"
 #include "..\graphics\Cube.h"
 #include "..\graphics\Geometry.h"
 #include "..\utility\System.h"
@@ -29,6 +29,7 @@ MatrixNode			*GraphicsEngine::m_player = NULL,
 *GraphicsEngine::m_scene = NULL;
 
 CameraNode			*GraphicsEngine::m_mainCamera = NULL;
+unordered_map<ObjectId, MatrixNode*> GraphicsEngine::objNodeMap;
 
 string version = "#version 150\n";
 
@@ -46,7 +47,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 * Description: This function initializes the graphics pipeline, compiles the
 * shaders, creates the window, and sets up the view and projection matrices
 */
-void GraphicsEngine::Initialize() {
+void GraphicsEngine::Initialize(ObjectId playerId) {
 	if (!glfwInit())
 		return;
 
@@ -134,13 +135,7 @@ void GraphicsEngine::Initialize() {
 	worldGeode->setRenderable(worldModel);
 	m_scene->addChild(worldGeode);
 
-	// PLAYER
-	Renderable* playerModel = new Geometry("../../media/gb.obj");
-	Geode* playerGeode = new Geode();
-	playerGeode->setRenderable(playerModel);
-	m_player = new MatrixNode();
-	m_player->addChild(playerGeode);
-	m_scene->addChild(m_player);
+
 
 	// CAMERA
 	glm::mat4 camview = glm::lookAt(
@@ -149,6 +144,10 @@ void GraphicsEngine::Initialize() {
 		glm::vec3(0.f, 0.f, 1.f));
 	m_mainCamera = new CameraNode();
 	m_mainCamera->setViewMatrix(camview);
+
+	// PLAYER  (Player node is created by default)
+	Renderable * model = GraphicsEngine::selectModel(playerId);
+	m_player = GraphicsEngine::addNode(model);
 	m_player->addChild(m_mainCamera);
 
 	// view and projection matrix locations in the shader program
@@ -166,6 +165,8 @@ void GraphicsEngine::Initialize() {
 
 	m_initialized = true;
 }
+
+
 
 /**
 * GraphicsEngine::Closing()
@@ -199,9 +200,8 @@ void GraphicsEngine::DrawAndPoll() {
 		1.f, 1000.f);
 
 	glm::mat4 view = m_mainCamera->getFlatViewMatrix();
-	//cout << glm::to_string(view) << endl;
-	//cout << glm::to_string(m_view) << endl;
-	//system("pause");
+
+
 	glUniformMatrix4fv(m_uniView, 1, GL_FALSE, glm::value_ptr(view));
 	glUniformMatrix4fv(m_uniProjection, 1, GL_FALSE, glm::value_ptr(m_projection));
 
@@ -218,11 +218,7 @@ void GraphicsEngine::DrawAndPoll() {
 	glm::vec3 dirLightVec(-1, -1, -1);
 	glUniform3fv(dirLight, 1, glm::value_ptr(dirLightVec));
 
-	// render objects
-	/*int renderableCount = m_objects.size();
-	for (int i = 0; i < renderableCount; ++i) {
-	m_objects[i]->getMatrix() = glm::rotate(m_objects[i]->getMatrix(), glm::radians(1.f), glm::vec3(0, 0, 1.f));
-	}*/
+
 
 	glm::mat4 identity;
 	renderScene(m_scene, &identity);
@@ -294,67 +290,59 @@ void GraphicsEngine::ScaleDown()
 		m_player->getMatrix() = glm::scale(m_player->getMatrix(), glm::vec3(0.8, 0.8, 0.8));
 }
 
-void GraphicsEngine::Login(ObjectId playerId) {
-	ObjectDB & db = ObjectDB::getInstance(); //??
-	GameObject* player = new GameObject();
 
-	//player->orientation.r = 500.f;
-	std::cout << "logging in id " << playerId << std::endl;
-	db.add(playerId, player);
-	player->node = m_player;
+void GraphicsEngine::bindPlayerNode(GameObject* player) {
+    GraphicsEngine::insertObject(player->getId(), m_player);// (player->node = m_player;)
 }
 
-void GraphicsEngine::UpdatePlayer(deque<Packet> & data) {
-	if (data.size() <= 0) {
-		return;
-	}
 
-	ObjectId playerId;
-	GameObject* player = nullptr;
-	ObjectDB & objects = ObjectDB::getInstance();
-
-	for (auto packet = data.begin(); packet != data.end(); ++packet) {
-		if (packet->size() <= 0) {
-			continue;
+//Add node into scene graph using a model
+MatrixNode* GraphicsEngine::addNode(Renderable* objModel){
+	//Renderable* objModel = new Geometry(modelPath);// "../../media/pb.obj");
+	Geode* objGeode = new Geode();
+	objGeode->setRenderable(objModel);
+	MatrixNode * m_node = new MatrixNode();
+	m_node->addChild(objGeode);
+	m_scene->addChild(m_node);
+	return m_node;
 		}
 
-		playerId = packet->readUInt();
-
-		player = objects.get(playerId);
-
-
-		if (!player) {
-			player = new GameObject();
-			//player->orientation.r = 500.f;
-			player = objects.add(playerId, player); 
-			Renderable* playerModel = new Geometry("../../media/ob.obj");
-			Geode* playerGeode = new Geode();
-			playerGeode->setRenderable(playerModel);
-			player->node = new MatrixNode();
-			player->node->addChild(playerGeode);
-			m_scene->addChild(player->node);
+// Select blob model based on playerId, will be changed later
+Renderable * GraphicsEngine::selectModel(ObjectId playerId){
+	Renderable* newModel;
+	switch (playerId % 3){
+	case 0:
+		newModel = new Geometry("../../media/bb.obj");
+		break;
+	case 1:
+		//newModel = new Geometry("../../media/gb.obj"); //gb model doesnt work
+		//break;
+		//case 2:
+		newModel = new Geometry("../../media/ob.obj");
+		break;
+	case 2:
+		newModel = new Geometry("../../media/pb.obj");
+		break;
+	default:
+		newModel = new Geometry("../../media/bb.obj");
+		break;
 		}
-		player->deserialize(*packet);
-		player->node->getMatrix() = MatrixNode::sphere2xyz(player->getLoc());
+	return newModel;
 	}
+
+// Translate from vec4 postion to matrix in the node of scene graph??
+void GraphicsEngine::updateObject(ObjectId objId, glm::vec4 & v) {
+	objNodeMap[objId]->getMatrix() = MatrixNode::sphere2xyz(v);
 }
 
-/*
-void GraphicsEngine::UpdatePlayer(deque<Packet> & data) {
-if (data.size() > 0 && data[0].size() > 0) {
-float * matPointer = glm::value_ptr(m_player->getMatrix());
-for (auto it = data.begin(); it != data.end(); ++it) {
-for(int i = 0; i < 16; ++i) {
-matPointer[i] = it->readFloat();
+//A mapping from ObjectId to node in scene graph
+void GraphicsEngine::insertObject(ObjectId objId, MatrixNode* n) {
+
+	auto found = objNodeMap.find(objId);
+	if (found == objNodeMap.end()) {
+		objNodeMap.insert(make_pair(objId, n));
+}
+	else{
+		//TODO exception duplicate node
 }
 }
-}
-}*/
-/*
-Renderable* playerModel = new Geometry("../../media/pb.obj");
-Geode* playerGeode = new Geode();
-playerGeode->setRenderable(playerModel);
-m_player = new MatrixNode();
-m_player->addChild(playerGeode);
-m_scene->addChild(m_player);
-*/

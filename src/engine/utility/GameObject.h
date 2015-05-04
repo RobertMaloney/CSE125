@@ -11,8 +11,10 @@
 #include <gtc\type_ptr.hpp>
 //#include <gtx\string_cast.hpp>
 #include "Serializable.h"
+//#include "../graphics/GraphicsEngine.h"
+#include "IdGenerator.h"
+//#include "..\graphics\MatrixNode.h"
 #include "ResourceModel.h"
-#include "../graphics/GraphicsEngine.h"
 
 
 //using std::pair;
@@ -41,13 +43,13 @@ protected:
 
 public:
 
-	MatrixNode* node;//
+	//MatrixNode* node;//
 
 	GameObject() :GameObject(505, 0, 0, 0) {};
 	GameObject(float radius, float theta, float azimuth, float direction);
 	GameObject(const vec4 & loc) :GameObject(loc.r, loc.g, loc.b, loc.a) {};
 
-	virtual ~GameObject();
+	~GameObject();//virtual?
 
 	void serialize(Packet & p);
 	void deserialize(Packet & p);

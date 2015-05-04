@@ -19,13 +19,28 @@ void GameClient::run() {
 	bool loggedIn = false;
     deque<Packet> updates;
 
-	GraphicsEngine::Initialize();
 	this->initialize();
-	Packet p;
 
+
+	//Note: Client receives id from server, creates a copy of player (same id) and adds it into the game state of client
+	//Note: TODO: current position of player is default 505,0,0,0, need to get real position from server
+	Packet p;
 	connection->setNonBlocking(false);
 	connection->receive(p);
-	GraphicsEngine::Login(p.readUInt());
+
+	ObjectId playerId = p.readUInt();
+    GameObject* player = new Player();
+	std::cout << "logging in id " << playerId << std::endl;
+	player = gstate.map->add(playerId, player);
+	//player = ObjectDB::getInstance().add(playerId, player);
+
+	//Initializes GraphicsEngine for this client with playerId (i.e. ClientID)
+	GraphicsEngine::Initialize(playerId);
+
+	//Binds player game object with the player node in Graphics engine
+	GraphicsEngine::bindPlayerNode(player);
+
+
 	connection->setNonBlocking(true);
 
 	while (!GraphicsEngine::Closing()) {
@@ -34,13 +49,52 @@ void GameClient::run() {
 		if (DEBUG) {	
 			this->sendEvents(InputHandler::input);		
 			this->receiveUpdates(updates);
-			GraphicsEngine::UpdatePlayer(updates);
+
+			//Note: currently, it only updates game objects. Each package only includes the id and position of a game object.
+			//Note: This method reads updates, translates update, updates game states (in client) and scene graph (in GraphicsEngine)
+			this->updateGameState(updates);
+			//GraphicsEngine::UpdatePlayer(updates, gstate);
 			updates.clear();
 		}
 	}
 
 	GraphicsEngine::Destroy();
 	system("pause");
+}
+
+
+void GameClient::updateGameState(deque<Packet> & data) {
+	if (data.size() <= 0) {
+		return;
+	}
+
+	ObjectId objId;
+	GameObject* obj = nullptr;
+
+	//Note: Loop through all packets(gameobjects for now), identify which object it relates to or if it is a new object
+	for (auto packet = data.begin(); packet != data.end(); ++packet) {
+		if (packet->size() <= 0) {
+			continue;
+		}
+
+		objId = packet->readUInt();
+		obj = gstate.map->get(objId);
+
+		//If this game object is new 
+		if (!obj) {
+			obj = new GameObject();
+			obj = gstate.map->add(objId, obj); // Adds to game state in client
+
+			//Add node in scene graph (in GraphicsEngine) and add object-node mapping (in GraphicsEngine)
+			GraphicsEngine::insertObject(obj->getId(), GraphicsEngine::addNode(GraphicsEngine::selectModel(objId)));
+		}
+
+		//Update the object in game state
+		obj->deserialize(*packet);//For now it only updates obj (pos) in game state
+
+		//Update the object in node (in GraphicsEngine)
+		GraphicsEngine::updateObject(obj->getId(), obj->getLoc()); 
+	}
 }
 
 
@@ -55,6 +109,7 @@ void GameClient::initialize() {
     }
     connection->setNoDelay(true);
     connection->setNonBlocking(true);
+	gstate.init();
 }
 
 

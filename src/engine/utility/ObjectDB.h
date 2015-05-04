@@ -1,6 +1,7 @@
 #ifndef OBJECTDB_H
 #define OBJECTDB_H
 
+//#include "IdGenerator.h"
 #include <deque>
 #include <unordered_map>
 #include <glm.hpp>
@@ -8,8 +9,9 @@
 #include <gtc\type_ptr.hpp>
 #include <gtx\string_cast.hpp>
 #include "Serializable.h"
-#include "../graphics/GraphicsEngine.h"
+//#include "../graphics/GraphicsEngine.h"
 #include "GameObject.h"
+
 
 using glm::mat4;
 using glm::vec3;
@@ -35,6 +37,7 @@ public:
 	bool remove(ObjectId objectId);
 	GameObject* get(ObjectId objectId);
 
+	int getSize();
 	void getObjectState(deque<Packet> & state);
 
 	static ObjectDB & getInstance();

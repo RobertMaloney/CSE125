@@ -9,6 +9,10 @@
 #include "utility\InputHandler.h"
 #include "graphics\GraphicsEngine.h"
 #include "network\Packet.h"
+#include "utility\Player.h"
+#include "utility\GameState.h"
+#include "utility\IdGenerator.h"
+
 
 
 using std::this_thread::sleep_for;
@@ -19,6 +23,7 @@ using std::cout;
 class GameClient {
 
 public:
+	GameState gstate;
 
     GameClient();
     ~GameClient();
@@ -28,6 +33,7 @@ public:
 
     void receiveUpdates(deque<Packet> & updates);
     void sendEvents(deque<Packet> & events);
+	void updateGameState(deque<Packet> & updates);
 
 private:
 
