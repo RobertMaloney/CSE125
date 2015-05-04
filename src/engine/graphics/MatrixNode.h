@@ -54,7 +54,6 @@ public:
 			child->setParent(this);
 	}
 
-	// TODO add support for normal rotation
 	static glm::mat4 sphere2xyz(glm::vec4 & spherePos) {
 		// get position on world
 		glm::vec3 xyz(0, 0, spherePos.x);

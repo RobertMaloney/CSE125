@@ -12,6 +12,9 @@ Player::Player(BlobModel thebm, float radius, float theta, float azimuth, float 
 	//this->loc = Location(nx, ny, nz);
 	this->loc = glm::vec4(radius, theta, azimuth, direction);
 	this->bm = thebm;
+
+	for (int i = 0; i < 4; ++i)
+		this->moves[i] = false;
 }
 
 /*glm::vec4 & Player::getOrientation() {
@@ -37,4 +40,12 @@ void Player::setSpeed(int newSpeed) {
 
 void Player::setPower(int newPower) {
 	power = newPower;
+}
+
+bool Player::getMoving(int index) {
+	return moves[index];
+}
+
+void Player::setMoving(int index, bool b) {
+	moves[index] = b;
 }
