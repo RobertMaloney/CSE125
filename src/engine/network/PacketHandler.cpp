@@ -14,7 +14,7 @@ void forwardHandler(ObjectId id) {
     if (player != nullptr) {
         //player->location = glm::translate(player->location, vec3(0.f, -1.f, 0.f));
 		std::cout << "Player " << id << " moving forward\n";
-		player->getLoc().g -= 1.f;
+		player->getLoc().b += 1.f;
     }
 }
 
@@ -25,7 +25,7 @@ void backwardHandler(ObjectId id) {
     if (player != nullptr) {
         //player->location = glm::translate(player->location, vec3(0.f, 1.f, 0.f));
 		std::cout << "Player " << id << " moving back\n";
-		player->getLoc().g += 1.f;
+		player->getLoc().b -= 1.f;
     }
 }
 
@@ -36,7 +36,7 @@ void leftHandler(ObjectId id) {
     if (player != nullptr) {
         //player->location = glm::translate(player->location, vec3(1.f, 0.f, 0.f));
 		std::cout << "Player " << id << " moving left\n";
-		player->getLoc().b += 1.f;
+		player->getLoc().a += 1.f;
     }
 }
 
@@ -47,7 +47,7 @@ void rightHandler(ObjectId id) {
     if (player != nullptr) {
         //player->location = glm::translate(player->location, vec3(-1.f, 0.f, 0.f));
 		std::cout << "Player " << id << " moving right\n";
-		player->getLoc().b -= 1.f;
+		player->getLoc().a -= 1.f;
     }
 }
 
