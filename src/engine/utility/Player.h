@@ -17,6 +17,7 @@ protected:
 	//ObjectId pid;
 	int speed;
 	int power;
+   int score;
 	//static int numOfPlayers;
 
 	BlobModel bm;
@@ -31,6 +32,7 @@ public:
 
 	int getSpeed();
 	int getPower();
+   int getScore();
 
 	//ObjectId getPid();
 
@@ -38,6 +40,7 @@ public:
 
 	void setSpeed(int newSpeed);
 	void setPower(int newPower);
+   void setScore(int score);
 };
 
 #endif

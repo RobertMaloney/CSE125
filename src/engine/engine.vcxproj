@@ -118,6 +118,8 @@
     <ClCompile Include="utility\ObjectDB.cpp" />
     <ClCompile Include="Utility\ObjLoader.cpp" />
     <ClCompile Include="utility\Player.cpp" />
+    <ClCompile Include="utility\Resource.cpp" />
+    <ClCompile Include="utility\ResourceMap.cpp" />
     <ClCompile Include="utility\World.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -150,6 +152,8 @@
     <ClInclude Include="utility\ObjectDB.h" />
     <ClInclude Include="Utility\ObjLoader.h" />
     <ClInclude Include="utility\Player.h" />
+    <ClInclude Include="utility\Resource.h" />
+    <ClInclude Include="utility\ResourceMap.h" />
     <ClInclude Include="utility\Serializable.h" />
     <ClInclude Include="utility\System.h" />
     <ClInclude Include="utility\World.h" />

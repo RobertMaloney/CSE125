@@ -15,3 +15,7 @@ void GameState::addPlayer(BlobModel bm) {
 	world->insert(*ptr);
 	numOfPlayers++;
 }
+
+void GameState::addResource(ResourceModel rm) {
+   GameObject * gameObj = new GameObject();
+}

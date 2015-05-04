@@ -11,6 +11,7 @@
 #include <gtc\type_ptr.hpp>
 //#include <gtx\string_cast.hpp>
 #include "Serializable.h"
+#include "ResourceMap.h"
 #include "../graphics/GraphicsEngine.h"
 
 
@@ -34,7 +35,8 @@ protected:
 	//mat4 location;
 	vec4 loc;
 
-
+   // Model
+   ResourceModel rm;
 
 
 public:
@@ -59,12 +61,14 @@ public:
 
 	//Location getLoc();
 	vec4 & getLoc();
+   ResourceModel getModel();
 
 	//void setX(int newX);
 	//void setY(int newY);
 	//void setZ(int newZ);
 
 	void setLoc(vec4 & newLoc);
+   void setModel(ResourceModel model);
 
 };
 
