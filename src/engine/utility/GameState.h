@@ -26,8 +26,8 @@ public:
 
 	GameObject* addPlayer(ObjectId theId, Player* p);
 	static GameState & getInstance();
-   void addResource(ResourceModel rm);
-   void addResource(Resource * ptr);
+
+   GameObject* addResource(ObjectId theId, Resource * ptr);
 
    void generateResources(int num);
 };

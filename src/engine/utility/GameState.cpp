@@ -1,5 +1,5 @@
 #include "GameState.h"
-
+#include "IdGenerator.h"
 
 //ObjectDB & map = ObjectDB::getInstance();
 
@@ -22,13 +22,10 @@ GameState & GameState::getInstance(){
 	return gstate;
 }
 
-void GameState::addResource(Resource * ptr) {
+GameObject* GameState::addResource(ObjectId theId, Resource * ptr) {
+   GameObject * o = map->add(theId, ptr);
    resources.push_back(ptr);
-   world->insert(ptr);
-}
-
-void GameState::addResource(ResourceModel rm) {
-   GameObject * gameObj = new GameObject();
+   return o;
 }
 
 void GameState::generateResources(int num) {
@@ -51,7 +48,8 @@ void GameState::generateResources(int num) {
          model = MUSHROOM;
 
       Resource * newRe = new Resource(model, 5, radius, theta, azimuth, direction);
-      addResource(newRe);
+      ObjectId resourceId = IdGenerator::getInstance().getNextId();
+      addResource(resourceId, newRe);
       //radius is always 505
       //randomize resource model?? (maybe we should separate blob model from resource model)
       //randomize other coords
