@@ -38,7 +38,7 @@ protected:
 	vec4 loc;
 
    // Model
-   ResourceModel rm;
+   ResourceModel rm = TREE;
 
 
 public:

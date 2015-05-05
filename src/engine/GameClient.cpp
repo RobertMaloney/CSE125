@@ -86,13 +86,14 @@ void GameClient::updateGameState(deque<Packet> & data) {
 		if (!obj) {
 			obj = new GameObject();
 			obj = gstate.map->add(objId, obj); // Adds to game state in client
-
+         obj->deserialize(*packet);
 			//Add node in scene graph (in GraphicsEngine) and add object-node mapping (in GraphicsEngine)
-			GraphicsEngine::insertObject(obj->getId(), GraphicsEngine::addNode(GraphicsEngine::selectModel(objId)));
+			GraphicsEngine::insertObject(obj->getId(), GraphicsEngine::addNode(GraphicsEngine::selectModel(obj->getModel())));
 		}
-
-		//Update the object in game state
-		obj->deserialize(*packet);//For now it only updates obj (pos) in game state
+      else {
+         //Update the object in game state
+         obj->deserialize(*packet);//For now it only updates obj (pos) in game state
+      }
 
 		//Update the object in node (in GraphicsEngine)
 		GraphicsEngine::updateObject(obj->getId(), obj->getLoc()); 

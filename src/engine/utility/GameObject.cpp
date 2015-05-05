@@ -21,6 +21,7 @@ void GameObject::serialize(Packet & p) {
 	for (int i = 0; i < 4; ++i){
 		p.writeFloat(this->loc[i]);
 	}
+   p.writeInt(rm);
 }
 
 
@@ -28,7 +29,8 @@ void GameObject::deserialize(Packet & p) {
 	//this->id = p.readUInt();
 	for (int i = 0; i < 4; ++i){
 		this->loc[i] = p.readFloat();
-	}
+   }
+   this->rm = ResourceModel(p.readInt());
 }
 
 
@@ -61,7 +63,9 @@ void GameObject::setLoc(vec4 & newLoc){
 	loc = newLoc;
 }
 
-
+ResourceModel GameObject::getModel() {
+   return rm;
+}
 
 /*void GameObject::setX(int newX) {
 	loc.setX(newX);

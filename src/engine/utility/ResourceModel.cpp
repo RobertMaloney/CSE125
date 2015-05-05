@@ -1,7 +1,7 @@
 #include "ResourceModel.h"
 #include <string>
 
-std::map<ResourceModel, char *> map = {
+std::map<ResourceModel, std::string> ResourceMap::map = {
       { OB_TYPE, "ob" },
       { PB_TYPE, "pb" },
       { BB_TYPE, "bb" },

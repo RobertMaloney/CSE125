@@ -8,6 +8,7 @@
 #include "..\graphics\Cube.h"
 #include "..\graphics\Geometry.h"
 #include "..\utility\System.h"
+#include "..\utility\ResourceModel.h"
 using namespace std;
 
 // Graphics Engine Static Members
@@ -310,15 +311,13 @@ MatrixNode* GraphicsEngine::addNode(Renderable* objModel){
 // Select blob model based on playerId, will be changed later
 Renderable * GraphicsEngine::selectModel(ObjectId playerId){
 	Renderable* newModel;
+
 	switch (playerId % 3){
 	case 0:
 		newModel = new Geometry("../../media/bb.obj");
 		break;
 	case 1:
-		//newModel = new Geometry("../../media/gb.obj"); //gb model doesnt work
-		//break;
-		//case 2:
-		newModel = new Geometry("../../media/ob.obj");
+		newModel = new Geometry("../../media/gb.obj");
 		break;
 	case 2:
 		newModel = new Geometry("../../media/pb.obj");
@@ -326,9 +325,18 @@ Renderable * GraphicsEngine::selectModel(ObjectId playerId){
 	default:
 		newModel = new Geometry("../../media/bb.obj");
 		break;
-		}
-	return newModel;
 	}
+	return newModel;
+}
+
+// Select blob model based on playerId, will be changed later
+Renderable * GraphicsEngine::selectModel(ResourceModel model){
+   Renderable* newModel;
+   std::string pathString = "../../media/" + ResourceMap::getObjFile(model);
+   const char * path = pathString.c_str();
+   newModel = new Geometry(path);
+   return newModel;
+}
 
 // Translate from vec4 postion to matrix in the node of scene graph??
 void GraphicsEngine::updateObject(ObjectId objId, glm::vec4 & v) {

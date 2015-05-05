@@ -55,6 +55,7 @@ public:
 
 	static MatrixNode* addNode(Renderable*);
 	static Renderable* selectModel(ObjectId playerId);
+   static Renderable* selectModel(ResourceModel model);
 
 private:
 	static glm::mat4				m_view, m_projection;
