@@ -6,8 +6,6 @@
 
 class Resource : public GameObject {
 protected:   
-   
-   ResourceModel rm;
    int points; // for score system?
 
 public:

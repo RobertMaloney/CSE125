@@ -21,7 +21,7 @@ void GameObject::serialize(Packet & p) {
 	for (int i = 0; i < 4; ++i){
 		p.writeFloat(this->loc[i]);
 	}
-   p.writeInt(rm);
+   p.writeInt(static_cast<int>(this->rm));
 }
 
 
@@ -30,7 +30,7 @@ void GameObject::deserialize(Packet & p) {
 	for (int i = 0; i < 4; ++i){
 		this->loc[i] = p.readFloat();
    }
-   this->rm = ResourceModel(p.readInt());
+   this->rm = static_cast<ResourceModel>(p.readInt());
 }
 
 

@@ -39,7 +39,7 @@ void GameState::generateResources(int num) {
       float direction = (float)(rand() % 360);
       ResourceModel model = TREE;
 
-      int pick = num % 5;
+      int pick = i % 5;
       if (pick == 1)
          model = ROCK;
       else if (pick == 2)
