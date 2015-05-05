@@ -9,7 +9,7 @@ void GameState::init(){
 	//world->init();
 	map = &(ObjectDB::getInstance());
 	std::cout << "map: " << map << std::endl;
-	generateResources(30);
+	//generateResources(30);
 }
 
 GameObject* GameState::addPlayer(ObjectId theId, Player* p) {
@@ -34,8 +34,8 @@ void GameState::generateResources(int num) {
    for (int i = 0; i < num; i++)
    {
       float radius = 505;
-      float theta = (float)rand() / (float)RAND_MAX;
-      float azimuth = (float)rand() / (float)RAND_MAX;
+      float theta = (float)(rand() % 180);
+      float azimuth = (float)(rand() % 360);
       float direction = (float)(rand() % 360);
       ResourceModel model = TREE;
 
@@ -48,7 +48,7 @@ void GameState::generateResources(int num) {
          model = GRASS;
       else if (pick == 4)
          model = MUSHROOM;
-
+      cout << theta << " " << azimuth << " " << direction;
       Resource * newRe = new Resource(model, 5, radius, theta, azimuth, direction);
       ObjectId resourceId = IdGenerator::getInstance().getNextId();
       addResource(resourceId, newRe);
