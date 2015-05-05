@@ -19,6 +19,7 @@ GameObject* ObjectDB::add(ObjectId theId, GameObject* object) {
 
 
 	if (!object) {
+		std::cout << "object is null?: " << object << std::endl;
 		return NULL;
 	}
 	if (object->getId()){// should not have id?
@@ -27,6 +28,7 @@ GameObject* ObjectDB::add(ObjectId theId, GameObject* object) {
 
 	auto found = objects.find(theId);
 	if (found == objects.end()) {
+		std::cout << "object not found!. with id: " << theId << " and object: " << object << std::endl;
 		object->setId(theId);
 		objects.insert(make_pair(theId, object));
 

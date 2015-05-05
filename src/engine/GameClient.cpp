@@ -31,8 +31,10 @@ void GameClient::run() {
 	ObjectId playerId = p.readUInt();
     GameObject* player = new Player();
 	std::cout << "logging in id " << playerId << std::endl;
+	std::cout << "logging in player " << player << std::endl;
 	player = gstate.map->add(playerId, player);
 	//player = ObjectDB::getInstance().add(playerId, player);
+	std::cout << "player: " << player << std::endl;
 
 	//Initializes GraphicsEngine for this client with playerId (i.e. ClientID)
 	GraphicsEngine::Initialize(playerId);

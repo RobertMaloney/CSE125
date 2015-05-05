@@ -1,6 +1,8 @@
 #ifndef OBJECTDB_H
 #define OBJECTDB_H
 
+#include <iostream>
+
 //#include "IdGenerator.h"
 #include <deque>
 #include <unordered_map>
@@ -20,6 +22,7 @@ using std::pair;
 using std::deque;
 using std::make_pair;
 using std::unordered_map;
+using std::cout;
 
 //ObjectId ObjectDB::numOfObjects = 0;
 

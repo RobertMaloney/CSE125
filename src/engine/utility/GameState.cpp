@@ -8,7 +8,8 @@ void GameState::init(){
 	numOfPlayers = 0;
 	//world->init();
 	map = &(ObjectDB::getInstance());
-   generateResources(30);
+	std::cout << "map: " << map << std::endl;
+	generateResources(30);
 }
 
 GameObject* GameState::addPlayer(ObjectId theId, Player* p) {

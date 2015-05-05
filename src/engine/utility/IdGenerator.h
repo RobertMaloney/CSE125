@@ -5,7 +5,7 @@ typedef unsigned int ObjectId;
 
 class IdGenerator {
 private:
-    ObjectId numOfObjects = 0;
+    ObjectId numOfObjects = 2;
 
 public:
 	static IdGenerator & getInstance();

@@ -7,12 +7,12 @@ IdGenerator & IdGenerator::getInstance(){
 }
 
 void IdGenerator::update(ObjectId current){
-	if (current > this->numOfObjects){
-		this->numOfObjects = current;
-	}
+	//if (current > this->numOfObjects){
+		//this->numOfObjects = current;
+	//}
 }
 
 ObjectId IdGenerator::getNextId(){
-	return this->numOfObjects + 1;
+	return this->numOfObjects = this->numOfObjects + 1;
 }
 
