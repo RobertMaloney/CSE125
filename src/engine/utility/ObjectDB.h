@@ -9,7 +9,6 @@
 #include <gtc\type_ptr.hpp>
 #include <gtx\string_cast.hpp>
 #include "Serializable.h"
-//#include "../graphics/GraphicsEngine.h"
 #include "GameObject.h"
 
 
@@ -21,18 +20,16 @@ using std::deque;
 using std::make_pair;
 using std::unordered_map;
 
-//ObjectId ObjectDB::numOfObjects = 0;
 
 class ObjectDB {
 
 public:
-	//static ObjectId numOfObjects;
 
 	ObjectDB();
 	~ObjectDB();
 
 
-	GameObject* add(ObjectId theId, GameObject* object);
+	bool add(ObjectId theId, GameObject* object);
 
 	bool remove(ObjectId objectId);
 	GameObject* get(ObjectId objectId);

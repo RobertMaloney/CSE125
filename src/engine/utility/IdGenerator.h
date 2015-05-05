@@ -4,13 +4,16 @@
 typedef unsigned int ObjectId;
 
 class IdGenerator {
+
 private:
-    ObjectId numOfObjects = 0;
+	ObjectId numOfObjects;
 
 public:
+
 	static IdGenerator & getInstance();
 	void update(ObjectId current);
 	ObjectId getNextId();
+	ObjectId createId();
 	
 };
 

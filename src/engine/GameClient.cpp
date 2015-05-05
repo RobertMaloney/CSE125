@@ -30,9 +30,12 @@ void GameClient::run() {
 
 	ObjectId playerId = p.readUInt();
     GameObject* player = new Player();
+
 	std::cout << "logging in id " << playerId << std::endl;
-	player = gstate.map->add(playerId, player);
-	//player = ObjectDB::getInstance().add(playerId, player);
+
+	if (!gstate.map->add(playerId, player)){
+		return;
+	}
 
 	//Initializes GraphicsEngine for this client with playerId (i.e. ClientID)
 	GraphicsEngine::Initialize(playerId);
@@ -83,7 +86,12 @@ void GameClient::updateGameState(deque<Packet> & data) {
 		//If this game object is new 
 		if (!obj) {
 			obj = new GameObject();
-			obj = gstate.map->add(objId, obj); // Adds to game state in client
+			
+			if (!gstate.map->add(objId, obj)){ // Adds to game state in client
+				delete obj;
+				obj = nullptr;
+				continue;
+			}
 
 			//Add node in scene graph (in GraphicsEngine) and add object-node mapping (in GraphicsEngine)
 			GraphicsEngine::insertObject(obj->getId(), GraphicsEngine::addNode(GraphicsEngine::selectModel(objId)));

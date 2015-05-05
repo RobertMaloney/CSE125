@@ -2,19 +2,15 @@
 #define PLAYER_H
 
 #include <string>
-//#include "Location.h"
 #include "BlobModel.h"
 #include "GameObject.h"
 
-
 using namespace std;
 
-
 class Player : public GameObject {
-	//TODO put it outside
+
 protected:
 
-	//ObjectId pid;
 	int speed;
 	int power;
 	bool moves[4];
@@ -22,6 +18,7 @@ protected:
 	BlobModel bm;
 
 public:
+
 	enum {
 		UP = 0,
 		RIGHT,
@@ -37,10 +34,6 @@ public:
 
 	int getSpeed();
 	int getPower();
-
-	//ObjectId getPid();
-
-	//glm::vec4 & getOrientation();
 
 	void setSpeed(int newSpeed);
 	void setPower(int newPower);

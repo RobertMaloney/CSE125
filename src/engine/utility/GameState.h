@@ -2,7 +2,6 @@
 #define GAME_STATE_H
 
 #include <vector>
-//#include "World.h"
 #include "ObjectDB.h"
 #include "Player.h"
 
@@ -13,15 +12,17 @@ using namespace std;
 class GameState {
 
 protected:
-	int numOfPlayers;
 
-public:
 	ObjectDB * map;
 	vector<Player*> players;
 
+public:
+
 	void init();
 
-	GameObject* addPlayer(ObjectId theId, Player* p);
+	bool addPlayer(ObjectId theId, Player* p);
+	bool addObject(ObjectId id, GameObject* o);
+	int getNumPlayers();
 	static GameState & getInstance();
 
 };
