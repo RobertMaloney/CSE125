@@ -29,11 +29,11 @@ void GameClient::run() {
 	connection->receive(p);
 
 	ObjectId playerId = p.readUInt();
-    GameObject* player = new Player();
+    Player* player = new Player();
 
 	std::cout << "logging in id " << playerId << std::endl;
 
-	if (!gstate.map->add(playerId, player)){
+	if (!gstate.addPlayer(playerId, player)){
 		return;
 	}
 
@@ -81,13 +81,13 @@ void GameClient::updateGameState(deque<Packet> & data) {
 		}
 
 		objId = packet->readUInt();
-		obj = gstate.map->get(objId);
+		obj = gstate.getObject(objId);
 
 		//If this game object is new 
 		if (!obj) {
 			obj = new GameObject();
 			
-			if (!gstate.map->add(objId, obj)){ // Adds to game state in client
+			if (!gstate.addObject(objId, obj)){ // Adds to game state in client
 				delete obj;
 				obj = nullptr;
 				continue;
