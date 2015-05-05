@@ -23,7 +23,7 @@ protected:
 public:
 
 	Player() :Player(OB_TYPE) {};
-	Player(ResourceModel thebm) : Player(thebm, 0, 0, 0, 0) {};
+	Player(ResourceModel thebm) : Player(thebm, 505, 0, 0, 0) {};
 	Player(ResourceModel, float, float, float, float);
 
     ~Player();
