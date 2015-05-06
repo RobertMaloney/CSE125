@@ -56,6 +56,10 @@ bool ObjLoader::LoadObj(string filePath, vector<float> & vertexData) {
 			for (int k = 0; k < 3; ++k) {
 				vertexData.push_back(materials[mat_id].diffuse[k]);
 			}
+			// tex
+			for (int k = 0; k < 2; ++k) {
+				vertexData.push_back(((doTex) ? _mesh.texcoords[2 * index + k] : 0.f));
+			}
 		}
 	}
 }
