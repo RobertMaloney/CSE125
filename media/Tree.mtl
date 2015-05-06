@@ -1,31 +1,20 @@
-# Max2Mtl Version 4.0 Mar 10th, 2001
-#
-# Multi/Sub Material__35 (2) to come 
-#
-newmtl Stem
-Ka  0.6 0.6 0.6
-Kd  0.6 0.6 0.6
-Ks  0.0 0.0 0.0
-d  1.0
-Ns  10.0
+# Blender MTL File: 'None'
+# Material Count: 2
+
+newmtl Leafs
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.216470 0.326274 0.320000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
 illum 2
-#
-newmtl L1
-Ka  0.3 0.3 0.2
-Kd  0.3 0.3 0.2
-Ks  0.3 0.3 0.3
-d  1.0
-Ns  10.0
+
+newmtl Wood
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.533334 0.436078 0.285490
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
 illum 2
-#
-# Multi/Sub Material__35 done 
-#
-newmtl L1
-Ka  0.3 0.3 0.2
-Kd  0.3 0.3 0.2
-Ks  0.3 0.3 0.3
-d  1.0
-Ns  10.0
-illum 2
-#
-# EOF

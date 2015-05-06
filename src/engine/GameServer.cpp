@@ -33,7 +33,7 @@ void GameServer::initialize(int maxConns) {
 	maxConnections = maxConns;
 
 	gstate.init();
-   gstate.generateResources(3);
+   gstate.generateResources(100);
 }
 
 
