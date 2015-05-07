@@ -8,6 +8,10 @@ Player::Player(Model thebm, float radius, float theta, float azimuth, float dire
 
 	this->loc = glm::vec4(radius, theta, azimuth, direction);
 	this->rm = thebm;
+   this->moves[0] = false;
+   this->moves[1] = false;
+   this->moves[2] = false;
+   this->moves[3] = false;
 }
 
 Player::~Player() {
