@@ -1,6 +1,7 @@
 #ifndef GAMESERVER_H
 #define GAMESERVER_H
 
+#include <cassert>
 #include <chrono>
 #include <thread>
 #include <string>
@@ -58,7 +59,7 @@ private:
 
     inline bool shouldTerminate(SocketError err);
     
-    unsigned int maxConnections;
+	unsigned int maxConnections;
 
     TCPListener* listener;
     PacketHandler* handler;

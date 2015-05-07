@@ -37,7 +37,7 @@ void GameServer::initialize(int maxConns) {
 
 
 void GameServer::run() {
-	chrono::milliseconds elapsedTime;
+	long long elapsedTime;
 	high_resolution_clock::time_point start;
 
 	while (true) {
@@ -45,12 +45,13 @@ void GameServer::run() {
 		if (clients->size() < maxConnections) {
 			this->acceptWaitingClient();
 		}
-
 		this->receiveAndUpdate();
 		this->tick();
-		elapsedTime = chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start);
-		//std::cout << elapsedTime.count() << " elapsedTime " << TIME_PER_FRAME - elapsedTime.count() << " sleeping for" << std::endl;
-		sleep_for(milliseconds(TIME_PER_FRAME - elapsedTime.count()));
+		elapsedTime = chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count();
+		if (elapsedTime > TIME_PER_FRAME) {
+			cerr << "Server loop took long than a frame." << endl;
+		}
+		sleep_for(milliseconds(TIME_PER_FRAME - elapsedTime));
 	}
 }
 
