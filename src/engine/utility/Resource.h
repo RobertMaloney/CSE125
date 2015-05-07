@@ -13,7 +13,7 @@ public:
    Resource(Model rm, int points) : Resource(rm, points, 500, 0, 0, 0){};
    Resource(Model rm, int points, float radius, float theta, float azimuth, float direction);
 
-   ~Resource();
+   ~Resource() {};
    
    int getPoints();
 

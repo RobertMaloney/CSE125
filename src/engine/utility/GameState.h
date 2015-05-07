@@ -30,7 +30,7 @@ public:
 	void updateMovingPlayers();
 	static GameState & getInstance();
 
-   GameObject* addResource(ObjectId theId, Resource * ptr);
+   bool addResource(ObjectId theId, Resource * ptr);
 
    void generateResources(int num);
 };

@@ -30,10 +30,10 @@ GameState & GameState::getInstance(){
 	return gstate;
 }
 
-GameObject* GameState::addResource(ObjectId theId, Resource * ptr) {
-   GameObject * o = map->add(theId, ptr);
+bool GameState::addResource(ObjectId theId, Resource * ptr) {
+   bool r = map->add(theId, ptr);
    resources.push_back(ptr);
-   return o;
+   return r;
 }
 
 void GameState::generateResources(int num) {
