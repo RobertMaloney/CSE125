@@ -62,8 +62,10 @@ public:
 
 		// make matrix out of position, add rotations
 		glm::mat4 matrix = glm::translate(glm::mat4(), xyz);
-		matrix = glm::rotate(matrix, glm::radians(spherePos.y), glm::vec3(0, 1, 0));
-		matrix = glm::rotate(matrix, glm::radians(spherePos.z), glm::vec3(1, 0, 0));
+		glm::quat rot = glm::rotation(glm::vec3(0, 0, 1), glm::normalize(xyz));
+		matrix = glm::rotate(matrix, glm::angle(rot), glm::axis(rot));
+		//matrix = glm::rotate(matrix, glm::radians(spherePos.y + 180.f), glm::vec3(0, 1, 0));
+		//matrix = glm::rotate(matrix, glm::radians(spherePos.z + 180.f), glm::vec3(1, 0, 0));
 		// do normal rotation last
 		matrix = glm::rotate(matrix, glm::radians(spherePos.w), glm::vec3(0, 0, 1));
 

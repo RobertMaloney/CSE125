@@ -18,7 +18,6 @@ protected:
 	BlobModel bm;
 
 public:
-
 	enum {
 		UP = 0,
 		RIGHT,

@@ -20,6 +20,7 @@
 #include "Geode.h"
 #include "CameraNode.h"
 #include "Renderable.h"
+#include "Shader.h"
 
 #include "..\network\Packet.h"
 #include "..\utility\GameObject.h"
@@ -62,13 +63,16 @@ private:
 	static GLFWwindow				*m_window;
 	static GLint					m_uniView, m_uniProjection;
 	static std::vector<MatrixNode*> m_objects;
-	static GLuint					m_vertexShader, m_fragmentShader, m_shaderProgram;
 	static KeyCallback				m_keyCallback;
 	static MatrixNode				*m_player;
 	static CameraNode				*m_mainCamera;
 	static CameraNode				*m_minimapCamera;
 	static MatrixNode				*m_scene;
-	
+
+	static GLuint					m_skyboxId;
+	static Renderable				*m_skybox;
+	static Shader					*m_defaultShader, *m_skyboxShader;
+
 
 	static unordered_map<ObjectId, MatrixNode*> objNodeMap;
 	
