@@ -75,6 +75,13 @@ void Packet::writeDouble(double val) {
     this->append(reinterpret_cast<char*>(&val), sizeof(val));
 }
 
+void Packet::writeString(string & str) {
+	for (auto it = str.begin(); it != str.end(); ++it) {
+		this->writeByte(*it);
+	}
+	this->writeByte('\0');
+}
+
 
 byte Packet::readByte() {
     return this->buffer[index++];
@@ -149,6 +156,17 @@ double Packet::readDouble() {
     double buff;
     this->read(reinterpret_cast<char*>(&buff), sizeof(double));
     return buff;
+}
+
+
+string Packet::readString() {
+	string val;
+	char current = this->readByte();
+	while (current != '\0') {
+		val += current;
+		current = this->readByte();
+	}
+	return val;
 }
 
 

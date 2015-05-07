@@ -51,6 +51,7 @@ void GameServer::run() {
 
 
 void GameServer::acceptWaitingClient() {
+	Packet response;
 	TCPConnection* connection = listener->accept();
 	if (!connection) {
 		return;
@@ -58,17 +59,15 @@ void GameServer::acceptWaitingClient() {
 
 	//Note: Server generates id for client/player, and addes the player to gamestate
 	//Note: default position foor player is 505,0,0,0
-	ObjectId playerId = idGen->getNextId();
-	GameObject* player = gstate.addPlayer(playerId, new Player());// ObjectDB::getInstance().add(playerId, new GameObject());
-	if (!player){
-		//throw exception (get NULL => not added)
+	ObjectId playerId = idGen->createId();
+	Player* newPlayer = new Player();
+	if (!gstate.addPlayer(playerId, newPlayer)){
+		delete newPlayer;
+		return;
 	}
-	idGen->update(playerId);
-
 	connection->setNoDelay(true);
 	connection->setNonBlocking(true);
 	clients->insert(make_pair(connection, playerId));	
-	Packet response;
 	response.writeUInt(playerId);
 	connection->send(response);
 }
@@ -77,8 +76,7 @@ void GameServer::acceptWaitingClient() {
 
 void GameServer::tick() {
 	deque<Packet> updates;
-	//ObjectDB::getInstance().getObjectState(updates);
-	gstate.map->getObjectState(updates);
+	ObjectDB::getInstance().getObjectState(updates);
 
 	for (auto it = clients->begin(); it != clients->end(); ) {
 		SocketError err = it->first->send(updates);
@@ -108,26 +106,7 @@ void GameServer::receiveAndUpdate() {
         }
         events.clear();
 	}
-
-	// update positions
-	for (auto it = gstate.players.begin(); it != gstate.players.end(); ++it) {
-		if ((*it)->getMoving(Player::UP)) {
-			float dir = (*it)->getLoc().w;
-			(*it)->getLoc().z += glm::cos(glm::radians(dir));
-			(*it)->getLoc().y += glm::sin(glm::radians(dir));
-		}
-		else if ((*it)->getMoving(Player::RIGHT)) {
-			(*it)->getLoc().w -= 1.f;
-		}
-		else if ((*it)->getMoving(Player::DOWN)) {
-			float dir = (*it)->getLoc().w;
-			(*it)->getLoc().z -= glm::cos(glm::radians(dir));
-			(*it)->getLoc().y -= glm::sin(glm::radians(dir));
-		}
-		else if ((*it)->getMoving(Player::LEFT)) {
-			(*it)->getLoc().w += 1.f;
-		}
-	}
+	gstate.updateMovingPlayers();
 }
 
 
