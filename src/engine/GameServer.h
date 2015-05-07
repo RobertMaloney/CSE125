@@ -24,10 +24,13 @@ using std::chrono::high_resolution_clock;
 using std::chrono::duration_cast;
 using std::chrono::milliseconds;
 using std::chrono::duration;
+using std::chrono::duration_cast;
 using std::unordered_map;
 using std::make_pair;
 using std::pair;
 using std::cout;
+
+const long long TIME_PER_FRAME = 1000.f / 60.f;
 
 class PacketHandler;
 
