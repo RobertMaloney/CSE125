@@ -30,7 +30,7 @@ void GameObject::deserialize(Packet & p) {
 	for (int i = 0; i < 4; ++i){
 		this->loc[i] = p.readFloat();
    }
-   this->rm = static_cast<ResourceModel>(p.readInt());
+   this->rm = static_cast<Model>(p.readInt());
 }
 
 
@@ -63,7 +63,7 @@ void GameObject::setLoc(vec4 & newLoc){
 	loc = newLoc;
 }
 
-ResourceModel GameObject::getModel() {
+Model GameObject::getModel() {
    return rm;
 }
 

@@ -14,7 +14,7 @@
 //#include "../graphics/GraphicsEngine.h"
 #include "IdGenerator.h"
 //#include "..\graphics\MatrixNode.h"
-#include "ResourceModel.h"
+#include "Model.h"
 
 
 //using std::pair;
@@ -38,7 +38,7 @@ protected:
 	vec4 loc;
 
    // Model
-   ResourceModel rm = TREE;
+   Model rm = TREE;
 
 
 public:
@@ -63,14 +63,14 @@ public:
 
 	//Location getLoc();
 	vec4 & getLoc();
-   ResourceModel getModel();
+   Model getModel();
 
 	//void setX(int newX);
 	//void setY(int newY);
 	//void setZ(int newZ);
 
 	void setLoc(vec4 & newLoc);
-   void setModel(ResourceModel model);
+   void setModel(Model model);
 
 };
 

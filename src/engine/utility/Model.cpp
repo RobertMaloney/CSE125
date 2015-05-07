@@ -1,7 +1,7 @@
-#include "ResourceModel.h"
+#include "Model.h"
 #include <string>
 
-std::map<ResourceModel, std::string> ResourceMap::map = {
+std::map<Model, std::string> ResourceMap::map = {
       { OB_TYPE, "ob" },
       { PB_TYPE, "pb" },
       { BB_TYPE, "bb" },
@@ -10,15 +10,16 @@ std::map<ResourceModel, std::string> ResourceMap::map = {
       { ROCK, "rock" },
       { STUMP, "stump" },
       { GRASS, "grass" },
-      { MUSHROOM, "mushroom" }
+      { MUSHROOM, "mushroom" },
+      { FLOWER, "flower" }
 };
 
-std::string ResourceMap::getObjFile(ResourceModel rm)
+std::string ResourceMap::getObjFile(Model rm)
 {
    return std::string(map[rm]) + ".obj";
 }
 
-std::string ResourceMap::getMatlFile(ResourceModel rm)
+std::string ResourceMap::getMatlFile(Model rm)
 {
    return std::string(map[rm]) + ".matl";
 }

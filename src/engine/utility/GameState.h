@@ -6,7 +6,7 @@
 #include "ObjectDB.h"
 #include "Player.h"
 #include "Resource.h"
-#include "ResourceModel.h"
+#include "Model.h"
 
 
 

@@ -1,6 +1,6 @@
 #include "Resource.h"
 
-Resource::Resource(ResourceModel rm, int points, float radius, float theta, float azimuth, float direction) 
+Resource::Resource(Model rm, int points, float radius, float theta, float azimuth, float direction) 
    : GameObject(radius, theta, azimuth, direction)
 {
    this->rm = rm;

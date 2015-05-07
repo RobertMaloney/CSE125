@@ -3,7 +3,7 @@
 
 #include <string>
 //#include "Location.h"
-#include "ResourceModel.h"
+#include "Model.h"
 #include "GameObject.h"
 
 
@@ -23,8 +23,8 @@ protected:
 public:
 
 	Player() :Player(OB_TYPE) {};
-	Player(ResourceModel thebm) : Player(thebm, 505, 0, 0, 0) {};
-	Player(ResourceModel, float, float, float, float);
+	Player(Model thebm) : Player(thebm, 505, 0, 0, 0) {};
+	Player(Model, float, float, float, float);
 
     ~Player();
 

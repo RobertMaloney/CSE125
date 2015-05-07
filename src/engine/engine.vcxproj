@@ -118,7 +118,7 @@
     <ClCompile Include="Utility\ObjLoader.cpp" />
     <ClCompile Include="utility\Player.cpp" />
     <ClCompile Include="utility\Resource.cpp" />
-    <ClCompile Include="utility\ResourceModel.cpp" />
+    <ClCompile Include="utility\Model.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameClient.h" />
@@ -150,7 +150,7 @@
     <ClInclude Include="Utility\ObjLoader.h" />
     <ClInclude Include="utility\Player.h" />
     <ClInclude Include="utility\Resource.h" />
-    <ClInclude Include="utility\ResourceModel.h" />
+    <ClInclude Include="utility\Model.h" />
     <ClInclude Include="utility\Serializable.h" />
     <ClInclude Include="utility\System.h" />
   </ItemGroup>

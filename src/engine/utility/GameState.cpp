@@ -37,9 +37,9 @@ void GameState::generateResources(int num) {
       float theta = (float)(rand() % 180);
       float azimuth = (float)(rand() % 360);
       float direction = (float)(rand() % 360);
-      ResourceModel model = TREE;
+      Model model = TREE;
 
-      int pick = i % 5;
+      int pick = rand() % 6;
       if (pick == 1)
          model = ROCK;
       else if (pick == 2)
@@ -48,6 +48,9 @@ void GameState::generateResources(int num) {
          model = GRASS;
       else if (pick == 4)
          model = MUSHROOM;
+      else if (pick == 5)
+         model = FLOWER;
+
       cout << theta << " " << azimuth << " " << direction;
       Resource * newRe = new Resource(model, 5, radius, theta, azimuth, direction);
       ObjectId resourceId = IdGenerator::getInstance().getNextId();

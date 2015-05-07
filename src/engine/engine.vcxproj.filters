@@ -16,8 +16,8 @@
     <ClCompile Include="utility\IdGenerator.cpp" />
     <ClCompile Include="utility\GameObject.cpp" />
     <ClCompile Include="utility\Resource.cpp" />
-    <ClCompile Include="utility\ResourceModel.cpp" />
     <ClCompile Include="utility\GameState.cpp" />
+    <ClCompile Include="utility\Model.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameClient.h" />
@@ -50,8 +50,8 @@
     <ClInclude Include="utility\GameObject.h" />
     <ClInclude Include="utility\BlobModel.h" />
     <ClInclude Include="utility\Resource.h" />
-    <ClInclude Include="utility\ResourceModel.h" />
     <ClInclude Include="utility\GameState.h" />
+    <ClInclude Include="utility\Model.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Network\Endianness.inl" />

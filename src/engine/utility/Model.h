@@ -4,7 +4,7 @@
 #include <map>
 #include <string>
 
-enum ResourceModel {
+enum Model {
    OB_TYPE,
    PB_TYPE,
    BB_TYPE,
@@ -13,18 +13,19 @@ enum ResourceModel {
    ROCK,
    STUMP,
    GRASS,
-   MUSHROOM
+   MUSHROOM,
+   FLOWER
 };
 
 class ResourceMap {
 private:
-   static std::map<ResourceModel, std::string> map;
+   static std::map<Model, std::string> map;
 
 public:
-   static std::string getObjFile(ResourceModel rm);
-   static std::string getMatlFile(ResourceModel rm);
+   static std::string getObjFile(Model rm);
+   static std::string getMatlFile(Model rm);
 };
-/*enum ResourceModel {
+/*enum Model {
    RED_TREE_S,
    RED_TREE_L,
    GREEN_TREE_S_1,

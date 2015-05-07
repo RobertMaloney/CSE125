@@ -8,7 +8,7 @@
 #include "..\graphics\Cube.h"
 #include "..\graphics\Geometry.h"
 #include "..\utility\System.h"
-#include "..\utility\ResourceModel.h"
+#include "..\utility\Model.h"
 using namespace std;
 
 // Graphics Engine Static Members
@@ -330,7 +330,7 @@ Renderable * GraphicsEngine::selectModel(ObjectId playerId){
 }
 
 // Select blob model based on playerId, will be changed later
-Renderable * GraphicsEngine::selectModel(ResourceModel model){
+Renderable * GraphicsEngine::selectModel(Model model){
    Renderable* newModel;
    std::string pathString = "../../media/" + ResourceMap::getObjFile(model);
    const char * path = pathString.c_str();

@@ -4,7 +4,7 @@
 //ObjectId numOfPlayers = 0;
 
 //TODO Config file
-Player::Player(ResourceModel thebm, float radius, float theta, float azimuth, float direction) : GameObject(radius, theta, azimuth, direction) {
+Player::Player(Model thebm, float radius, float theta, float azimuth, float direction) : GameObject(radius, theta, azimuth, direction) {
 	//this->numOfPlayers++;
 	//this->pid = numOfPlayers;
 	this->speed = 0;
