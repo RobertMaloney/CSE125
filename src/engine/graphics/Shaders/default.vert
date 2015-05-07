@@ -4,6 +4,7 @@ in vec3 color;
 in vec2 texcoord;
 
 out vec3 Color;
+out vec3 TexCoord;
 
 uniform mat4 model;
 uniform mat4 view;
@@ -15,6 +16,7 @@ void main()
 {
 	vec4 worldPos = model * vec4(position, 1.0);
 	vec3 worldNorm = normalize(mat3(model) * normal);
+	TexCoord = position;
 
 	gl_Position = projection * view * worldPos;
 

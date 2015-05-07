@@ -13,7 +13,6 @@
 #include <gtx\string_cast.hpp>
 
 
-
 class Renderable
 {
 private:
@@ -21,7 +20,7 @@ private:
 		VERTICES = 0,
 		ELEMENTS
 	};
-	GLuint		m_vao, m_vbo, m_ebo;
+	GLuint		m_vao, m_vbo, m_ebo, m_texId;
 	GLint		m_model;
 	RenderMode	m_renderMode;
 	GLint		m_numElems, m_numVerts;
@@ -73,6 +72,7 @@ protected:
 
 	// This bufferObject handles vertices only
 	void bufferObject(GLenum elementType, GLfloat* vertexArray, int vertexLength) {
+		m_renderMode = VERTICES;
 		glGenVertexArrays(1, &m_vao);
 		glBindVertexArray(m_vao);
 
@@ -82,7 +82,7 @@ protected:
 
 		m_numVerts = vertexLength;
 		m_drawType = elementType;
-		m_renderMode = VERTICES;
+		m_texId = 0;
 
 		glGenBuffers(1, &m_vbo);
 		glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
@@ -123,6 +123,9 @@ public:
 	void render(glm::mat4* matrix) {
 		if (m_valid) {
 			glBindVertexArray(m_vao);
+			if (m_texId != 0) {
+				glBindTexture(GL_TEXTURE_CUBE_MAP, m_texId);
+			}
 			glUniformMatrix4fv(m_model, 1, GL_FALSE, glm::value_ptr(*matrix));
 			switch (m_renderMode) {
 				case ELEMENTS: glDrawElements(m_drawType, m_numElems, GL_UNSIGNED_INT, 0); break;
@@ -132,12 +135,8 @@ public:
 		}
 	}
 
-	glm::mat4 & getMatrix() {
-		return m_matrix;
-	}
-
-	void setMatrix(glm::mat4 & new_matrix) {
-		m_matrix = new_matrix;
+	void setTextureId(GLuint id) {
+		m_texId = id;
 	}
 };
 #endif
