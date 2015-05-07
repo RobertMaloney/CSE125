@@ -24,11 +24,12 @@ GraphicsEngine::m_fragmentShader,
 GraphicsEngine::m_shaderProgram;
 
 KeyCallback			GraphicsEngine::m_keyCallback = NULL;
-
 MatrixNode			*GraphicsEngine::m_player = NULL,
+
 *GraphicsEngine::m_scene = NULL;
 
 CameraNode			*GraphicsEngine::m_mainCamera = NULL;
+CameraNode			*GraphicsEngine::m_minimapCamera = NULL;
 unordered_map<ObjectId, MatrixNode*> GraphicsEngine::objNodeMap;
 
 string version = "#version 150\n";
@@ -53,7 +54,7 @@ void GraphicsEngine::Initialize(ObjectId playerId) {
 
 	cout << "Current Dir: " << System::CurrentDirectory() << endl;
 	m_scene = new MatrixNode();
-
+	
 	// Load shader files
 	string vertInfo = System::File2String("../engine/graphics/Shaders/test.vert");
 	string fragInfo = System::File2String("../engine/graphics/Shaders/test.frag");
@@ -110,24 +111,6 @@ void GraphicsEngine::Initialize(ObjectId playerId) {
 	// Turn on z-buffering
 	glEnable(GL_DEPTH_TEST);
 
-	// Testing renderables
-	const int CUBE_COUNT = 0;
-	Renderable* cube = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 1.f, 1.f), 1.f);
-	for (int i = 0; i < CUBE_COUNT; ++i) {
-		glm::vec3 position(-2.f + 0.4f*(i % 10), -2.f + 0.4f*(i / 10), 0.1f);
-		Geode* cubeGeode = new Geode();
-		cubeGeode->setRenderable(cube);
-		m_objects.push_back(new MatrixNode());
-		m_objects[i]->addChild(cubeGeode);
-		glm::mat4 cubeMat;
-		cubeMat = glm::translate(cubeMat, position);
-		cubeMat = glm::rotate(cubeMat, glm::radians((float)i), glm::vec3(0, 0, 1));
-		float scale = 0.02f + 0.08f * (i / (float)100);
-		cubeMat = glm::scale(cubeMat, glm::vec3(scale, scale, scale));
-		m_objects[i]->setMatrix(cubeMat);
-		m_scene->addChild(m_objects[i]);
-		//m_objects.push_back(new Cube(position, glm::angleAxis(glm::radians((float)i), glm::vec3(0, 0, 1)), glm::vec3(1.f, 1.f, 1.f), 0.02f + 0.08f * (i / (float)100)));
-	}
 
 	// WORLD
 	Renderable* worldModel = new Geometry("../../media/sphere.obj");
@@ -144,20 +127,24 @@ void GraphicsEngine::Initialize(ObjectId playerId) {
 		glm::vec3(0.f, 0.f, 1.f));
 	m_mainCamera = new CameraNode();
 	m_mainCamera->setViewMatrix(camview);
+	
+	glm::mat4 minimapview = glm::lookAt(
+		glm::vec3(0.f,10.f, 300.f),
+		glm::vec3(0.f, 0.f, 0.f),
+		glm::vec3(0.f, -1.f, 0.f));
+	m_minimapCamera = new CameraNode();
+	m_minimapCamera->setViewMatrix(minimapview);
 
 	// PLAYER  (Player node is created by default)
 	Renderable * model = GraphicsEngine::selectModel(playerId);
 	m_player = GraphicsEngine::addNode(model);
 	m_player->addChild(m_mainCamera);
+	m_player->addChild(m_minimapCamera);
+	
 
 	// view and projection matrix locations in the shader program
 	m_uniView = glGetUniformLocation(m_shaderProgram, "view");
 	m_uniProjection = glGetUniformLocation(m_shaderProgram, "projection");
-
-	m_view = glm::lookAt(
-		glm::vec3(0.f, 6.f, 4.f),
-		glm::vec3(0.f, 0.f, 0.f),
-		glm::vec3(0.f, 0.f, 1.f));
 
 	if (glGetError() != 0) printf("Error Code: %d\n", glGetError());
 
@@ -194,6 +181,7 @@ void GraphicsEngine::DrawAndPoll() {
 	int height, width;
 	glfwGetWindowSize(m_window, &width, &height);
 
+	glViewport(0, 0, width, height);
 	m_projection = glm::perspective(
 		glm::radians(45.f),
 		((float)height) / width,
@@ -222,6 +210,16 @@ void GraphicsEngine::DrawAndPoll() {
 
 	glm::mat4 identity;
 	renderScene(m_scene, &identity);
+	glViewport(width -200, height-200,200, 200);
+	glDisable(GL_DEPTH_TEST);
+
+	 view = m_minimapCamera->getFlatViewMatrix();
+
+
+	glUniformMatrix4fv(m_uniView, 1, GL_FALSE, glm::value_ptr(view));
+	glUniformMatrix4fv(m_uniProjection, 1, GL_FALSE, glm::value_ptr(m_projection));
+	renderScene(m_scene, &identity);
+	glEnable(GL_DEPTH_TEST);
 
 	glfwSwapBuffers(m_window);
 	glfwPollEvents();

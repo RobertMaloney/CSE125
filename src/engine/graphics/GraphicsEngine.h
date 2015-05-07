@@ -66,7 +66,9 @@ private:
 	static KeyCallback				m_keyCallback;
 	static MatrixNode				*m_player;
 	static CameraNode				*m_mainCamera;
+	static CameraNode				*m_minimapCamera;
 	static MatrixNode				*m_scene;
+	
 
 	static unordered_map<ObjectId, MatrixNode*> objNodeMap;
 	
