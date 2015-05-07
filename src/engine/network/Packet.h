@@ -3,9 +3,11 @@
 
 #include <vector>
 #include <cstdint>
+#include <string>
 
 #include "Endianness.h"
 
+using std::string;
 using std::vector;
 
 typedef uint8_t byte;
@@ -33,6 +35,7 @@ public:
     void writeUShort(unsigned short val);
     void writeUInt(unsigned int val);
     void writeULong(unsigned long val);
+	void writeString(string & str);
 
     byte readByte();
     bool readBool();
@@ -42,6 +45,7 @@ public:
     long readLong();
     float readFloat();
     double readDouble();
+	string readString();
 
     unsigned char readUChar();
     unsigned short readUShort();

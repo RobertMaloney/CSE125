@@ -16,3 +16,7 @@ ObjectId IdGenerator::getNextId(){
 	return this->numOfObjects = this->numOfObjects + 1;
 }
 
+ObjectId IdGenerator::createId() {
+	int id = numOfObjects++;
+	return id;
+}

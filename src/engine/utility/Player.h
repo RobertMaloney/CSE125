@@ -6,21 +6,23 @@
 #include "Model.h"
 #include "GameObject.h"
 
-
 using namespace std;
 
-
 class Player : public GameObject {
-	//TODO put it outside
+
 protected:
 
-	//ObjectId pid;
 	int speed;
 	int power;
-   int score;
-	//static int numOfPlayers;
+	bool moves[4];
 
 public:
+	enum {
+		UP = 0,
+		RIGHT,
+		DOWN,
+		LEFT
+	};
 
 	Player() :Player(OB_TYPE) {};
 	Player(Model thebm) : Player(thebm, 505, 0, 0, 0) {};
@@ -32,13 +34,11 @@ public:
 	int getPower();
    int getScore();
 
-	//ObjectId getPid();
-
-	//glm::vec4 & getOrientation();
-
 	void setSpeed(int newSpeed);
 	void setPower(int newPower);
-   void setScore(int score);
+
+	bool getMoving(int);
+	void setMoving(int, bool);
 };
 
 #endif

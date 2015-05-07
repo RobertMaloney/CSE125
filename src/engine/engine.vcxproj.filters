@@ -51,6 +51,8 @@
     <ClInclude Include="utility\BlobModel.h" />
     <ClInclude Include="utility\Resource.h" />
     <ClInclude Include="utility\GameState.h" />
+    <ClInclude Include="graphics\Skybox.h" />
+    <ClInclude Include="graphics\Shader.h" />
     <ClInclude Include="utility\Model.h" />
   </ItemGroup>
   <ItemGroup>

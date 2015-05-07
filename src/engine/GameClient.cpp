@@ -29,12 +29,13 @@ void GameClient::run() {
 	connection->receive(p);
 
 	ObjectId playerId = p.readUInt();
-    GameObject* player = new Player();
+    Player* player = new Player();
+
 	std::cout << "logging in id " << playerId << std::endl;
-	std::cout << "logging in player " << player << std::endl;
-	player = gstate.map->add(playerId, player);
-	//player = ObjectDB::getInstance().add(playerId, player);
-	std::cout << "player: " << player << std::endl;
+
+	if (!gstate.addPlayer(playerId, player)){
+		return;
+	}
 
 	//Initializes GraphicsEngine for this client with playerId (i.e. ClientID)
 	GraphicsEngine::Initialize(playerId);
@@ -83,19 +84,28 @@ void GameClient::updateGameState(deque<Packet> & data) {
 		}
 
 		objId = packet->readUInt();
-		obj = gstate.map->get(objId);
+		obj = gstate.getObject(objId);
 
 		//If this game object is new 
 		if (!obj) {
 			obj = new GameObject();
-			obj = gstate.map->add(objId, obj); // Adds to game state in client
-         obj->deserialize(*packet);
+			
+			if (!gstate.addObject(objId, obj)){ // Adds to game state in client
+				delete obj;
+				obj = nullptr;
+				continue;
+			}
+         else
+         {
+            obj->deserialize(*packet);
+         }
+
 			//Add node in scene graph (in GraphicsEngine) and add object-node mapping (in GraphicsEngine)
 			GraphicsEngine::insertObject(obj->getId(), GraphicsEngine::addNode(GraphicsEngine::selectModel(obj->getModel())));
 		}
       else {
-         //Update the object in game state
-         obj->deserialize(*packet);//For now it only updates obj (pos) in game state
+		   //Update the object in game state
+		   obj->deserialize(*packet);//For now it only updates obj (pos) in game state
       }
 
 		//Update the object in node (in GraphicsEngine)

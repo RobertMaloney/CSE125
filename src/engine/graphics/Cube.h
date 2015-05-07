@@ -15,58 +15,58 @@ public:
 
 		GLfloat m_vertexData[] = {
 			// top
-			halfLength, halfLength, halfLength, 0.f, 0.f, 1.f, color[0], color[1], color[2], //0
-			halfLength, -halfLength, halfLength, 0.f, 0.f, 1.f, color[0], color[1], color[2], //1
-			-halfLength, -halfLength, halfLength, 0.f, 0.f, 1.f, color[0], color[1], color[2], //2
+			halfLength, halfLength, halfLength, 0.f, 0.f, 1.f, color[0], color[1], color[2], 0.f, 0.f, //0
+			halfLength, -halfLength, halfLength, 0.f, 0.f, 1.f, color[0], color[1], color[2], 0.f, 0.f, //1
+			-halfLength, -halfLength, halfLength, 0.f, 0.f, 1.f, color[0], color[1], color[2], 0.f, 0.f, //2
 
-			-halfLength, -halfLength, halfLength, 0.f, 0.f, 1.f, color[0], color[1], color[2], //2
-			-halfLength, halfLength, halfLength, 0.f, 0.f, 1.f, color[0], color[1], color[2], //3
-			halfLength, halfLength, halfLength, 0.f, 0.f, 1.f, color[0], color[1], color[2], //0
+			-halfLength, -halfLength, halfLength, 0.f, 0.f, 1.f, color[0], color[1], color[2], 0.f, 0.f, //2
+			-halfLength, halfLength, halfLength, 0.f, 0.f, 1.f, color[0], color[1], color[2], 0.f, 0.f, //3
+			halfLength, halfLength, halfLength, 0.f, 0.f, 1.f, color[0], color[1], color[2], 0.f, 0.f, //0
 
 			// bottom
-			halfLength, halfLength, -halfLength, 0.f, 0.f, -1.f, color[0], color[1], color[2], //4
-			halfLength, -halfLength, -halfLength, 0.f, 0.f, -1.f, color[0], color[1], color[2], //5
-			-halfLength, -halfLength, -halfLength, 0.f, 0.f, -1.f, color[0], color[1], color[2], //6
+			halfLength, halfLength, -halfLength, 0.f, 0.f, -1.f, color[0], color[1], color[2], 0.f, 0.f, //4
+			halfLength, -halfLength, -halfLength, 0.f, 0.f, -1.f, color[0], color[1], color[2], 0.f, 0.f, //5
+			-halfLength, -halfLength, -halfLength, 0.f, 0.f, -1.f, color[0], color[1], color[2], 0.f, 0.f, //6
 
-			-halfLength, -halfLength, -halfLength, 0.f, 0.f, -1.f, color[0], color[1], color[2], //6
-			-halfLength, halfLength, -halfLength, 0.f, 0.f, -1.f, color[0], color[1], color[2], //7
-			halfLength, halfLength, -halfLength, 0.f, 0.f, -1.f, color[0], color[1], color[2], //4
+			-halfLength, -halfLength, -halfLength, 0.f, 0.f, -1.f, color[0], color[1], color[2], 0.f, 0.f, //6
+			-halfLength, halfLength, -halfLength, 0.f, 0.f, -1.f, color[0], color[1], color[2], 0.f, 0.f, //7
+			halfLength, halfLength, -halfLength, 0.f, 0.f, -1.f, color[0], color[1], color[2], 0.f, 0.f, //4
 
 			// left
-			-halfLength, -halfLength, halfLength, -1.f, 0.f, 0.f, color[0], color[1], color[2], //2
-			-halfLength, halfLength, halfLength, -1.f, 0.f, 0.f, color[0], color[1], color[2], //3
-			-halfLength, halfLength, -halfLength, -1.f, 0.f, 0.f, color[0], color[1], color[2], //7
+			-halfLength, -halfLength, halfLength, -1.f, 0.f, 0.f, color[0], color[1], color[2], 0.f, 0.f, //2
+			-halfLength, halfLength, halfLength, -1.f, 0.f, 0.f, color[0], color[1], color[2], 0.f, 0.f, //3
+			-halfLength, halfLength, -halfLength, -1.f, 0.f, 0.f, color[0], color[1], color[2], 0.f, 0.f, //7
 
-			-halfLength, halfLength, -halfLength, -1.f, 0.f, 0.f, color[0], color[1], color[2], //7
-			-halfLength, -halfLength, -halfLength, -1.f, 0.f, 0.f, color[0], color[1], color[2], //6
-			-halfLength, -halfLength, halfLength, -1.f, 0.f, 0.f, color[0], color[1], color[2], //2
+			-halfLength, halfLength, -halfLength, -1.f, 0.f, 0.f, color[0], color[1], color[2], 0.f, 0.f, //7
+			-halfLength, -halfLength, -halfLength, -1.f, 0.f, 0.f, color[0], color[1], color[2], 0.f, 0.f, //6
+			-halfLength, -halfLength, halfLength, -1.f, 0.f, 0.f, color[0], color[1], color[2], 0.f, 0.f, //2
 
 			// right
-			halfLength, halfLength, halfLength, 1.f, 0.f, 0.f, color[0], color[1], color[2], //0
-			halfLength, -halfLength, halfLength, 1.f, 0.f, 0.f, color[0], color[1], color[2], //1
-			halfLength, -halfLength, -halfLength, 1.f, 0.f, 0.f, color[0], color[1], color[2], //5
+			halfLength, halfLength, halfLength, 1.f, 0.f, 0.f, color[0], color[1], color[2], 0.f, 0.f, //0
+			halfLength, -halfLength, halfLength, 1.f, 0.f, 0.f, color[0], color[1], color[2], 0.f, 0.f, //1
+			halfLength, -halfLength, -halfLength, 1.f, 0.f, 0.f, color[0], color[1], color[2], 0.f, 0.f, //5
 
-			halfLength, -halfLength, -halfLength, 1.f, 0.f, 0.f, color[0], color[1], color[2], //5
-			halfLength, halfLength, -halfLength, 1.f, 0.f, 0.f, color[0], color[1], color[2], //4
-			halfLength, halfLength, halfLength, 1.f, 0.f, 0.f, color[0], color[1], color[2], //0
+			halfLength, -halfLength, -halfLength, 1.f, 0.f, 0.f, color[0], color[1], color[2], 0.f, 0.f, //5
+			halfLength, halfLength, -halfLength, 1.f, 0.f, 0.f, color[0], color[1], color[2], 0.f, 0.f, //4
+			halfLength, halfLength, halfLength, 1.f, 0.f, 0.f, color[0], color[1], color[2], 0.f, 0.f, //0
 
 			// back
-			halfLength, halfLength, halfLength, 0.f, 1.f, 0.f, color[0], color[1], color[2], //0
-			-halfLength, halfLength, halfLength, 0.f, 1.f, 0.f, color[0], color[1], color[2], //3
-			-halfLength, halfLength, -halfLength, 0.f, 1.f, 0.f, color[0], color[1], color[2], //7
+			halfLength, halfLength, halfLength, 0.f, 1.f, 0.f, color[0], color[1], color[2], 0.f, 0.f, //0
+			-halfLength, halfLength, halfLength, 0.f, 1.f, 0.f, color[0], color[1], color[2], 0.f, 0.f, //3
+			-halfLength, halfLength, -halfLength, 0.f, 1.f, 0.f, color[0], color[1], color[2], 0.f, 0.f, //7
 
-			-halfLength, halfLength, -halfLength, 0.f, 1.f, 0.f, color[0], color[1], color[2], //7
-			halfLength, halfLength, -halfLength, 0.f, 1.f, 0.f, color[0], color[1], color[2], //4
-			halfLength, halfLength, halfLength, 0.f, 1.f, 0.f, color[0], color[1], color[2], //0
+			-halfLength, halfLength, -halfLength, 0.f, 1.f, 0.f, color[0], color[1], color[2], 0.f, 0.f, //7
+			halfLength, halfLength, -halfLength, 0.f, 1.f, 0.f, color[0], color[1], color[2], 0.f, 0.f, //4
+			halfLength, halfLength, halfLength, 0.f, 1.f, 0.f, color[0], color[1], color[2], 0.f, 0.f, //0
 
 			// front
-			halfLength, -halfLength, halfLength, 0.f, -1.f, 0.f, color[0], color[1], color[2], //1
-			-halfLength, -halfLength, halfLength, 0.f, -1.f, 0.f, color[0], color[1], color[2], //2
-			-halfLength, -halfLength, -halfLength, 0.f, -1.f, 0.f, color[0], color[1], color[2], //6
+			halfLength, -halfLength, halfLength, 0.f, -1.f, 0.f, color[0], color[1], color[2], 0.f, 0.f, //1
+			-halfLength, -halfLength, halfLength, 0.f, -1.f, 0.f, color[0], color[1], color[2], 0.f, 0.f, //2
+			-halfLength, -halfLength, -halfLength, 0.f, -1.f, 0.f, color[0], color[1], color[2], 0.f, 0.f, //6
 
-			-halfLength, -halfLength, -halfLength, 0.f, -1.f, 0.f, color[0], color[1], color[2], //6
-			halfLength, -halfLength, -halfLength, 0.f, -1.f, 0.f, color[0], color[1], color[2], //5
-			halfLength, -halfLength, halfLength, 0.f, -1.f, 0.f, color[0], color[1], color[2] //1
+			-halfLength, -halfLength, -halfLength, 0.f, -1.f, 0.f, color[0], color[1], color[2], 0.f, 0.f, //6
+			halfLength, -halfLength, -halfLength, 0.f, -1.f, 0.f, color[0], color[1], color[2], 0.f, 0.f, //5
+			halfLength, -halfLength, halfLength, 0.f, -1.f, 0.f, color[0], color[1], color[2], 0.f, 0.f //1
 
 
 			//halfLength, halfLength, halfLength, color[0], color[1], color[2], //0

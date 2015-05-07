@@ -54,21 +54,22 @@ public:
 			child->setParent(this);
 	}
 
-	// TODO add support for normal rotation
 	static glm::mat4 sphere2xyz(glm::vec4 & spherePos) {
-		// position
-		glm::vec3 xyz(spherePos.x, 0, 0);
-		xyz = glm::angleAxis(glm::radians(spherePos.y), glm::vec3(0, 0, 1)) * xyz;
-		xyz = glm::angleAxis(glm::radians(spherePos.z), glm::vec3(0, 1, 0)) * xyz;
+		// get position on world
+		glm::vec3 xyz(0, 0, spherePos.x);
+		xyz = glm::angleAxis(glm::radians(spherePos.y), glm::vec3(0, 1, 0)) * xyz;
+		xyz = glm::angleAxis(glm::radians(spherePos.z), glm::vec3(1, 0, 0)) * xyz;
 
-		// set relative up
-		glm::vec3 norm_pos = glm::normalize(xyz);
-		glm::quat new_up = glm::rotation(glm::vec3(0, 0, 1), norm_pos);
+		// make matrix out of position, add rotations
+		glm::mat4 matrix = glm::translate(glm::mat4(), xyz);
+		glm::quat rot = glm::rotation(glm::vec3(0, 0, 1), glm::normalize(xyz));
+		matrix = glm::rotate(matrix, glm::angle(rot), glm::axis(rot));
+		//matrix = glm::rotate(matrix, glm::radians(spherePos.y + 180.f), glm::vec3(0, 1, 0));
+		//matrix = glm::rotate(matrix, glm::radians(spherePos.z + 180.f), glm::vec3(1, 0, 0));
+		// do normal rotation last
+		matrix = glm::rotate(matrix, glm::radians(spherePos.w), glm::vec3(0, 0, 1));
 
-		glm::mat4 result = glm::translate(glm::mat4(), xyz);
-		result = result * glm::toMat4(new_up);
-
-		return result;
+		return matrix;
 	}
 };
 #endif

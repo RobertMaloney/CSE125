@@ -59,7 +59,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\lib\glew\include;..\..\lib\glm\include;..\..\lib\jsoncpp\include;..\..\lib\tinyobjloader\include;..\..\lib\glfw\include;%(AdditionalLibraryDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\lib\SOIL\include;..\..\lib\glew\include;..\..\lib\glm\include;..\..\lib\jsoncpp\include;..\..\lib\tinyobjloader\include;..\..\lib\glfw\include;%(AdditionalLibraryDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
@@ -71,8 +71,8 @@
     </Link>
     <Lib>
       <OutputFile>$(SolutionDir)\lib\dusty-core\lib\dusty-core.lib</OutputFile>
-      <AdditionalLibraryDirectories>..\..\lib\glew\lib;..\..\lib\glm\lib;..\..\lib\glfw\lib;..\..\lib\tinyobjloader\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;glew32s.lib;tinyobjloader.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\lib\SOIL\lib;..\..\lib\glew\lib;..\..\lib\glm\lib;..\..\lib\glfw\lib;..\..\lib\tinyobjloader\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;glew32s.lib;tinyobjloader.lib;SOIL.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -105,6 +105,7 @@
     <ClCompile Include="GameClient.cpp" />
     <ClCompile Include="GameServer.cpp" />
     <ClCompile Include="Graphics\GraphicsEngine.cpp" />
+    <ClCompile Include="graphics\Shader.cpp" />
     <ClCompile Include="network\Packet.cpp" />
     <ClCompile Include="network\PacketHandler.cpp" />
     <ClCompile Include="Network\Socket.cpp" />
@@ -132,6 +133,8 @@
     <ClInclude Include="graphics\MatrixNode.h" />
     <ClInclude Include="graphics\Node.h" />
     <ClInclude Include="Graphics\Renderable.h" />
+    <ClInclude Include="graphics\Shader.h" />
+    <ClInclude Include="graphics\Skybox.h" />
     <ClInclude Include="graphics\TextureLoad.h" />
     <ClInclude Include="Network\Endianness.h" />
     <ClInclude Include="network\Packet.h" />

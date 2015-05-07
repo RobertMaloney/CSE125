@@ -38,20 +38,28 @@ void GameServer::initialize(int maxConns) {
 
 
 void GameServer::run() {
+	long long elapsedTime;
+	high_resolution_clock::time_point start;
+
 	while (true) {
+		start = high_resolution_clock::now();
 		if (clients->size() < maxConnections) {
 			this->acceptWaitingClient();
 		}
-
 		this->receiveAndUpdate();
 		this->tick();
-		sleep_for(milliseconds(34));
+		elapsedTime = chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count();
+		if (elapsedTime > TIME_PER_FRAME) {
+			cerr << "Server loop took long than a frame." << endl;
+		}
+		sleep_for(milliseconds(TIME_PER_FRAME - elapsedTime));
 	}
 }
 
 
 
 void GameServer::acceptWaitingClient() {
+	Packet response;
 	TCPConnection* connection = listener->accept();
 	if (!connection) {
 		return;
@@ -59,17 +67,15 @@ void GameServer::acceptWaitingClient() {
 
 	//Note: Server generates id for client/player, and addes the player to gamestate
 	//Note: default position foor player is 505,0,0,0
-	ObjectId playerId = idGen->getNextId();
-	GameObject* player = gstate.addPlayer(playerId, new Player());// ObjectDB::getInstance().add(playerId, new GameObject());
-	if (!player){
-		//throw exception (get NULL => not added)
+	ObjectId playerId = idGen->createId();
+	Player* newPlayer = new Player();
+	if (!gstate.addPlayer(playerId, newPlayer)){
+		delete newPlayer;
+		return;
 	}
-	idGen->update(playerId);
-
 	connection->setNoDelay(true);
 	connection->setNonBlocking(true);
 	clients->insert(make_pair(connection, playerId));	
-	Packet response;
 	response.writeUInt(playerId);
 	connection->send(response);
 }
@@ -78,8 +84,7 @@ void GameServer::acceptWaitingClient() {
 
 void GameServer::tick() {
 	deque<Packet> updates;
-	//ObjectDB::getInstance().getObjectState(updates);
-	gstate.map->getObjectState(updates);
+	ObjectDB::getInstance().getObjectState(updates);
 
 	for (auto it = clients->begin(); it != clients->end(); ) {
 		SocketError err = it->first->send(updates);
@@ -109,6 +114,7 @@ void GameServer::receiveAndUpdate() {
         }
         events.clear();
 	}
+	gstate.updateMovingPlayers();
 }
 
 
