@@ -39,6 +39,9 @@ void GameObject::setId(ObjectId theId) {
 	this->id = theId;
 }
 
+void GameObject::setModel(Model model) {
+   this->rm = model;
+}
 
 vec4 & GameObject::getLoc() {
 	return loc;
