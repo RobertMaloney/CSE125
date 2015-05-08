@@ -32,8 +32,8 @@ void GameServer::initialize(int maxConns) {
 	this->listener->listen(maxConns);
 	this->listener->setNonBlocking(true);
 	maxConnections = maxConns;
-   gstate->init();
-   gstate->generateResources(100);
+   gameState->init();
+   gameState->generateResources(100);
 }
 
 

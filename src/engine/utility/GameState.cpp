@@ -61,7 +61,7 @@ void GameState::generateResources(int num) {
 
       cout << theta << " " << azimuth << " " << direction;
       Resource * newRe = new Resource(model, 5, radius, theta, azimuth, direction);
-      ObjectId resourceId = IdGenerator::getInstance().getNextId();
+      ObjectId resourceId = IdGenerator::getInstance().createId();
       addResource(resourceId, newRe);
       //radius is always 505
       //randomize resource model?? (maybe we should separate blob model from resource model)
