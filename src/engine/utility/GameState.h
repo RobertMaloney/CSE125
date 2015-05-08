@@ -5,8 +5,6 @@
 #include "ObjectDB.h"
 #include "Player.h"
 
-
-
 using namespace std;
 
 class GameState {

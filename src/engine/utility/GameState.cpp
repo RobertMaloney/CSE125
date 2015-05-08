@@ -9,6 +9,7 @@ bool GameState::addPlayer(ObjectId theId, Player* p) {
 	if (!map->add(theId, p)){
 		return false;
 	}
+	p->setId(theId);
 	players.push_back(p);
 	return true;
 }
@@ -17,6 +18,7 @@ bool GameState::addObject(ObjectId id, GameObject* o) {
 	if (!map->add(id, o)){
 		return false;
 	}
+	o->setId(id);
 	return true;
 }
 

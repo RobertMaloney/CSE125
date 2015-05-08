@@ -6,16 +6,6 @@ IdGenerator & IdGenerator::getInstance(){
 
 }
 
-void IdGenerator::update(ObjectId current){
-	if (current > this->numOfObjects){
-		this->numOfObjects = current;
-	}
-}
-
-ObjectId IdGenerator::getNextId(){
-	return this->numOfObjects + 1;
-}
-
 ObjectId IdGenerator::createId() {
 	int id = numOfObjects++;
 	return id;

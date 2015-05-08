@@ -22,6 +22,7 @@ void GameObject::serialize(Packet & p) {
 
 
 void GameObject::deserialize(Packet & p) {
+	this->id = p.readUInt();
 	for (int i = 0; i < 4; ++i){
 		this->loc[i] = p.readFloat();
 	}

@@ -14,14 +14,7 @@ GameClient::~GameClient() {
 }
 
 
-void GameClient::run() {
-	bool DEBUG = true;
-	bool loggedIn = false;
-    deque<Packet> updates;
-
-	this->initialize();
-
-
+void GameClient::login() {
 	//Note: Client receives id from server, creates a copy of player (same id) and adds it into the game state of client
 	//Note: TODO: current position of player is default 505,0,0,0, need to get real position from server
 	Packet p;
@@ -29,22 +22,28 @@ void GameClient::run() {
 	connection->receive(p);
 
 	ObjectId playerId = p.readUInt();
-    Player* player = new Player();
+	Player* player = new Player();
 
 	std::cout << "logging in id " << playerId << std::endl;
 
-	if (!gstate.addPlayer(playerId, player)){
-		return;
-	}
+	assert(gstate.addPlayer(playerId, player));
 
 	//Initializes GraphicsEngine for this client with playerId (i.e. ClientID)
 	GraphicsEngine::Initialize(playerId);
 
 	//Binds player game object with the player node in Graphics engine
 	GraphicsEngine::bindPlayerNode(player);
-
-
 	connection->setNonBlocking(true);
+}
+
+
+void GameClient::run() {
+	bool DEBUG = true;
+	bool loggedIn = false;
+    deque<Packet> updates;
+
+	this->initialize();
+	this->login();
 
 	while (!GraphicsEngine::Closing()) {
 		GraphicsEngine::DrawAndPoll();
@@ -56,7 +55,6 @@ void GameClient::run() {
 			//Note: currently, it only updates game objects. Each package only includes the id and position of a game object.
 			//Note: This method reads updates, translates update, updates game states (in client) and scene graph (in GraphicsEngine)
 			this->updateGameState(updates);
-			//GraphicsEngine::UpdatePlayer(updates, gstate);
 			updates.clear();
 		}
 	}
@@ -81,6 +79,7 @@ void GameClient::updateGameState(deque<Packet> & data) {
 		}
 
 		objId = packet->readUInt();
+		packet->reset();
 		obj = gstate.getObject(objId);
 
 		//If this game object is new 
