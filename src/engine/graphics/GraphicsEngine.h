@@ -67,10 +67,13 @@ private:
 	static KeyCallback				m_keyCallback;
 	static MatrixNode				*m_player;
 	static CameraNode				*m_mainCamera;
+	static CameraNode				*m_minimapCamera;
 	static MatrixNode				*m_scene;
+
 	static GLuint					m_skyboxId;
 	static Renderable				*m_skybox;
 	static Shader					*m_defaultShader, *m_skyboxShader;
+
 
 	static unordered_map<ObjectId, MatrixNode*> objNodeMap;
 	

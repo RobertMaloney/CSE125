@@ -29,6 +29,7 @@ public:
     ~GameClient();
 
 	void run();
+	void login();
     void initialize();
 
     void receiveUpdates(deque<Packet> & updates);

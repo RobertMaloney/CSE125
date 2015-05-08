@@ -7,8 +7,6 @@
 #include "Resource.h"
 #include "Model.h"
 
-
-
 using namespace std;
 
 class GameState {

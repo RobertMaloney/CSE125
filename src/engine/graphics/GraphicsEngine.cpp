@@ -23,14 +23,17 @@ GLint				GraphicsEngine::m_uniView,
 GraphicsEngine::m_uniProjection;
 
 KeyCallback			GraphicsEngine::m_keyCallback = NULL;
-
 MatrixNode			*GraphicsEngine::m_player = NULL,
+
 *GraphicsEngine::m_scene = NULL;
 
 CameraNode			*GraphicsEngine::m_mainCamera = NULL;
+CameraNode			*GraphicsEngine::m_minimapCamera = NULL;
+
 GLuint				GraphicsEngine::m_skyboxId = 0;
 Renderable			*GraphicsEngine::m_skybox = NULL;
 Shader				*GraphicsEngine::m_defaultShader, *GraphicsEngine::m_skyboxShader;
+
 
 unordered_map<ObjectId, MatrixNode*> GraphicsEngine::objNodeMap;
 
@@ -56,6 +59,15 @@ void GraphicsEngine::Initialize(ObjectId playerId) {
 
 	cout << "Current Dir: " << System::CurrentDirectory() << endl;
 	m_scene = new MatrixNode();
+	
+	// Load shader files
+	string vertInfo = System::File2String("../engine/graphics/Shaders/test.vert");
+	string fragInfo = System::File2String("../engine/graphics/Shaders/test.frag");
+
+	GLchar const* vertFiles[] = { version.c_str(), vertInfo.c_str() };
+	GLint vertLengths[] = { version.size(), vertInfo.size() };
+	GLchar const* fragFiles[] = { version.c_str(), fragInfo.c_str() };
+	GLint fragLengths[] = { version.size(), fragInfo.size() };
 
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 	m_window = glfwCreateWindow(800, 800, "CSE 125", NULL, NULL);
@@ -71,6 +83,7 @@ void GraphicsEngine::Initialize(ObjectId playerId) {
 
 	// Turn on z-buffering
 	glEnable(GL_DEPTH_TEST);
+
 
 	// SKYBOX
 	m_skyboxShader->Use();
@@ -92,16 +105,20 @@ void GraphicsEngine::Initialize(ObjectId playerId) {
 		glm::vec3(0.f, 0.f, 1.f));
 	m_mainCamera = new CameraNode();
 	m_mainCamera->setViewMatrix(camview);
+	
+	glm::mat4 minimapview = glm::lookAt(
+		glm::vec3(0.f,300.f, 300.f),
+		glm::vec3(0.f, 1.f, 0.f),
+		glm::vec3(0.f, -1.f, 1.f));
+	m_minimapCamera = new CameraNode();
+	m_minimapCamera->setViewMatrix(minimapview);
 
 	// PLAYER  (Player node is created by default)
 	Renderable * model = GraphicsEngine::selectModel(playerId);
 	m_player = GraphicsEngine::addNode(model);
 	m_player->addChild(m_mainCamera);
-
-	m_view = glm::lookAt(
-		glm::vec3(0.f, 6.f, 4.f),
-		glm::vec3(0.f, 0.f, 0.f),
-		glm::vec3(0.f, 0.f, 1.f));
+	m_player->addChild(m_minimapCamera);
+	
 
 	if (glGetError() != 0) printf("Error Code: %d\n", glGetError());
 
@@ -136,6 +153,7 @@ void GraphicsEngine::DrawAndPoll() {
 	int height, width;
 	glfwGetWindowSize(m_window, &width, &height);
 
+	glViewport(0, 0, width, height);
 	m_projection = glm::perspective(
 		45.f,
 		((float)height) / width,
@@ -177,6 +195,18 @@ void GraphicsEngine::DrawAndPoll() {
 	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "view"), 1, GL_FALSE, glm::value_ptr(view));
 
 	renderScene(m_scene, &identity);
+	glViewport(width -200, height-200,200, 200);
+
+	glClear( GL_DEPTH_BUFFER_BIT);
+
+	 view = m_minimapCamera->getFlatViewMatrix();
+
+
+	glUniformMatrix4fv(m_uniView, 1, GL_FALSE, glm::value_ptr(view));
+	glUniformMatrix4fv(m_uniProjection, 1, GL_FALSE, glm::value_ptr(m_projection));
+
+	renderScene(m_scene, &identity);
+	glEnable(GL_DEPTH_TEST);
 
 	glfwSwapBuffers(m_window);
 	glfwPollEvents();

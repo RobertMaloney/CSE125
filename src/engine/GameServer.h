@@ -42,14 +42,11 @@ public:
     GameServer();
     ~GameServer();
 
+	void run();
     void initialize(int maxConns);
-    void run();
 
     void tick();
-    void receiveAndUpdate();
-
-	IdGenerator * idGen;
-	GameState gstate;
+    void processClientEvents();
 
 private:
 
@@ -61,6 +58,8 @@ private:
     
 	unsigned int maxConnections;
 
+	IdGenerator * idGen;
+	GameState* gameState;
     TCPListener* listener;
     PacketHandler* handler;
 	unordered_map<TCPConnection*, ObjectId>* clients;

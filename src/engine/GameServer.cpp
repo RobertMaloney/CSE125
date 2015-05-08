@@ -4,7 +4,8 @@
 GameServer::GameServer() {
 	this->clients = new unordered_map<TCPConnection*, ObjectId>();
 	this->handler = new PacketHandler();
-	this->idGen = &(IdGenerator::getInstance());
+	this->idGen = &IdGenerator::getInstance();
+	this->gameState = &GameState::getInstance();
 }
 
 
@@ -31,9 +32,8 @@ void GameServer::initialize(int maxConns) {
 	this->listener->listen(maxConns);
 	this->listener->setNonBlocking(true);
 	maxConnections = maxConns;
-
-	gstate.init();
-   gstate.generateResources(100);
+   gstate->init();
+   gstate->generateResources(100);
 }
 
 
@@ -46,7 +46,7 @@ void GameServer::run() {
 		if (clients->size() < maxConnections) {
 			this->acceptWaitingClient();
 		}
-		this->receiveAndUpdate();
+		this->processClientEvents();
 		this->tick();
 		elapsedTime = chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count();
 		if (elapsedTime > TIME_PER_FRAME) {
@@ -64,12 +64,11 @@ void GameServer::acceptWaitingClient() {
 	if (!connection) {
 		return;
 	}
-
 	//Note: Server generates id for client/player, and addes the player to gamestate
 	//Note: default position foor player is 505,0,0,0
 	ObjectId playerId = idGen->createId();
 	Player* newPlayer = new Player();
-	if (!gstate.addPlayer(playerId, newPlayer)){
+	if (!gameState->addPlayer(playerId, newPlayer)){
 		delete newPlayer;
 		return;
 	}
@@ -99,7 +98,7 @@ void GameServer::tick() {
 }
 
 
-void GameServer::receiveAndUpdate() {
+void GameServer::processClientEvents() {
 	deque<Packet> events;
 
 	for (auto it = clients->begin(); it != clients->end(); ) {
@@ -114,7 +113,7 @@ void GameServer::receiveAndUpdate() {
         }
         events.clear();
 	}
-	gstate.updateMovingPlayers();
+	gameState->updateMovingPlayers();
 }
 
 
