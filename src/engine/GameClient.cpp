@@ -93,11 +93,9 @@ void GameClient::updateGameState(deque<Packet> & data) {
 				delete obj;
 				obj = nullptr;
 				continue;
-			}
-         else
-         {
-            obj->deserialize(*packet);
-         }
+			}else{
+                obj->deserialize(*packet);//deserialize here to get the model
+            }
 
 			//Add node in scene graph (in GraphicsEngine) and add object-node mapping (in GraphicsEngine)
 			GraphicsEngine::insertObject(obj->getId(), GraphicsEngine::addNode(GraphicsEngine::selectModel(obj->getModel())));

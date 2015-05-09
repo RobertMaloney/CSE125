@@ -5,6 +5,7 @@
 void forwardHandler(ObjectId id) {
 	Player* player = static_cast<Player*> (ObjectDB::getInstance().get(id));
 	player->setMoving(Player::UP, true);
+	GameEngine::getInstance().handleColliDetect(id);
 }
 
 

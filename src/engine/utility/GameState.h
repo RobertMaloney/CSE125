@@ -15,7 +15,7 @@ protected:
 
 	ObjectDB * map;
 	vector<Player*> players;
-   vector<Resource *> resources;
+    vector<Resource *> resources;
 
 public:
 

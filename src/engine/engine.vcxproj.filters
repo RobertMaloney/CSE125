@@ -18,6 +18,8 @@
     <ClCompile Include="utility\Resource.cpp" />
     <ClCompile Include="utility\GameState.cpp" />
     <ClCompile Include="utility\Model.cpp" />
+    <ClCompile Include="graphics\Shader.cpp" />
+    <ClCompile Include="utility\GameEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameClient.h" />
@@ -54,6 +56,7 @@
     <ClInclude Include="graphics\Skybox.h" />
     <ClInclude Include="graphics\Shader.h" />
     <ClInclude Include="utility\Model.h" />
+    <ClInclude Include="utility\GameEngine.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Network\Endianness.inl" />
