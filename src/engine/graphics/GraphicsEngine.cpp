@@ -114,10 +114,11 @@ void GraphicsEngine::Initialize(ObjectId playerId) {
 	m_minimapCamera->setViewMatrix(minimapview);
 
 	// PLAYER  (Player node is created by default)
-	Renderable * model = GraphicsEngine::selectModel(playerId);
+
+	/*Renderable * model = GraphicsEngine::selectModel(playerId);
 	m_player = GraphicsEngine::addNode(model);
 	m_player->addChild(m_mainCamera);
-	m_player->addChild(m_minimapCamera);
+	m_player->addChild(m_minimapCamera);*/
 	
 
 	if (glGetError() != 0) printf("Error Code: %d\n", glGetError());
@@ -279,7 +280,12 @@ void GraphicsEngine::ScaleDown()
 
 
 void GraphicsEngine::bindPlayerNode(GameObject* player) {
-    GraphicsEngine::insertObject(player->getId(), m_player);// (player->node = m_player;)
+   Renderable * model = GraphicsEngine::selectModel(player->getModel());
+   m_player = GraphicsEngine::addNode(model);
+   m_player->addChild(m_mainCamera);
+   m_player->addChild(m_minimapCamera);
+
+   GraphicsEngine::insertObject(player->getId(), m_player);// (player->node = m_player;)
 }
 
 
@@ -292,27 +298,6 @@ MatrixNode* GraphicsEngine::addNode(Renderable* objModel){
 	m_node->addChild(objGeode);
 	m_scene->addChild(m_node);
 	return m_node;
-}
-
-// Select blob model based on playerId, will be changed later
-Renderable * GraphicsEngine::selectModel(ObjectId playerId){
-	Renderable* newModel;
-
-	switch (playerId % 3){
-	case 0:
-		newModel = new Geometry("../../media/bb.obj");
-		break;
-	case 1:
-		newModel = new Geometry("../../media/gb.obj");
-		break;
-	case 2:
-		newModel = new Geometry("../../media/pb.obj");
-		break;
-	default:
-		newModel = new Geometry("../../media/bb.obj");
-		break;
-	}
-	return newModel;
 }
 
 // Select blob model based on playerId, will be changed later

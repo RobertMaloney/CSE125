@@ -48,14 +48,13 @@ public:
 	static void ScaleDown();
 	static KeyCallback GetKeyCallback();
 	static void UpdatePlayer(deque<Packet> &, GameState &);
-    static int getKeyState(int);
+   static int getKeyState(int);
 
-    static void bindPlayerNode(GameObject* player);
+   static void bindPlayerNode(GameObject* player);
 	static void updateObject(ObjectId objId, glm::vec4 & v);
 	static void insertObject(ObjectId objId, MatrixNode*);
 
 	static MatrixNode* addNode(Renderable*);
-	static Renderable* selectModel(ObjectId playerId);
    static Renderable* selectModel(Model model);
 
 private:

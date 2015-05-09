@@ -32,8 +32,8 @@ void GameServer::initialize(int maxConns) {
 	this->listener->listen(maxConns);
 	this->listener->setNonBlocking(true);
 	maxConnections = maxConns;
-    gameState->init();
-    gameState->generateResources(100);
+   gameState->init();
+   generateResources(100);
 }
 
 
@@ -126,3 +126,33 @@ void GameServer::printUpdates(deque<Packet> & updates) {
 	}
 }
 
+void GameServer::generateResources(int num) {
+   for (int i = 0; i < num; i++)
+   {
+      float radius = 505;
+      float theta = (float)(rand() % 180);
+      float azimuth = (float)(rand() % 360);
+      float direction = (float)(rand() % 360);
+      Model model = TREE;
+
+      int pick = rand() % 6;
+      if (pick == 1)
+         model = ROCK;
+      else if (pick == 2)
+         model = STUMP;
+      else if (pick == 3)
+         model = GRASS;
+      else if (pick == 4)
+         model = MUSHROOM;
+      else if (pick == 5)
+         model = FLOWER;
+
+      cout << theta << " " << azimuth << " " << direction;
+      Resource * newRe = new Resource(model, 5, radius, theta, azimuth, direction);
+      ObjectId resourceId = IdGenerator::getInstance().createId();
+      gameState->addResource(resourceId, newRe);
+      //radius is always 505
+      //randomize resource model?? (maybe we should separate blob model from resource model)
+      //randomize other coords
+   }
+}
