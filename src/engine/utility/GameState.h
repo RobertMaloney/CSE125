@@ -30,8 +30,6 @@ public:
 
    Model selectPlayerModel(ObjectId playerId);
    bool addResource(ObjectId theId, Resource * ptr);
-
-   void generateResources(int num);
 };
 
 #endif

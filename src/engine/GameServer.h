@@ -48,11 +48,13 @@ public:
     void tick();
     void processClientEvents();
 
+    void generateResources(int num);
+
 private:
 
     void acceptWaitingClient();
     void printUpdates(deque<Packet> & updates);
-	void parsePlayer(deque<Packet> & in, deque<Packet> & out);
+	 void parsePlayer(deque<Packet> & in, deque<Packet> & out);
 
     inline bool shouldTerminate(SocketError err);
     
