@@ -14,7 +14,6 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram.cd" />
     <None Include="config_client.json" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

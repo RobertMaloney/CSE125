@@ -17,6 +17,7 @@
     <ClCompile Include="utility\GameObject.cpp" />
     <ClCompile Include="utility\GameState.cpp" />
     <ClCompile Include="graphics\Shader.cpp" />
+    <ClCompile Include="utility\World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameClient.h" />
@@ -39,7 +40,6 @@
     <ClInclude Include="utility\ObjLoader.h" />
     <ClInclude Include="utility\Player.h" />
     <ClInclude Include="graphics\CameraNode.h" />
-    <ClInclude Include="utility\MoveEvent.h" />
     <ClInclude Include="utility\System.h" />
     <ClInclude Include="network\PacketHandler.h" />
     <ClInclude Include="utility\Serializable.h" />
@@ -51,6 +51,7 @@
     <ClInclude Include="utility\GameState.h" />
     <ClInclude Include="graphics\Skybox.h" />
     <ClInclude Include="graphics\Shader.h" />
+    <ClInclude Include="utility\World.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Network\Endianness.inl" />

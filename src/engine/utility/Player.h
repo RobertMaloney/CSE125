@@ -11,13 +11,15 @@ class Player : public GameObject {
 
 protected:
 
-	int speed;
-	int power;
 	bool moves[4];
-
+	const float PLAYER_ACCELERATION = .001;
+	const float FRICTION = .005;
+	float velocity;
+ 
 	BlobModel bm;
 
 public:
+
 	enum {
 		UP = 0,
 		RIGHT,
@@ -25,20 +27,18 @@ public:
 		LEFT
 	};
 
-	Player() :Player(OB_TYPE) {};
-	Player(BlobModel thebm) : Player(thebm, 505, 0, 0, 0) {};
-	Player(BlobModel, float, float, float, float);
+	Player() : Player(OB_TYPE) {};
+	Player(BlobModel bm, float radius = 505, float theta = 0, float azimuth = 0, float direction = 0);
 
     ~Player();
 
-	int getSpeed();
-	int getPower();
-
-	void setSpeed(int newSpeed);
-	void setPower(int newPower);
 
 	bool getMoving(int);
 	void setMoving(int, bool);
+
+
+	void update(float dt);
+
 };
 
 #endif

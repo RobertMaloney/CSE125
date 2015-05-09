@@ -22,9 +22,11 @@ public:
 	bool addObject(ObjectId id, GameObject* o);
 	GameObject* getObject(ObjectId id);
 	int getNumPlayers();
-	void updateMovingPlayers();
+	
 	static GameState & getInstance();
 
+
+//	void updateMovingPlayers();
 };
 
 #endif

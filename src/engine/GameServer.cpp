@@ -6,6 +6,7 @@ GameServer::GameServer() {
 	this->handler = new PacketHandler();
 	this->idGen = &IdGenerator::getInstance();
 	this->gameState = &GameState::getInstance();
+	this->world = new World();
 }
 
 
@@ -22,6 +23,7 @@ GameServer::~GameServer() {
 	}
 	delete clients;
 	clients = nullptr;
+	delete world;
 }
 
 
@@ -42,15 +44,20 @@ void GameServer::run() {
 
 	while (true) {
 		start = high_resolution_clock::now();
+		// try to allow a new player to join
 		if (clients->size() < maxConnections) {
 			this->acceptWaitingClient();
 		}
-		this->processClientEvents();
-		this->tick();
+
+		this->processClientEvents(); 		// process the client input events
+		world->update(TIME_PER_FRAME);      // do a physics step
+		this->tick();                       // send state back to client
+		//calculates the ms from start until here.
 		elapsedTime = chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count();
-		if (elapsedTime > TIME_PER_FRAME) {
+		if (elapsedTime > TIME_PER_FRAME) {  // this is so know if we need to slow down the loop
 			cerr << "Server loop took long than a frame." << endl;
 		}
+		// sleep for unused time
 		sleep_for(milliseconds(TIME_PER_FRAME - elapsedTime));
 	}
 }
@@ -112,7 +119,7 @@ void GameServer::processClientEvents() {
         }
         events.clear();
 	}
-	gameState->updateMovingPlayers();
+	//gameState->updateMovingPlayers();
 }
 
 

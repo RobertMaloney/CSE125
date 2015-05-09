@@ -5,6 +5,8 @@
 //TODO Config file
 GameObject::GameObject(float radius, float theta, float azimuth, float direction) {
 	this->loc = glm::vec4(radius, theta, azimuth, direction);
+	this->modelRadius = 1.f;
+	this->type = ObjectType::GAMEOBJECT;
 }
 
 GameObject::~GameObject() {
@@ -47,3 +49,17 @@ void GameObject::setLoc(vec4 & newLoc){
 	loc = newLoc;
 }
 
+
+float GameObject::getModelRadius() {
+	return this->modelRadius;
+}
+
+
+void GameObject::setModelRadius(float radius) {
+	assert(radius > 0);
+	this->modelRadius = radius;
+}
+
+
+void GameObject::update(float dt) {
+}

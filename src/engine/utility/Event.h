@@ -17,21 +17,6 @@ enum EventType {
    OBJECT_UPDATE
 };
 
-struct Event
-{
-	EventType theevent;
-	
-
-	void serialize(char * buffer)
-	{
-		memcpy(buffer, this, sizeof(EventType));
-	}
-
-	void deserialize(char* buffer)
-	{
-		memcpy(this, buffer, sizeof(EventType));
-	}
-};
 
 #endif
 

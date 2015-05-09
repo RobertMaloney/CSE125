@@ -8,21 +8,31 @@
 #include "IdGenerator.h"
 
 using glm::mat4;
+using glm::vec2;
 using glm::vec4;
 using namespace std;
 
 class GameObject : public Serializable  {
 
+public:
+
+	enum ObjectType {
+		PLAYER,
+		MOVEABLE,
+		GAMEOBJECT
+	};
+
 protected:
 
-	ObjectId id;
 	vec4 loc;
+	ObjectId id;
+	ObjectType type;
+	float modelRadius;
 
 public:
 
-	GameObject() :GameObject(505, 0, 0, 0) {};
-	GameObject(float radius, float theta, float azimuth, float direction);
-	GameObject(const vec4 & loc) :GameObject(loc.r, loc.g, loc.b, loc.a) {};
+	GameObject(float radius = 505, float theta = 0, float azimuth = 0, float direction = 0);
+	GameObject(const vec4 & loc) : GameObject(loc.r, loc.g, loc.b, loc.a) {};
 
 	virtual ~GameObject();
 
@@ -34,6 +44,13 @@ public:
 
 	vec4 & getLoc();
 	void setLoc(vec4 & newLoc);
+
+	float getModelRadius();
+	void setModelRadius(float radius);
+
+	ObjectType getType();
+
+	virtual void update(float dt);
 
 };
 
