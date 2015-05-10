@@ -6,10 +6,6 @@
 #include <gtc\type_ptr.hpp>
 #include <gtx\quaternion.hpp>
 
-
-using std::hash;
-using std::pair;
-
 using glm::pow;
 using glm::sqrt;
 
@@ -24,9 +20,9 @@ public:
 
 private:
 
-	bool checkCollision(GameObject* ob1, GameObject* ob2);
-	void resolveCollisions(float dt);
 	void updateObjects(float dt);
+	void resolveCollisions(float dt);
+	inline bool checkCollision(GameObject* ob1, GameObject* ob2);
 
 	ObjectDB* objectDb;
 	
@@ -40,5 +36,17 @@ private:
 	return xyz;
 }
 
+ // check for a collision
+ inline bool PhysicsEngine::checkCollision(GameObject* ob1, GameObject* ob2) {
+	 // if something is null bad things are happening so crash
+	 assert(ob1 && ob2);
+
+	 // get positions in xyz
+	 vec3 loc1 = sphereToXYZ(ob1->getLocation());
+	 vec3 loc2 = sphereToXYZ(ob2->getLocation());
+
+	 // if the distance is less than sum of radii there is a collision
+	 return glm::distance(loc1, loc2) < (ob1->getModelRadius() + ob2->getModelRadius());
+ }
 
 #endif
