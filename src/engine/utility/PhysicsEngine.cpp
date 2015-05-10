@@ -1,6 +1,23 @@
 #include "PhysicsEngine.h"
 
 
+Collision::Collision(GameObject* first, GameObject* second) {
+	assert(first && second);
+	if (first > second) {
+		this->second = first;
+		this->first = second;
+	} else {
+		this->first = first;
+		this->second = second;
+	}
+}
+
+
+Collision::~Collision() {
+
+}
+
+
 PhysicsEngine::PhysicsEngine() {
 	objectDb = &ObjectDB::getInstance();
 }
@@ -17,34 +34,29 @@ void PhysicsEngine::update(float dt) {
 }
 
 // get all the collisions be sure to avoid duplicate collisions
-void PhysicsEngine::getCollisions(set<pair<GameObject*, GameObject*>> & collisions) {
-	// loop over all pairs for now
+void PhysicsEngine::getCollisions() {
+
+	// lLoop over all pairs of objects. check if they are colliding, if they are put them in
+	// the set of collisions. this should prevent duplicates
 	for (auto it = objectDb->objects.begin(); it != objectDb->objects.end(); ++it) {
 		for (auto jt = objectDb->objects.begin(); jt != objectDb->objects.end(); ++jt) {
-			// check to see if they are colliding
 			if (jt != it && this->checkCollision(it->second, jt->second)) {
-				// add them to collision set, avoid duplicates
-				GameObject* first = it->second;
-				GameObject* second = jt->second;
-				if (first > second) {
-					collisions.insert(make_pair(second, first));
-				} else {
-					collisions.insert(make_pair(first, second));
-				}
+				collisions.insert(Collision(it->second, jt->second));
 			}
 		}
 	}
 }
 
+
 // dispatch collisions to each object
 void PhysicsEngine::resolveCollisions() {
-	set<pair<GameObject*, GameObject*>> collisions;
-	this->getCollisions(collisions);
+	this->getCollisions();
 
 	for (auto it = collisions.begin(); it != collisions.end(); ++it) {
 		it->first->collide(*it->second);
 		it->second->collide(*it->first);
 	}
+	collisions.clear();
 }
 
 
@@ -54,6 +66,7 @@ void PhysicsEngine::updateObjects(float dt) {
 		it->second->update(dt);
 	}
 }
+
 
 // check for a collision
 bool PhysicsEngine::checkCollision(GameObject* ob1, GameObject* ob2) {

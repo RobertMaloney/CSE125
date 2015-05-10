@@ -28,7 +28,6 @@ void Player::setMoving(int index, bool b) {
 }
 
 
-
 void Player::update(float dt) {
 	if (moves[Player::UP]) {
 		velocity += PLAYER_ACCELERATION;
@@ -50,14 +49,13 @@ void Player::update(float dt) {
 	if (!moves[Player::UP] && !moves[Player::DOWN]) {
 		if (glm::abs(velocity) <= FRICTION && glm::abs(velocity) >= 0) {
 			velocity = 0;
-		} else {
+		} else { 
 			velocity = (velocity > 0) ? velocity - FRICTION : velocity + FRICTION;
 		}
 	}
 
 	loc.z += glm::cos(glm::radians(loc.w)) * dt * velocity;
 	loc.y += glm::sin(glm::radians(loc.w)) * dt * velocity;
-
 }
 
 

@@ -52,11 +52,13 @@ void GameServer::run() {
 		this->processClientEvents(); 		// process the client input events
 		physics->update(TIME_PER_FRAME);      // do a physics step
 		this->tick();                       // send state back to client
+
 		//calculates the ms from start until here.
 		elapsedTime = chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count();
 		if (elapsedTime > TIME_PER_FRAME) {  // this is so know if we need to slow down the loop
 			cerr << "Server loop took long than a frame." << endl;
 		}
+
 		// sleep for unused time
 		sleep_for(milliseconds(TIME_PER_FRAME - elapsedTime));
 	}
