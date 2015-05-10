@@ -16,7 +16,6 @@
 #endif
 
 // C++ includes
-#include <stdexcept>
 #include <string>
 #include <iostream>
 

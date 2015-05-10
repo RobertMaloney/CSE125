@@ -1,15 +1,14 @@
 #ifndef PHYSICSENGINE_H
 #define PHYSICSENGINE_H
 
-#include <set>
-#include <unordered_map>
-
 #include "ObjectDB.h"
+#include <glm.hpp>
+#include <gtc\type_ptr.hpp>
+#include <gtx\quaternion.hpp>
+
 
 using std::hash;
 using std::pair;
-using std::set;
-using std::unordered_map;
 
 using glm::pow;
 using glm::sqrt;

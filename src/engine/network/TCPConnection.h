@@ -1,7 +1,6 @@
 #ifndef TCPCONNECTION_H
 #define TCPCONNECTION_H
 
-#include <cstdint>
 #include <vector>
 #include <deque>
 

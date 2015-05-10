@@ -8,10 +8,6 @@
 #include <iostream>
 #include <unordered_map>
 
-#include <glm.hpp>
-#include <gtc/matrix_transform.hpp>
-#include <gtc/type_ptr.hpp>
-
 #include "utility/PhysicsEngine.h"
 #include "network/PacketHandler.h"
 #include "network/TCPConnection.h"

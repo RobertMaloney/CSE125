@@ -1,9 +1,6 @@
 #ifndef EVENT_H
 #define EVENT_H
 
-#include <string.h>
-
-#include "Serializable.h"
 
 enum EventType {
    MOVE_FORWARD,

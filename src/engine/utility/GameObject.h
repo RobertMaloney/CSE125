@@ -1,9 +1,7 @@
 #ifndef GAME_OBJECT_H
 #define GAME_OBJECT_H
 
-#include <string>
 #include <glm.hpp>
-#include <gtc\type_ptr.hpp>
 #include "../network/Packet.h"
 #include "Serializable.h"
 #include "IdGenerator.h"

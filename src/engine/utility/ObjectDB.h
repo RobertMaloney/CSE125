@@ -6,10 +6,7 @@
 #include <algorithm>
 #include <unordered_map>
 #include <glm.hpp>
-#include <gtc\matrix_transform.hpp>
-#include <gtc\type_ptr.hpp>
-#include <gtx\string_cast.hpp>
-#include "Serializable.h"
+
 #include "GameObject.h"
 
 
