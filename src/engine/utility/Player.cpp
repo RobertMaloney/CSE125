@@ -30,7 +30,6 @@ void Player::setMoving(int index, bool b) {
 
 
 void Player::update(float dt) {
-
 	if (moves[Player::UP]) {
 		velocity += PLAYER_ACCELERATION;
 	}
@@ -47,6 +46,7 @@ void Player::update(float dt) {
 		loc.w += 1.f;
 	}
 
+	// if there was no input simulate friction
 	if (!moves[Player::UP] && !moves[Player::DOWN]) {
 		if (glm::abs(velocity) <= FRICTION && glm::abs(velocity) >= 0) {
 			velocity = 0;

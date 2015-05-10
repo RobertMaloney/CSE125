@@ -42,7 +42,8 @@ public:
 	ObjectId getId();
 	void setId(ObjectId theId);
 
-	vec4 & getLoc();
+	vec4 getLoc();
+	const vec4 & getLoc() const;
 	void setLoc(vec4 & newLoc);
 
 	float getModelRadius();

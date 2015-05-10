@@ -11,11 +11,11 @@ class Player : public GameObject {
 
 protected:
 
-	bool moves[4];
 	const float PLAYER_ACCELERATION = .001;
 	const float FRICTION = .005;
+
+	bool moves[4];
 	float velocity;
- 
 	BlobModel bm;
 
 public:
