@@ -12,6 +12,7 @@ Player::Player(BlobModel thebm, float radius, float theta, float azimuth, float 
 
 	this->type = ObjectType::PLAYER;
 	this->velocity = 0;
+	this->modelRadius = 5.f;
 }
 
 Player::~Player() {
