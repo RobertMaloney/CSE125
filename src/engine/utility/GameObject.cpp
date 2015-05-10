@@ -43,10 +43,6 @@ vec4 GameObject::getLoc() {
 	return loc;
 }
 
-const vec4 & GameObject::getLoc() const {
-	return loc;
-}
-
 
 void GameObject::setLoc(vec4 & newLoc) {
 	loc = newLoc;
@@ -65,4 +61,14 @@ void GameObject::setModelRadius(float radius) {
 
 
 void GameObject::update(float dt) {
+}
+
+
+void GameObject::collide(const GameObject & target) {
+
+}
+
+
+ObjectType GameObject::getType() const {
+	return this->type;
 }

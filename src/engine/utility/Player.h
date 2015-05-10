@@ -38,6 +38,7 @@ public:
 
 
 	void update(float dt);
+	void collide(const GameObject & target);
 
 };
 

@@ -59,3 +59,16 @@ void Player::update(float dt) {
 	loc.y += glm::sin(glm::radians(loc.w)) * dt * velocity;
 
 }
+
+
+void Player::collide(const GameObject & target) {
+
+	switch (target.getType()) {
+		case GAMEOBJECT:
+			this->loc.w += 180.f;
+			break;
+		case PLAYER:
+			this->loc.w += 180.f;
+			break;
+	}
+}

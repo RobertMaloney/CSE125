@@ -6,7 +6,7 @@ GameServer::GameServer() {
 	this->handler = new PacketHandler();
 	this->idGen = &IdGenerator::getInstance();
 	this->gameState = &GameState::getInstance();
-	this->physics = new Physics();
+	this->physics = new PhysicsEngine();
 }
 
 

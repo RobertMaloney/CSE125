@@ -12,7 +12,7 @@
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
 
-#include "utility/Physics.h"
+#include "utility/PhysicsEngine.h"
 #include "network/PacketHandler.h"
 #include "network/TCPConnection.h"
 #include "network/TCPListener.h"
@@ -59,7 +59,7 @@ private:
 	unsigned int maxConnections;
 
 	IdGenerator * idGen;
-	Physics* physics;
+	PhysicsEngine* physics;
 	GameState* gameState;
     TCPListener* listener;
     PacketHandler* handler;

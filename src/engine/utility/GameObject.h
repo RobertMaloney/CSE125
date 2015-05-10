@@ -13,15 +13,15 @@ using glm::vec2;
 using glm::vec4;
 using namespace std;
 
+enum ObjectType {
+	PLAYER,
+	MOVEABLE,
+	GAMEOBJECT
+};
+
 class GameObject : public Serializable  {
 
 public:
-
-	enum ObjectType {
-		PLAYER,
-		MOVEABLE,
-		GAMEOBJECT
-	};
 
 protected:
 
@@ -37,22 +37,22 @@ public:
 
 	virtual ~GameObject();
 
-	void serialize(Packet & p);
-	void deserialize(Packet & p);
-
 	ObjectId getId();
 	void setId(ObjectId theId);
 
 	vec4 getLoc();
-	const vec4 & getLoc() const;
 	void setLoc(vec4 & newLoc);
 
 	float getModelRadius();
 	void setModelRadius(float radius);
 
-	ObjectType getType();
+	ObjectType getType() const;
+
+	void serialize(Packet & p);
+	void deserialize(Packet & p);
 
 	virtual void update(float dt);
+	virtual void collide(const GameObject & target);
 
 };
 

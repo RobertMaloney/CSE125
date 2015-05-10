@@ -118,7 +118,7 @@
     <ClCompile Include="utility\ObjectDB.cpp" />
     <ClCompile Include="Utility\ObjLoader.cpp" />
     <ClCompile Include="utility\Player.cpp" />
-    <ClCompile Include="utility\Physics.cpp" />
+    <ClCompile Include="utility\PhysicsEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameClient.h" />
@@ -152,7 +152,7 @@
     <ClInclude Include="utility\Player.h" />
     <ClInclude Include="utility\Serializable.h" />
     <ClInclude Include="utility\System.h" />
-    <ClInclude Include="utility\Physics.h" />
+    <ClInclude Include="utility\PhysicsEngine.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Network\Endianness.inl" />

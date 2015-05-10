@@ -1,6 +1,7 @@
 #ifndef WORLD_H
 #define WORLD_H
 
+#include <set>
 #include <iostream>
 #include <unordered_map>
 
@@ -9,24 +10,26 @@
 
 using std::hash;
 using std::pair;
+using std::set;
 using std::unordered_map;
 
 using glm::pow;
 using glm::sqrt;
 
-class Physics {
+class PhysicsEngine {
 
 public:
 	
-	Physics();
-	~Physics();
+	PhysicsEngine();
+	~PhysicsEngine();
 
 	void update(float dt);
 
 private:
 
 	bool checkCollision(GameObject* ob1, GameObject* ob2);
-	void handleCollisions();
+	void getCollisions(set<pair<GameObject*, GameObject*>> & collisions);
+	void resolveCollisions();
 	void updateObjects(float dt);
 
 	ObjectDB* objectDb;
