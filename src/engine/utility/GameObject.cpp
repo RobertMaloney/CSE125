@@ -3,9 +3,9 @@
 
 //TODO Config file
 GameObject::GameObject(float radius, float theta, float azimuth, float direction) {
-	this->loc = glm::vec4(radius, theta, azimuth, direction);
+	this->loc = vec4(radius, theta, azimuth, direction);
 	this->modelRadius = 1.f;
-	this->type = ObjectType::GAMEOBJECT;
+	this->type = GAMEOBJECT;
 }
 
 GameObject::~GameObject() {
@@ -43,6 +43,10 @@ vec4 GameObject::getLoc() {
 	return loc;
 }
 
+const vec4& GameObject::getLocation() {
+	return this->loc;
+}
+
 
 void GameObject::setLoc(vec4 & newLoc) {
 	loc = newLoc;
@@ -64,7 +68,7 @@ void GameObject::update(float dt) {
 }
 
 
-void GameObject::collide(const GameObject & target) {
+void GameObject::collide(float dt, const GameObject & target) {
 
 }
 

@@ -21,8 +21,6 @@ enum ObjectType {
 
 class GameObject : public Serializable  {
 
-public:
-
 protected:
 
 	vec4 loc;
@@ -41,6 +39,7 @@ public:
 	void setId(ObjectId theId);
 
 	vec4 getLoc();
+	const vec4 & getLocation();
 	void setLoc(vec4 & newLoc);
 
 	float getModelRadius();
@@ -52,7 +51,7 @@ public:
 	void deserialize(Packet & p);
 
 	virtual void update(float dt);
-	virtual void collide(const GameObject & target);
+	virtual void collide(float dt, const GameObject & target);
 
 };
 

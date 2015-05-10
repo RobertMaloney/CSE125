@@ -36,8 +36,8 @@ public:
 	void setMoving(int, bool);
 
 
-	void update(float dt);
-	void collide(const GameObject & target);
+	virtual void update(float dt) override;
+	virtual void collide(float dt, const GameObject & target) override;
 
 };
 
