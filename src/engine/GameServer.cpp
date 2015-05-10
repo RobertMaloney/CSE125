@@ -6,7 +6,7 @@ GameServer::GameServer() {
 	this->handler = new PacketHandler();
 	this->idGen = &IdGenerator::getInstance();
 	this->gameState = &GameState::getInstance();
-	this->world = new World();
+	this->physics = new Physics();
 }
 
 
@@ -23,7 +23,7 @@ GameServer::~GameServer() {
 	}
 	delete clients;
 	clients = nullptr;
-	delete world;
+	delete physics;
 }
 
 
@@ -50,7 +50,7 @@ void GameServer::run() {
 		}
 
 		this->processClientEvents(); 		// process the client input events
-		world->update(TIME_PER_FRAME);      // do a physics step
+		physics->update(TIME_PER_FRAME);      // do a physics step
 		this->tick();                       // send state back to client
 		//calculates the ms from start until here.
 		elapsedTime = chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count();
@@ -119,7 +119,6 @@ void GameServer::processClientEvents() {
         }
         events.clear();
 	}
-	//gameState->updateMovingPlayers();
 }
 
 

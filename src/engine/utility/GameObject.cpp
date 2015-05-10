@@ -1,5 +1,4 @@
 #include "GameObject.h"
-#include "../network/Packet.h"
 
 
 //TODO Config file

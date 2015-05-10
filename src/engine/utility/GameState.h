@@ -25,8 +25,6 @@ public:
 	
 	static GameState & getInstance();
 
-
-//	void updateMovingPlayers();
 };
 
 #endif
