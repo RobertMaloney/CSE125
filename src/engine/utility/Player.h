@@ -32,7 +32,6 @@ public:
 
     ~Player();
 
-
 	bool getMoving(int);
 	void setMoving(int, bool);
 

@@ -1,5 +1,5 @@
-#ifndef WORLD_H
-#define WORLD_H
+#ifndef PHYSICSENGINE_H
+#define PHYSICSENGINE_H
 
 #include <set>
 #include <iostream>
