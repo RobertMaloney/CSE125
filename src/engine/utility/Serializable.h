@@ -7,6 +7,7 @@ class Serializable {
 
 public:
 
+	virtual ~Serializable() {}
 	virtual void serialize(Packet & p) = 0;
 	virtual void deserialize(Packet & p) = 0;
 

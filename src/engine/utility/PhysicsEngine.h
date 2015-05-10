@@ -2,7 +2,6 @@
 #define PHYSICSENGINE_H
 
 #include <set>
-#include <iostream>
 #include <unordered_map>
 
 #include "ObjectDB.h"
