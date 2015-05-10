@@ -26,6 +26,8 @@ public:
 private:
 
 	bool checkCollision(GameObject* ob1, GameObject* ob2);
+	void handleCollisions();
+	void updateObjects(float dt);
 
 	ObjectDB* objectDb;
 	

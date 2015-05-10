@@ -12,17 +12,28 @@ Physics::~Physics() {
 
 
 void Physics::update(float dt) {
+	this->handleCollisions();
+	this->updateObjects(dt);
+}
+
+
+void Physics::handleCollisions() {
 	static int collisionCounter;
-	for (auto it = objectDb->objects.begin(); it != objectDb->objects.end(); ++it) {
-		it->second->update(dt);
-	}
 
 	for (auto it = objectDb->objects.begin(); it != objectDb->objects.end(); ++it) {
 		for (auto jt = objectDb->objects.begin(); jt != objectDb->objects.end(); ++jt) {
+			// check all pairs for now
 			if (jt != it && this->checkCollision(it->second, jt->second)) {
 				std::cout << "collision : " << collisionCounter++ << std::endl;
 			}
 		}
+	}
+}
+
+
+void Physics::updateObjects(float dt) {
+	for (auto it = objectDb->objects.begin(); it != objectDb->objects.end(); ++it) {
+		it->second->update(dt);
 	}
 }
 
@@ -45,3 +56,28 @@ bool Physics::checkCollision(GameObject* ob1, GameObject* ob2) {
 	return distance < (r1 + r2);
 }
 
+/*
+void GameState::updateMovingPlayers() {
+// update positions
+for (auto it = players.begin(); it != players.end(); ++it) {
+if ((*it)->getMoving(Player::UP)) {
+float dir = (*it)->getLoc().w;
+(*it)->getLoc().z += glm::cos(glm::radians(dir));
+(*it)->getLoc().y += glm::sin(glm::radians(dir));
+}
+if ((*it)->getMoving(Player::RIGHT)) {
+(*it)->getLoc().w -= 1.f;
+
+}
+if ((*it)->getMoving(Player::DOWN)) {
+float dir = (*it)->getLoc().w;
+(*it)->getLoc().z -= glm::cos(glm::radians(dir));
+(*it)->getLoc().y -= glm::sin(glm::radians(dir));
+
+}
+if ((*it)->getMoving(Player::LEFT)) {
+(*it)->getLoc().w += 1.f;
+
+}
+}
+}*/
