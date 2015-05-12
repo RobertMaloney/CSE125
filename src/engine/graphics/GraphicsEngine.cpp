@@ -202,11 +202,8 @@ void GraphicsEngine::DrawAndPoll() {
 
 	 view = m_minimapCamera->getFlatViewMatrix();
 
-    //glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "projection"), 1, GL_FALSE, glm::value_ptr(m_projection));
-    //glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "view"), 1, GL_FALSE, glm::value_ptr(view));
-
-	//glUniformMatrix4fv(m_uniView, 1, GL_FALSE, glm::value_ptr(view));
-	//glUniformMatrix4fv(m_uniProjection, 1, GL_FALSE, glm::value_ptr(m_projection));
+	glUniformMatrix4fv(m_uniView, 1, GL_FALSE, glm::value_ptr(view));
+	glUniformMatrix4fv(m_uniProjection, 1, GL_FALSE, glm::value_ptr(m_projection));
 
 	renderScene(m_scene, &identity);
 	glEnable(GL_DEPTH_TEST);
