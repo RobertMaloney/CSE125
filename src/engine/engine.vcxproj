@@ -145,6 +145,7 @@
     <ClInclude Include="utility\Event.h" />
     <ClInclude Include="utility\GameObject.h" />
     <ClInclude Include="utility\GameState.h" />
+    <ClInclude Include="utility\IGameState.h" />
     <ClInclude Include="utility\IdGenerator.h" />
     <ClInclude Include="utility\InputHandler.h" />
     <ClInclude Include="utility\ObjectDB.h" />

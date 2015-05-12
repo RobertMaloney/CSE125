@@ -4,6 +4,7 @@
 #include <thread>
 #include <iostream>
 #include <deque>
+#include <vector>
 
 #include "network\TCPConnection.h"
 #include "utility\InputHandler.h"
@@ -12,6 +13,9 @@
 #include "utility\Player.h"
 #include "utility\GameState.h"
 #include "utility\IdGenerator.h"
+
+//forward declarations
+
 
 using std::this_thread::sleep_for;
 using std::chrono::milliseconds;
@@ -26,13 +30,15 @@ public:
     GameClient();
     ~GameClient();
 
+	void init();
 	void run();
 	void login();
-    void initialize();
 
     void receiveUpdates(deque<Packet> & updates);
     void sendEvents(deque<Packet> & events);
 	void updateGameState(deque<Packet> & updates);
+
+	void changeState(IGameState *state);
 
 private:
 
@@ -40,5 +46,8 @@ private:
 
     inline void checkError(SocketError err);
     inline bool shouldTerminate(SocketError err);
+
+	//stack of states
+	vector<IGameState *> states;
 };
 #endif

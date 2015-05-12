@@ -5,6 +5,27 @@ void GameState::init(){
 	map = &ObjectDB::getInstance();
 }
 
+
+void GameState::cleanup()
+{
+}
+
+
+void GameState::handleEvents()
+{
+}
+
+
+void GameState::update()
+{
+}
+
+
+void GameState::draw()
+{
+}
+
+
 bool GameState::addPlayer(ObjectId theId, Player* p) {
 	if (!map->add(theId, p)){
 		return false;

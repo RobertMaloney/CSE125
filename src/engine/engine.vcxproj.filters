@@ -52,6 +52,7 @@
     <ClInclude Include="graphics\Skybox.h" />
     <ClInclude Include="graphics\Shader.h" />
     <ClInclude Include="utility\PhysicsEngine.h" />
+    <ClInclude Include="utility\IGameState.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Network\Endianness.inl" />

@@ -14,6 +14,21 @@ GameClient::~GameClient() {
 }
 
 
+void GameClient::init() {
+	Socket::initialize();
+	SocketError err = connection->connect(DEFAULT_SERVER_IP, DEFAULT_SERVER_PORT);
+	if (this->shouldTerminate(err)) {
+		connection->close();
+		delete connection;
+		connection = nullptr;
+		throw SocketException("Connection Failure.");
+	}
+	connection->setNoDelay(true);
+	connection->setNonBlocking(true);
+	gstate.init();
+}
+
+
 void GameClient::login() {
 	//Note: Client receives id from server, creates a copy of player (same id) and adds it into the game state of client
 	//Note: TODO: current position of player is default 505,0,0,0, need to get real position from server
@@ -42,7 +57,7 @@ void GameClient::run() {
 	bool loggedIn = false;
     deque<Packet> updates;
 
-	this->initialize();
+	this->init();
 	this->login();
 
 	while (!GraphicsEngine::Closing()) {
@@ -102,21 +117,6 @@ void GameClient::updateGameState(deque<Packet> & data) {
 		//Update the object in node (in GraphicsEngine)
 		GraphicsEngine::updateObject(obj->getId(), obj->getLoc()); 
 	}
-}
-
-
-void GameClient::initialize() {
-    Socket::initialize();
-    SocketError err = connection->connect(DEFAULT_SERVER_IP, DEFAULT_SERVER_PORT);
-    if (this->shouldTerminate(err)) {
-        connection->close();
-        delete connection;
-        connection = nullptr;
-        throw SocketException("Connection Failure.");
-    }
-    connection->setNoDelay(true);
-    connection->setNonBlocking(true);
-	gstate.init();
 }
 
 
