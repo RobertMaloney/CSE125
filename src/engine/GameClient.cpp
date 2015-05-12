@@ -45,7 +45,6 @@ void GameClient::run() {
 	this->initialize();
 	this->login();
 
-	std::cout << "Entering game loop!" << std::endl;
 	while (!GraphicsEngine::Closing()) {
 		GraphicsEngine::DrawAndPoll();
 		
@@ -59,8 +58,6 @@ void GameClient::run() {
 			updates.clear();
 		}
 	}
-
-	std::cout << "exited game loop!" << std::endl;
 
 	GraphicsEngine::Destroy();
 	system("pause");

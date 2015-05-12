@@ -8,16 +8,13 @@
 #include <iostream>
 #include <unordered_map>
 
-#include <glm.hpp>
-#include <gtc\matrix_transform.hpp>
-#include <gtc\type_ptr.hpp>
-
-#include "network\PacketHandler.h"
-#include "network\TCPConnection.h"
-#include "network\TCPListener.h"
-#include "utility\ObjectDB.h"
-#include "utility\IdGenerator.h"
-#include "utility\GameState.h"
+#include "utility/PhysicsEngine.h"
+#include "network/PacketHandler.h"
+#include "network/TCPConnection.h"
+#include "network/TCPListener.h"
+#include "utility/ObjectDB.h"
+#include "utility/IdGenerator.h"
+#include "utility/GameState.h"
 
 using std::to_string;
 using std::this_thread::sleep_for;
@@ -48,19 +45,17 @@ public:
     void tick();
     void processClientEvents();
 
-    void generateResources(int num);
-
 private:
 
     void acceptWaitingClient();
     void printUpdates(deque<Packet> & updates);
-	 void parsePlayer(deque<Packet> & in, deque<Packet> & out);
-
+    void generateResources(int num);
     inline bool shouldTerminate(SocketError err);
     
 	unsigned int maxConnections;
 
 	IdGenerator * idGen;
+	PhysicsEngine* physics;
 	GameState* gameState;
     TCPListener* listener;
     PacketHandler* handler;

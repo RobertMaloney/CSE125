@@ -39,5 +39,7 @@ public:
 		in.close();
 		return result;
 	}
+
+
 };
 #endif

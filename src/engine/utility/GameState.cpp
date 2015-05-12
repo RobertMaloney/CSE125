@@ -54,25 +54,3 @@ bool GameState::addResource(ObjectId theId, Resource * ptr) {
 int GameState::getNumPlayers() {
 	return players.size();
 }
-
-void GameState::updateMovingPlayers() {
-	// update positions
-	for (auto it = players.begin(); it != players.end(); ++it) {
-		if ((*it)->getMoving(Player::UP)) {
-			float dir = (*it)->getLoc().w;
-			(*it)->getLoc().z += glm::cos(glm::radians(dir));
-			(*it)->getLoc().y += glm::sin(glm::radians(dir));
-		}
-		else if ((*it)->getMoving(Player::RIGHT)) {
-			(*it)->getLoc().w -= 1.f;
-		}
-		else if ((*it)->getMoving(Player::DOWN)) {
-			float dir = (*it)->getLoc().w;
-			(*it)->getLoc().z -= glm::cos(glm::radians(dir));
-			(*it)->getLoc().y -= glm::sin(glm::radians(dir));
-		}
-		else if ((*it)->getMoving(Player::LEFT)) {
-			(*it)->getLoc().w += 1.f;
-		}
-	}
-}

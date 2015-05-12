@@ -121,6 +121,7 @@
     <ClCompile Include="utility\Player.cpp" />
     <ClCompile Include="utility\Resource.cpp" />
     <ClCompile Include="utility\Model.cpp" />
+    <ClCompile Include="utility\PhysicsEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameClient.h" />
@@ -145,12 +146,10 @@
     <ClInclude Include="Network\TCPListener.h" />
     <ClInclude Include="utility\BlobModel.h" />
     <ClInclude Include="utility\Event.h" />
-    <ClInclude Include="utility\GameEngine.h" />
     <ClInclude Include="utility\GameObject.h" />
     <ClInclude Include="utility\GameState.h" />
     <ClInclude Include="utility\IdGenerator.h" />
     <ClInclude Include="utility\InputHandler.h" />
-    <ClInclude Include="utility\MoveEvent.h" />
     <ClInclude Include="utility\ObjectDB.h" />
     <ClInclude Include="Utility\ObjLoader.h" />
     <ClInclude Include="utility\Player.h" />
@@ -158,6 +157,7 @@
     <ClInclude Include="utility\Model.h" />
     <ClInclude Include="utility\Serializable.h" />
     <ClInclude Include="utility\System.h" />
+    <ClInclude Include="utility\PhysicsEngine.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Network\Endianness.inl" />

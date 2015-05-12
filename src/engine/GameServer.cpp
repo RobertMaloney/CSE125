@@ -6,6 +6,7 @@ GameServer::GameServer() {
 	this->handler = new PacketHandler();
 	this->idGen = &IdGenerator::getInstance();
 	this->gameState = &GameState::getInstance();
+	this->physics = new PhysicsEngine();
 }
 
 
@@ -22,6 +23,7 @@ GameServer::~GameServer() {
 	}
 	delete clients;
 	clients = nullptr;
+	delete physics;
 }
 
 
@@ -43,15 +45,22 @@ void GameServer::run() {
 
 	while (true) {
 		start = high_resolution_clock::now();
+		// try to allow a new player to join
 		if (clients->size() < maxConnections) {
 			this->acceptWaitingClient();
 		}
-		this->processClientEvents();
-		this->tick();
+
+		this->processClientEvents(); 		// process the client input events
+		physics->update(TIME_PER_FRAME);      // do a physics step
+		this->tick();                       // send state back to client
+
+		//calculates the ms from start until here.
 		elapsedTime = chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count();
-		if (elapsedTime > TIME_PER_FRAME) {
+		if (elapsedTime > TIME_PER_FRAME) {  // this is so know if we need to slow down the loop
 			cerr << "Server loop took long than a frame." << endl;
 		}
+
+		// sleep for unused time
 		sleep_for(milliseconds(TIME_PER_FRAME - elapsedTime));
 	}
 }
@@ -113,7 +122,6 @@ void GameServer::processClientEvents() {
         }
         events.clear();
 	}
-	gameState->updateMovingPlayers();
 }
 
 
@@ -147,7 +155,6 @@ void GameServer::generateResources(int num) {
       else if (pick == 5)
          model = FLOWER;
 
-      cout << theta << " " << azimuth << " " << direction;
       Resource * newRe = new Resource(model, 5, radius, theta, azimuth, direction);
       ObjectId resourceId = IdGenerator::getInstance().createId();
       gameState->addResource(resourceId, newRe);

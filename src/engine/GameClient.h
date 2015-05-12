@@ -13,8 +13,6 @@
 #include "utility\GameState.h"
 #include "utility\IdGenerator.h"
 
-
-
 using std::this_thread::sleep_for;
 using std::chrono::milliseconds;
 using std::to_string;

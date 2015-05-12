@@ -12,11 +12,14 @@ class Player : public GameObject {
 
 protected:
 
-	int speed;
-	int power;
+	const float PLAYER_ACCELERATION = .001;
+	const float FRICTION = .005;
+
 	bool moves[4];
+	float velocity;
 
 public:
+
 	enum {
 		UP = 0,
 		RIGHT,
@@ -24,21 +27,17 @@ public:
 		LEFT
 	};
 
-	Player() :Player(OB_TYPE) {};
-	Player(Model thebm) : Player(thebm, 505, 0, 0, 0) {};
-	Player(Model, float, float, float, float);
+   Player() : Player(OB_TYPE) {};
+	Player(Model bm, float radius = 505, float theta = 0, float azimuth = 0, float direction = 0);
 
     ~Player();
 
-	int getSpeed();
-	int getPower();
-   int getScore();
-
-	void setSpeed(int newSpeed);
-	void setPower(int newPower);
-
 	bool getMoving(int);
 	void setMoving(int, bool);
+
+	virtual void update(float dt) override;
+	virtual void collide(float dt, const GameObject & target) override;
+
 };
 
 #endif
