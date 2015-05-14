@@ -73,15 +73,6 @@ void GameObject::setModelRadius(float radius) {
 }
 
 
-void GameObject::update(float dt) {
-}
-
-
-void GameObject::collide(float dt, const GameObject & target) {
-
-}
-
-
 ObjectType GameObject::getType() const {
 	return this->type;
 }

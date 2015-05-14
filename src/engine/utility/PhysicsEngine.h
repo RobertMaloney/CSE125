@@ -1,14 +1,17 @@
 #ifndef PHYSICSENGINE_H
 #define PHYSICSENGINE_H
 
-#include "ObjectDB.h"
+#include <algorithm>
+#include <vector>
 #include <glm.hpp>
 #include <gtc\type_ptr.hpp>
 #include <gtx\quaternion.hpp>
-
+#include "MoveableObject.h"
+#include "ObjectDB.h"
 using glm::pow;
 using glm::sqrt;
-
+using std::vector;
+using std::remove_if;
 class PhysicsEngine {
 
 public:
@@ -17,15 +20,17 @@ public:
 	~PhysicsEngine();
 
 	void update(float dt);
+	void registerMoveable(MoveableObject* object);
+	void removeMoveable(MoveableObject* object);
 
 private:
 
 	void updateObjects(float dt);
 	void resolveCollisions(float dt);
-	inline bool checkCollision(GameObject* ob1, GameObject* ob2);
+	inline bool checkCollision(MoveableObject* ob1, GameObject* ob2);
 
 	ObjectDB* objectDb;
-	
+	vector<MoveableObject*> moveableObjects;
 };
 
 
@@ -37,7 +42,7 @@ private:
 }
 
  // check for a collision
- inline bool PhysicsEngine::checkCollision(GameObject* ob1, GameObject* ob2) {
+ inline bool PhysicsEngine::checkCollision(MoveableObject* ob1, GameObject* ob2) {
 	 // if something is null bad things are happening so crash
 	 assert(ob1 && ob2);
 

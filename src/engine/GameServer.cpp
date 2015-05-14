@@ -35,7 +35,7 @@ void GameServer::initialize(int maxConns) {
 	this->listener->setNonBlocking(true);
 	maxConnections = maxConns;
    gameState->init();
-   generateResources(100);
+   generateResources(1000);
 }
 
 
@@ -49,19 +49,23 @@ void GameServer::run() {
 		if (clients->size() < maxConnections) {
 			this->acceptWaitingClient();
 		}
-
+		std::cout << "process took : ";
 		this->processClientEvents(); 		// process the client input events
+		std::cout << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
+		std::cout << "physics took : ";
 		physics->update(TIME_PER_FRAME);      // do a physics step
+		std::cout << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
 		this->tick();                       // send state back to client
 
 		//calculates the ms from start until here.
 		elapsedTime = chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count();
+		std::cout << "elapsed  " << elapsedTime << std::endl;
 		if (elapsedTime > TIME_PER_FRAME) {  // this is so know if we need to slow down the loop
 			cerr << "Server loop took long than a frame." << endl;
 		}
 
 		// sleep for unused time
-		sleep_for(milliseconds(TIME_PER_FRAME - elapsedTime));
+//		sleep_for(milliseconds(TIME_PER_FRAME - elapsedTime));
 	}
 }
 
@@ -81,6 +85,7 @@ void GameServer::acceptWaitingClient() {
 		delete newPlayer;
 		return;
 	}
+	physics->registerMoveable(newPlayer);
 	connection->setNoDelay(true);
 	connection->setNonBlocking(true);
 	clients->insert(make_pair(connection, playerId));	
@@ -92,7 +97,11 @@ void GameServer::acceptWaitingClient() {
 
 void GameServer::tick() {
 	deque<Packet> updates;
+	high_resolution_clock::time_point t1, t2;
+	t1 = high_resolution_clock::now();
 	ObjectDB::getInstance().getObjectState(updates);
+	std::cout << "get state: " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - t1).count() << std::endl;
+	t1 = high_resolution_clock::now();
 
 	for (auto it = clients->begin(); it != clients->end(); ) {
 		SocketError err = it->first->send(updates);
@@ -104,6 +113,8 @@ void GameServer::tick() {
             ++it;
         }
 	}
+	std::cout << "send: " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - t1).count() << std::endl;
+
 }
 
 

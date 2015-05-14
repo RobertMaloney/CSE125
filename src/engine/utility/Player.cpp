@@ -2,7 +2,7 @@
 
 
 //TODO Config file
-Player::Player(Model thebm, float radius, float theta, float azimuth, float direction) : GameObject(radius, theta, azimuth, direction) {
+Player::Player(Model thebm, float radius, float theta, float azimuth, float direction) : MoveableObject(radius, theta, azimuth, direction) {
 
 	this->loc = vec4(radius, theta, azimuth, direction);
    this->rm = thebm;
@@ -33,12 +33,12 @@ void Player::setMoving(int index, bool b) {
 }
 
 
-void Player::update(float dt) {
+void Player::move(float dt) {
 	if (moves[UP]) {
-		velocity += PLAYER_ACCELERATION;
+		velocity += .001;
 	}
 	if (moves[DOWN]) {
-		velocity -= PLAYER_ACCELERATION;
+		velocity -= .001;
 	}
 	if (moves[RIGHT]) {
 		loc.w -= 1.f;
@@ -62,15 +62,17 @@ void Player::update(float dt) {
 
 void Player::collide(float dt, const GameObject & target) {
 	switch (target.getType()) {
-		case GAMEOBJECT:
-			this->velocity *= -1;
-			break;
-		case PLAYER:
-			loc.z -= glm::cos(glm::radians(loc.w)) * dt * velocity;
-			loc.y -= glm::sin(glm::radians(loc.w)) * dt * velocity;
-			this->velocity *= -1;
-			break;
-		default:
-			break;
-}
+	case GAMEOBJECT:
+		loc.z -= glm::cos(glm::radians(loc.w)) * dt * velocity;
+		loc.y -= glm::sin(glm::radians(loc.w)) * dt * velocity;
+		this->velocity *= -1;
+		break;
+	case PLAYER:
+		loc.z -= glm::cos(glm::radians(loc.w)) * dt * velocity;
+		loc.y -= glm::sin(glm::radians(loc.w)) * dt * velocity;
+		this->velocity *= -1;
+		break;
+	default:
+		break;
+	}
 }
