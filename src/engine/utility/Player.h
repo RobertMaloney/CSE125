@@ -12,7 +12,7 @@ class Player : public GameObject {
 
 protected:
 
-	const float PLAYER_ACCELERATION = .00001;
+	const float PLAYER_ACCELERATION = .0005;
 	const float FRICTION = .005;
 
 	bool moves[4];

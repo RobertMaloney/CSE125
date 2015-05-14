@@ -24,7 +24,6 @@ class GameObject : public Serializable  {
 
 protected:
 
-	vec4 loc;
 	quat orientation;
 	float angle;
 
@@ -46,10 +45,7 @@ public:
 	ObjectId getId();
 	void setId(ObjectId theId);
 
-	vec4 & getLoc();
    Model getModel();
-	const vec4 & getLocation();
-	void setLoc(vec4 & newLoc);
    void setModel(Model model);
 
    quat & getOrientation();

@@ -3,10 +3,11 @@
 
 //TODO Config file
 GameObject::GameObject(float radius, float theta, float azimuth, float direction) {
-	this->loc = vec4(radius, theta, azimuth, direction);
+	//this->loc = vec4(radius, theta, azimuth, direction);
 	this->modelRadius = 1.f;
 	this->type = GAMEOBJECT;
-	this->angle = 0.f;
+	this->angle = direction;
+	this->orientation = glm::quat(glm::vec3(theta, azimuth, 0.f));
 }
 
 GameObject::~GameObject() {
@@ -56,21 +57,8 @@ void GameObject::setModel(Model model) {
    this->rm = model;
 }
 
-vec4 & GameObject::getLoc() {
-	return loc;
-}
-
 Model GameObject::getModel() {
    return rm;
-}
-
-const vec4& GameObject::getLocation() {
-	return this->loc;
-}
-
-
-void GameObject::setLoc(vec4 & newLoc) {
-	loc = newLoc;
 }
 
 
