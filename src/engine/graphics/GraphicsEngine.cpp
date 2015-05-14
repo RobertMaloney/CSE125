@@ -307,8 +307,8 @@ Renderable * GraphicsEngine::selectModel(Model model){
 }
 
 // Translate from vec4 postion to matrix in the node of scene graph??
-void GraphicsEngine::updateObject(ObjectId objId, glm::vec4 & v) {
-	objNodeMap[objId]->getMatrix() = MatrixNode::sphere2xyz(v);
+void GraphicsEngine::updateObject(ObjectId objId, glm::quat & q, float angle) {
+	objNodeMap[objId]->getMatrix() = MatrixNode::quatAngle(q, angle);
 }
 
 //A mapping from ObjectId to node in scene graph

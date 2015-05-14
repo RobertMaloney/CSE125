@@ -2,6 +2,7 @@
 #define GAME_OBJECT_H
 
 #include <glm.hpp>
+#include <gtc\quaternion.hpp>
 #include "../network/Packet.h"
 #include "Serializable.h"
 #include "IdGenerator.h"
@@ -10,6 +11,7 @@
 using glm::mat4;
 using glm::vec2;
 using glm::vec4;
+using glm::quat;
 using namespace std;
 
 enum ObjectType {
@@ -23,6 +25,9 @@ class GameObject : public Serializable  {
 protected:
 
 	vec4 loc;
+	quat orientation;
+	float angle;
+
 	ObjectId id;
 	ObjectType type;
 	float modelRadius;
@@ -46,6 +51,9 @@ public:
 	const vec4 & getLocation();
 	void setLoc(vec4 & newLoc);
    void setModel(Model model);
+
+   quat & getOrientation();
+   float getAngle();
 
 	float getModelRadius();
 	void setModelRadius(float radius);
