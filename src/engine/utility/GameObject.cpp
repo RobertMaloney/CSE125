@@ -7,6 +7,7 @@ GameObject::GameObject(float radius, float theta, float azimuth, float direction
 	this->modelRadius = 1.f;
 	this->type = GAMEOBJECT;
 	this->angle = direction;
+	this->height = radius;
 	this->orientation = glm::quat(glm::vec3(theta, azimuth, 0.f));
 }
 
@@ -23,6 +24,7 @@ void GameObject::serialize(Packet & p) {
 		p.writeFloat(this->orientation[i]);
 	}
 	p.writeFloat(this->angle);
+	p.writeFloat(this->height);
    p.writeInt(static_cast<int>(this->rm));
 }
 
@@ -34,6 +36,7 @@ void GameObject::deserialize(Packet & p) {
 		this->orientation[i] = p.readFloat();
 	}
 	this->angle = p.readFloat();
+	this->height = p.readFloat();
    this->rm = static_cast<Model>(p.readInt());
 }
 
@@ -45,6 +48,9 @@ float GameObject::getAngle() {
 	return angle;
 }
 
+float GameObject::getHeight() {
+	return height;
+}
 ObjectId GameObject::getId() {
 	return id;
 }

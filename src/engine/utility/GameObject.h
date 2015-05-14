@@ -26,6 +26,7 @@ protected:
 
 	quat orientation;
 	float angle;
+	float height;
 
 	ObjectId id;
 	ObjectType type;
@@ -50,6 +51,7 @@ public:
 
    quat & getOrientation();
    float getAngle();
+   float getHeight();
 
 	float getModelRadius();
 	void setModelRadius(float radius);

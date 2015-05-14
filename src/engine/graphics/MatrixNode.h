@@ -54,8 +54,8 @@ public:
 			child->setParent(this);
 	}
 
-	static glm::mat4 quatAngle(glm::quat & q, float angle) {
-		glm::vec3 pos = q * glm::vec3(0, 0, 505.f);
+	static glm::mat4 quatAngle(glm::quat & q, float angle, float height) {
+		glm::vec3 pos = q * glm::vec3(0, 0, height);
 		glm::quat rot = q * glm::angleAxis(glm::radians(angle), glm::vec3(0, 0, 1));
 		return glm::translate(glm::mat4(), pos) * glm::toMat4(rot);
 	}
