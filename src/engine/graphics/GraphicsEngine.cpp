@@ -107,17 +107,18 @@ void GraphicsEngine::Initialize(ObjectId playerId) {
 	m_mainCamera->setViewMatrix(camview);
 	
 	glm::mat4 minimapview = glm::lookAt(
-		glm::vec3(0.f,300.f, 300.f),
-		glm::vec3(0.f, 1.f, 0.f),
-		glm::vec3(0.f, -1.f, 1.f));
+		glm::vec3(0.f, 0.f, 300.f),
+		glm::vec3(0.f, 0.f, 0.f),
+		glm::vec3(0.f, 0.f, 1.f));
 	m_minimapCamera = new CameraNode();
 	m_minimapCamera->setViewMatrix(minimapview);
 
 	// PLAYER  (Player node is created by default)
-	Renderable * model = GraphicsEngine::selectModel(playerId);
+
+	/*Renderable * model = GraphicsEngine::selectModel(playerId);
 	m_player = GraphicsEngine::addNode(model);
 	m_player->addChild(m_mainCamera);
-	m_player->addChild(m_minimapCamera);
+	m_player->addChild(m_minimapCamera);*/
 	
 
 	if (glGetError() != 0) printf("Error Code: %d\n", glGetError());
@@ -201,7 +202,6 @@ void GraphicsEngine::DrawAndPoll() {
 
 	 view = m_minimapCamera->getFlatViewMatrix();
 
-
 	glUniformMatrix4fv(m_uniView, 1, GL_FALSE, glm::value_ptr(view));
 	glUniformMatrix4fv(m_uniProjection, 1, GL_FALSE, glm::value_ptr(m_projection));
 
@@ -277,7 +277,12 @@ void GraphicsEngine::ScaleDown()
 
 
 void GraphicsEngine::bindPlayerNode(GameObject* player) {
-    GraphicsEngine::insertObject(player->getId(), m_player);// (player->node = m_player;)
+   Renderable * model = GraphicsEngine::selectModel(player->getModel());
+   m_player = GraphicsEngine::addNode(model);
+   m_player->addChild(m_mainCamera);
+   m_player->addChild(m_minimapCamera);
+
+   GraphicsEngine::insertObject(player->getId(), m_player);// (player->node = m_player;)
 }
 
 
@@ -293,25 +298,11 @@ MatrixNode* GraphicsEngine::addNode(Renderable* objModel){
 }
 
 // Select blob model based on playerId, will be changed later
-Renderable * GraphicsEngine::selectModel(ObjectId playerId){
-	Renderable* newModel;
-	switch (playerId % 3){
-	case 0:
-		newModel = new Geometry("../../media/bb.obj");
-		break;
-	case 1:
-		//newModel = new Geometry("../../media/gb.obj"); //gb model doesnt work
-		//break;
-		//case 2:
-		newModel = new Geometry("../../media/ob.obj");
-		break;
-	case 2:
-		newModel = new Geometry("../../media/pb.obj");
-		break;
-	default:
-		newModel = new Geometry("../../media/bb.obj");
-		break;
-	}
+Renderable * GraphicsEngine::selectModel(Model model){
+   Renderable* newModel;
+   std::string pathString = "../../media/" + ResourceMap::getObjFile(model);
+   const char * path = pathString.c_str();
+   newModel = new Geometry(path);
 	return newModel;
 }
 

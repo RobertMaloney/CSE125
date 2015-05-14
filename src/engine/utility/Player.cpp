@@ -2,10 +2,14 @@
 
 
 //TODO Config file
-Player::Player(BlobModel thebm, float radius, float theta, float azimuth, float direction) : GameObject(radius, theta, azimuth, direction) {
+Player::Player(Model thebm, float radius, float theta, float azimuth, float direction) : GameObject(radius, theta, azimuth, direction) {
 
 	this->loc = vec4(radius, theta, azimuth, direction);
-	this->bm = thebm;
+   this->rm = thebm;
+   this->moves[0] = false;
+   this->moves[1] = false;
+   this->moves[2] = false;
+   this->moves[3] = false;
 
 	for (int i = 0; i < 4; ++i)
 		this->moves[i] = false;
@@ -68,5 +72,5 @@ void Player::collide(float dt, const GameObject & target) {
 			break;
 		default:
 			break;
-	}
+}
 }

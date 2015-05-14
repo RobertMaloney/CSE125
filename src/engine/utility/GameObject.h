@@ -5,6 +5,7 @@
 #include "../network/Packet.h"
 #include "Serializable.h"
 #include "IdGenerator.h"
+#include "Model.h"
 
 using glm::mat4;
 using glm::vec2;
@@ -26,6 +27,10 @@ protected:
 	ObjectType type;
 	float modelRadius;
 
+   // Model
+   Model rm = TREE;
+
+
 public:
 
 	GameObject(float radius = 505, float theta = 0, float azimuth = 0, float direction = 0);
@@ -36,9 +41,11 @@ public:
 	ObjectId getId();
 	void setId(ObjectId theId);
 
-	vec4 getLoc();
+	vec4 & getLoc();
+   Model getModel();
 	const vec4 & getLocation();
 	void setLoc(vec4 & newLoc);
+   void setModel(Model model);
 
 	float getModelRadius();
 	void setModelRadius(float radius);

@@ -1,7 +1,9 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "BlobModel.h"
+#include <string>
+//#include "Location.h"
+#include "Model.h"
 #include "GameObject.h"
 
 using namespace std;
@@ -15,7 +17,6 @@ protected:
 
 	bool moves[4];
 	float velocity;
-	BlobModel bm;
 
 public:
 
@@ -26,14 +27,13 @@ public:
 		LEFT
 	};
 
-	Player() : Player(OB_TYPE) {};
-	Player(BlobModel bm, float radius = 505, float theta = 0, float azimuth = 0, float direction = 0);
+   Player() : Player(OB_TYPE) {};
+	Player(Model bm, float radius = 505, float theta = 0, float azimuth = 0, float direction = 0);
 
     ~Player();
 
 	bool getMoving(int);
 	void setMoving(int, bool);
-
 
 	virtual void update(float dt) override;
 	virtual void collide(float dt, const GameObject & target) override;

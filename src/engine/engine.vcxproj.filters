@@ -15,7 +15,9 @@
     <ClCompile Include="utility\ObjectDB.cpp" />
     <ClCompile Include="utility\IdGenerator.cpp" />
     <ClCompile Include="utility\GameObject.cpp" />
+    <ClCompile Include="utility\Resource.cpp" />
     <ClCompile Include="utility\GameState.cpp" />
+    <ClCompile Include="utility\Model.cpp" />
     <ClCompile Include="graphics\Shader.cpp" />
     <ClCompile Include="utility\PhysicsEngine.cpp" />
   </ItemGroup>
@@ -48,9 +50,11 @@
     <ClInclude Include="utility\IdGenerator.h" />
     <ClInclude Include="utility\GameObject.h" />
     <ClInclude Include="utility\BlobModel.h" />
+    <ClInclude Include="utility\Resource.h" />
     <ClInclude Include="utility\GameState.h" />
     <ClInclude Include="graphics\Skybox.h" />
     <ClInclude Include="graphics\Shader.h" />
+    <ClInclude Include="utility\Model.h" />
     <ClInclude Include="utility\PhysicsEngine.h" />
     <ClInclude Include="utility\IGameState.h" />
   </ItemGroup>

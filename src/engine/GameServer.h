@@ -49,7 +49,7 @@ private:
 
     void acceptWaitingClient();
     void printUpdates(deque<Packet> & updates);
-
+    void generateResources(int num);
     inline bool shouldTerminate(SocketError err);
     
 	unsigned int maxConnections;

@@ -1,6 +1,8 @@
 #ifndef OBJECTDB_H
 #define OBJECTDB_H
 
+#include <iostream>
+
 //#include "IdGenerator.h"
 #include <deque>
 #include <algorithm>
@@ -18,6 +20,7 @@ using std::for_each;
 using std::deque;
 using std::make_pair;
 using std::unordered_map;
+using std::cout;
 
 
 class ObjectDB {

@@ -19,6 +19,7 @@ void GameObject::serialize(Packet & p) {
 	for (int i = 0; i < 4; ++i) {
 		p.writeFloat(this->loc[i]);
 	}
+   p.writeInt(static_cast<int>(this->rm));
 }
 
 
@@ -27,6 +28,7 @@ void GameObject::deserialize(Packet & p) {
 	for (int i = 0; i < 4; ++i) {
 		this->loc[i] = p.readFloat();
 	}
+   this->rm = static_cast<Model>(p.readInt());
 }
 
 
@@ -38,9 +40,16 @@ void GameObject::setId(ObjectId theId) {
 	this->id = theId;
 }
 
+void GameObject::setModel(Model model) {
+   this->rm = model;
+}
 
-vec4 GameObject::getLoc() {
+vec4 & GameObject::getLoc() {
 	return loc;
+}
+
+Model GameObject::getModel() {
+   return rm;
 }
 
 const vec4& GameObject::getLocation() {

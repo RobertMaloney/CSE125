@@ -12,6 +12,7 @@
 #include "../utility/Event.h"
 #include "../utility/ObjectDB.h"
 #include "../utility/Player.h"
+#include "../utility/GameEngine.h"
 
 
 using glm::mat4;

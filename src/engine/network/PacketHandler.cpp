@@ -5,6 +5,7 @@
 void forwardHandler(ObjectId id) {
 	Player* player = static_cast<Player*> (ObjectDB::getInstance().get(id));
 	player->setMoving(Player::UP, true);
+	GameEngine::getInstance().handleColliDetect(id);
 }
 
 
@@ -23,7 +24,7 @@ void backwardHandler(ObjectId id) {
 void stopBackwardHandler(ObjectId id) {
 	Player* player = static_cast<Player*> (ObjectDB::getInstance().get(id));
 	player->setMoving(Player::DOWN, false);
-}
+    }
 
 
 void leftHandler(ObjectId id) {
@@ -35,7 +36,7 @@ void leftHandler(ObjectId id) {
 void stopLeftHandler(ObjectId id) {
 	Player* player = static_cast<Player*> (ObjectDB::getInstance().get(id));
 	player->setMoving(Player::LEFT, false);
-}
+    }
 
 
 void rightHandler(ObjectId id) {

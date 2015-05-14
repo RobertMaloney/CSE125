@@ -6,6 +6,8 @@
 #include "ObjectDB.h"
 #include "Player.h"
 #include "IGameState.h"
+#include "Resource.h"
+#include "Model.h"
 
 
 using namespace std;
@@ -16,6 +18,7 @@ protected:
 
 	ObjectDB * map;
 	vector<Player*> players;
+    vector<Resource *> resources;
 
 public:
 
@@ -33,6 +36,8 @@ public:
 	
 	static GameState & getInstance();
 
+   Model selectPlayerModel(ObjectId playerId);
+   bool addResource(ObjectId theId, Resource * ptr);
 };
 
 #endif
