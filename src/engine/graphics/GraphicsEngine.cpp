@@ -8,6 +8,7 @@
 #include "..\graphics\Cube.h"
 #include "..\graphics\Geometry.h"
 #include "..\utility\System.h"
+#include <gtc\constants.hpp>
 #include "Shader.h"
 #include "Skybox.h"
 
@@ -106,10 +107,8 @@ void GraphicsEngine::Initialize(ObjectId playerId) {
 	m_mainCamera = new CameraNode();
 	m_mainCamera->setViewMatrix(camview);
 	
-	glm::mat4 minimapview = glm::lookAt(
-		glm::vec3(0.f, 0.f, 300.f),
-		glm::vec3(0.f, 0.f, 0.f),
-		glm::vec3(0.f, 0.f, 1.f));
+	glm::mat4 minimapview = glm::translate(glm::mat4(), glm::vec3(0, 0, -550));
+	minimapview = glm::rotate(minimapview, glm::radians(180.f), glm::vec3(0, 0, 1));
 	m_minimapCamera = new CameraNode();
 	m_minimapCamera->setViewMatrix(minimapview);
 
@@ -200,10 +199,11 @@ void GraphicsEngine::DrawAndPoll() {
 
 	glClear( GL_DEPTH_BUFFER_BIT);
 
-	 view = m_minimapCamera->getFlatViewMatrix();
+	//view = m_minimapCamera->getFlatViewMatrix();
 
-	glUniformMatrix4fv(m_uniView, 1, GL_FALSE, glm::value_ptr(view));
-	glUniformMatrix4fv(m_uniProjection, 1, GL_FALSE, glm::value_ptr(m_projection));
+	// minimap
+	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "view"), 1, GL_FALSE, glm::value_ptr(m_minimapCamera->getFlatViewMatrix()));
+	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "projection"), 1, GL_FALSE, glm::value_ptr(m_projection));
 
 	renderScene(m_scene, &identity);
 	glEnable(GL_DEPTH_TEST);
