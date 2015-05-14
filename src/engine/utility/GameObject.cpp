@@ -3,9 +3,12 @@
 
 //TODO Config file
 GameObject::GameObject(float radius, float theta, float azimuth, float direction) {
-	this->loc = vec4(radius, theta, azimuth, direction);
+	//this->loc = vec4(radius, theta, azimuth, direction);
 	this->modelRadius = 1.f;
 	this->type = GAMEOBJECT;
+	this->angle = direction;
+	this->height = radius;
+	this->orientation = glm::quat(glm::vec3(theta, azimuth, 0.f));
 }
 
 GameObject::~GameObject() {
@@ -17,8 +20,11 @@ GameObject::~GameObject() {
 void GameObject::serialize(Packet & p) {
 	p.writeUInt(id);
 	for (int i = 0; i < 4; ++i) {
-		p.writeFloat(this->loc[i]);
+		//p.writeFloat(this->loc[i]);
+		p.writeFloat(this->orientation[i]);
 	}
+	p.writeFloat(this->angle);
+	p.writeFloat(this->height);
    p.writeInt(static_cast<int>(this->rm));
 }
 
@@ -26,12 +32,25 @@ void GameObject::serialize(Packet & p) {
 void GameObject::deserialize(Packet & p) {
 	this->id = p.readUInt();
 	for (int i = 0; i < 4; ++i) {
-		this->loc[i] = p.readFloat();
+		//this->loc[i] = p.readFloat();
+		this->orientation[i] = p.readFloat();
 	}
+	this->angle = p.readFloat();
+	this->height = p.readFloat();
    this->rm = static_cast<Model>(p.readInt());
 }
 
+quat & GameObject::getOrientation() {
+	return orientation;
+}
 
+float GameObject::getAngle() {
+	return angle;
+}
+
+float GameObject::getHeight() {
+	return height;
+}
 ObjectId GameObject::getId() {
 	return id;
 }
@@ -44,21 +63,8 @@ void GameObject::setModel(Model model) {
    this->rm = model;
 }
 
-vec4 & GameObject::getLoc() {
-	return loc;
-}
-
 Model GameObject::getModel() {
    return rm;
-}
-
-const vec4& GameObject::getLocation() {
-	return this->loc;
-}
-
-
-void GameObject::setLoc(vec4 & newLoc) {
-	loc = newLoc;
 }
 
 

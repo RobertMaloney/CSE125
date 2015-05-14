@@ -54,22 +54,10 @@ public:
 			child->setParent(this);
 	}
 
-	static glm::mat4 sphere2xyz(glm::vec4 & spherePos) {
-		// get position on world
-		glm::vec3 xyz(0, 0, spherePos.x);
-		xyz = glm::angleAxis(glm::radians(spherePos.y), glm::vec3(0, 1, 0)) * xyz;
-		xyz = glm::angleAxis(glm::radians(spherePos.z), glm::vec3(1, 0, 0)) * xyz;
-
-		// make matrix out of position, add rotations
-		glm::mat4 matrix = glm::translate(glm::mat4(), xyz);
-		glm::quat rot = glm::rotation(glm::vec3(0, 0, 1), glm::normalize(xyz));
-		matrix = glm::rotate(matrix, glm::angle(rot), glm::axis(rot));
-		//matrix = glm::rotate(matrix, glm::radians(spherePos.y + 180.f), glm::vec3(0, 1, 0));
-		//matrix = glm::rotate(matrix, glm::radians(spherePos.z + 180.f), glm::vec3(1, 0, 0));
-		// do normal rotation last
-		matrix = glm::rotate(matrix, glm::radians(spherePos.w), glm::vec3(0, 0, 1));
-
-		return matrix;
+	static glm::mat4 quatAngle(glm::quat & q, float angle, float height) {
+		glm::vec3 pos = q * glm::vec3(0, 0, height);
+		glm::quat rot = q * glm::angleAxis(glm::radians(angle), glm::vec3(0, 0, 1));
+		return glm::translate(glm::mat4(), pos) * glm::toMat4(rot);
 	}
 };
 #endif

@@ -42,8 +42,8 @@ private:
 	 assert(ob1 && ob2);
 
 	 // get positions in xyz
-	 vec3 loc1 = sphereToXYZ(ob1->getLocation());
-	 vec3 loc2 = sphereToXYZ(ob2->getLocation());
+	 vec3 loc1 = ob1->getOrientation() * glm::vec3(0, 0, 505.f);
+	 vec3 loc2 = ob2->getOrientation() * glm::vec3(0, 0, 505.f);
 
 	 // if the distance is less than sum of radii there is a collision
 	 return glm::distance(loc1, loc2) < (ob1->getModelRadius() + ob2->getModelRadius());
