@@ -297,6 +297,10 @@ MatrixNode* GraphicsEngine::addNode(Renderable* objModel){
 	return m_node;
 }
 
+void GraphicsEngine::removeNode(MatrixNode * node) {
+   node->
+}
+
 // Select blob model based on playerId, will be changed later
 Renderable * GraphicsEngine::selectModel(Model model){
    Renderable* newModel;
@@ -321,4 +325,9 @@ void GraphicsEngine::insertObject(ObjectId objId, MatrixNode* n) {
 	else{
 		//TODO exception duplicate node
 	}
+}
+
+//A mapping from ObjectId to node in scene graph
+void GraphicsEngine::removeObject(ObjectId objId) {
+  objNodeMap.erase(objId);
 }

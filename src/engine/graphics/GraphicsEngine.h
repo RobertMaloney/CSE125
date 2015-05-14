@@ -53,6 +53,7 @@ public:
    static void bindPlayerNode(GameObject* player);
 	static void updateObject(ObjectId objId, glm::vec4 & v);
 	static void insertObject(ObjectId objId, MatrixNode*);
+   static void removeObject(ObjectId objId);
 
 	static MatrixNode* addNode(Renderable*);
    static Renderable* selectModel(Model model);

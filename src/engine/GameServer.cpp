@@ -51,7 +51,7 @@ void GameServer::run() {
 		}
 
 		this->processClientEvents(); 		// process the client input events
-      //gameState->cleanup();
+      gameState->cleanup();
 		physics->update(TIME_PER_FRAME);      // do a physics step
 		this->tick();                       // send state back to client
 

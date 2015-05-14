@@ -66,7 +66,9 @@ int GameState::getNumPlayers() {
 void GameState::cleanup()
 {
    for (auto it = map->objects.begin(); it != map->objects.end(); ++it) {
-      if (it->second->getDeleteFlag())
-         map->remove(it->second->getId());
+      if (it->second->getDeleteFlag()) {
+         cout << "delete" << it->second->getId() << endl;
+         it = map->objects.erase(it);
+      }
    }
 }
