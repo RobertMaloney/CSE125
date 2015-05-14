@@ -51,6 +51,7 @@ void GameServer::run() {
 		}
 
 		this->processClientEvents(); 		// process the client input events
+      //gameState->cleanup();
 		physics->update(TIME_PER_FRAME);      // do a physics step
 		this->tick();                       // send state back to client
 
@@ -141,21 +142,23 @@ void GameServer::generateResources(int num) {
       float theta = (float)(rand() % 180);
       float azimuth = (float)(rand() % 360);
       float direction = (float)(rand() % 360);
-      Model model = TREE;
+      Resource * newRe;
 
       int pick = rand() % 6;
-      if (pick == 1)
-         model = ROCK;
-      else if (pick == 2)
-         model = STUMP;
-      else if (pick == 3)
-         model = GRASS;
-      else if (pick == 4)
-         model = MUSHROOM;
-      else if (pick == 5)
-         model = FLOWER;
 
-      Resource * newRe = new Resource(model, 5, radius, theta, azimuth, direction);
+      if (pick == 0)
+         newRe = new Tree(radius, theta, azimuth, direction);
+      else if (pick == 1)
+         newRe = new Rock(radius, theta, azimuth, direction);
+      else if (pick == 2)
+         newRe = new Stump(radius, theta, azimuth, direction);
+      else if (pick == 3)
+         newRe = new Grass(radius, theta, azimuth, direction);
+      else if (pick == 4)
+         newRe = new Mushroom(radius, theta, azimuth, direction);
+      else if (pick == 5)
+         newRe = new Flower(radius, theta, azimuth, direction);
+
       ObjectId resourceId = IdGenerator::getInstance().createId();
       gameState->addResource(resourceId, newRe);
       //radius is always 505

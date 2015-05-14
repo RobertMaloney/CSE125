@@ -5,6 +5,7 @@
 //#include "Location.h"
 #include "Model.h"
 #include "GameObject.h"
+#include "Eatable.h"
 
 using namespace std;
 
@@ -17,6 +18,8 @@ protected:
 
 	bool moves[4];
 	float velocity;
+
+   int score;
 
 public:
 
@@ -36,7 +39,7 @@ public:
 	void setMoving(int, bool);
 
 	virtual void update(float dt) override;
-	virtual void collide(float dt, const GameObject & target) override;
+	virtual void collide(float dt, GameObject & target) override;
 
 };
 

@@ -20,6 +20,7 @@ void GameObject::serialize(Packet & p) {
 		p.writeFloat(this->loc[i]);
 	}
    p.writeInt(static_cast<int>(this->rm));
+   p.writeByte(this->deleteFlag);
 }
 
 
@@ -29,6 +30,7 @@ void GameObject::deserialize(Packet & p) {
 		this->loc[i] = p.readFloat();
 	}
    this->rm = static_cast<Model>(p.readInt());
+   this->deleteFlag = p.readByte();
 }
 
 
@@ -77,11 +79,19 @@ void GameObject::update(float dt) {
 }
 
 
-void GameObject::collide(float dt, const GameObject & target) {
+void GameObject::collide(float dt, GameObject & target) {
 
 }
 
 
 ObjectType GameObject::getType() const {
 	return this->type;
+}
+
+void GameObject::setDeleteFlag(bool flag) {
+   this->deleteFlag = flag;
+}
+
+bool GameObject::getDeleteFlag() {
+   return this->deleteFlag;
 }

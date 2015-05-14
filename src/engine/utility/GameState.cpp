@@ -36,6 +36,14 @@ bool GameState::addObject(ObjectId id, GameObject* o) {
 	return true;
 }
 
+bool GameState::removeObject(ObjectId id){
+   if (!map->remove(id))
+   {
+      return false;
+   }
+   return true;
+}
+
 GameObject* GameState::getObject(ObjectId id) {
 	return map->get(id);
 }
@@ -53,4 +61,12 @@ bool GameState::addResource(ObjectId theId, Resource * ptr) {
 
 int GameState::getNumPlayers() {
 	return players.size();
+}
+
+void GameState::cleanup()
+{
+   for (auto it = map->objects.begin(); it != map->objects.end(); ++it) {
+      if (it->second->getDeleteFlag())
+         map->remove(it->second->getId());
+   }
 }

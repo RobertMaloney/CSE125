@@ -23,6 +23,7 @@ public:
 
 	bool addPlayer(ObjectId theId, Player* p);
 	bool addObject(ObjectId id, GameObject* o);
+   bool removeObject(ObjectId id);
 	GameObject* getObject(ObjectId id);
 	int getNumPlayers();
 	
@@ -30,6 +31,8 @@ public:
 
    Model selectPlayerModel(ObjectId playerId);
    bool addResource(ObjectId theId, Resource * ptr);
+
+   void cleanup();
 };
 
 #endif

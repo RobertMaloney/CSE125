@@ -1,11 +1,12 @@
 #include "Player.h"
-
+#include <iostream>
 
 //TODO Config file
 Player::Player(Model thebm, float radius, float theta, float azimuth, float direction) : GameObject(radius, theta, azimuth, direction) {
 
 	this->loc = vec4(radius, theta, azimuth, direction);
    this->rm = thebm;
+   this->score = 0;
    this->moves[0] = false;
    this->moves[1] = false;
    this->moves[2] = false;
@@ -60,11 +61,19 @@ void Player::update(float dt) {
 }
 
 
-void Player::collide(float dt, const GameObject & target) {
+void Player::collide(float dt, GameObject & target) {
 	switch (target.getType()) {
 		case GAMEOBJECT:
+         loc.z -= glm::cos(glm::radians(loc.w)) * dt * velocity;
+         loc.y -= glm::sin(glm::radians(loc.w)) * dt * velocity;
 			this->velocity *= -1;
+         std::cout << "EAT " << endl;
 			break;
+      case EATABLE:
+         std::cout << "EAT " << endl;
+         target.setDeleteFlag(true);
+         this->score += 10; // placeholder
+         break;
 		case PLAYER:
 			loc.z -= glm::cos(glm::radians(loc.w)) * dt * velocity;
 			loc.y -= glm::sin(glm::radians(loc.w)) * dt * velocity;

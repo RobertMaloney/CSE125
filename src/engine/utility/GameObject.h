@@ -7,6 +7,7 @@
 #include "IdGenerator.h"
 #include "Model.h"
 
+
 using glm::mat4;
 using glm::vec2;
 using glm::vec4;
@@ -15,7 +16,8 @@ using namespace std;
 enum ObjectType {
 	PLAYER,
 	MOVEABLE,
-	GAMEOBJECT
+	GAMEOBJECT,
+   EATABLE
 };
 
 class GameObject : public Serializable  {
@@ -30,6 +32,8 @@ protected:
    // Model
    Model rm = TREE;
 
+   // Should we delete this object?
+   bool deleteFlag = false;
 
 public:
 
@@ -50,14 +54,16 @@ public:
 	float getModelRadius();
 	void setModelRadius(float radius);
 
+   void setDeleteFlag(bool flag);
+   bool getDeleteFlag();
+
 	ObjectType getType() const;
 
 	void serialize(Packet & p);
 	void deserialize(Packet & p);
 
 	virtual void update(float dt);
-	virtual void collide(float dt, const GameObject & target);
-
+	virtual void collide(float dt, GameObject & target);
 };
 
 #endif
