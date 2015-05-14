@@ -1,25 +1,16 @@
-# Blender MTL File: 'rocket3.blend'
-# Material Count: 4
+# Blender MTL File: 'greenBlob.blend'
+# Material Count: 3
 
-newmtl Material.011
+newmtl eye_black
 Ns 96.078431
 Ka 0.000000 0.000000 0.000000
-Kd 0.639282 0.026484 0.190718
+Kd 0.640000 0.640000 0.640000
 Ks 0.500000 0.500000 0.500000
 Ni 1.000000
 d 1.000000
 illum 2
 
-newmtl eye_black.001
-Ns 96.078431
-Ka 0.000000 0.000000 0.000000
-Kd 0.000000 0.000000 0.000000
-Ks 0.500000 0.500000 0.500000
-Ni 1.000000
-d 1.000000
-illum 2
-
-newmtl eye_white.001
+newmtl eye_white
 Ns 96.078431
 Ka 0.000000 0.000000 0.000000
 Kd 0.640000 0.640000 0.640000
@@ -31,8 +22,8 @@ illum 2
 newmtl orange_blob
 Ns 96.078431
 Ka 0.000000 0.000000 0.000000
-Kd 0.030918 0.529491 0.043257
-Ks 0.500000 0.466756 0.481311
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
 Ni 1.000000
 d 1.000000
 illum 2
