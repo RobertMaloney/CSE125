@@ -52,7 +52,7 @@ public:
    static int getKeyState(int);
 
    static void bindPlayerNode(GameObject* player);
-	static void updateObject(ObjectId objId, glm::vec4 & v);
+	static void updateObject(ObjectId objId, glm::quat &, float, float);
 	static void insertObject(ObjectId objId, MatrixNode*);
 
 	static MatrixNode* addNode(Renderable*);

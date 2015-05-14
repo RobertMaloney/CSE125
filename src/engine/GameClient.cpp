@@ -126,7 +126,7 @@ void GameClient::updateGameState(deque<Packet> & data) {
       }
 
 		//Update the object in node (in GraphicsEngine)
-		GraphicsEngine::updateObject(obj->getId(), obj->getLoc()); 
+	  GraphicsEngine::updateObject(obj->getId(), obj->getOrientation(), obj->getAngle(), obj->getHeight());
 	}
 }
 
