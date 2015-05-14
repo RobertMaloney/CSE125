@@ -15,7 +15,13 @@ GameClient::~GameClient() {
 
 
 void GameClient::init() {
+	//get socket ready
 	Socket::initialize();
+
+	//make first state
+	MenuState *newstate = new MenuState();
+	states.push_back(newstate);
+
 	SocketError err = connection->connect(DEFAULT_SERVER_IP, DEFAULT_SERVER_PORT);
 	if (this->shouldTerminate(err)) {
 		connection->close();
@@ -25,7 +31,35 @@ void GameClient::init() {
 	}
 	connection->setNoDelay(true);
 	connection->setNonBlocking(true);
+
 	gstate.init();
+}
+
+
+void GameClient::run() {
+	bool DEBUG = true;
+	bool loggedIn = false;
+	deque<Packet> updates;
+
+	this->init();
+	this->login();
+
+	while (!GraphicsEngine::Closing()) {
+		GraphicsEngine::DrawAndPoll();
+
+		if (DEBUG) {
+			this->sendEvents(InputHandler::input);
+			this->receiveUpdates(updates);
+
+			//Note: currently, it only updates game objects. Each package only includes the id and position of a game object.
+			//Note: This method reads updates, translates update, updates game states (in client) and scene graph (in GraphicsEngine)
+			this->updateGameState(updates);
+			updates.clear();
+		}
+	}
+
+	GraphicsEngine::Destroy();
+	system("pause");
 }
 
 
@@ -51,32 +85,6 @@ void GameClient::login() {
 	connection->setNonBlocking(true);
 }
 
-
-void GameClient::run() {
-	bool DEBUG = true;
-	bool loggedIn = false;
-    deque<Packet> updates;
-
-	this->init();
-	this->login();
-
-	while (!GraphicsEngine::Closing()) {
-		GraphicsEngine::DrawAndPoll();
-		
-		if (DEBUG) {	
-			this->sendEvents(InputHandler::input);		
-			this->receiveUpdates(updates);
-
-			//Note: currently, it only updates game objects. Each package only includes the id and position of a game object.
-			//Note: This method reads updates, translates update, updates game states (in client) and scene graph (in GraphicsEngine)
-			this->updateGameState(updates);
-			updates.clear();
-		}
-	}
-
-	GraphicsEngine::Destroy();
-	system("pause");
-}
 
 
 void GameClient::updateGameState(deque<Packet> & data) {

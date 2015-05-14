@@ -11,6 +11,7 @@
 #include "graphics\GraphicsEngine.h"
 #include "network\Packet.h"
 #include "utility\Player.h"
+#include "utility\MenuState.h"
 #include "utility\GameState.h"
 #include "utility\IdGenerator.h"
 

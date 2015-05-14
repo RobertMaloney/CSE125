@@ -15,7 +15,8 @@ class IGameState
 public:
 	IGameState * changeTo;
 
-	IGameState() : changeTo(NULL) {}
+
+	IGameState() : changeTo(nullptr) {}
 
 	virtual ~IGameState()		= 0;
 
