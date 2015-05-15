@@ -78,8 +78,8 @@ void Player::collide(float dt, const GameObject & target) {
 		default:
 			break;
 }*/
-	loc.z -= glm::cos(glm::radians(loc.w)) * dt * velocity;
-	loc.y -= glm::sin(glm::radians(loc.w)) * dt * velocity;
+	//loc.z -= glm::cos(glm::radians(loc.w)) * dt * velocity;
+	//loc.y -= glm::sin(glm::radians(loc.w)) * dt * velocity;
 	this->velocity *= -1;
 	//set target flag = false//dead
 	//increase score
