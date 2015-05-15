@@ -61,9 +61,6 @@ public:
 	void serialize(Packet & p);
 	void deserialize(Packet & p);
 
-	virtual void update(float dt);
-	virtual void collide(float dt, const GameObject & target);
-
 };
 
 #endif

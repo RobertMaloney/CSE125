@@ -3,7 +3,7 @@
 #include <gtx\string_cast.hpp>
 
 //TODO Config file
-Player::Player(Model thebm, float radius, float theta, float azimuth, float direction) : GameObject(radius, theta, azimuth, direction) {
+Player::Player(Model thebm, float radius, float theta, float azimuth, float direction) : MoveableObject() {
 
 	//this->loc = vec4(radius, theta, azimuth, direction);
    this->rm = thebm;
@@ -34,12 +34,12 @@ void Player::setMoving(int index, bool b) {
 }
 
 
-void Player::update(float dt) {
+void Player::move(float dt) {
 	if (moves[UP]) {
-		velocity += PLAYER_ACCELERATION;
+		velocity += acceleration;
 	}
 	if (moves[DOWN]) {
-		velocity -= PLAYER_ACCELERATION;
+		velocity -= acceleration;
 	}
 	if (moves[RIGHT]) {
 		angle -= 1.f;
@@ -50,10 +50,10 @@ void Player::update(float dt) {
 	}
 	// if there was no input simulate friction
 	if (!moves[UP] && !moves[DOWN]) {
-		if (glm::abs(velocity) <= FRICTION && glm::abs(velocity) >= 0) {
+		if (glm::abs(velocity) <= dampening && glm::abs(velocity) >= 0) {
 			velocity = 0;
 		} else { 
-			velocity = (velocity > 0) ? velocity - FRICTION : velocity + FRICTION;
+			velocity = (velocity > 0) ? velocity - dampening : velocity + dampening;
 		}
 	}
 	// move the player
@@ -64,22 +64,7 @@ void Player::update(float dt) {
 }
 
 
-void Player::collide(float dt, const GameObject & target) {
-	/*switch (target.getType()) {
-		case GAMEOBJECT:
-			this->velocity *= -1;
-			break;
-		case PLAYER:
-			//loc.z -= glm::cos(glm::radians(loc.w)) * dt * velocity;
-			//loc.y -= glm::sin(glm::radians(loc.w)) * dt * velocity;
-			std::cout << "Player collision" << std::endl;
-			this->velocity *= -1;
-			break;
-		default:
-			break;
-}*/
-	//loc.z -= glm::cos(glm::radians(loc.w)) * dt * velocity;
-	//loc.y -= glm::sin(glm::radians(loc.w)) * dt * velocity;
+void Player::collide(float dt, GameObject & target) {
 	this->velocity *= -1;
 	//set target flag = false//dead
 	//increase score
