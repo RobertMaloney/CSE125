@@ -1,17 +1,21 @@
 #ifndef PHYSICSENGINE_H
 #define PHYSICSENGINE_H
 
+
+#include "ObjectDB.h"
+#include "MoveableObject.h"
+
 #include <algorithm>
 #include <vector>
 #include <glm.hpp>
 #include <gtc\type_ptr.hpp>
 #include <gtx\quaternion.hpp>
-#include "MoveableObject.h"
-#include "ObjectDB.h"
+
 using glm::pow;
 using glm::sqrt;
 using std::vector;
 using std::remove_if;
+
 class PhysicsEngine {
 
 public:
@@ -20,6 +24,8 @@ public:
 	~PhysicsEngine();
 
 	void update(float dt);
+	vector<GameObject*> & getChangedObjects();
+
 	void registerMoveable(MoveableObject* object);
 	void removeMoveable(MoveableObject* object);
 
@@ -30,7 +36,9 @@ private:
 	inline bool checkCollision(MoveableObject* ob1, GameObject* ob2);
 
 	ObjectDB* objectDb;
-	vector<MoveableObject*> moveableObjects;
+	vector<GameObject*> changed;
+	vector<MoveableObject*> moveables;
+
 };
 
 
@@ -47,8 +55,8 @@ private:
 	 assert(ob1 && ob2);
 
 	 // get positions in xyz
-	 vec3 loc1 = sphereToXYZ(ob1->getLocation());
-	 vec3 loc2 = sphereToXYZ(ob2->getLocation());
+	 vec3 loc1 = ob1->getOrientation() * glm::vec3(0, 0, 505.f);
+	 vec3 loc2 = ob2->getOrientation() * glm::vec3(0, 0, 505.f);
 
 	 // if the distance is less than sum of radii there is a collision
 	 return glm::distance(loc1, loc2) < (ob1->getModelRadius() + ob2->getModelRadius());

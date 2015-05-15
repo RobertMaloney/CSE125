@@ -1,10 +1,11 @@
 #include "Player.h"
-
+#include <iostream>
+#include <gtx\string_cast.hpp>
 
 //TODO Config file
-Player::Player(Model thebm, float radius, float theta, float azimuth, float direction) : MoveableObject(radius, theta, azimuth, direction) {
+Player::Player(Model thebm, float radius, float theta, float azimuth, float direction) : MoveableObject() {
 
-	this->loc = vec4(radius, theta, azimuth, direction);
+	//this->loc = vec4(radius, theta, azimuth, direction);
    this->rm = thebm;
    this->moves[0] = false;
    this->moves[1] = false;
@@ -35,44 +36,37 @@ void Player::setMoving(int index, bool b) {
 
 void Player::move(float dt) {
 	if (moves[UP]) {
-		velocity += .001;
+		velocity += acceleration;
 	}
 	if (moves[DOWN]) {
-		velocity -= .001;
+		velocity -= acceleration;
 	}
 	if (moves[RIGHT]) {
-		loc.w -= 1.f;
+		angle -= 1.f;
 	}
 	if (moves[LEFT]) {
-		loc.w += 1.f;
+		angle += 1.f;
+		std::cout << "Angle: " << angle << std::endl;
 	}
 	// if there was no input simulate friction
 	if (!moves[UP] && !moves[DOWN]) {
-		if (glm::abs(velocity) <= FRICTION && glm::abs(velocity) >= 0) {
+		if (glm::abs(velocity) <= dampening && glm::abs(velocity) >= 0) {
 			velocity = 0;
 		} else { 
-			velocity = (velocity > 0) ? velocity - FRICTION : velocity + FRICTION;
+			velocity = (velocity > 0) ? velocity - dampening : velocity + dampening;
 		}
 	}
 	// move the player
-	loc.z += glm::cos(glm::radians(loc.w)) * dt * velocity;
-	loc.y += glm::sin(glm::radians(loc.w)) * dt * velocity;
+	float cosa = glm::cos(glm::radians(angle));
+	float sina = glm::sin(glm::radians(angle));
+	glm::quat q = orientation * glm::angleAxis(glm::radians(velocity), glm::vec3(cosa, sina, 0));
+	orientation = glm::normalize(glm::mix(orientation, q, dt));
 }
 
 
-void Player::collide(float dt, const GameObject & target) {
-	switch (target.getType()) {
-	case GAMEOBJECT:
-		loc.z -= glm::cos(glm::radians(loc.w)) * dt * velocity;
-		loc.y -= glm::sin(glm::radians(loc.w)) * dt * velocity;
-		this->velocity *= -1;
-		break;
-	case PLAYER:
-		loc.z -= glm::cos(glm::radians(loc.w)) * dt * velocity;
-		loc.y -= glm::sin(glm::radians(loc.w)) * dt * velocity;
-		this->velocity *= -1;
-		break;
-	default:
-		break;
-	}
+void Player::collide(float dt, GameObject & target) {
+	this->velocity *= -1;
+	//set target flag = false//dead
+	//increase score
+	//Render needs to figure out (not) rendering dead object
 }

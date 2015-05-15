@@ -30,7 +30,7 @@ public:
     PacketHandler();
     ~PacketHandler();
 
-    void dispatch(ObjectId clientId, deque<Packet> & received);
+    void dispatch(ObjectId clientId, vector<Packet> & received);
 
 private:
 

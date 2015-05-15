@@ -35,7 +35,7 @@ void GameServer::initialize(int maxConns) {
 	this->listener->setNonBlocking(true);
 	maxConnections = maxConns;
    gameState->init();
-   generateResources(1000);
+ //  generateResources(100);
 }
 
 
@@ -49,23 +49,25 @@ void GameServer::run() {
 		if (clients->size() < maxConnections) {
 			this->acceptWaitingClient();
 		}
-		std::cout << "process took : ";
+		std::cout << " accept : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
 		this->processClientEvents(); 		// process the client input events
-		std::cout << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
-		std::cout << "physics took : ";
+
+		std::cout << " process : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
 		physics->update(TIME_PER_FRAME);      // do a physics step
-		std::cout << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
+
+		std::cout << " physics : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
 		this->tick();                       // send state back to client
 
+		std::cout << " tick : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
 		//calculates the ms from start until here.
 		elapsedTime = chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count();
-		std::cout << "elapsed  " << elapsedTime << std::endl;
 		if (elapsedTime > TIME_PER_FRAME) {  // this is so know if we need to slow down the loop
-			cerr << "Server loop took long than a frame." << endl;
+	//		cerr << "Server loop took long than a frame." << endl;
 		}
+		std::cout << " sleep for : " << TIME_PER_FRAME - elapsedTime << std::endl;
 
 		// sleep for unused time
-//		sleep_for(milliseconds(TIME_PER_FRAME - elapsedTime));
+		sleep_for(milliseconds(TIME_PER_FRAME - elapsedTime));
 	}
 }
 
@@ -91,18 +93,23 @@ void GameServer::acceptWaitingClient() {
 	clients->insert(make_pair(connection, playerId));	
 	response.writeUInt(playerId);
 	connection->send(response);
+	vector<Packet> initial;
+	//initial.push_back(response);
+	ObjectDB::getInstance().getObjectState(initial);
+	connection->send(initial);
 }
 
 
 
 void GameServer::tick() {
-	deque<Packet> updates;
-	high_resolution_clock::time_point t1, t2;
-	t1 = high_resolution_clock::now();
-	ObjectDB::getInstance().getObjectState(updates);
-	std::cout << "get state: " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - t1).count() << std::endl;
-	t1 = high_resolution_clock::now();
-
+	Packet p;
+	vector<Packet> updates;
+	vector<GameObject*> & changed = physics->getChangedObjects();
+	for (GameObject* object : changed) {
+		object->serialize(p);
+		updates.push_back(p);
+	}
+	changed.clear();
 	for (auto it = clients->begin(); it != clients->end(); ) {
 		SocketError err = it->first->send(updates);
 		if (this->shouldTerminate(err)){
@@ -113,13 +120,11 @@ void GameServer::tick() {
             ++it;
         }
 	}
-	std::cout << "send: " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - t1).count() << std::endl;
-
 }
 
 
 void GameServer::processClientEvents() {
-	deque<Packet> events;
+	vector<Packet> events;
 
 	for (auto it = clients->begin(); it != clients->end(); ) {
 		SocketError err = it->first->receive(events);

@@ -2,7 +2,6 @@
 #define PLAYER_H
 
 #include <string>
-//#include "Location.h"
 #include "Model.h"
 #include "MoveableObject.h"
 
@@ -30,8 +29,9 @@ public:
 
 	bool getMoving(int);
 	void setMoving(int, bool);
+
 	virtual void move(float dt) override;
-	virtual void collide(float dt, const GameObject & target) override;
+	virtual void collide(float dt, GameObject & target) override;
 
 };
 
