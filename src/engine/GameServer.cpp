@@ -35,7 +35,7 @@ void GameServer::initialize(int maxConns) {
 	this->listener->setNonBlocking(true);
 	maxConnections = maxConns;
    gameState->init();
- //  generateResources(100);
+   generateResources(5000);
 }
 
 
@@ -108,6 +108,7 @@ void GameServer::tick() {
 	for (GameObject* object : changed) {
 		object->serialize(p);
 		updates.push_back(p);
+		p.clear();
 	}
 	changed.clear();
 	for (auto it = clients->begin(); it != clients->end(); ) {
