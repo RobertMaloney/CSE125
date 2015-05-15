@@ -21,6 +21,7 @@ using std::cout;
 class GameClient {
 
 public:
+
 	GameState gstate;
 
     GameClient();
@@ -30,9 +31,9 @@ public:
 	void login();
     void initialize();
 
-    void receiveUpdates(deque<Packet> & updates);
-    void sendEvents(deque<Packet> & events);
-	void updateGameState(deque<Packet> & updates);
+    void receiveUpdates(vector<Packet> & updates);
+    void sendEvents(vector<Packet> & events);
+	void updateGameState(vector<Packet> & updates);
 
 private:
 

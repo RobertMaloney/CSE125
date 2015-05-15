@@ -11,8 +11,13 @@ PhysicsEngine::~PhysicsEngine() {
 
 
 void PhysicsEngine::update(float dt) {
-	this->resolveCollisions(dt);
 	this->updateObjects(dt);
+	this->resolveCollisions(dt);
+}
+
+
+vector<GameObject*> & PhysicsEngine::getChangedObjects(){
+	return this->changed;
 }
 
 
@@ -36,6 +41,7 @@ void PhysicsEngine::resolveCollisions(float dt) {
 		for (auto jt = objectDb->objects.begin(); jt != objectDb->objects.end(); ++jt) {
 			if (jt->second != *it && this->checkCollision(*it, jt->second)) {
 				(*it)->collide(dt, *jt->second);
+				changed.push_back(jt->second);
 			}
 		}
 	}
@@ -46,6 +52,7 @@ void PhysicsEngine::resolveCollisions(float dt) {
 void PhysicsEngine::updateObjects(float dt) {
 	for (MoveableObject* object : moveables){
 		object->move(dt);
+		changed.push_back(object);
 	}
 }
 

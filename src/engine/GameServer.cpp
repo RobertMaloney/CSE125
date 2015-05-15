@@ -35,7 +35,7 @@ void GameServer::initialize(int maxConns) {
 	this->listener->setNonBlocking(true);
 	maxConnections = maxConns;
    gameState->init();
-   generateResources(100);
+ //  generateResources(100);
 }
 
 
@@ -93,14 +93,23 @@ void GameServer::acceptWaitingClient() {
 	clients->insert(make_pair(connection, playerId));	
 	response.writeUInt(playerId);
 	connection->send(response);
+	vector<Packet> initial;
+	//initial.push_back(response);
+	ObjectDB::getInstance().getObjectState(initial);
+	connection->send(initial);
 }
 
 
 
 void GameServer::tick() {
-	deque<Packet> updates;
-	ObjectDB::getInstance().getObjectState(updates);
-
+	Packet p;
+	vector<Packet> updates;
+	vector<GameObject*> & changed = physics->getChangedObjects();
+	for (GameObject* object : changed) {
+		object->serialize(p);
+		updates.push_back(p);
+	}
+	changed.clear();
 	for (auto it = clients->begin(); it != clients->end(); ) {
 		SocketError err = it->first->send(updates);
 		if (this->shouldTerminate(err)){
@@ -115,7 +124,7 @@ void GameServer::tick() {
 
 
 void GameServer::processClientEvents() {
-	deque<Packet> events;
+	vector<Packet> events;
 
 	for (auto it = clients->begin(); it != clients->end(); ) {
 		SocketError err = it->first->receive(events);

@@ -24,6 +24,7 @@ public:
 	~PhysicsEngine();
 
 	void update(float dt);
+	vector<GameObject*> & getChangedObjects();
 
 	void registerMoveable(MoveableObject* object);
 	void removeMoveable(MoveableObject* object);
@@ -35,6 +36,7 @@ private:
 	inline bool checkCollision(MoveableObject* ob1, GameObject* ob2);
 
 	ObjectDB* objectDb;
+	vector<GameObject*> changed;
 	vector<MoveableObject*> moveables;
 
 };

@@ -36,7 +36,7 @@ public:
     /* Send all the packets in the vector. If one of the packets is larger than
      * MAX_PACKET_SIZE it will be silently dropped.
      */
-    SocketError send(const deque<Packet> & packets);
+    SocketError send(const vector<Packet> & packets);
 
     /* Receive a single packet into the packet buffer.
      */
@@ -46,7 +46,7 @@ public:
      * to grab all packets instead of looping on the single receive. This will be
      * more efficient.
      */
-    SocketError receive(deque<Packet> & packets);
+    SocketError receive(vector<Packet> & packets);
 
 
 protected:

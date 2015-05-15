@@ -40,7 +40,7 @@ void GameClient::login() {
 void GameClient::run() {
 	bool DEBUG = true;
 	bool loggedIn = false;
-    deque<Packet> updates;
+    vector<Packet> updates;
 
 	this->initialize();
 	this->login();
@@ -64,7 +64,7 @@ void GameClient::run() {
 }
 
 
-void GameClient::updateGameState(deque<Packet> & data) {
+void GameClient::updateGameState(vector<Packet> & data) {
 	if (data.size() <= 0) {
 		return;
 	}
@@ -123,12 +123,12 @@ void GameClient::initialize() {
 }
 
 
-void GameClient::receiveUpdates(deque<Packet> & updates) {
+void GameClient::receiveUpdates(vector<Packet> & updates) {
     this->checkError(connection->receive(updates));
 }
 
 
-void GameClient::sendEvents(deque<Packet> & events) {
+void GameClient::sendEvents(vector<Packet> & events) {
 	connection->send(events);
 	events.clear();
 }
