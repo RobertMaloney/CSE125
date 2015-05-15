@@ -65,7 +65,7 @@ void Player::update(float dt) {
 
 
 void Player::collide(float dt, const GameObject & target) {
-	switch (target.getType()) {
+	/*switch (target.getType()) {
 		case GAMEOBJECT:
 			this->velocity *= -1;
 			break;
@@ -77,5 +77,11 @@ void Player::collide(float dt, const GameObject & target) {
 			break;
 		default:
 			break;
-}
+}*/
+	loc.z -= glm::cos(glm::radians(loc.w)) * dt * velocity;
+	loc.y -= glm::sin(glm::radians(loc.w)) * dt * velocity;
+	this->velocity *= -1;
+	//set target flag = false//dead
+	//increase score
+	//Render needs to figure out (not) rendering dead object
 }
