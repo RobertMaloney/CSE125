@@ -105,9 +105,9 @@ void GameClient::updateGameState(deque<Packet> & data) {
       // Delete object if delete flag set
       if (obj->getDeleteFlag())
       {
-         gstate.removeObject(obj->getId());
-         GraphicsEngine::removeObject(obj->getId());
-         obj = nullptr;
+         //gstate.removeObject(obj->getId());
+         //GraphicsEngine::removeObject(obj->getId());
+         //obj = nullptr;
          // Object deleted but still gets rendered.
          // Need to delete Renderable from screen graph
       }
