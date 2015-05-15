@@ -1,7 +1,29 @@
 #include "GameState.h"
+#include "..\GameClient.h"
 
-void GameState::init(){
+
+GameState::GameState()
+{
+
+}
+
+
+GameState::~GameState()
+{
+
+}
+
+void GameState::init()
+{
+	//get db
 	map = &ObjectDB::getInstance();
+
+	//init player
+	Player* player = new Player();
+	assert(this->addPlayer(gameclient->playerid, player)); 
+	GraphicsEngine::Initialize(gameclient->playerid);
+	//Binds player game object with the player node in Graphics engine
+	GraphicsEngine::bindPlayerNode(player);
 }
 
 
@@ -12,16 +34,25 @@ void GameState::cleanup()
 
 void GameState::handleEvents()
 {
+	this->sendEvents(InputHandler::input);
+	this->receiveUpdates();
 }
 
 
 void GameState::update()
 {
+	//update the db
+	this->updateGameState();
+	
+	//clear for fresh updates
+	updates.clear();
 }
 
 
 void GameState::draw()
 {
+	//use grpahics engine to draw
+	GraphicsEngine::DrawAndPoll();
 }
 
 
@@ -29,7 +60,7 @@ bool GameState::addPlayer(ObjectId theId, Player* p) {
 	if (!map->add(theId, p)){
 		return false;
 	}
-   p->setModel(selectPlayerModel(theId));
+    p->setModel(selectPlayerModel(theId));
 	p->setId(theId);
 	players.push_back(p);
 	return true;
@@ -74,4 +105,63 @@ bool GameState::addResource(ObjectId theId, Resource * ptr) {
 
 int GameState::getNumPlayers() {
 	return players.size();
+}
+
+
+
+void GameState::sendEvents(deque<Packet> & events) 
+{
+	gameclient->connection->send(events);
+	events.clear();
+}
+
+
+void GameState::receiveUpdates() 
+{
+	gameclient->checkError(gameclient->connection->receive(updates));
+}
+
+
+void GameState::updateGameState() {
+	if (updates.size() <= 0) {
+		return;
+	}
+
+	ObjectId objId;
+	GameObject* obj = nullptr;
+
+	//Note: Loop through all packets(gameobjects for now), identify which object it relates to or if it is a new object
+	for (auto packet = updates.begin(); packet != updates.end(); ++packet) {
+		if (packet->size() <= 0) {
+			continue;
+		}
+
+		objId = packet->readUInt();
+		packet->reset();
+		obj = this->getObject(objId);
+
+		//If this game object is new 
+		if (!obj) {
+			obj = new GameObject();
+
+			if (!this->addObject(objId, obj)){ // Adds to game state in client
+				delete obj;
+				obj = nullptr;
+				continue;
+			}
+			else{
+				obj->deserialize(*packet);//deserialize here to get the model
+			}
+
+			//Add node in scene graph (in GraphicsEngine) and add object-node mapping (in GraphicsEngine)
+			GraphicsEngine::insertObject(obj->getId(), GraphicsEngine::addNode(GraphicsEngine::selectModel(obj->getModel())));
+		}
+		else {
+			//Update the object in game state
+			obj->deserialize(*packet);//For now it only updates obj (pos) in game state
+		}
+
+		//Update the object in node (in GraphicsEngine)
+		GraphicsEngine::updateObject(obj->getId(), obj->getOrientation(), obj->getAngle(), obj->getHeight());
+	}
 }

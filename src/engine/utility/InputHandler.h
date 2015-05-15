@@ -4,7 +4,6 @@
 #include <deque>
 #include "../network/Packet.h"
 #include "..\utility\Event.h"
-#include "..\graphics\GraphicsEngine.h"
 
 using std::deque;
 

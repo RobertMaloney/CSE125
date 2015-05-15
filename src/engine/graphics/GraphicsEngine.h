@@ -16,6 +16,8 @@
 
 #include <vector>
 #include <deque>
+#include <unordered_map>
+
 #include "MatrixNode.h"
 #include "Geode.h"
 #include "CameraNode.h"
@@ -24,7 +26,8 @@
 
 #include "..\network\Packet.h"
 #include "..\utility\GameObject.h"
-#include "..\utility\GameState.h"
+//#include "..\utility\GameState.h"
+#include "..\utility\InputHandler.h"
 
 
 typedef unsigned int ObjectId;
@@ -48,7 +51,7 @@ public:
 	static void ScaleUp();
 	static void ScaleDown();
 	static KeyCallback GetKeyCallback();
-	static void UpdatePlayer(deque<Packet> &, GameState &);
+	//static void UpdatePlayer(deque<Packet> &, GameState &);
    static int getKeyState(int);
 
    static void bindPlayerNode(GameObject* player);

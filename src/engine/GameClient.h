@@ -7,10 +7,10 @@
 #include <vector>
 
 #include "network\TCPConnection.h"
-#include "utility\InputHandler.h"
-#include "graphics\GraphicsEngine.h"
-#include "network\Packet.h"
-#include "utility\Player.h"
+//#include "utility\InputHandler.h"
+//#include "graphics\GraphicsEngine.h"
+//#include "network\Packet.h"
+//#include "utility\Player.h"
 #include "utility\MenuState.h"
 #include "utility\GameState.h"
 #include "utility\IdGenerator.h"
@@ -26,28 +26,28 @@ using std::cout;
 class GameClient {
 
 public:
-	GameState gstate;
+	//GameState gstate;
+	ObjectId playerid;
+	IGameState * current_state;
+	TCPConnection* connection;
 
     GameClient();
     ~GameClient();
 
 	void init();
+	void cleanup();
+
 	void run();
-	void login();
 
-    void receiveUpdates(deque<Packet> & updates);
-    void sendEvents(deque<Packet> & events);
-	void updateGameState(deque<Packet> & updates);
+	//managing states
+	void addState(IGameState *state);
+	void removeState();
+	void changeState(IGameState *state); //this is a pop and push
 
-	void changeState(IGameState *state);
+	void checkError(SocketError err);
+	bool shouldTerminate(SocketError err);
 
 private:
-
-	TCPConnection* connection;
-
-    inline void checkError(SocketError err);
-    inline bool shouldTerminate(SocketError err);
-
 	//stack of states
 	vector<IGameState *> states;
 };

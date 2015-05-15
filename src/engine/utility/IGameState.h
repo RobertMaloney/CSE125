@@ -3,6 +3,11 @@
 
 
 //#include "..\GameClient.h"
+#include "..\network\TCPConnection.h"
+
+
+//forward declarations
+class GameClient;
 
 
 /*
@@ -14,7 +19,7 @@ class IGameState
 {
 public:
 	IGameState * changeTo;
-
+	GameClient * gameclient;
 
 	IGameState() : changeTo(nullptr) {}
 
@@ -27,16 +32,9 @@ public:
 	virtual void update()		= 0;
 	virtual void draw()			= 0;
 
-	//only gameclient is used by this method
-	void changeState(IGameState *state)
-	{
-		changeTo = state;
-	}
-
-	IGameState * checkState()
-	{
-		return changeTo;
-	}
+	//non-virtual methods
+	//void changeState(IGameState *state);
+	//IGameState * checkState();
 };
 
 

@@ -2,6 +2,7 @@
 #define MENU_STATE_H
 
 #include "IGameState.h"
+//#include "..\GameClient.h"
 
 
 class MenuState : public IGameState
@@ -16,6 +17,9 @@ public:
 	void handleEvents();
 	void update();
 	void draw();
+
+	void connectToServer();
+	void login();
 };
 
 

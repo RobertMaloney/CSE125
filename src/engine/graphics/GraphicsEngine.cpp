@@ -2,8 +2,6 @@
 
 #include "GraphicsEngine.h"
 
-#include "..\utility\InputHandler.h"
-
 //#include "..\utility\ObjectDB.h"
 #include "..\graphics\Cube.h"
 #include "..\graphics\Geometry.h"

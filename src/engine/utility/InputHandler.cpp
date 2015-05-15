@@ -1,4 +1,6 @@
 #include "InputHandler.h"
+#include "..\graphics\GraphicsEngine.h"
+
 
 deque<Packet> InputHandler::input;
 

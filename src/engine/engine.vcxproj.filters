@@ -63,5 +63,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Network\Endianness.inl" />
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

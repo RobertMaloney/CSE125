@@ -3,16 +3,24 @@
 
 
 #include <vector>
+#include <deque>
+
+#include "IGameState.h"
+#include "..\graphics\GraphicsEngine.h"
 #include "ObjectDB.h"
 #include "Player.h"
-#include "IGameState.h"
 #include "Resource.h"
 #include "Model.h"
+//#include "..\network\Packet.h"
+
+
+//forward declarations
+
 
 
 using namespace std;
 
-class GameState : IGameState 
+class GameState : public IGameState 
 {
 protected:
 
@@ -21,6 +29,10 @@ protected:
     vector<Resource *> resources;
 
 public:
+	deque<Packet> updates;
+
+	GameState();
+	~GameState();
 
 	void init();
 	void cleanup();
@@ -36,8 +48,12 @@ public:
 	
 	static GameState & getInstance();
 
-   Model selectPlayerModel(ObjectId playerId);
-   bool addResource(ObjectId theId, Resource * ptr);
+	Model selectPlayerModel(ObjectId playerId);
+	bool addResource(ObjectId theId, Resource * ptr);
+
+	void sendEvents(deque<Packet> & events);
+	void receiveUpdates();
+	void updateGameState();
 };
 
 #endif
