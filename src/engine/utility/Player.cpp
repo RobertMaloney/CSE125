@@ -16,7 +16,7 @@ Player::Player(Model thebm, float radius, float theta, float azimuth, float dire
 		this->moves[i] = false;
 
 	this->type = PLAYER;
-	this->velocity = 0;
+	//this->velocity = 0;
 	this->modelRadius = 5.f;
 }
 
