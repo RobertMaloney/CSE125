@@ -35,7 +35,7 @@ void GameServer::initialize(int maxConns) {
 	this->listener->setNonBlocking(true);
 	maxConnections = maxConns;
    gameState->init();
-  // generateResources(2000);
+  //generateResources(5000);
 }
 
 
@@ -49,25 +49,27 @@ void GameServer::run() {
 		if (clients->size() < maxConnections) {
 			this->acceptWaitingClient();
 		}
-		std::cout << " accept : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
+	//	std::cout << " accept : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
 		this->processClientEvents(); 		// process the client input events
 
-		std::cout << " process : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
+	//	std::cout << " process : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
 		physics->update(TIME_PER_FRAME);      // do a physics step
 
-		std::cout << " physics : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
+	//	std::cout << " physics : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
 		this->tick();                       // send state back to client
 
-		std::cout << " tick : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
+	//	std::cout << " tick : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
 		//calculates the ms from start until here.
 		elapsedTime = chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count();
 		if (elapsedTime > TIME_PER_FRAME) {  // this is so know if we need to slow down the loop
 	//		cerr << "Server loop took long than a frame." << endl;
 		}
-		std::cout << " sleep for : " << TIME_PER_FRAME - elapsedTime << std::endl;
+	//	std::cout << " sleep for : " << TIME_PER_FRAME - elapsedTime << std::endl;
 
 		// sleep for unused time
 		sleep_for(milliseconds(TIME_PER_FRAME - elapsedTime));
+		//sleep_for(milliseconds(2000));
+
 	}
 }
 

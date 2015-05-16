@@ -32,20 +32,28 @@ void PhysicsEngine::removeMoveable(MoveableObject* object) {
 	remove_if(moveables.begin(), moveables.end(), [&] (MoveableObject* obj) -> bool {return obj == object; });
 }
 
+bool contains(vector<MoveableObject*>& container, MoveableObject* object) {
+	return find(container.begin(), container.end(), object) != container.end();
+}
+
 // get all the collisions be sure to avoid duplicate collisions
 void PhysicsEngine::resolveCollisions(float dt) {
 
 	// lLoop over all pairs of objects. check if they are colliding, if they are call there collision 
 	// methods
+	vector<MoveableObject*> seen;
 	for (auto it = moveables.begin(); it != moveables.end(); ++it) {
 		for (auto jt = objectDb->objects.begin(); jt != objectDb->objects.end(); ++jt) {
-			if (jt->second != *it && this->checkCollision(*it, jt->second)) {
+			if (jt->second != *it && /*!contains(seen, *it) &&*/ this->checkCollision(*it, jt->second)) {
 				(*it)->collide(dt, *jt->second);
 				changed.push_back(jt->second);
+			//	seen.push_back(*it);
 			}
 		}
 	}
 }
+
+
 
 
 // update all the objects in the game by one timestep

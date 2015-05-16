@@ -12,17 +12,23 @@ class MoveableObject : public GameObject {
 public:
 
 	//MoveableObject(float acceleration = .0005, float dampening = .005);
-	MoveableObject(vec3 velocity = vec3(0,0,0), vec3 acceleration = vec3(0,0,0), float dampening = .001);
-
+	MoveableObject();
 	virtual ~MoveableObject();
+
+	void setMass(float value);
+	float getMass();
+
+	void addForce(vec3 force);
+	void addForce(float x, float y, float z);
 
 	virtual void move(float dt);
 	virtual void collide(float dt, GameObject & target);
 
 protected:
 
+	float inverseMass;
 	float dampening;
-	float forceAccum;
+	vec3 forceAccum;
 	vec3 velocity;
 	vec3 acceleration;
 
