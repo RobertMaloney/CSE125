@@ -21,7 +21,6 @@ void GameState::init()
 	//init player
 	Player* player = new Player();
 	assert(this->addPlayer(gameclient->playerid, player)); 
-	GraphicsEngine::Initialize(gameclient->playerid);
 	//Binds player game object with the player node in Graphics engine
 	GraphicsEngine::bindPlayerNode(player);
 }

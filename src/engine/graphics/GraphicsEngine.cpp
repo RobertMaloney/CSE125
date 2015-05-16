@@ -52,7 +52,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 * Description: This function initializes the graphics pipeline, compiles the
 * shaders, creates the window, and sets up the view and projection matrices
 */
-void GraphicsEngine::Initialize(ObjectId playerId) {
+void GraphicsEngine::Initialize() {
 	if (!glfwInit())
 		return;
 

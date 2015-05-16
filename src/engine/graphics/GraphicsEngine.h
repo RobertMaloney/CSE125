@@ -38,7 +38,7 @@ typedef void (*KeyCallback) (int,int,int);
 
 class GraphicsEngine {
 public:
-	static void Initialize(ObjectId playerId);
+	static void Initialize();
 	static bool Closing();
 	static void CloseGame();
 	static void DrawAndPoll();

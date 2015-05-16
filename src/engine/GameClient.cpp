@@ -34,6 +34,7 @@ void GameClient::run() {
 
 	this->init();
 	//this->login();
+	GraphicsEngine::Initialize();
 
 	while (!GraphicsEngine::Closing()) {
 		current_state->handleEvents();
@@ -82,10 +83,11 @@ bool GameClient::shouldTerminate(SocketError err)
 
 void GameClient::addState(IGameState *state)
 {
+	//NOTE: this order matters
+	state->gameclient = this;
 	state->init();
 	this->current_state = state;
 	this->states.push_back(state);
-	state->gameclient = this;
 }
 
 
@@ -100,8 +102,9 @@ void GameClient::removeState()
 
 void GameClient::changeState(IGameState *state)
 {
+	//NOTE: this order matters
+	state->gameclient = this;
 	state->init();
 	this->current_state = state;
 	this->states.push_back(state);
-	state->gameclient = this;
 }
