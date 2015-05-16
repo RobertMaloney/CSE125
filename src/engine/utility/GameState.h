@@ -35,6 +35,7 @@ public:
 	~GameState();
 
 	void init();
+	void initWithServer();
 	void cleanup();
 
 	void handleEvents();

@@ -27,6 +27,14 @@ void GameState::init()
 }
 
 
+//server uses this to intialize
+void GameState::initWithServer()
+{
+	//get db
+	map = &ObjectDB::getInstance();
+}
+
+
 void GameState::cleanup()
 {
 }
