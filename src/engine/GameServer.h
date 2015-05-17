@@ -15,6 +15,7 @@
 #include "utility/ObjectDB.h"
 #include "utility/IdGenerator.h"
 #include "utility/GameState.h"
+#include "utility/GameEngine.h"
 
 using std::to_string;
 using std::this_thread::sleep_for;
@@ -56,6 +57,7 @@ private:
 
 	IdGenerator * idGen;
 	PhysicsEngine* physics;
+	GameEngine* engine;
 	GameState* gameState;
     TCPListener* listener;
     PacketHandler* handler;

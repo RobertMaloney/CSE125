@@ -32,8 +32,11 @@ protected:
 	ObjectType type;
 	float modelRadius;
 
-   // Model
-   Model rm = TREE;
+	bool visible;
+	int score;
+
+    // Model
+    Model rm = TREE;
 
 
 public:
@@ -52,6 +55,12 @@ public:
    quat & getOrientation();
    float getAngle();
    float getHeight();
+
+   bool getVisible();
+   void setVisible(bool v);
+
+   int getScore();
+   void setScore(int s);
 
 	float getModelRadius();
 	void setModelRadius(float radius);

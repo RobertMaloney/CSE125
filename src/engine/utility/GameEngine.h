@@ -8,16 +8,16 @@ using namespace std;
 
 class GameEngine {
 
-protected:
-
-	GameState * gstate;
-
-
 public:
 
+	GameEngine();
+	~GameEngine();
+
+private:
 	void init(GameState * g);
-	void handleColliDetect(ObjectId id);
-	static GameEngine & getInstance();
+	void calculatePercent();
+	GameState* gstate;
+
 
 };
 

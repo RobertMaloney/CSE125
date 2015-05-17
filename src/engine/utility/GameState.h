@@ -27,6 +27,7 @@ protected:
 	ObjectDB * map;
 	vector<Player*> players;
     vector<Resource *> resources;
+	vector<int> percentScores;
 
 public:
 	vector<Packet> updates;

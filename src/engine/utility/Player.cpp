@@ -66,7 +66,10 @@ void Player::move(float dt) {
 
 void Player::collide(float dt, GameObject & target) {
 	this->velocity *= -1;
-	//set target flag = false//dead
-	//increase score
+	//if they are trees, flowers or mushrooms?  (not stones)
+
+		this->setScore(this->getScore() + target.getScore());
+		target.setVisible(false);
+	
 	//Render needs to figure out (not) rendering dead object
 }
