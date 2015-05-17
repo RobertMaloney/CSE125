@@ -54,7 +54,7 @@ private:
 	void generateForces(float dt);
 	void integrateObjects(float dt);
 	void resolveCollisions(float dt);
-	inline bool checkCollision(MoveableObject* ob1, GameObject* ob2);
+	inline bool checkCollision(float dt, MoveableObject* ob1, GameObject* ob2);
 
 	ObjectDB* objectDb;
 	vector<GameObject*> changed;
@@ -65,7 +65,7 @@ private:
 
 
  // check for a collision
- inline bool PhysicsEngine::checkCollision(MoveableObject* ob1, GameObject* ob2) {
+ inline bool PhysicsEngine::checkCollision(float dt, MoveableObject* ob1, GameObject* ob2) {
 	 // if something is null bad things are happening so crash
 	 assert(ob1 && ob2);
 
@@ -73,6 +73,7 @@ private:
 	 vec3 loc1 = ob1->getOrientation() * glm::vec3(0, 0, 505.f);
 	 vec3 loc2 = ob2->getOrientation() * glm::vec3(0, 0, 505.f);
 
+	
 	 // if the distance is less than sum of radii there is a collision
 	 return glm::distance(loc1, loc2) < (ob1->getModelRadius() + ob2->getModelRadius());
  }

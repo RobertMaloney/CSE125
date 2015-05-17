@@ -105,7 +105,7 @@ void MoveableObject::integrate(float dt) {
 	this->forceAccum *= 0.f;
 	this->velocity += newAcceleration * dt;
 
-	std::cout << "velocity : " << glm::length(this->velocity) << std::endl;
+	
 	if (glm::length(this->velocity) > .0001f)
 		this->velocity *= .985f;
 	

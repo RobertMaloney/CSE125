@@ -84,8 +84,8 @@ void Player::collide(float dt, GameObject & target) {
 		float deltaVelocity = (-seperatingVelocity * restitution) - seperatingVelocity;
 		vec3 impulse = normal * (deltaVelocity / (im1 + im2));
 		
-		this->velocity += impulse * im1;
-		other.velocity += impulse * -im2;
+		this->velocity += impulse * im1 * 1.2f;
+		other.velocity += impulse * -im2 * 1.2f;
 	/*	vec3 p1mp2 = p1 - p2;
 		vec3 unormal12 = p1mp2/ (glm::length(p1mp2));
 		vec3 unormal21 = -p1mp2 / (glm::length(-p1mp2));
