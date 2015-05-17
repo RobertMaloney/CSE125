@@ -11,7 +11,7 @@ class InputHandler
 {
 public:
 	
-   static deque<Packet> input;
+   static vector<Packet> input;
    static void handleKey(int key, int action, int mods);
 
 

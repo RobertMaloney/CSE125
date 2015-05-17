@@ -196,7 +196,7 @@ void MenuState::quit()
 
 void MenuState::receiveInput()
 {
-	updates = deque<Packet>(InputHandler::input);
+	updates = vector<Packet>(InputHandler::input);
 	InputHandler::input.clear();
 }
 

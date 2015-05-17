@@ -69,7 +69,7 @@ PacketHandler::~PacketHandler() {
 }
 
 
-void PacketHandler::dispatch(ObjectId clientId, deque<Packet> & received) {
+void PacketHandler::dispatch(ObjectId clientId, vector<Packet> & received) {
 	for (auto it = received.begin(); it != received.end(); ++it) {
 		if (it->size() <= 0) {
 			continue;

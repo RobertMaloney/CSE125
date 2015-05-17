@@ -30,6 +30,7 @@ void GameClient::init() {
 void GameClient::run() {
 	bool DEBUG = true;
 	bool loggedIn = false;
+
 	//deque<Packet> updates; MOVED TO GAMESTATE
 
 	this->init();

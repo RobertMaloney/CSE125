@@ -117,7 +117,7 @@ int GameState::getNumPlayers() {
 
 
 
-void GameState::sendEvents(deque<Packet> & events) 
+void GameState::sendEvents(vector<Packet> & events) 
 {
 	gameclient->connection->send(events);
 	events.clear();

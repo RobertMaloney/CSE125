@@ -3,6 +3,7 @@
 
 #include "IGameState.h"
 //#include "..\GameClient.h"
+#include "..\network\Packet.h"
 
 #define MENU_SELECTIONS_NUM 2
 
@@ -14,7 +15,7 @@ public:
 		QUIT
 	};
 
-	deque<Packet> updates;
+	vector<Packet> updates;
 
 	MenuState();
 	~MenuState();

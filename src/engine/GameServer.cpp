@@ -34,8 +34,9 @@ void GameServer::initialize(int maxConns) {
 	this->listener->listen(maxConns);
 	this->listener->setNonBlocking(true);
 	maxConnections = maxConns;
+
 	gameState->initWithServer();
-	generateResources(100);
+	generateResources(5000);
 }
 
 
@@ -49,16 +50,22 @@ void GameServer::run() {
 		if (clients->size() < maxConnections) {
 			this->acceptWaitingClient();
 		}
-
+		std::cout << " accept : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
 		this->processClientEvents(); 		// process the client input events
+
+		std::cout << " process : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
 		physics->update(TIME_PER_FRAME);      // do a physics step
+
+		std::cout << " physics : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
 		this->tick();                       // send state back to client
 
+		std::cout << " tick : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
 		//calculates the ms from start until here.
 		elapsedTime = chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count();
 		if (elapsedTime > TIME_PER_FRAME) {  // this is so know if we need to slow down the loop
-			cerr << "Server loop took long than a frame." << endl;
+	//		cerr << "Server loop took long than a frame." << endl;
 		}
+		std::cout << " sleep for : " << TIME_PER_FRAME - elapsedTime << std::endl;
 
 		// sleep for unused time
 		sleep_for(milliseconds(TIME_PER_FRAME - elapsedTime));
@@ -81,19 +88,30 @@ void GameServer::acceptWaitingClient() {
 		delete newPlayer;
 		return;
 	}
+	physics->registerMoveable(newPlayer);
 	connection->setNoDelay(true);
 	connection->setNonBlocking(true);
 	clients->insert(make_pair(connection, playerId));	
 	response.writeUInt(playerId);
 	connection->send(response);
+	vector<Packet> initial;
+	//initial.push_back(response);
+	ObjectDB::getInstance().getObjectState(initial);
+	connection->send(initial);
 }
 
 
 
 void GameServer::tick() {
-	deque<Packet> updates;
-	ObjectDB::getInstance().getObjectState(updates);
-
+	Packet p;
+	vector<Packet> updates;
+	vector<GameObject*> & changed = physics->getChangedObjects();
+	for (GameObject* object : changed) {
+		object->serialize(p);
+		updates.push_back(p);
+		p.clear();
+	}
+	changed.clear();
 	for (auto it = clients->begin(); it != clients->end(); ) {
 		SocketError err = it->first->send(updates);
 		if (this->shouldTerminate(err)){
@@ -108,7 +126,7 @@ void GameServer::tick() {
 
 
 void GameServer::processClientEvents() {
-	deque<Packet> events;
+	vector<Packet> events;
 
 	for (auto it = clients->begin(); it != clients->end(); ) {
 		SocketError err = it->first->receive(events);

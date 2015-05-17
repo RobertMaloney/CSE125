@@ -29,7 +29,7 @@ protected:
     vector<Resource *> resources;
 
 public:
-	deque<Packet> updates;
+	vector<Packet> updates;
 
 	GameState();
 	~GameState();
@@ -52,7 +52,7 @@ public:
 	Model selectPlayerModel(ObjectId playerId);
 	bool addResource(ObjectId theId, Resource * ptr);
 
-	void sendEvents(deque<Packet> & events);
+	void sendEvents(vector<Packet> & events);
 	void receiveUpdates();
 	void updateGameState();
 };

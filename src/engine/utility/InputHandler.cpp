@@ -2,7 +2,7 @@
 #include "..\graphics\GraphicsEngine.h"
 
 
-deque<Packet> InputHandler::input;
+vector<Packet> InputHandler::input;
 
 void InputHandler::handleKey(int key, int action, int mods)
 {

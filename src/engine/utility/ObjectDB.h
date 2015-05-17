@@ -37,7 +37,7 @@ public:
 	GameObject* get(ObjectId objectId);
 
 	int getSize();
-	void getObjectState(deque<Packet> & state);
+	void getObjectState(vector<Packet> & state);
 
 	static ObjectDB & getInstance();
 

@@ -50,7 +50,7 @@ GameObject* ObjectDB::get(ObjectId objectId) {
 }
 
 
-void ObjectDB::getObjectState(deque<Packet> & state) {
+void ObjectDB::getObjectState(vector<Packet> & state) {
 	Packet p;
 	for (auto it = objects.begin(); it != objects.end(); ++it){
 		it->second->serialize(p);

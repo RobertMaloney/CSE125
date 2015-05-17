@@ -2,21 +2,16 @@
 #define PLAYER_H
 
 #include <string>
-//#include "Location.h"
 #include "Model.h"
-#include "GameObject.h"
+#include "MoveableObject.h"
 
 using namespace std;
 
-class Player : public GameObject {
+class Player : public MoveableObject {
 
 protected:
 
-	const float PLAYER_ACCELERATION = .0005;
-	const float FRICTION = .005;
-
 	bool moves[4];
-	float velocity;
 
 public:
 
@@ -35,8 +30,8 @@ public:
 	bool getMoving(int);
 	void setMoving(int, bool);
 
-	virtual void update(float dt) override;
-	virtual void collide(float dt, const GameObject & target) override;
+	virtual void move(float dt) override;
+	virtual void collide(float dt, GameObject & target) override;
 
 };
 

@@ -22,6 +22,7 @@
     <ClCompile Include="utility\PhysicsEngine.cpp" />
     <ClCompile Include="utility\GameEngine.cpp" />
     <ClCompile Include="utility\MenuState.cpp" />
+    <ClCompile Include="utility\MoveableObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameClient.h" />
@@ -60,6 +61,7 @@
     <ClInclude Include="utility\PhysicsEngine.h" />
     <ClInclude Include="utility\IGameState.h" />
     <ClInclude Include="utility\MenuState.h" />
+    <ClInclude Include="utility\MoveableObject.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Network\Endianness.inl" />
