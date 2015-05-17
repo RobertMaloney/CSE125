@@ -29,6 +29,7 @@ public:
 	//GameState gstate;
 	ObjectId playerid;
 	IGameState * current_state;
+	IGameState * next_state;
 	TCPConnection* connection;
 
     GameClient();
@@ -43,6 +44,8 @@ public:
 	void addState(IGameState *state);
 	void removeState();
 	void changeState(IGameState *state); //this is a pop and push
+
+	void updateState();
 
 	void checkError(SocketError err);
 	bool shouldTerminate(SocketError err);

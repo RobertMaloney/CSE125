@@ -15,6 +15,7 @@ GameState::~GameState()
 
 void GameState::init()
 {
+	std::cout << "Entering GameState" << std::endl;
 	//get db
 	map = &ObjectDB::getInstance();
 

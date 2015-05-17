@@ -60,6 +60,12 @@ void InputHandler::handleKey(int key, int action, int mods)
 	else if (key == GLFW_KEY_E && action == GLFW_PRESS) {
 		GraphicsEngine::ScaleDown();
 	}
-
-
+	//ENTER
+	else if (key == GLFW_KEY_ENTER) {
+		if (action == GLFW_PRESS) {
+			cout << "client confirm" << endl;
+			p.writeByte(EventType::CONFIRM);
+			input.push_back(p);
+		}
+	}
 }

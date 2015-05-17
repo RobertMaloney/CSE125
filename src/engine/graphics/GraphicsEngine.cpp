@@ -210,6 +210,13 @@ void GraphicsEngine::DrawAndPoll() {
 	glfwPollEvents();
 }
 
+
+void GraphicsEngine::DrawAndPollMenu()
+{
+	glfwPollEvents();
+}
+
+
 /**
 * GraphicsEngine::renderScene(Node*, glm::mat4*)
 * Description: This function renders the scene graph using depth traversal.

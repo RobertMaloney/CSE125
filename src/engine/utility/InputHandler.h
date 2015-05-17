@@ -2,7 +2,7 @@
 #define INPUT_HANDLER_H
 
 #include <deque>
-#include "../network/Packet.h"
+#include "..\network\Packet.h"
 #include "..\utility\Event.h"
 
 using std::deque;

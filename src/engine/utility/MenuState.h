@@ -4,10 +4,18 @@
 #include "IGameState.h"
 //#include "..\GameClient.h"
 
+#define MENU_SELECTIONS_NUM 2
 
 class MenuState : public IGameState
 {
 public:
+	enum MenuSelections{
+		PLAY,
+		QUIT
+	};
+
+	deque<Packet> updates;
+
 	MenuState();
 	~MenuState();
 
@@ -20,6 +28,23 @@ public:
 
 	void connectToServer();
 	void login();
+
+	void MenuState::updateMenuState();
+
+private:
+	int menu_select;
+
+	void menuUp();
+	void menuDown();
+	void menuEnter();
+
+	void play();
+	void quit();
+
+	void receiveInput();
+
+	//debugging
+	void checkMenu();
 };
 
 

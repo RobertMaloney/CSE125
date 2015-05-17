@@ -42,6 +42,7 @@ public:
 	static bool Closing();
 	static void CloseGame();
 	static void DrawAndPoll();
+	static void DrawAndPollMenu();
 	static void Destroy();
 	static void SetKeyCallback(KeyCallback);
 	static void MoveUp();

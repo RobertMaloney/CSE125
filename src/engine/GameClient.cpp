@@ -37,6 +37,7 @@ void GameClient::run() {
 	GraphicsEngine::Initialize();
 
 	while (!GraphicsEngine::Closing()) {
+		updateState();
 		current_state->handleEvents();
 		current_state->update();
 		current_state->draw();
@@ -54,6 +55,17 @@ void GameClient::run() {
 
 	GraphicsEngine::Destroy();
 	system("pause");
+}
+
+
+void GameClient::updateState()
+{
+	//check if there's a state to change to
+	if (next_state == nullptr)
+		return;
+	current_state = next_state;
+	next_state = nullptr;
+
 }
 
 
@@ -86,7 +98,7 @@ void GameClient::addState(IGameState *state)
 	//NOTE: this order matters
 	state->gameclient = this;
 	state->init();
-	this->current_state = state;
+	this->next_state = state;
 	this->states.push_back(state);
 }
 
@@ -96,7 +108,7 @@ void GameClient::removeState()
 	//handle case when there's only one state?
 
 	this->states.pop_back();
-	this->current_state = states.back();
+	this->next_state = states.back();
 }
 
 
@@ -105,6 +117,6 @@ void GameClient::changeState(IGameState *state)
 	//NOTE: this order matters
 	state->gameclient = this;
 	state->init();
-	this->current_state = state;
+	this->next_state = state;
 	this->states.push_back(state);
 }
