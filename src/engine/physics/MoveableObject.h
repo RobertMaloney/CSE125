@@ -3,7 +3,7 @@
 
 #include <glm.hpp>
 
-#include "GameObject.h"
+#include "../utility/GameObject.h"
 
 using glm::vec3;
 
@@ -11,30 +11,39 @@ class MoveableObject : public GameObject {
 
 public:
 
-	//MoveableObject(float acceleration = .0005, float dampening = .005);
+	//MoveableObject(float acceleration = .0005, float damping = .005);
 	MoveableObject();
 	virtual ~MoveableObject();
 
 	void setMass(float value);
 	float getMass();
+	float getInverseMass();
+
+	//void setFriction(float value);
+	//float getFriction();
 
 	void addForce(vec3 force);
 	void addForce(float x, float y, float z);
 
-	virtual void move(float dt);
+	void addVelocity(vec3 dv);
+	vec3 getVelocity();
+
+	void addAcceleration(vec3 da);
+	vec3 getAcceleration();
+
+	void setRestitution(float rest);
+	float getRestitution();
+
+	virtual void integrate(float dt);
 	virtual void collide(float dt, GameObject & target);
 
 protected:
 
 	float inverseMass;
-	float dampening;
+	float restitution;
 	vec3 forceAccum;
 	vec3 velocity;
 	vec3 acceleration;
-
-//	float velocity;
-	//float acceleration = .0005;
-	//float dampening = .005;
 
 };
 

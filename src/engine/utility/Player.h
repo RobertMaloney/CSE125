@@ -3,7 +3,7 @@
 
 #include <string>
 #include "Model.h"
-#include "MoveableObject.h"
+#include "../physics/MoveableObject.h"
 
 using namespace std;
 
@@ -30,7 +30,7 @@ public:
 	bool getMoving(int);
 	void setMoving(int, bool);
 
-	virtual void move(float dt) override;
+	virtual void integrate(float dt) override;
 	virtual void collide(float dt, GameObject & target) override;
 
 };

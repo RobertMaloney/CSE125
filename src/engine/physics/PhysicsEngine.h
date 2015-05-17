@@ -2,7 +2,10 @@
 #define PHYSICSENGINE_H
 
 
-#include "ObjectDB.h"
+#include "../utility/ObjectDB.h"
+#include "ForceGenerator.h"
+#include "GravityGenerator.h"
+#include "DragGenerator.h"
 #include "MoveableObject.h"
 
 #include <algorithm>
@@ -11,10 +14,23 @@
 #include <gtc\type_ptr.hpp>
 #include <gtx\quaternion.hpp>
 
+using std::make_pair;
 using glm::pow;
 using glm::sqrt;
 using std::vector;
 using std::remove_if;
+
+enum {
+	GRAVITY = 1 << 0,
+	DRAG = 1 << 1,
+};
+
+
+typedef struct {
+	ForceGenerator* generator;
+	MoveableObject* receiver;
+}Interaction;
+
 
 class PhysicsEngine {
 
@@ -26,28 +42,25 @@ public:
 	void update(float dt);
 	vector<GameObject*> & getChangedObjects();
 
-	void registerMoveable(MoveableObject* object);
-	void removeMoveable(MoveableObject* object);
+	void registerInteraction(MoveableObject* object, unsigned int flags);
+	
 
 private:
 
-	void updateObjects(float dt);
+	void addInteraction(MoveableObject* object, ForceGenerator* force);
+
+	void generateForces(float dt);
+	void integrateObjects(float dt);
 	void resolveCollisions(float dt);
 	inline bool checkCollision(MoveableObject* ob1, GameObject* ob2);
 
 	ObjectDB* objectDb;
 	vector<GameObject*> changed;
-	vector<MoveableObject*> moveables;
+	vector<Interaction> interactions;
+	unordered_map<unsigned int, ForceGenerator*> forces;
 
 };
 
-
- inline vec3 sphereToXYZ(const vec4 & spherePos) {
-	vec3 xyz(0, 0, spherePos.x);
-	xyz = angleAxis(glm::radians(spherePos.y), vec3(0, 1, 0)) * xyz;
-	xyz = angleAxis(glm::radians(spherePos.z), vec3(1, 0, 0)) * xyz;
-	return xyz;
-}
 
  // check for a collision
  inline bool PhysicsEngine::checkCollision(MoveableObject* ob1, GameObject* ob2) {

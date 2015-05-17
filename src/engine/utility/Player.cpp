@@ -37,9 +37,8 @@ void Player::setMoving(int index, bool b) {
 }
 
 
-void Player::move(float dt) {
+void Player::integrate(float dt) {
 
-	//this->velocity.x = .0005f;
 	if (moves[RIGHT]) {
 		angle -= 1.f;
 	}
@@ -51,7 +50,7 @@ void Player::move(float dt) {
 	float cosa = glm::cos(glm::radians(angle));
 	float sina = glm::sin(glm::radians(angle));
 
-	float forceConst = .0005f * log(this->getMass());
+	float forceConst = 30.f * log(this->getMass());
 
 	if (moves[UP]) {
 		this->addForce(cosa * forceConst, sina * forceConst, 0);
@@ -60,68 +59,44 @@ void Player::move(float dt) {
 
 	if (moves[DOWN]) {
 		this->addForce(cosa * -forceConst, sina * -forceConst, 0);
-	//	this->addForce(0.f, 0.f, forceConst);
 	}
 
-	MoveableObject::move(dt);
+	MoveableObject::integrate(dt);
 
 }
 
 
 void Player::collide(float dt, GameObject & target) {
-	MoveableObject::move(-dt);
 	if (target.getType() == PLAYER) {
-		std::cout << "target is player " << std::endl;
-		Player & p2 = dynamic_cast<Player&>(target);
+		Player & other = dynamic_cast<Player&>(target);
 		vec3 v1 = this->velocity;
-		vec3 v2 = p2.velocity;
-		vec3 l1 = this->orientation * vec3(0.f, 0.f, 505.f);
-		vec3 l2 = p2.orientation * vec3(0.f, 0.f, 505.f);
+		vec3 v2 = other.velocity;
+		vec3 p1 = this->orientation * vec3(0.f, 0.f, 505.f);
+		vec3 p2 = other.orientation * vec3(0.f, 0.f, 505.f);
 		float m1 = this->getMass();
-		float m2 = p2.getMass();
+		float m2 = other.getMass();
 
-	/*	vec3 normal = glm::normalize(l1 - l2);
-		float seperatingVel = glm::dot(v1 - v2, normal);
-		if (seperatingVel > 0){
-			return;
+		vec3 unormal12 = (p1 - p2) / (glm::length(p1 - p2));
+		vec3 unormal21 = (p2 - p1) / (glm::length(p2 - p1));
+
+		float distance = glm::distance(p1, p2);
+		if (distance < this->getModelRadius() + other.getModelRadius()) {
+			distance = this->getModelRadius() + other.getModelRadius() - distance;
+			//this->orientation = this->orientation * -()
 		}
-		float newSeperatingVel = -seperatingVel * .99f;
-		float dv = newSeperatingVel - seperatingVel;
+		float component12 = glm::dot(v1, p1 - p2) / glm::length(p1 - p2);
+		float component21 = glm::dot(v2, p2 - p1) / glm::length(p2 - p1);
 
-		float totalInverseMass = this->inverseMass + p2.inverseMass;
+		vec3 u12 = component12 * unormal12;
+		vec3 u21 = component21 * unormal21;
+		vec3 t12 = v1 - u12;
+		vec3 t21 = v2 - u21;
 
-		float impulse = dv / totalInverseMass;
-		vec3 imass = normal * impulse;
-
-		this->velocity = this->velocity + (imass * -this->inverseMass);
-		p2.velocity = p2.velocity + (imass * -p2.inverseMass);
-		//float closingV = glm::dot(v1, glm::normalize(l2 - l1)) + glm::dot(v2, glm::normalize(l1 - l2));
-		*/
-	/*	float temp;
-		vec3 tangent;
-		vec3 normal = glm::normalize(l2 - l1);
-		tangent.x = -normal.y;
-		tangent.y = normal.x;
-		//tangent.z = 0.f;
-		float v1n = glm::dot(normal, v1);
-		float v1t = glm::dot(tangent, v1);
-		float v2n = glm::dot(normal, v2);
-		float v2t = glm::dot(tangent, v2); 
-	*/	this->velocity = (v1 * (m1 - m2) + 2 * m2 * v2) / (m1 + m2);
-		/*v2n = (v2n * (m2 - m1) + 2 * m1 * v1n) / (m1 + m2);
-		this->velocity = v1n * normal + v1t * tangent;
-		p2.velocity = v2n * normal + v2t * tangent;*/
-//		this->velocity = (v1 * (m1 - m2) + 2 * m2 * v2) / (m1 + m2);
-//		float mag1 = glm::length(l1 - l2);
-	//	float mag2 = glm::length(l2 - l1);
+		vec3 v12 = (u12 * (m1 - m2) + 2 * m2 * u21) / (m1 + m2);
+		vec3 v21 = (u21 * (m2 - m1) + 2 * m1 * u12) / (m1 + m2);
 		
-	//	mag1 *= mag1;
-//		mag2 *= mag2;
-
-	//	this->velocity = v1 - ((2 * m2) / (m1 + m2)) * (glm::dot(v1 - v2, l1 - l2) / mag1) * (l1 - l2);
-	//	p2.velocity =    v2 - ((2 * m1) / (m1 + m2)) * (glm::dot(v2 - v1, l2 - l1) / mag2) * (l2 - l1);
+		this->velocity = v12 + t12;
+		other.velocity = v21 + t21;
 	}
-	//set target flag = false//dead
-	//increase score
-	//Render needs to figure out (not) rendering dead object
+
 }
