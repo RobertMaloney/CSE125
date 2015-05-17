@@ -86,6 +86,13 @@ float MoveableObject::getRestitution() {
 }
 
 
+vec3 MoveableObject::rotateInXYPlane(vec3 original, float radians) {
+	original.x = original.x * glm::cos(glm::radians(radians)) - original.y * glm::sin(glm::radians(radians));
+	original.y = original.x * glm::sin(glm::radians(radians)) + original.y * glm::cos(glm::radians(radians));
+	return original;
+}
+
+
 void MoveableObject::integrate(float dt) {
 	vec3 newAcceleration(0.f,0.f,0.f);
 	vec3 direction = glm::normalize(velocity);
@@ -93,17 +100,14 @@ void MoveableObject::integrate(float dt) {
 
 	glm::quat dq = this->orientation * glm::angleAxis(magnitude, direction);
 	this->orientation = glm::normalize(glm::mix(this->orientation, dq, dt));
-//	this->orientation = dq;
 
 	newAcceleration = this->forceAccum * this->inverseMass + this->acceleration;
 	this->forceAccum *= 0.f;
 	this->velocity += newAcceleration * dt;
 
-	//if (glm::length(this->velocity) > .00001f){
-//		this->velocity *= powf(damping, dt);
-	//}
+	std::cout << "velocity : " << glm::length(this->velocity) << std::endl;
 	if (glm::length(this->velocity) > .0001f)
-		this->velocity *= .995f;
+		this->velocity *= .985f;
 	
 }
 

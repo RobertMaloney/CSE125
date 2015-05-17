@@ -2,7 +2,7 @@
 #define MOVEABLEOBJECT_H
 
 #include <glm.hpp>
-
+#include <iostream>
 #include "../utility/GameObject.h"
 
 using glm::vec3;
@@ -33,6 +33,8 @@ public:
 
 	void setRestitution(float rest);
 	float getRestitution();
+
+	vec3 rotateInXYPlane(vec3 original, float radians);
 
 	virtual void integrate(float dt);
 	virtual void collide(float dt, GameObject & target);

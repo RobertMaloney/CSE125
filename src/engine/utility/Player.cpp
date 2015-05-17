@@ -18,7 +18,7 @@ Player::Player(Model thebm, float radius, float theta, float azimuth, float dire
 	this->type = PLAYER;
 	//this->velocity = 0;
 	this->modelRadius = 7.f;
-	if (num)
+
 		this->setMass(100);
 	num++; 
 }
@@ -37,20 +37,22 @@ void Player::setMoving(int index, bool b) {
 }
 
 
+
 void Player::integrate(float dt) {
 
 	if (moves[RIGHT]) {
 		angle -= 1.f;
+		this->velocity = this->rotateInXYPlane(this->velocity, glm::radians(-1.f));
 	}
 	if (moves[LEFT]) {
 		angle += 1.f;
-		std::cout << "Angle: " << angle << std::endl;
+		this->velocity = this->rotateInXYPlane(this->velocity, glm::radians(1.f));
 	}
 
 	float cosa = glm::cos(glm::radians(angle));
 	float sina = glm::sin(glm::radians(angle));
 
-	float forceConst = 30.f * log(this->getMass());
+	float forceConst = 100.f * log(this->getMass());
 
 	if (moves[UP]) {
 		this->addForce(cosa * forceConst, sina * forceConst, 0);
@@ -73,19 +75,23 @@ void Player::collide(float dt, GameObject & target) {
 		vec3 v2 = other.velocity;
 		vec3 p1 = this->orientation * vec3(0.f, 0.f, 505.f);
 		vec3 p2 = other.orientation * vec3(0.f, 0.f, 505.f);
-		float m1 = this->getMass();
-		float m2 = other.getMass();
+		float im1 = this->getInverseMass();
+		float im2 = other.getInverseMass();
 
-		vec3 unormal12 = (p1 - p2) / (glm::length(p1 - p2));
-		vec3 unormal21 = (p2 - p1) / (glm::length(p2 - p1));
+		vec3 normal = glm::normalize(p1 - p2);
+		float seperatingVelocity = glm::dot(v1 - v2, normal);
 
-		float distance = glm::distance(p1, p2);
-		if (distance < this->getModelRadius() + other.getModelRadius()) {
-			distance = this->getModelRadius() + other.getModelRadius() - distance;
-			//this->orientation = this->orientation * -()
-		}
-		float component12 = glm::dot(v1, p1 - p2) / glm::length(p1 - p2);
-		float component21 = glm::dot(v2, p2 - p1) / glm::length(p2 - p1);
+		float deltaVelocity = (-seperatingVelocity * restitution) - seperatingVelocity;
+		vec3 impulse = normal * (deltaVelocity / (im1 + im2));
+		
+		this->velocity += impulse * im1;
+		other.velocity += impulse * -im2;
+	/*	vec3 p1mp2 = p1 - p2;
+		vec3 unormal12 = p1mp2/ (glm::length(p1mp2));
+		vec3 unormal21 = -p1mp2 / (glm::length(-p1mp2));
+
+		float component12 = glm::dot(v1, p1mp2) / glm::length(p1mp2);
+		float component21 = glm::dot(v2, -p1mp2) / glm::length(-p1mp2);
 
 		vec3 u12 = component12 * unormal12;
 		vec3 u21 = component21 * unormal21;
@@ -96,7 +102,7 @@ void Player::collide(float dt, GameObject & target) {
 		vec3 v21 = (u21 * (m2 - m1) + 2 * m1 * u12) / (m1 + m2);
 		
 		this->velocity = v12 + t12;
-		other.velocity = v21 + t21;
+		other.velocity = v21 + t21;*/
 	}
 
 }

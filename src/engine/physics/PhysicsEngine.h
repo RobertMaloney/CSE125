@@ -27,8 +27,10 @@ enum {
 
 
 typedef struct {
+
 	ForceGenerator* generator;
 	MoveableObject* receiver;
+
 }Interaction;
 
 
