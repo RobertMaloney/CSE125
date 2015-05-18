@@ -21,6 +21,7 @@
     <ClCompile Include="graphics\Shader.cpp" />
     <ClCompile Include="utility\PhysicsEngine.cpp" />
     <ClCompile Include="utility\GameEngine.cpp" />
+    <ClCompile Include="utility\Eatable.cpp" />
     <ClCompile Include="utility\MenuState.cpp" />
     <ClCompile Include="utility\MoveableObject.cpp" />
   </ItemGroup>
@@ -62,6 +63,8 @@
     <ClInclude Include="utility\IGameState.h" />
     <ClInclude Include="utility\MenuState.h" />
     <ClInclude Include="utility\MoveableObject.h" />
+    <ClInclude Include="utility\Eatable.h" />
+    <ClInclude Include="utility\Resources.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Network\Endianness.inl" />

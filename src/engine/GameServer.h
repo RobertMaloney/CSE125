@@ -16,6 +16,7 @@
 #include "utility/IdGenerator.h"
 #include "utility/GameState.h"
 #include "utility/GameEngine.h"
+#include "utility/Resources.h"
 
 using std::to_string;
 using std::this_thread::sleep_for;

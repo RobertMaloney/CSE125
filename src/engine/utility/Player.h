@@ -4,6 +4,8 @@
 #include <string>
 #include "Model.h"
 #include "MoveableObject.h"
+#include "GameObject.h"
+#include "Eatable.h"
 
 using namespace std;
 
@@ -12,6 +14,8 @@ class Player : public MoveableObject {
 protected:
 
 	bool moves[4];
+
+   int score;
 
 public:
 

@@ -17,7 +17,8 @@ using namespace std;
 enum ObjectType {
 	PLAYER,
 	MOVEABLE,
-	GAMEOBJECT
+	GAMEOBJECT,
+   EATABLE
 };
 
 class GameObject : public Serializable  {
@@ -35,8 +36,8 @@ protected:
 	bool visible;
 	int score;
 
-    // Model
-    Model rm = TREE;
+   // Model
+   Model rm = TREE;
 
 
 public:
@@ -64,6 +65,9 @@ public:
 
 	float getModelRadius();
 	void setModelRadius(float radius);
+
+   void setDeleteFlag(bool flag);
+   bool getDeleteFlag();
 
 	ObjectType getType() const;
 

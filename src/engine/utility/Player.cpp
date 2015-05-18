@@ -7,6 +7,7 @@ Player::Player(Model thebm, float radius, float theta, float azimuth, float dire
 
 	//this->loc = vec4(radius, theta, azimuth, direction);
    this->rm = thebm;
+   this->score = 0;
    this->moves[0] = false;
    this->moves[1] = false;
    this->moves[2] = false;
@@ -65,7 +66,7 @@ void Player::move(float dt) {
 
 
 void Player::collide(float dt, GameObject & target) {
-	this->velocity *= -1;
+			this->velocity *= -1;
 	//if they are trees, flowers or mushrooms?  (not stones)
 
 		this->setScore(this->getScore() + target.getScore());

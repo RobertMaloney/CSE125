@@ -68,7 +68,7 @@ bool GameState::addPlayer(ObjectId theId, Player* p) {
 	if (!map->add(theId, p)){
 		return false;
 	}
-    p->setModel(selectPlayerModel(theId));
+   p->setModel(selectPlayerModel(theId));
 	p->setId(theId);
 	players.push_back(p);
 	return true;

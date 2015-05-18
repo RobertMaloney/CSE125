@@ -28,7 +28,7 @@ void GameObject::serialize(Packet & p) {
 	p.writeFloat(this->height);
 	p.writeFloat(this->score);
 	p.writeFloat(this->visible);
-    p.writeInt(static_cast<int>(this->rm));
+   p.writeInt(static_cast<int>(this->rm));
 }
 
 
@@ -42,7 +42,7 @@ void GameObject::deserialize(Packet & p) {
 	this->height = p.readFloat();
 	this->score = p.readFloat();
 	this->visible = p.readFloat();
-    this->rm = static_cast<Model>(p.readInt());
+   this->rm = static_cast<Model>(p.readInt());
 }
 
 quat & GameObject::getOrientation() {

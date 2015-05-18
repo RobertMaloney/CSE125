@@ -50,8 +50,8 @@ public:
 	
 	static GameState & getInstance();
 
-	Model selectPlayerModel(ObjectId playerId);
-	bool addResource(ObjectId theId, Resource * ptr);
+   Model selectPlayerModel(ObjectId playerId);
+   bool addResource(ObjectId theId, Resource * ptr);
 
 	void sendEvents(vector<Packet> & events);
 	void receiveUpdates();
