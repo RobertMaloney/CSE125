@@ -13,11 +13,11 @@ public:
 	GameEngine();
 	~GameEngine();
 
-private:
 	void init(GameState * g);
+
+private:
 	void calculatePercent();
 	GameState* gstate;
-
 
 };
 

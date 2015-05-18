@@ -115,6 +115,17 @@ int GameState::getNumPlayers() {
 	return players.size();
 }
 
+vector<Player*> & GameState::getPlayers(){
+	return players;
+}
+
+int GameState::getTotal(){
+	return this->total;
+}
+
+void GameState::setTotal(int t){
+	this->total = t;
+}
 
 
 void GameState::sendEvents(vector<Packet> & events) 

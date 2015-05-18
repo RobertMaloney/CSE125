@@ -26,9 +26,9 @@ void GameObject::serialize(Packet & p) {
 	}
 	p.writeFloat(this->angle);
 	p.writeFloat(this->height);
-	p.writeFloat(this->score);
+	//p.writeFloat(this->score);
 	p.writeFloat(this->visible);
-   p.writeInt(static_cast<int>(this->rm));
+    p.writeInt(static_cast<int>(this->rm));
 }
 
 
@@ -40,9 +40,9 @@ void GameObject::deserialize(Packet & p) {
 	}
 	this->angle = p.readFloat();
 	this->height = p.readFloat();
-	this->score = p.readFloat();
+	//this->score = p.readFloat();
 	this->visible = p.readFloat();
-   this->rm = static_cast<Model>(p.readInt());
+    this->rm = static_cast<Model>(p.readInt());
 }
 
 quat & GameObject::getOrientation() {
@@ -80,25 +80,14 @@ void GameObject::setVisible(bool v){
 	this->visible = v;
 }
 
-int GameObject::getScore(){
-	return this->score;
-}
-
-void GameObject::setScore(int s){
-	this->score = s;
-}
-
 float GameObject::getModelRadius() {
 	return this->modelRadius;
 }
-
 
 void GameObject::setModelRadius(float radius) {
 	assert(radius > 0);
 	this->modelRadius = radius;
 }
-
-
 
 ObjectType GameObject::getType() const {
 	return this->type;

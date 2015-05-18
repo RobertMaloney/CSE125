@@ -1,12 +1,23 @@
 #include "GameEngine.h"
 
 
-void GameEngine::init(GameState * g){
-	gstate = g;
+GameEngine::GameEngine() {
+	gstate = &GameState::getInstance();
 }
 
-void calculatePercent(){
 
+GameEngine::~GameEngine() {
+}
+
+void GameEngine::calculatePercent(){
+	int total = gstate->getTotal();
+
+	for (auto it = gstate->getPlayers().begin(); it != gstate->getPlayers().end(); ++it) {
+		int s = (*it)->getScore();
+		int p = s / total;
+		std::cout << (*it)->getId() << ": " << p << endl;
+		(*it)->setPercent(p);
+	}
 }
 
 

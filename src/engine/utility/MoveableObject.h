@@ -1,5 +1,5 @@
-#ifndef MOVEABLEOBJECT_H
-#define MOVEABLEOBJECT_H
+#ifndef MOVEABLE_OBJECT_H
+#define MOVEABLE_OBJECT_H
 
 #include "GameObject.h"
 

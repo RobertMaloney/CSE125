@@ -111,7 +111,6 @@
     <ClCompile Include="Network\Socket.cpp" />
     <ClCompile Include="Network\TCPConnection.cpp" />
     <ClCompile Include="Network\TCPListener.cpp" />
-    <ClCompile Include="utility\Eatable.cpp" />
     <ClCompile Include="utility\GameEngine.cpp" />
     <ClCompile Include="utility\GameObject.cpp" />
     <ClCompile Include="utility\GameState.cpp" />
@@ -148,7 +147,7 @@
     <ClInclude Include="Network\TCPConnection.h" />
     <ClInclude Include="Network\TCPListener.h" />
     <ClInclude Include="utility\BlobModel.h" />
-    <ClInclude Include="utility\Eatable.h" />
+    <ClInclude Include="utility\IEatable.h" />
     <ClInclude Include="utility\Event.h" />
     <ClInclude Include="utility\GameObject.h" />
     <ClInclude Include="utility\GameState.h" />

@@ -302,9 +302,9 @@ MatrixNode* GraphicsEngine::addNode(Renderable* objModel){
 	return m_node;
 }
 
-void GraphicsEngine::removeNode(MatrixNode * node) {
+/*void GraphicsEngine::removeNode(MatrixNode * node) {
    node->
-}
+}*/
 
 // Select blob model based on playerId, will be changed later
 Renderable * GraphicsEngine::selectModel(Model model){

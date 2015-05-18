@@ -25,6 +25,21 @@ Player::~Player() {
 
 }
 
+int Player::getScore(){
+	return this->score;
+}
+
+void Player::setScore(int s){
+	this->score = s;
+}
+
+int Player::getPercent(){
+	return this->percent;
+}
+
+void Player::setPercent(int p){
+	this->percent = p;
+}
 
 bool Player::getMoving(int index) {
 	return moves[index];
@@ -47,7 +62,7 @@ void Player::move(float dt) {
 	}
 	if (moves[LEFT]) {
 		angle += 1.f;
-		std::cout << "Angle: " << angle << std::endl;
+		//std::cout << "Angle: " << angle << std::endl;
 	}
 	// if there was no input simulate friction
 	if (!moves[UP] && !moves[DOWN]) {
@@ -66,11 +81,45 @@ void Player::move(float dt) {
 
 
 void Player::collide(float dt, GameObject & target) {
+	switch (target.getType()) {
+		case PLAYER:
 			this->velocity *= -1;
-	//if they are trees, flowers or mushrooms?  (not stones)
-
-		this->setScore(this->getScore() + target.getScore());
-		target.setVisible(false);
+			break;
+		case GAMEOBJECT:
+			this->velocity *= -1;
+			break;
+		case IEATABLE:
+			if (target.getVisible()){
+				std::cout << "EAT " << endl;
+				IEatable* eatable = dynamic_cast<IEatable*>(&target);
+				if (eatable){
+					this->setScore(this->getScore() + eatable->getPoints());
+					std::cout << this->getId() << " new score: " << this->getScore() << endl;
+				}
+				else{
+					std::cout << "Error: EATABLE is null: " << typeid(target).name() << endl;
+				}
+				target.setVisible(false);
+				//TODO Render needs to figure out (not) rendering dead/invisible object
+						
+			}
+			break;
+	}
 	
-	//Render needs to figure out (not) rendering dead object
+}
+
+void Player::serialize(Packet & p) {
+
+	GameObject::serialize(p);
+
+	p.writeFloat(this->score);
+	p.writeFloat(this->percent);
+	//TODO: moves???
+}
+
+
+void Player::deserialize(Packet & p) {
+	GameObject::deserialize(p);
+	this->score = p.readFloat();
+	this->percent = p.readFloat();
 }

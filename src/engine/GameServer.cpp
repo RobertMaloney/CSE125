@@ -7,6 +7,7 @@ GameServer::GameServer() {
 	this->idGen = &IdGenerator::getInstance();
 	this->gameState = &GameState::getInstance();
 	this->physics = new PhysicsEngine();
+	this->engine = new GameEngine();
 }
 
 
@@ -36,7 +37,7 @@ void GameServer::initialize(int maxConns) {
 	maxConnections = maxConns;
 
 	gameState->initWithServer();
-	generateResources(5000);
+	generateResources(500);
 }
 
 
@@ -50,22 +51,22 @@ void GameServer::run() {
 		if (clients->size() < maxConnections) {
 			this->acceptWaitingClient();
 		}
-		std::cout << " accept : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
+		//std::cout << " accept : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
 		this->processClientEvents(); 		// process the client input events
 
-		std::cout << " process : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
+		//std::cout << " process : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
 		physics->update(TIME_PER_FRAME);      // do a physics step
 
-		std::cout << " physics : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
+		//std::cout << " physics : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
 		this->tick();                       // send state back to client
 
-		std::cout << " tick : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
+		//std::cout << " tick : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
 		//calculates the ms from start until here.
 		elapsedTime = chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count();
 		if (elapsedTime > TIME_PER_FRAME) {  // this is so know if we need to slow down the loop
 	//		cerr << "Server loop took long than a frame." << endl;
 		}
-		std::cout << " sleep for : " << TIME_PER_FRAME - elapsedTime << std::endl;
+		//std::cout << " sleep for : " << TIME_PER_FRAME - elapsedTime << std::endl;
 
 		// sleep for unused time
 		sleep_for(milliseconds(TIME_PER_FRAME - elapsedTime));
@@ -162,22 +163,33 @@ void GameServer::generateResources(int num) {
       Resource * newRe;
 
       int pick = rand() % 6;
+	  int total = 0;
 
-      if (pick == 0)
-         newRe = new Tree(radius, theta, azimuth, direction);
-      else if (pick == 1)
+	  //Scores are placeholder, need to handle them differently...
+	  if (pick == 0){
+		  newRe = new Tree(30, radius, theta, azimuth, direction);
+		  total = total + 30;
+	  }
+	  else if (pick == 1)
          newRe = new Rock(radius, theta, azimuth, direction);
-      else if (pick == 2)
-         newRe = new Stump(radius, theta, azimuth, direction);
-      else if (pick == 3)
+	  else if (pick == 2){
+		  newRe = new Stump(10, radius, theta, azimuth, direction);
+		  total = total + 10;
+	  }
+	  else if (pick == 3)
          newRe = new Grass(radius, theta, azimuth, direction);
-      else if (pick == 4)
-         newRe = new Mushroom(radius, theta, azimuth, direction);
-      else if (pick == 5)
-         newRe = new Flower(radius, theta, azimuth, direction);
+	  else if (pick == 4){
+		  newRe = new Mushroom(25, radius, theta, azimuth, direction);
+		  total = total + 25;
+	  }
+	  else if (pick == 5){
+		  newRe = new Flower(40, radius, theta, azimuth, direction);
+		  total = total + 40;
+	  }
 
       ObjectId resourceId = IdGenerator::getInstance().createId();
       gameState->addResource(resourceId, newRe);
+	  gameState->setTotal(total);
       //radius is always 505
       //randomize resource model?? (maybe we should separate blob model from resource model)
       //randomize other coords

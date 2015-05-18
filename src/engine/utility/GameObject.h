@@ -18,7 +18,7 @@ enum ObjectType {
 	PLAYER,
 	MOVEABLE,
 	GAMEOBJECT,
-   EATABLE
+    IEATABLE
 };
 
 class GameObject : public Serializable  {
@@ -34,7 +34,6 @@ protected:
 	float modelRadius;
 
 	bool visible;
-	int score;
 
    // Model
    Model rm = TREE;
@@ -60,11 +59,8 @@ public:
    bool getVisible();
    void setVisible(bool v);
 
-   int getScore();
-   void setScore(int s);
-
-	float getModelRadius();
-	void setModelRadius(float radius);
+   float getModelRadius();
+   void setModelRadius(float radius);
 
    void setDeleteFlag(bool flag);
    bool getDeleteFlag();

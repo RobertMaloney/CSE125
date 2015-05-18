@@ -27,7 +27,8 @@ protected:
 	ObjectDB * map;
 	vector<Player*> players;
     vector<Resource *> resources;
-	vector<int> percentScores;
+	int total;
+
 
 public:
 	vector<Packet> updates;
@@ -47,11 +48,14 @@ public:
 	bool addObject(ObjectId id, GameObject* o);
 	GameObject* getObject(ObjectId id);
 	int getNumPlayers();
+	vector<Player*> & getPlayers();
+	int getTotal();
+	void setTotal(int t);
 	
 	static GameState & getInstance();
 
-   Model selectPlayerModel(ObjectId playerId);
-   bool addResource(ObjectId theId, Resource * ptr);
+    Model selectPlayerModel(ObjectId playerId);
+    bool addResource(ObjectId theId, Resource * ptr);
 
 	void sendEvents(vector<Packet> & events);
 	void receiveUpdates();

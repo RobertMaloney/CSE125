@@ -66,60 +66,8 @@ void GameClient::updateState()
 		return;
 	current_state = next_state;
 	next_state = nullptr;
-
-		}
-
-
-		//If this game object is new 
-		if (!obj) {
-			obj = new GameObject();
-			
-			if (!gstate.addObject(objId, obj)){ // Adds to game state in client
-				delete obj;
-				obj = nullptr;
-				continue;
-			}else{
-                obj->deserialize(*packet);//deserialize here to get the model
-            }
-
-			//Add node in scene graph (in GraphicsEngine) and add object-node mapping (in GraphicsEngine)
-			GraphicsEngine::insertObject(obj->getId(), GraphicsEngine::addNode(GraphicsEngine::selectModel(obj->getModel())));
-		}
-      else {
-		   //Update the object in game state
-		   obj->deserialize(*packet);//For now it only updates obj (pos) in game state
-      }
-
-		//Update the object in node (in GraphicsEngine)
-		GraphicsEngine::updateObject(obj->getId(), obj->getLoc()); 
-	}
 }
 
-
-void GameClient::initialize() {
-    Socket::initialize();
-    SocketError err = connection->connect(DEFAULT_SERVER_IP, DEFAULT_SERVER_PORT);
-    if (this->shouldTerminate(err)) {
-        connection->close();
-        delete connection;
-        connection = nullptr;
-        throw SocketException("Connection Failure.");
-    }
-    connection->setNoDelay(true);
-    connection->setNonBlocking(true);
-	gstate.init();
-}
-
-
-void GameClient::receiveUpdates(deque<Packet> & updates) {
-    this->checkError(connection->receive(updates));
-}
-
-
-void GameClient::sendEvents(deque<Packet> & events) {
-	connection->send(events);
-	events.clear();
-}
 
 
 void GameClient::checkError(SocketError err) {

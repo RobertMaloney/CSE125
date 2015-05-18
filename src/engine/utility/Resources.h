@@ -1,66 +1,86 @@
 #include "Resource.h"
-#include "Eatable.h"
+#include "IEatable.h"
 
-class Mushroom : public Resource, public Eatable {
-public:
+class EatableResource : public Resource, public IEatable {
+	protected:
+		int points;
 
-   Mushroom() : Resource(MUSHROOM), Eatable(10) { this->type = EATABLE; };
-   Mushroom(float radius, float theta, float azimuth, float direction) :
-      Resource(MUSHROOM, radius, theta, azimuth, direction), Eatable(10){
-      this->type = EATABLE;
-   };
+		EatableResource(int p, Model m) : Resource(m){ 
+			this->type = IEATABLE; 
+			this->points = p;
+		};//TREE?
+		EatableResource(int p, Model m, float radius, float theta, float azimuth, float direction) :
+			Resource(m, radius, theta, azimuth, direction){//TREE?
+			this->type = IEATABLE;
+			this->points = p;
+		};
 
-   virtual ~Mushroom() { };
+		virtual ~EatableResource() { };
+
+	public:
+		int getPoints(){
+			return this->points;
+		}
+
+		void setPoints(int p){
+			this->points = p;
+		}
 };
 
-class Tree : public Resource {
+class Mushroom : public EatableResource {
 public:
-   Tree() : Resource(TREE) {};
-   Tree(float radius, float theta, float azimuth, float direction) :
-      Resource(TREE, radius, theta, azimuth, direction) {};
+    Mushroom() : Mushroom(10){};
+	Mushroom(int points) : EatableResource(points, MUSHROOM){};
+	Mushroom(int points, float radius, float theta, float azimuth, float direction) :
+		EatableResource(points, MUSHROOM, radius, theta, azimuth, direction){};
+
+    virtual ~Mushroom() { };
+};
+
+class Tree : public EatableResource {
+public:
+	Tree() : Tree(10){};
+	Tree(int points) : EatableResource(points, TREE){};
+	Tree(int points, float radius, float theta, float azimuth, float direction) :
+       EatableResource(points, TREE, radius, theta, azimuth, direction) {};
 
    virtual ~Tree() {};
 };
 
-class Rock : public Resource, public Eatable {
+class Rock : public Resource{
 public:
-   Rock() : Resource(ROCK), Eatable(15) { this->type = EATABLE; };
-   Rock(float radius, float theta, float azimuth, float direction) :
-      Resource(ROCK, radius, theta, azimuth, direction), Eatable(15){
-      this->type = EATABLE;
-   };
+	Rock() : Resource(ROCK){};
+	Rock(float radius, float theta, float azimuth, float direction) :
+		Resource(ROCK, radius, theta, azimuth, direction) {};
 
    virtual ~Rock() {};
 };
 
-class Stump : public Resource, public Eatable {
+class Stump : public EatableResource{
 public:
-   Stump() : Eatable(20), Resource(STUMP) { this->type = EATABLE; };
-   Stump(float radius, float theta, float azimuth, float direction) :
-      Resource(STUMP, radius, theta, azimuth, direction), Eatable(20){
-      this->type = EATABLE;
-   };
+	Stump() : Stump(10){};
+	Stump(int points) : EatableResource(points, STUMP) { this->type = IEATABLE; };
+	Stump(int points, float radius, float theta, float azimuth, float direction) :
+		EatableResource(points, STUMP, radius, theta, azimuth, direction){};
 
    virtual ~Stump() {};
 };
 
-class Grass : public Resource {
+class Grass : public Resource{
 public:
-   Grass() : Resource(GRASS) {};
-   Grass(float radius, float theta, float azimuth, float direction) :
+	Grass() : Resource(GRASS) {};
+    Grass(float radius, float theta, float azimuth, float direction) :
       Resource(GRASS, radius, theta, azimuth, direction) {};;
 
    virtual ~Grass() {};
 };
 
-class Flower : public Resource, public Eatable {
+class Flower : public EatableResource{
 public:
-
-   Flower() : Resource(FLOWER), Eatable(10) { this->type = EATABLE; };
-   Flower(float radius, float theta, float azimuth, float direction) :
-      Resource(MUSHROOM, radius, theta, azimuth, direction), Eatable(10){
-      this->type = EATABLE;
-   };
+	Flower() : Flower(10){};
+	Flower(int points) : EatableResource(points, FLOWER){};
+	Flower(int points, float radius, float theta, float azimuth, float direction) :
+		EatableResource(points, MUSHROOM, radius, theta, azimuth, direction){};
 
    virtual ~Flower() { };
 };
