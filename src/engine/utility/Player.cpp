@@ -4,7 +4,6 @@
 
 //TODO Config file
 Player::Player(Model thebm, float radius, float theta, float azimuth, float direction) : MoveableObject() {
-	static int num;
 	//this->loc = vec4(radius, theta, azimuth, direction);
    this->rm = thebm;
    this->moves[0] = false;
@@ -18,9 +17,8 @@ Player::Player(Model thebm, float radius, float theta, float azimuth, float dire
 	this->type = PLAYER;
 	//this->velocity = 0;
 	this->modelRadius = 7.f;
+	this->setMass(10.f);
 
-		this->setMass(100);
-	num++; 
 }
 
 Player::~Player() {
@@ -51,17 +49,19 @@ void Player::integrate(float dt) {
 
 	float cosa = glm::cos(glm::radians(angle));
 	float sina = glm::sin(glm::radians(angle));
+	
 
 	float forceConst = 100.f * log(this->getMass());
 
 	if (moves[UP]) {
-		this->addForce(cosa * forceConst, sina * forceConst, 0);
+		this->addForce(cosa * forceConst, sina * forceConst, 0.f);
 
 	}
-
+	
 	if (moves[DOWN]) {
-		this->addForce(cosa * -forceConst, sina * -forceConst, 0);
+		this->addForce(cosa * -forceConst, sina * -forceConst, 0.f);
 	}
+
 
 	MoveableObject::integrate(dt);
 
@@ -71,21 +71,39 @@ void Player::integrate(float dt) {
 void Player::collide(float dt, GameObject & target) {
 	if (target.getType() == PLAYER) {
 		Player & other = dynamic_cast<Player&>(target);
-		vec3 v1 = this->velocity;
-		vec3 v2 = other.velocity;
 		vec3 p1 = this->orientation * vec3(0.f, 0.f, 505.f);
 		vec3 p2 = other.orientation * vec3(0.f, 0.f, 505.f);
+
+		vec3 v1 = this->velocity;
+		vec3 v2 = other.velocity;
+		float m1 = this->getMass();
+		float m2 = other.getMass();
+
 		float im1 = this->getInverseMass();
 		float im2 = other.getInverseMass();
 
-		vec3 normal = glm::normalize(p1 - p2);
-		float seperatingVelocity = glm::dot(v1 - v2, normal);
-
-		float deltaVelocity = (-seperatingVelocity * restitution) - seperatingVelocity;
-		vec3 impulse = normal * (deltaVelocity / (im1 + im2));
+		float totalMass = m1 + m2;
 		
-		this->velocity += impulse * im1 * 1.2f;
-		other.velocity += impulse * -im2 * 1.2f;
+		vec3 normal = p1 - p2;
+		vec3 unitNormal = glm::normalize(normal);
+		unitNormal.z = 0.f;
+		float seperatingVelocity = glm::dot(v1 - v2, unitNormal);
+
+		float p1weight = (totalMass - m1) / totalMass;
+		float p2weight = (totalMass - m2) / totalMass;
+
+		float deltaVelocity = (-seperatingVelocity * 1.f) - seperatingVelocity;
+		vec3 impulse = unitNormal * (deltaVelocity / (im1 + im2));
+		
+		this->velocity += impulse * im1; 
+		other.velocity -= impulse * im2;
+		
+		
+		if (glm::length(normal) < this->getModelRadius() + other.getModelRadius()) {
+			float pen = this->getModelRadius() + other.getModelRadius() - glm::length(normal);
+			this->orientation *= glm::angleAxis(glm::radians(p1weight*pen), unitNormal/*-glm::normalize(v1)*/);
+			other.orientation *= glm::angleAxis(glm::radians(p2weight*pen), unitNormal/*-glm::normalize(v2)*/);
+		}
 	/*	vec3 p1mp2 = p1 - p2;
 		vec3 unormal12 = p1mp2/ (glm::length(p1mp2));
 		vec3 unormal21 = -p1mp2 / (glm::length(-p1mp2));
@@ -106,3 +124,8 @@ void Player::collide(float dt, GameObject & target) {
 	}
 
 }
+/*
+vec3 movePerImass = unitNormal * (penetration / (im1 + im2));
+this->orientation *= glm::angleAxis(glm::radians(im1 * glm::length(movePerImass)), glm::normalize(this->velocity + movePerImass));
+other.orientation *= glm::angleAxis(glm::radians(im2 * -glm::length(movePerImass)), glm::normalize(other.velocity + movePerImass));
+*/

@@ -12,7 +12,7 @@ public:
 
 	virtual void updateForce(MoveableObject* target, float dt) override;
 
-	vec3 gravityForce;
+	float gravity;
 
 };
 #endif

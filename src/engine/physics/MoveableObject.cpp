@@ -105,7 +105,7 @@ void MoveableObject::integrate(float dt) {
 	this->forceAccum *= 0.f;
 	this->velocity += newAcceleration * dt;
 
-	
+	// temporary form of friction
 	if (glm::length(this->velocity) > .0001f)
 		this->velocity *= .985f;
 	
