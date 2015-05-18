@@ -59,7 +59,7 @@ public:
 class Stump : public EatableResource{
 public:
 	Stump() : Stump(10){};
-	Stump(int points) : EatableResource(points, STUMP) { this->type = IEATABLE; };
+	Stump(int points) : EatableResource(points, STUMP) {};
 	Stump(int points, float radius, float theta, float azimuth, float direction) :
 		EatableResource(points, STUMP, radius, theta, azimuth, direction){};
 

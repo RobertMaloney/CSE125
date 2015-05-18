@@ -162,7 +162,7 @@ void GameServer::generateResources(int num) {
       float direction = (float)(rand() % 360);
       Resource * newRe;
 
-      int pick = rand() % 6;
+      int pick = rand() % 5;
 	  int total = 0;
 
 	  //Scores are placeholder, need to handle them differently...
@@ -176,13 +176,11 @@ void GameServer::generateResources(int num) {
 		  newRe = new Stump(10, radius, theta, azimuth, direction);
 		  total = total + 10;
 	  }
-	  else if (pick == 3)
-         newRe = new Grass(radius, theta, azimuth, direction);
-	  else if (pick == 4){
+	  else if (pick == 3){
 		  newRe = new Mushroom(25, radius, theta, azimuth, direction);
 		  total = total + 25;
 	  }
-	  else if (pick == 5){
+	  else if (pick == 4){
 		  newRe = new Flower(40, radius, theta, azimuth, direction);
 		  total = total + 40;
 	  }
