@@ -53,6 +53,7 @@ public:
    void setModel(Model model);
 
    quat & getOrientation();
+   void moveAngle(float);
    float getAngle();
    float getHeight();
 
