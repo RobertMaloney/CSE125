@@ -2,53 +2,59 @@
 
 
 
-void forwardHandler(ObjectId id) {
+void forwardHandler(ObjectId id, Packet &p) {
 	Player* player = static_cast<Player*> (ObjectDB::getInstance().get(id));
 	player->setMoving(Player::UP, true);
 }
 
 
-void stopForwardHandler(ObjectId id) {
+void stopForwardHandler(ObjectId id, Packet &p) {
 	Player* player = static_cast<Player*> (ObjectDB::getInstance().get(id));
 	player->setMoving(Player::UP, false);
 }
 
 
-void backwardHandler(ObjectId id) {
+void backwardHandler(ObjectId id, Packet &p) {
 	Player* player = static_cast<Player*> (ObjectDB::getInstance().get(id));
 	player->setMoving(Player::DOWN, true);
 }
 
 
-void stopBackwardHandler(ObjectId id) {
+void stopBackwardHandler(ObjectId id, Packet &p) {
 	Player* player = static_cast<Player*> (ObjectDB::getInstance().get(id));
 	player->setMoving(Player::DOWN, false);
     }
 
 
-void leftHandler(ObjectId id) {
+void leftHandler(ObjectId id, Packet &p) {
 	Player* player = static_cast<Player*> (ObjectDB::getInstance().get(id));
 	player->setMoving(Player::LEFT, true);
 }
 
 
-void stopLeftHandler(ObjectId id) {
+void stopLeftHandler(ObjectId id, Packet &p) {
 	Player* player = static_cast<Player*> (ObjectDB::getInstance().get(id));
 	player->setMoving(Player::LEFT, false);
     }
 
 
-void rightHandler(ObjectId id) {
+void rightHandler(ObjectId id, Packet &p) {
 	Player* player = static_cast<Player*> (ObjectDB::getInstance().get(id));
 	player->setMoving(Player::RIGHT, true);
 }
 
 
-void stopRightHandler(ObjectId id) {
+void stopRightHandler(ObjectId id, Packet &p) {
 	Player* player = static_cast<Player*> (ObjectDB::getInstance().get(id));
 	player->setMoving(Player::RIGHT, false);
 }
 
+void lookHandler(ObjectId id, Packet &p) {
+	Player* player = static_cast<Player*> (ObjectDB::getInstance().get(id));
+	p.readByte(); // throwaway event
+	player->moveAngle(p.readFloat()); // x
+	p.readFloat(); // y
+}
 
 PacketHandler::PacketHandler(){
 	eventHandlers[EventType::MOVE_FORWARD] = EventHandler(forwardHandler);
@@ -60,6 +66,8 @@ PacketHandler::PacketHandler(){
 	eventHandlers[EventType::STOP_BACKWARD] = EventHandler(stopBackwardHandler);
 	eventHandlers[EventType::STOP_LEFT] = EventHandler(stopLeftHandler);
 	eventHandlers[EventType::STOP_RIGHT] = EventHandler(stopRightHandler);
+
+	eventHandlers[EventType::LOOK] = EventHandler(lookHandler);
 }
 
 
@@ -77,7 +85,7 @@ void PacketHandler::dispatch(ObjectId clientId, vector<Packet> & received) {
 		EventType eventType = static_cast<EventType>(it->at(0));
 
 		if (eventHandlers.find(eventType) != eventHandlers.end()) {
-            eventHandlers[eventType](clientId);
+            eventHandlers[eventType](clientId, *it);
         }
 	}
 }
