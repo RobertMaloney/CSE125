@@ -173,7 +173,7 @@ void GameState::updateGameState() {
 			}
 
 			//Add node in scene graph (in GraphicsEngine) and add object-node mapping (in GraphicsEngine)
-			GraphicsEngine::insertObject(obj->getId(), GraphicsEngine::addNode(GraphicsEngine::selectModel(obj->getModel())));
+			GraphicsEngine::insertObject(obj->getId(), GraphicsEngine::addNode(GraphicsEngine::selectModel(obj->getModel()), obj->getVisible()));
 		}
 		else {
 			//Update the object in game state
@@ -181,6 +181,6 @@ void GameState::updateGameState() {
 		}
 
 		//Update the object in node (in GraphicsEngine)
-		GraphicsEngine::updateObject(obj->getId(), obj->getOrientation(), obj->getAngle(), obj->getHeight());
+		GraphicsEngine::updateObject(obj->getId(), obj->getOrientation(), obj->getAngle(), obj->getHeight(), obj->getVisible());
 	}
 }

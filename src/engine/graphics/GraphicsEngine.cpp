@@ -230,7 +230,7 @@ void GraphicsEngine::renderScene(Node* node, glm::mat4* matrix) {
 		//cout << glm::to_string(*matrix) << endl << endl;
 		geode->getRenderable()->render(matrix);
 	}
-	else if (mnode) {
+	else if (mnode && mnode->getVisible()) {
 		int numChildren = mnode->getNumChildren();
 		glm::mat4 newmat = *matrix;
 		mnode->postMult(newmat);
@@ -283,7 +283,7 @@ void GraphicsEngine::ScaleDown()
 
 void GraphicsEngine::bindPlayerNode(GameObject* player) {
    Renderable * model = GraphicsEngine::selectModel(player->getModel());
-   m_player = GraphicsEngine::addNode(model);
+   m_player = GraphicsEngine::addNode(model, true);
    m_player->addChild(m_mainCamera);
    m_player->addChild(m_minimapCamera);
 
@@ -292,13 +292,14 @@ void GraphicsEngine::bindPlayerNode(GameObject* player) {
 
 
 //Add node into scene graph using a model
-MatrixNode* GraphicsEngine::addNode(Renderable* objModel){
+MatrixNode* GraphicsEngine::addNode(Renderable* objModel, bool f){
 	//Renderable* objModel = new Geometry(modelPath);// "../../media/pb.obj");
 	Geode* objGeode = new Geode();
 	objGeode->setRenderable(objModel);
 	MatrixNode * m_node = new MatrixNode();
 	m_node->addChild(objGeode);
 	m_scene->addChild(m_node);
+	m_node->setVisible(f);
 	return m_node;
 }
 
@@ -316,8 +317,9 @@ Renderable * GraphicsEngine::selectModel(Model model){
 }
 
 // Translate from vec4 postion to matrix in the node of scene graph??
-void GraphicsEngine::updateObject(ObjectId objId, glm::quat & q, float angle, float height) {
+void GraphicsEngine::updateObject(ObjectId objId, glm::quat & q, float angle, float height, bool f) {
 	objNodeMap[objId]->getMatrix() = MatrixNode::quatAngle(q, angle, height);
+	objNodeMap[objId]->setVisible(f);
 }
 
 //A mapping from ObjectId to node in scene graph
