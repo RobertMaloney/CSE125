@@ -22,6 +22,7 @@
     <ClCompile Include="utility\PhysicsEngine.cpp" />
     <ClCompile Include="utility\GameEngine.cpp" />
     <ClCompile Include="utility\Eatable.cpp" />
+    <ClCompile Include="utility\Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameClient.h" />
@@ -60,6 +61,7 @@
     <ClInclude Include="utility\PhysicsEngine.h" />
     <ClInclude Include="utility\Eatable.h" />
     <ClInclude Include="utility\Resources.h" />
+    <ClInclude Include="utility\Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Network\Endianness.inl" />
