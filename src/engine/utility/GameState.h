@@ -31,8 +31,10 @@ protected:
 	int total;
 
 
+
 public:
 	vector<Packet> updates;
+	Player* top;
 
 	GameState();
 	~GameState();

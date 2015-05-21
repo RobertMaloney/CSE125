@@ -65,6 +65,8 @@
     <ClInclude Include="utility\System.h" />
     <ClInclude Include="utility\PhysicsEngine.h" />
     <ClInclude Include="utility\IEatable.h" />
+    <ClInclude Include="utility\GameEngine.h" />
+    <ClInclude Include="utility\Status.h" />
     <ClInclude Include="utility\Timer.h" />
   </ItemGroup>
   <ItemGroup>

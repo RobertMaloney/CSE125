@@ -140,7 +140,7 @@ void GameState::receiveUpdates()
 	gameclient->checkError(gameclient->connection->receive(updates));
 }
 
-
+//TODO TODO TODO TODO TODO : this method needs to be put back to client 
 void GameState::updateGameState() {
 	if (updates.size() <= 0) {
 		return;
@@ -176,7 +176,7 @@ void GameState::updateGameState() {
 			}
 
 			//Add node in scene graph (in GraphicsEngine) and add object-node mapping (in GraphicsEngine)
-			GraphicsEngine::insertObject(obj->getId(), GraphicsEngine::addNode(GraphicsEngine::selectModel(obj->getModel())));
+			GraphicsEngine::insertObject(obj->getId(), GraphicsEngine::addNode(GraphicsEngine::selectModel(obj->getModel()), obj->getVisible()));
 		}
 		else {
 			//Update the object in game state
@@ -195,6 +195,18 @@ void GameState::updateGameState() {
       }
 
 		//Update the object in node (in GraphicsEngine)
-		GraphicsEngine::updateObject(obj->getId(), obj->getOrientation(), obj->getAngle(), obj->getHeight());
+		GraphicsEngine::updateObject(obj->getId(), obj->getOrientation(), obj->getAngle(), obj->getHeight(), obj->getVisible());
+
+		if (obj->getType() == PLAYER){
+			Player * p = dynamic_cast<Player*>(obj);
+			if (p->getStatus() == GStatus::WIN){
+				//Client needs to output win
+				std::cout << "I win. yayyyyy" << endl;
+			}
+			else if (p->getStatus() == GStatus::LOSE){
+				//Client needs to output lose
+				std::cout << "I lose :(" << endl;
+			}
+		}
 	}
 }
