@@ -9,6 +9,7 @@
 #include <gtc\constants.hpp>
 #include "Shader.h"
 #include "Skybox.h"
+#include "HUD.h"
 
 using namespace std;
 
@@ -30,8 +31,10 @@ CameraNode			*GraphicsEngine::m_mainCamera = NULL;
 CameraNode			*GraphicsEngine::m_minimapCamera = NULL;
 
 GLuint				GraphicsEngine::m_skyboxId = 0;
+GLuint				GraphicsEngine::m_HudId = 0;
 Renderable			*GraphicsEngine::m_skybox = NULL;
-Shader				*GraphicsEngine::m_defaultShader, *GraphicsEngine::m_skyboxShader;
+Renderable			*GraphicsEngine::m_HUD = NULL;
+Shader				*GraphicsEngine::m_defaultShader, *GraphicsEngine::m_skyboxShader, *GraphicsEngine::m_textureShader;
 
 
 unordered_map<ObjectId, MatrixNode*> GraphicsEngine::objNodeMap;
@@ -94,6 +97,7 @@ void GraphicsEngine::Initialize() {
 
 	m_defaultShader = new Shader("../engine/graphics/Shaders/default.vert", "../engine/graphics/Shaders/default.frag");
 	m_skyboxShader = new Shader("../engine/graphics/Shaders/skybox.vert", "../engine/graphics/Shaders/skybox.frag");
+	m_textureShader = new Shader("../engine/graphics/Shaders/texture2D.vert", "../engine/graphics/Shaders/texture2D.frag");
 
 	// Turn on z-buffering
 	glEnable(GL_DEPTH_TEST);
@@ -104,6 +108,12 @@ void GraphicsEngine::Initialize() {
 	m_skybox = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.f);
 	m_skyboxId = Skybox::makeSkybox("../../media/");
 	m_skybox->setTextureId(m_skyboxId);
+	
+	//
+	m_textureShader->Use();
+	m_HUD = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.f);
+	m_HudId = HUD::makeHUD("../../media/HUD.png");
+	m_HUD->setTextureId(m_HudId);
 
 	// WORLD
 	m_defaultShader->Use();
@@ -125,8 +135,7 @@ void GraphicsEngine::Initialize() {
 	m_minimapCamera = new CameraNode();
 	m_minimapCamera->setViewMatrix(minimapview);
 
-	// PLAYER  (Player node is created by default)
-
+	// PLAYER  (Player node is created by default
 	/*Renderable * model = GraphicsEngine::selectModel(playerId);
 	m_player = GraphicsEngine::addNode(model);
 	m_player->addChild(m_mainCamera);
@@ -139,6 +148,20 @@ void GraphicsEngine::Initialize() {
 
 	m_initialized = true;
 }
+
+void GraphicsEngine::ZoomIn(CameraNode *a) {
+	glm::mat4 mat = a->getFlatViewMatrix();
+	mat[3][2] += 10;
+	a->setViewMatrix(mat);
+
+}
+void GraphicsEngine::ZoomOut(CameraNode *a) {
+	glm::mat4 mat = a->getFlatViewMatrix();
+	mat[3][2] -= 10;
+	a->setViewMatrix(mat);
+
+}
+
 
 /**
 * GraphicsEngine::Closing()
@@ -210,15 +233,31 @@ void GraphicsEngine::DrawAndPoll() {
 	renderScene(m_scene, &identity);
 	glViewport(width -200, height-200,200, 200);
 
-	glClear( GL_DEPTH_BUFFER_BIT);
+	glClear(GL_DEPTH_BUFFER_BIT);
 
 	//view = m_minimapCamera->getFlatViewMatrix();
-
+	
 	// minimap
+	ZoomIn(m_minimapCamera);
 	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "view"), 1, GL_FALSE, glm::value_ptr(m_minimapCamera->getFlatViewMatrix()));
 	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "projection"), 1, GL_FALSE, glm::value_ptr(m_projection));
 
 	renderScene(m_scene, &identity);
+
+
+	glViewport(0, height - 200, 200, 200);
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	//glm::mat4 identity;
+	glDepthMask(GL_FALSE);
+	m_textureShader->Use();
+	glOrtho(0, 0, 0,0, 0, 1);
+	//renderScene(m_scene, &identity);
+	glActiveTexture(GL_TEXTURE0);
+	glUniform1i(glGetUniformLocation(m_textureShader->Id(), "HUD"), 0);
+	m_HUD->render(&identity);
+	glDepthMask(GL_TRUE);
+
 	glEnable(GL_DEPTH_TEST);
 
 	glfwSwapBuffers(m_window);

@@ -73,6 +73,7 @@ void GameObject::setModel(Model model) {
 }
 
 Model GameObject::getModel() {
+
    return rm;
 }
 

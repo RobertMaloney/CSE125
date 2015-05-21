@@ -59,6 +59,8 @@ public:
 	static void updateObject(ObjectId objId, glm::quat &, float, float);
 	static void insertObject(ObjectId objId, MatrixNode*);
    static void removeObject(ObjectId objId);
+   static void ZoomIn(CameraNode *a);
+   static void ZoomOut(CameraNode *a);
 
 	static MatrixNode* addNode(Renderable*);
    static Renderable* selectModel(Model model);
@@ -76,8 +78,10 @@ private:
 	static MatrixNode				*m_scene;
 
 	static GLuint					m_skyboxId;
+	static GLuint					m_HudId;
 	static Renderable				*m_skybox;
-	static Shader					*m_defaultShader, *m_skyboxShader;
+	static Renderable				*m_HUD;
+	static Shader					*m_defaultShader, *m_skyboxShader, *m_textureShader;
 
 
 	static unordered_map<ObjectId, MatrixNode*> objNodeMap;

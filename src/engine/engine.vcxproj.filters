@@ -68,5 +68,7 @@
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
     <None Include="Network\Endianness.inl" />
+    <None Include="graphics\Shaders\texture2D.frag" />
+    <None Include="graphics\Shaders\texture2D.vert" />
   </ItemGroup>
 </Project>
