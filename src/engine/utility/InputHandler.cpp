@@ -69,3 +69,12 @@ void InputHandler::handleKey(int key, int action, int mods)
 		}
 	}
 }
+
+void InputHandler::handleMouse(float x, float y)
+{
+	Packet p;
+	p.writeByte(EventType::LOOK);
+	p.writeFloat(x);
+	p.writeFloat(y);
+	input.push_back(p);
+}
