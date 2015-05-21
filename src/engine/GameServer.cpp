@@ -48,17 +48,25 @@ void GameServer::run() {
 	while (true) {
 		start = high_resolution_clock::now();
 		// try to allow a new player to join
+
 		if (clients->size() < maxConnections) {
 			this->acceptWaitingClient();
 		}
+		std::cout << " accept : " << chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count() << std::endl;
+
+		start = high_resolution_clock::now();
 		this->processClientEvents(); 		// process the client input events
 
+		std::cout << " accept : " << chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count() << std::endl;
+		start = high_resolution_clock::now();
 		physics->update(PHYSICS_DT);      // do a physics step
-
+		std::cout << " physics : " << chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count() << std::endl;
+		start = high_resolution_clock::now();
 		engine->calculatePercent();
-
-		//std::cout << " physics : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
+		std::cout << " calculate percent : " << chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count() << std::endl;
+		start = high_resolution_clock::now();
 		this->tick();                       // send state back to client
+		std::cout << " tick : " << chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count() << std::endl;
 
 		//calculates the ms from start until here.
 		elapsedTime = chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count();
@@ -66,8 +74,12 @@ void GameServer::run() {
 			cerr << "Server loop took long than a frame." << endl;
 		}
 
+		
 		// sleep for unused time
+		start = high_resolution_clock::now();
 		sleep_for(microseconds(TIME_PER_FRAME - elapsedTime));
+		std::cout << " sleep for : " << chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count() << std::endl;
+
 		//sleep_for(milliseconds(2000));
 
 	}

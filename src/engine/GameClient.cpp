@@ -37,11 +37,27 @@ void GameClient::run() {
 	//this->login();
 	GraphicsEngine::Initialize();
 
+	high_resolution_clock::time_point start = high_resolution_clock::now();
 	while (!GraphicsEngine::Closing()) {
+
+		start = high_resolution_clock::now();
 		updateState();
+		std::cout << " updateState : " << chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count() << std::endl;
+
+		start = high_resolution_clock::now();
 		current_state->handleEvents();
+		std::cout << " handleEvents : " << chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count() << std::endl;
+
+
+		start = high_resolution_clock::now();
 		current_state->update();
+		std::cout << " update : " << chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count() << std::endl;
+
+
+		start = high_resolution_clock::now();
 		current_state->draw();
+		std::cout << " draw : " << chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count() << std::endl;
+
 		
 		//GraphicsEngine::DrawAndPoll();
 

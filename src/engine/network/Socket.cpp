@@ -45,7 +45,7 @@ SocketError Socket::setNoDelay(bool on) {
     if (!this->isSocketActive()) {           // cant change options on inactive sockets
         return SE_BADFD;
     }
-    return this->setSockOpt(SOL_SOCKET, TCP_NODELAY, on ? 1 : 0);
+    return this->setSockOpt(IPPROTO_TCP, TCP_NODELAY, on ? 1 : 0);
 }
 
 
