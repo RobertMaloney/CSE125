@@ -6,6 +6,7 @@
 #include "Geode.h"
 
 #include <iostream>
+#include <utility>
 
 using namespace std;
 
@@ -30,15 +31,16 @@ public:
 	virtual std::string getName() {
 		return "CameraNode";
 	}
-	glm::mat4 getFlatViewMatrix() {
+	std::pair<glm::mat4, glm::vec3> getFlatViewMatrix() {
 		glm::mat4 flat_view = cam_revert;
 		MatrixNode* curr = (m_parent == 0) ? 0 : m_parent->asMatrixNode();
 		while (curr != 0) {
 			curr->preMult(flat_view);
 			curr = (curr->getParent() == 0) ? 0 : curr->getParent()->asMatrixNode();
 		}
+		glm::vec3 pos(flat_view[3].x, flat_view[3].y, flat_view[3].z);
 		flat_view = glm::inverse(flat_view);
-		return flat_view;
+		return make_pair(flat_view, pos);
 	}
 	void setViewMatrix(glm::mat4 & matrix) {
 		cam_matrix = matrix;

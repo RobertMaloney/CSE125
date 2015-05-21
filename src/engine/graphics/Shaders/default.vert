@@ -9,8 +9,8 @@ out vec3 TexCoord;
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
-uniform vec3 pointLight;
-uniform vec3 dirLight;
+
+uniform vec3 camPos;
 
 struct Light {
 	bool valid;
@@ -53,6 +53,7 @@ void main()
 
 	if (dotted < 0) Color += color * vec3(-dotted);
 	*/
+
 	Color = vec3(0);
 	for (int i = 0; i < numLights; ++i) {
 		Light l = lights[i];
@@ -67,12 +68,25 @@ void main()
 			vec3 lightvec = normalize(l.position);
 			float dotted = clamp(-dot(lightvec, worldNorm), 0, 1);
 			diffuse = l.colorDiffuse * vec3(dotted) * vec3(l.scalarDiffuse);
+			
+			// SPECULAR
+			vec3 eyeVec = normalize(camPos - vec3(worldPos));
+			vec3 reflectVec = reflect(lightvec, worldNorm);
+			dotted = clamp( dot(eyeVec, reflectVec), 0, 1);
+			specular = l.colorSpecular * vec3(dotted) * vec3(l.scalarSpecular);
 		} else if (l.mode == 1) { // POINT
 			vec3 lightvec = normalize(vec3(worldPos) - l.position);
+			float distance = length(lightvec);
 			float dotted = clamp(-dot(lightvec, worldNorm), 0, 1);
-			diffuse = l.colorDiffuse * vec3(dotted) * vec3(l.scalarDiffuse);
+			diffuse = l.colorDiffuse * vec3(dotted) * vec3(l.scalarDiffuse) / distance;
+			
+			// SPECULAR
+			vec3 eyeVec = normalize(camPos - vec3(worldPos));
+			vec3 reflectVec = reflect(lightvec, worldNorm);
+			dotted = clamp( dot(eyeVec, reflectVec), 0, 1);
+			specular = l.colorSpecular * vec3(dotted) * vec3(l.scalarSpecular);
 		}
-		Color += diffuse + ambient + specular;
+		Color += color * (diffuse + ambient + specular);
 	}
 }
 
