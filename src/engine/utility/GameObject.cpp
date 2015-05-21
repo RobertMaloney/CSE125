@@ -49,6 +49,10 @@ quat & GameObject::getOrientation() {
 	return orientation;
 }
 
+void GameObject::moveAngle(float delta) {
+	angle += delta;
+}
+
 float GameObject::getAngle() {
 	return angle;
 }

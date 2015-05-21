@@ -58,11 +58,10 @@ void Player::move(float dt) {
 		velocity -= acceleration;
 	}
 	if (moves[RIGHT]) {
-		angle -= 1.f;
+		// strafe
 	}
 	if (moves[LEFT]) {
-		angle += 1.f;
-		//std::cout << "Angle: " << angle << std::endl;
+		// strafe
 	}
 	// if there was no input simulate friction
 	if (!moves[UP] && !moves[DOWN]) {
