@@ -16,6 +16,7 @@ public:
 
 
 	void calculatePercent();
+   void determineWinner();
 	void endGame();
 	GameState* gstate;
 

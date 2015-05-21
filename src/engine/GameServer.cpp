@@ -58,12 +58,6 @@ void GameServer::run() {
          this->startGame();
       }
 
-      // If timer is at max then restart (for now)
-      if (timer->atMax())
-      {
-         timer->reset();
-      }
-
 		//std::cout << " accept : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
 		this->processClientEvents(); 		// process the client input events
 
@@ -71,6 +65,12 @@ void GameServer::run() {
 		physics->update(TIME_PER_FRAME);      // do a physics step
 
 		engine->calculatePercent();
+
+      // If timer is at max then restart (for now)
+      if (timer->atMax())
+      {
+         engine->determineWinner();
+      }
 
       updatePlayerTimers();
 		//std::cout << " physics : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;

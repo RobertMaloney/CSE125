@@ -28,20 +28,24 @@ void GameEngine::calculatePercent(){
 	}	
 	//std::cout << occupied << "  " << total << endl;
 	if (occupied == total){
-		//Win or lose
-		for (auto it = gstate->getPlayers().begin(); it != gstate->getPlayers().end(); ++it) {
-			if ((*it) == gstate->top){//win
-				(*it)->setStatus(GStatus::WIN);
-				std::cout << (*it)->getId() << ": YOU WIN "  << endl;
-			}
-			else{//lose
-				(*it)->setStatus(GStatus::LOSE);
-				std::cout << (*it)->getId() << ": YOU LOSE " << endl;
-			}
-			
-		}
-		endGame();
+      determineWinner();
 	}
+}
+
+void GameEngine::determineWinner() {
+   //Win or lose
+   for (auto it = gstate->getPlayers().begin(); it != gstate->getPlayers().end(); ++it) {
+      if ((*it) == gstate->top){//win
+         (*it)->setStatus(GStatus::WIN);
+         std::cout << (*it)->getId() << ": YOU WIN " << endl;
+      }
+      else{//lose
+         (*it)->setStatus(GStatus::LOSE);
+         std::cout << (*it)->getId() << ": YOU LOSE " << endl;
+      }
+
+   }
+   endGame();
 }
 
 void GameEngine::endGame(){
