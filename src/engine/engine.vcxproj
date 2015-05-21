@@ -147,6 +147,7 @@
     <ClInclude Include="Network\TCPConnection.h" />
     <ClInclude Include="Network\TCPListener.h" />
     <ClInclude Include="utility\BlobModel.h" />
+    <ClInclude Include="utility\GameEngine.h" />
     <ClInclude Include="utility\IEatable.h" />
     <ClInclude Include="utility\Event.h" />
     <ClInclude Include="utility\GameObject.h" />
@@ -163,6 +164,7 @@
     <ClInclude Include="utility\Model.h" />
     <ClInclude Include="utility\Resources.h" />
     <ClInclude Include="utility\Serializable.h" />
+    <ClInclude Include="utility\Status.h" />
     <ClInclude Include="utility\System.h" />
     <ClInclude Include="utility\PhysicsEngine.h" />
   </ItemGroup>

@@ -6,19 +6,20 @@
 Player::Player(Model thebm, float radius, float theta, float azimuth, float direction) : MoveableObject() {
 
 	//this->loc = vec4(radius, theta, azimuth, direction);
-   this->rm = thebm;
-   this->score = 0;
-   this->moves[0] = false;
-   this->moves[1] = false;
-   this->moves[2] = false;
-   this->moves[3] = false;
+    this->rm = thebm;
+    this->score = 0;
+    this->moves[0] = false;
+    this->moves[1] = false;
+    this->moves[2] = false;
+    this->moves[3] = false;
 
-	for (int i = 0; i < 4; ++i)
+    for (int i = 0; i < 4; ++i)
 		this->moves[i] = false;
 
 	this->type = PLAYER;
 	this->velocity = 0;
 	this->modelRadius = 5.f;
+	this->status = PENDING;
 }
 
 Player::~Player() {
@@ -39,6 +40,14 @@ int Player::getPercent(){
 
 void Player::setPercent(int p){
 	this->percent = p;
+}
+
+GStatus Player::getStatus(){
+	return this->status;
+}
+
+void Player::setStatus(GStatus s){
+	this->status = s;
 }
 
 bool Player::getMoving(int index) {
@@ -112,14 +121,16 @@ void Player::serialize(Packet & p) {
 
 	GameObject::serialize(p);
 
-	p.writeFloat(this->score);
-	p.writeFloat(this->percent);
+	p.writeInt(this->score);
+	p.writeInt(this->percent);
+	p.writeInt(this->status);
 	//TODO: moves???
 }
 
 
 void Player::deserialize(Packet & p) {
 	GameObject::deserialize(p);
-	this->score = p.readFloat();
-	this->percent = p.readFloat();
+	this->score = p.readInt();
+	this->percent = p.readInt();
+	this->status = static_cast<GStatus>(p.readInt());
 }

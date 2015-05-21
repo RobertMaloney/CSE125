@@ -6,8 +6,10 @@
 #include "MoveableObject.h"
 #include "GameObject.h"
 #include "IEatable.h"
+#include "Status.h"
 
 using namespace std;
+
 
 class Player : public MoveableObject {
 
@@ -17,6 +19,7 @@ protected:
 
    int score;
    int percent;
+   GStatus status;
 
 public:
 
@@ -26,6 +29,8 @@ public:
 		DOWN,
 		LEFT
 	};
+
+
 
     Player() : Player(OB_TYPE) {};
 	Player(Model bm, float radius = 505, float theta = 0, float azimuth = 0, float direction = 0);
@@ -40,6 +45,10 @@ public:
 
 	int getPercent();
 	void setPercent(int p);
+
+	GStatus getStatus();
+	void setStatus(GStatus s);
+
 
 	virtual void move(float dt) override;
 	virtual void collide(float dt, GameObject & target) override;
