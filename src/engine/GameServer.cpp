@@ -8,6 +8,7 @@ GameServer::GameServer() {
 	this->gameState = &GameState::getInstance();
 	this->physics = new PhysicsEngine();
 	this->engine = new GameEngine();
+   this->timer = &Timer::getInstance();
 }
 
 
@@ -51,12 +52,24 @@ void GameServer::run() {
 		if (clients->size() < maxConnections) {
 			this->acceptWaitingClient();
 		}
+
+      // Only start timer if two players on map
+      if (clients->size() >= 2) {
+         this->startGame();
+      }
+
+      // If timer is at max then restart (for now)
+      if (timer->atMax())
+      {
+         timer->reset();
+      }
+
 		//std::cout << " accept : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
 		this->processClientEvents(); 		// process the client input events
 
 		//std::cout << " process : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
 		physics->update(TIME_PER_FRAME);      // do a physics step
-
+      updatePlayerTimers();
 		//std::cout << " physics : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
 		this->tick();                       // send state back to client
 
@@ -85,6 +98,7 @@ void GameServer::acceptWaitingClient() {
 	//Note: default position foor player is 505,0,0,0
 	ObjectId playerId = idGen->createId();
 	Player* newPlayer = new Player();
+   newPlayer->setTime(timer->getTimeText());
 	if (!gameState->addPlayer(playerId, newPlayer)){
 		delete newPlayer;
 		return;
@@ -106,6 +120,7 @@ void GameServer::acceptWaitingClient() {
 void GameServer::tick() {
 	Packet p;
 	vector<Packet> updates;
+
 	vector<GameObject*> & changed = physics->getChangedObjects();
 	for (GameObject* object : changed) {
 		object->serialize(p);
@@ -192,4 +207,16 @@ void GameServer::generateResources(int num) {
       //randomize resource model?? (maybe we should separate blob model from resource model)
       //randomize other coords
    }
+}
+
+void GameServer::updatePlayerTimers() {
+   for (auto it = gameState->getPlayers().begin(); it != gameState->getPlayers().end(); ++it)
+   {
+      Player * p = *it;
+      p-> setTime(timer->getTimeText());
+   }
+}
+
+void GameServer::startGame() {
+   timer->start();
 }

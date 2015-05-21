@@ -17,6 +17,7 @@
 #include "utility/GameState.h"
 #include "utility/GameEngine.h"
 #include "utility/Resources.h"
+#include "utility/Timer.h"
 
 using std::to_string;
 using std::this_thread::sleep_for;
@@ -52,6 +53,8 @@ private:
     void acceptWaitingClient();
     void printUpdates(deque<Packet> & updates);
     void generateResources(int num);
+    void updatePlayerTimers();
+    void startGame();
     inline bool shouldTerminate(SocketError err);
     
 	unsigned int maxConnections;
@@ -62,6 +65,7 @@ private:
 	GameState* gameState;
     TCPListener* listener;
     PacketHandler* handler;
+    Timer * timer;
 	unordered_map<TCPConnection*, ObjectId>* clients;
 
 };

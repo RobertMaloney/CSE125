@@ -6,13 +6,19 @@
 
 class Timer {
 private:
-   static clock_t startTime;
+   clock_t startTime;
+   int maxSeconds;
 
 public:
-   static void start();
-   static void reset();
-   static double getTimeInSeconds();
-   static std::string getTimeText();
+   Timer();
+
+   void start();
+   void reset();
+   void setStop(int seconds);
+   bool atMax();
+   double getTimeInSeconds();
+   std::string getTimeText();
+   static Timer & getInstance();
 };
 
 #endif

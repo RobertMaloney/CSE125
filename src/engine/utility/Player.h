@@ -17,6 +17,7 @@ protected:
 
    int score;
    int percent;
+   string time;
 
 public:
 
@@ -40,6 +41,9 @@ public:
 
 	int getPercent();
 	void setPercent(int p);
+
+   string getTime();
+   void setTime(string t);
 
 	virtual void move(float dt) override;
 	virtual void collide(float dt, GameObject & target) override;

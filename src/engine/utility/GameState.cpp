@@ -150,7 +150,7 @@ void GameState::updateGameState() {
 	GameObject* obj = nullptr;
 
 	//Note: Loop through all packets(gameobjects for now), identify which object it relates to or if it is a new object
-	for (auto packet = updates.begin(); packet != updates.end(); ++packet) {
+   for (auto packet = updates.begin(); packet != updates.end(); ++packet) {
 		if (packet->size() <= 0) {
 			continue;
 		}
@@ -179,6 +179,14 @@ void GameState::updateGameState() {
 			//Update the object in game state
 			obj->deserialize(*packet);//For now it only updates obj (pos) in game state
 		}
+
+
+      // TODO: Add method to deal with players and scores
+      if (objId == gameclient->playerid)
+      {
+         Player * curPlayer = (Player*)obj;
+         std::cout << curPlayer->getTime() << endl;
+      }
 
 		//Update the object in node (in GraphicsEngine)
 		GraphicsEngine::updateObject(obj->getId(), obj->getOrientation(), obj->getAngle(), obj->getHeight());

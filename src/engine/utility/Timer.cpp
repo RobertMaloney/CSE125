@@ -1,13 +1,17 @@
 #include "Timer.h"
 
-clock_t Timer::startTime;
+Timer::Timer()
+{
+   this->startTime = clock();
+   this->maxSeconds = 180;
+}
 
 void Timer::start() {
-   startTime = clock();
+   this->startTime = clock();
 }
 
 void Timer::reset() {
-   startTime = clock();
+   this->startTime = clock();
 }
 
 double Timer::getTimeInSeconds() {
@@ -15,16 +19,25 @@ double Timer::getTimeInSeconds() {
    clock_t clockTicksTaken = endTime - startTime;
    double timeInSeconds = clockTicksTaken / (double)CLOCKS_PER_SEC;
 
-   return timeInSeconds;
+   return timeInSeconds >= maxSeconds ? maxSeconds : timeInSeconds;
 }
 
 std::string Timer::getTimeText() {
    double timeInSeconds = getTimeInSeconds();
    int minutes = (int) timeInSeconds / 60;
    int seconds = (int) timeInSeconds % 60;
-   int fraction = (int)(timeInSeconds * 100) % 100;
 
    char buffer[50];
-   sprintf(buffer, "%01.0f:%02.0f:%02.2f", minutes, seconds, fraction);
+   sprintf(buffer, "%01d:%02d", minutes, seconds);
    return buffer;
+}
+
+Timer & Timer::getInstance(){
+   static Timer timer;
+   return timer;
+}
+
+bool Timer::atMax()
+{
+   return getTimeInSeconds() == maxSeconds;
 }

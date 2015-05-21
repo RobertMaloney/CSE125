@@ -49,6 +49,13 @@ void Player::setMoving(int index, bool b) {
 	moves[index] = b;
 }
 
+string Player::getTime() {
+   return this->time;
+}
+
+void Player::setTime(string t) {
+   this->time = t;
+}
 
 void Player::move(float dt) {
 	if (moves[UP]) {
@@ -114,6 +121,7 @@ void Player::serialize(Packet & p) {
 
 	p.writeFloat(this->score);
 	p.writeFloat(this->percent);
+   p.writeString(this->time);
 	//TODO: moves???
 }
 
@@ -122,4 +130,5 @@ void Player::deserialize(Packet & p) {
 	GameObject::deserialize(p);
 	this->score = p.readFloat();
 	this->percent = p.readFloat();
+   this->time = p.readString();
 }
