@@ -15,12 +15,37 @@ Player::Player(Model thebm, float radius, float theta, float azimuth, float dire
 	this->modelRadius = 7.f;
 	this->setMass(10.f);
 	this->height = 550.f;
+	this->modelRadius = 5.f;
+	this->status = PENDING;
 }
 
 Player::~Player() {
 
 }
 
+int Player::getScore(){
+	return this->score;
+}
+
+void Player::setScore(int s){
+	this->score = s;
+}
+
+int Player::getPercent(){
+	return this->percent;
+}
+
+void Player::setPercent(int p){
+	this->percent = p;
+}
+
+GStatus Player::getStatus(){
+	return this->status;
+}
+
+void Player::setStatus(GStatus s){
+	this->status = s;
+}
 
 bool Player::getMoving(int index) {
 	return moves[index];
@@ -79,58 +104,47 @@ bool Player::getJumping() {
 }
 
 void Player::collide(float dt, GameObject & target) {
-	if (target.getType() == PLAYER) {
-	/*	Player & other = dynamic_cast<Player&>(target);
-		vec3 p1 = this->orientation * vec3(0.f, 0.f, 505.f);
-		vec3 p2 = other.orientation * vec3(0.f, 0.f, 505.f);
-
-		vec3 v1 = this->velocity;
-		vec3 v2 = other.velocity;
-		float m1 = this->getMass();
-		float m2 = other.getMass();
-
-		float im1 = this->getInverseMass();
-		float im2 = other.getInverseMass();
-
-		float totalMass = m1 + m2;
-		
-		vec3 normal = p1 - p2;
-		vec3 unitNormal = glm::normalize(normal);
-		unitNormal.z = 0.f;
-		float seperatingVelocity = glm::dot(v1 - v2, unitNormal);
-
-		float p1weight = (totalMass - m1) / totalMass;
-		float p2weight = (totalMass - m2) / totalMass;
-
-		float deltaVelocity = (-seperatingVelocity * 1.f) - seperatingVelocity;
-		vec3 impulse = unitNormal * (deltaVelocity / (im1 + im2));
-		
-		this->velocity += impulse * im1; 
-		other.velocity -= impulse * im2;
-		
-		
-		if (glm::length(normal) < this->getModelRadius() + other.getModelRadius()) {
-			float pen = this->getModelRadius() + other.getModelRadius() - glm::length(normal);
-			this->orientation *= glm::angleAxis(glm::radians(p1weight*pen), unitNormal/*-glm::normalize(v1));
-		//	other.orientation *= glm::angleAxis(glm::radians(p2weight*pen), unitNormal/*-glm::normalize(v2));
-	//	}*/
-	/*	vec3 p1mp2 = p1 - p2;
-		vec3 unormal12 = p1mp2/ (glm::length(p1mp2));
-		vec3 unormal21 = -p1mp2 / (glm::length(-p1mp2));
-
-		float component12 = glm::dot(v1, p1mp2) / glm::length(p1mp2);
-		float component21 = glm::dot(v2, -p1mp2) / glm::length(-p1mp2);
-
-		vec3 u12 = component12 * unormal12;
-		vec3 u21 = component21 * unormal21;
-		vec3 t12 = v1 - u12;
-		vec3 t21 = v2 - u21;
-
-		vec3 v12 = (u12 * (m1 - m2) + 2 * m2 * u21) / (m1 + m2);
-		vec3 v21 = (u21 * (m2 - m1) + 2 * m1 * u12) / (m1 + m2);
-		
-		this->velocity = v12 + t12;
-		other.velocity = v21 + t21;*/
+	switch (target.getType()) {
+		case PLAYER:
+			this->velocity *= -1;
+			break;
+		case GAMEOBJECT:
+			this->velocity *= -1;
+			break;
+		case IEATABLE:
+			if (target.getVisible()){
+				std::cout << "EAT " << endl;
+				IEatable* eatable = dynamic_cast<IEatable*>(&target);
+				if (eatable){
+					this->setScore(this->getScore() + eatable->getPoints());
+					std::cout << this->getId() << " new score: " << this->getScore() << endl;
+				}
+				else{
+					std::cout << "Error: EATABLE is null: " << typeid(target).name() << endl;
+				}
+				target.setVisible(false);
+				//TODO Render needs to figure out (not) rendering dead/invisible object
+						
+			}
+			break;
 	}
+	
+}
 
+void Player::serialize(Packet & p) {
+
+	GameObject::serialize(p);
+
+	p.writeInt(this->score);
+	p.writeInt(this->percent);
+	p.writeInt(this->status);
+	//TODO: moves??? no. just no.
+}
+
+
+void Player::deserialize(Packet & p) {
+	GameObject::deserialize(p);
+	this->score = p.readInt();
+	this->percent = p.readInt();
+	this->status = static_cast<GStatus>(p.readInt());
 }

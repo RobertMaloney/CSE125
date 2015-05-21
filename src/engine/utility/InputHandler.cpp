@@ -1,4 +1,6 @@
 #include "InputHandler.h"
+#include "..\graphics\GraphicsEngine.h"
+
 
 vector<Packet> InputHandler::input;
 
@@ -60,6 +62,21 @@ void InputHandler::handleKey(int key, int action, int mods) {
 	else if (key == GLFW_KEY_E && action == GLFW_PRESS) {
 		GraphicsEngine::ScaleDown();
 	}
+	//ENTER
+	else if (key == GLFW_KEY_ENTER) {
+		if (action == GLFW_PRESS) {
+			cout << "client confirm" << endl;
+			p.writeByte(EventType::CONFIRM);
+			input.push_back(p);
+		}
+	}
+}
 
-
+void InputHandler::handleMouse(float x, float y)
+{
+	Packet p;
+	p.writeByte(EventType::LOOK);
+	p.writeFloat(x);
+	p.writeFloat(y);
+	input.push_back(p);
 }

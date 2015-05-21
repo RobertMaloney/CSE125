@@ -2,8 +2,6 @@
 
 #include "GraphicsEngine.h"
 
-#include "..\utility\InputHandler.h"
-
 //#include "..\utility\ObjectDB.h"
 #include "..\graphics\Cube.h"
 #include "..\graphics\Geometry.h"
@@ -50,11 +48,21 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 }
 
 /**
+* Description: This function handles the cursor position
+*/
+const float lookScale = 0.3f;
+static void cursor_callback(GLFWwindow* window, double x, double y) {
+	std::cout << "(x,y): (" << x << ", " << y << ")\n";
+	InputHandler::handleMouse(-x * lookScale, y * lookScale);
+	glfwSetCursorPos(window, 0, 0);
+}
+
+/**
 * GraphicsEngine::Initialize()
 * Description: This function initializes the graphics pipeline, compiles the
 * shaders, creates the window, and sets up the view and projection matrices
 */
-void GraphicsEngine::Initialize(ObjectId playerId) {
+void GraphicsEngine::Initialize() {
 	if (!glfwInit())
 		return;
 
@@ -75,6 +83,11 @@ void GraphicsEngine::Initialize(ObjectId playerId) {
 	glfwSetKeyCallback(m_window, key_callback);
 	glfwMakeContextCurrent(m_window);
 	glfwSwapInterval(1);
+
+	// mouse handling
+	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetCursorPosCallback(m_window, cursor_callback);
+	glfwSetCursorPos(m_window, 0, 0);
 
 	glewExperimental = GL_TRUE;
 	glewInit();
@@ -212,6 +225,13 @@ void GraphicsEngine::DrawAndPoll() {
 	glfwPollEvents();
 }
 
+
+void GraphicsEngine::DrawAndPollMenu()
+{
+	glfwPollEvents();
+}
+
+
 /**
 * GraphicsEngine::renderScene(Node*, glm::mat4*)
 * Description: This function renders the scene graph using depth traversal.
@@ -225,7 +245,7 @@ void GraphicsEngine::renderScene(Node* node, glm::mat4* matrix) {
 		//cout << glm::to_string(*matrix) << endl << endl;
 		geode->getRenderable()->render(matrix);
 	}
-	else if (mnode) {
+	else if (mnode && mnode->getVisible()) {
 		int numChildren = mnode->getNumChildren();
 		glm::mat4 newmat = *matrix;
 		mnode->postMult(newmat);
@@ -278,7 +298,7 @@ void GraphicsEngine::ScaleDown()
 
 void GraphicsEngine::bindPlayerNode(GameObject* player) {
    Renderable * model = GraphicsEngine::selectModel(player->getModel());
-   m_player = GraphicsEngine::addNode(model);
+   m_player = GraphicsEngine::addNode(model, true);
    m_player->addChild(m_mainCamera);
    m_player->addChild(m_minimapCamera);
 
@@ -287,15 +307,20 @@ void GraphicsEngine::bindPlayerNode(GameObject* player) {
 
 
 //Add node into scene graph using a model
-MatrixNode* GraphicsEngine::addNode(Renderable* objModel){
+MatrixNode* GraphicsEngine::addNode(Renderable* objModel, bool f){
 	//Renderable* objModel = new Geometry(modelPath);// "../../media/pb.obj");
 	Geode* objGeode = new Geode();
 	objGeode->setRenderable(objModel);
 	MatrixNode * m_node = new MatrixNode();
 	m_node->addChild(objGeode);
 	m_scene->addChild(m_node);
+	m_node->setVisible(f);
 	return m_node;
 }
+
+/*void GraphicsEngine::removeNode(MatrixNode * node) {
+   node->
+}*/
 
 // Select blob model based on playerId, will be changed later
 Renderable * GraphicsEngine::selectModel(Model model){
@@ -307,8 +332,9 @@ Renderable * GraphicsEngine::selectModel(Model model){
 }
 
 // Translate from vec4 postion to matrix in the node of scene graph??
-void GraphicsEngine::updateObject(ObjectId objId, glm::quat & q, float angle, float height) {
+void GraphicsEngine::updateObject(ObjectId objId, glm::quat & q, float angle, float height, bool f) {
 	objNodeMap[objId]->getMatrix() = MatrixNode::quatAngle(q, angle, height);
+	objNodeMap[objId]->setVisible(f);
 }
 
 //A mapping from ObjectId to node in scene graph
@@ -321,4 +347,9 @@ void GraphicsEngine::insertObject(ObjectId objId, MatrixNode* n) {
 	else{
 		//TODO exception duplicate node
 	}
+}
+
+//A mapping from ObjectId to node in scene graph
+void GraphicsEngine::removeObject(ObjectId objId) {
+  objNodeMap.erase(objId);
 }

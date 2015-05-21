@@ -16,6 +16,8 @@
 
 #include <vector>
 #include <deque>
+#include <unordered_map>
+
 #include "MatrixNode.h"
 #include "Geode.h"
 #include "CameraNode.h"
@@ -24,7 +26,9 @@
 
 #include "..\network\Packet.h"
 #include "..\utility\GameObject.h"
-#include "..\utility\GameState.h"
+//#include "..\utility\GameState.h"
+#include "..\utility\InputHandler.h"
+
 
 typedef unsigned int ObjectId;
 
@@ -34,10 +38,11 @@ typedef void (*KeyCallback) (int,int,int);
 
 class GraphicsEngine {
 public:
-	static void Initialize(ObjectId playerId);
+	static void Initialize();
 	static bool Closing();
 	static void CloseGame();
 	static void DrawAndPoll();
+	static void DrawAndPollMenu();
 	static void Destroy();
 	static void SetKeyCallback(KeyCallback);
 	static void MoveUp();
@@ -47,14 +52,15 @@ public:
 	static void ScaleUp();
 	static void ScaleDown();
 	static KeyCallback GetKeyCallback();
-	static void UpdatePlayer(deque<Packet> &, GameState &);
+	//static void UpdatePlayer(deque<Packet> &, GameState &);
    static int getKeyState(int);
 
    static void bindPlayerNode(GameObject* player);
-	static void updateObject(ObjectId objId, glm::quat &, float, float);
+	static void updateObject(ObjectId objId, glm::quat &, float, float, bool);
 	static void insertObject(ObjectId objId, MatrixNode*);
+   static void removeObject(ObjectId objId);
 
-	static MatrixNode* addNode(Renderable*);
+	static MatrixNode* addNode(Renderable*, bool);
    static Renderable* selectModel(Model model);
 
 private:

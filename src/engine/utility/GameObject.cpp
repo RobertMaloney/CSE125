@@ -9,6 +9,7 @@ GameObject::GameObject(float radius, float theta, float azimuth, float direction
 	this->angle = direction;
 	this->height = radius;
 	this->orientation = glm::quat(glm::vec3(theta, azimuth, 0.f));
+	this->visible = true;
 }
 
 GameObject::~GameObject() {
@@ -25,7 +26,9 @@ void GameObject::serialize(Packet & p) {
 	}
 	p.writeFloat(this->angle);
 	p.writeFloat(this->height);
-   p.writeInt(static_cast<int>(this->rm));
+	//p.writeFloat(this->score);
+	p.writeByte(this->visible);
+    p.writeInt(static_cast<int>(this->rm));
 }
 
 
@@ -37,11 +40,17 @@ void GameObject::deserialize(Packet & p) {
 	}
 	this->angle = p.readFloat();
 	this->height = p.readFloat();
-   this->rm = static_cast<Model>(p.readInt());
+	//this->score = p.readFloat();
+	this->visible = p.readBool();
+    this->rm = static_cast<Model>(p.readInt());
 }
 
 quat & GameObject::getOrientation() {
 	return orientation;
+}
+
+void GameObject::moveAngle(float delta) {
+	angle += delta;
 }
 
 float GameObject::getAngle() {
@@ -71,18 +80,22 @@ Model GameObject::getModel() {
    return rm;
 }
 
+bool GameObject::getVisible(){
+	return this->visible;
+}
+
+void GameObject::setVisible(bool v){
+	this->visible = v;
+}
 
 float GameObject::getModelRadius() {
 	return this->modelRadius;
 }
 
-
 void GameObject::setModelRadius(float radius) {
 	assert(radius > 0);
 	this->modelRadius = radius;
 }
-
-
 
 ObjectType GameObject::getType() const {
 	return this->type;

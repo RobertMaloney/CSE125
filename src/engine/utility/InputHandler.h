@@ -2,9 +2,8 @@
 #define INPUT_HANDLER_H
 
 #include <deque>
-#include "../network/Packet.h"
+#include "..\network\Packet.h"
 #include "..\utility\Event.h"
-#include "..\graphics\GraphicsEngine.h"
 
 using std::deque;
 
@@ -14,7 +13,7 @@ public:
 	
    static vector<Packet> input;
    static void handleKey(int key, int action, int mods);
-
+   static void handleMouse(float x, float y);
 
 private:
 

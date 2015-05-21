@@ -21,7 +21,7 @@ using std::deque;
 using std::function;
 using std::unordered_map;
 
-typedef function <void(ObjectId)> EventHandler;
+typedef function <void(ObjectId, Packet&)> EventHandler;
 
 class PacketHandler {
 

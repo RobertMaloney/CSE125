@@ -33,6 +33,17 @@ void PhysicsEngine::registerInteraction(MoveableObject* object, unsigned int fla
 	assert(object);
 	Interaction i;
 	i.receiver = object;
+	
+	// check to see if this object is being watched by the engine. if not add it to list of moveable objects
+	auto contains = find_if(moveables.begin(), moveables.end(), 
+		[&] (MoveableObject* obj) -> bool { 
+			return obj == object; 
+	});
+
+	if (contains == moveables.end()) {
+		moveables.push_back(object); 
+	}
+
 	if (flags & GRAVITY) {
 		i.generator = forces.find(GRAVITY)->second;
 		interactions.push_back(i);
@@ -49,11 +60,12 @@ void PhysicsEngine::resolveCollisions(float dt) {
 
 	// lLoop over all pairs of objects. check if they are colliding, if they are call there collision 
 	// methods
-	for (auto it = interactions.begin(); it != interactions.end(); ++it) {
+	//set<pair<MoveableObject*, GameObject*>> collisions;
+	for (auto it = moveables.begin(); it != moveables.end(); ++it) {
 		for (auto jt = objectDb->objects.begin(); jt != objectDb->objects.end(); ++jt) {
 			
-			if (jt->second != it->receiver && this->checkCollision(it->receiver, jt->second)) {
-				it->receiver->collide(dt, *jt->second);
+			if (jt->second != *it && this->checkCollision(*it, jt->second)) {
+				(*it)->collide(dt, *jt->second);
 				if (jt->second->getType() != MOVEABLE) {
 					changed.push_back(jt->second);
 				}

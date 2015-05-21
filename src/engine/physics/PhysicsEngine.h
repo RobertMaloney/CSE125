@@ -10,10 +10,13 @@
 
 #include <algorithm>
 #include <vector>
+#include <set>
 #include <glm.hpp>
 #include <gtc\type_ptr.hpp>
 #include <gtx\quaternion.hpp>
 
+using std::set;
+using std::pair;
 using std::make_pair;
 using glm::pow;
 using glm::sqrt;
@@ -58,6 +61,7 @@ private:
 
 	ObjectDB* objectDb;
 	vector<GameObject*> changed;
+	vector<MoveableObject*> moveables;
 	vector<Interaction> interactions;
 	unordered_map<unsigned int, ForceGenerator*> forces;
 

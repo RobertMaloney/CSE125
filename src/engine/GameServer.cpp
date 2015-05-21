@@ -7,6 +7,7 @@ GameServer::GameServer() {
 	this->idGen = &IdGenerator::getInstance();
 	this->gameState = &GameState::getInstance();
 	this->physics = new PhysicsEngine();
+	this->engine = new GameEngine();
 }
 
 
@@ -34,8 +35,9 @@ void GameServer::initialize(int maxConns) {
 	this->listener->listen(maxConns);
 	this->listener->setNonBlocking(true);
 	maxConnections = maxConns;
-   gameState->init();
- // generateResources(5000);
+
+	gameState->initWithServer();
+	generateResources(500);
 }
 
 
@@ -53,6 +55,9 @@ void GameServer::run() {
 
 		physics->update(PHYSICS_DT);      // do a physics step
 
+		engine->calculatePercent();
+
+		//std::cout << " physics : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
 		this->tick();                       // send state back to client
 
 		//calculates the ms from start until here.
@@ -149,31 +154,44 @@ void GameServer::printUpdates(deque<Packet> & updates) {
 }
 
 void GameServer::generateResources(int num) {
+   int total = 0;
    for (int i = 0; i < num; i++)
    {
       float radius = 505;
       float theta = (float)(rand() % 180);
       float azimuth = (float)(rand() % 360);
       float direction = (float)(rand() % 360);
-      Model model = TREE;
+      Resource * newRe;
 
-      int pick = rand() % 6;
-      if (pick == 1)
-         model = ROCK;
-      else if (pick == 2)
-         model = STUMP;
-      else if (pick == 3)
-         model = GRASS;
-      else if (pick == 4)
-         model = MUSHROOM;
-      else if (pick == 5)
-         model = FLOWER;
+      int pick = rand() % 5;
 
-      Resource * newRe = new Resource(model, 5, radius, theta, azimuth, direction);
+
+	  //Scores are placeholder, need to handle them differently...
+	  if (pick == 0){
+		  newRe = new Tree(30, radius, theta, azimuth, direction);
+		  total = total + 30;
+	  }
+	  else if (pick == 1)
+         newRe = new Rock(radius, theta, azimuth, direction);
+	  else if (pick == 2){
+		  newRe = new Stump(10, radius, theta, azimuth, direction);
+		  total = total + 10;
+	  }
+	  else if (pick == 3){
+		  newRe = new Mushroom(25, radius, theta, azimuth, direction);
+		  total = total + 25;
+	  }
+	  else if (pick == 4){
+		  newRe = new Flower(40, radius, theta, azimuth, direction);
+		  total = total + 40;
+	  }
+
       ObjectId resourceId = IdGenerator::getInstance().createId();
       gameState->addResource(resourceId, newRe);
+
       //radius is always 505
       //randomize resource model?? (maybe we should separate blob model from resource model)
       //randomize other coords
    }
+   gameState->setTotal(total);
 }

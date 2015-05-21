@@ -46,6 +46,7 @@ private:
 	unordered_map<ObjectId, GameObject*> objects;
 
 	friend class PhysicsEngine;
+   friend class GameState; //lol
 };
 
 
