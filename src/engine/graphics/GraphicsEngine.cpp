@@ -238,7 +238,6 @@ void GraphicsEngine::DrawAndPoll() {
 	//view = m_minimapCamera->getFlatViewMatrix();
 	
 	// minimap
-	ZoomIn(m_minimapCamera);
 	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "view"), 1, GL_FALSE, glm::value_ptr(m_minimapCamera->getFlatViewMatrix()));
 	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "projection"), 1, GL_FALSE, glm::value_ptr(m_projection));
 

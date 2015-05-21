@@ -124,7 +124,7 @@ public:
 		if (m_valid) {
 			glBindVertexArray(m_vao);
 			if (m_texId != 0) {
-				glBindTexture(GL_TEXTURE_CUBE_MAP, m_texId);
+				glBindTexture(GL_TEXTURE_2D, m_texId);
 			}
 			glUniformMatrix4fv(m_model, 1, GL_FALSE, glm::value_ptr(*matrix));
 			switch (m_renderMode) {
