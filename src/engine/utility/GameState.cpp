@@ -159,6 +159,9 @@ void GameState::updateGameState() {
 		packet->reset();
 		obj = this->getObject(objId);
 
+      Player * curPlayer = (Player *) getObject(gameclient->playerid);
+      string curTime = curPlayer->getTime();
+
 		//If this game object is new 
 		if (!obj) {
 			obj = new GameObject();
@@ -184,8 +187,11 @@ void GameState::updateGameState() {
       // TODO: Add method to deal with players and scores
       if (objId == gameclient->playerid)
       {
-         Player * curPlayer = (Player*)obj;
-         std::cout << curPlayer->getTime() << endl;
+         curPlayer = (Player*)obj;
+         string time = curPlayer->getTime();
+         // Only print if time has changed
+         if (curTime.compare(time) != 0 )
+            std::cout << curPlayer->getTime() << endl;
       }
 
 		//Update the object in node (in GraphicsEngine)
