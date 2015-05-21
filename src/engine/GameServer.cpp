@@ -37,7 +37,7 @@ void GameServer::initialize(int maxConns) {
 	maxConnections = maxConns;
 
 	gameState->initWithServer();
-	generateResources(500);
+	generateResources(5);
 }
 
 
@@ -56,6 +56,8 @@ void GameServer::run() {
 
 		//std::cout << " process : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
 		physics->update(TIME_PER_FRAME);      // do a physics step
+
+		engine->calculatePercent();
 
 		//std::cout << " physics : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
 		this->tick();                       // send state back to client
@@ -154,6 +156,7 @@ void GameServer::printUpdates(deque<Packet> & updates) {
 }
 
 void GameServer::generateResources(int num) {
+   int total = 0;
    for (int i = 0; i < num; i++)
    {
       float radius = 505;
@@ -162,8 +165,8 @@ void GameServer::generateResources(int num) {
       float direction = (float)(rand() % 360);
       Resource * newRe;
 
-      int pick = rand() % 5;
-	  int total = 0;
+      int pick = rand() % 6;
+
 
 	  //Scores are placeholder, need to handle them differently...
 	  if (pick == 0){
@@ -187,9 +190,10 @@ void GameServer::generateResources(int num) {
 
       ObjectId resourceId = IdGenerator::getInstance().createId();
       gameState->addResource(resourceId, newRe);
-	  gameState->setTotal(total);
+
       //radius is always 505
       //randomize resource model?? (maybe we should separate blob model from resource model)
       //randomize other coords
    }
+   gameState->setTotal(total);
 }
