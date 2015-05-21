@@ -13,7 +13,7 @@ Player::Player(Model thebm, float radius, float theta, float azimuth, float dire
 	this->type = PLAYER;
 	this->isJumping = false;
 	this->modelRadius = 7.f;
-	this->setMass(3.f);
+	this->setMass(10.f);
 	this->height = 550.f;
 }
 
@@ -59,7 +59,7 @@ void Player::integrate(float dt) {
 	}
 
 	if (moves[JUMP] && !this->isJumping) {
-		this->verticalComponent.force = 10000.f * (log(this->getMass() == 0) ? 1 : log(this->getMass()));
+		this->verticalComponent.force = 80000.f * (log(this->getMass() == 0) ? 1 : log(this->getMass()));
 		this->isJumping = true;
 		std::cout << "is jumping " << std::endl;
 	}

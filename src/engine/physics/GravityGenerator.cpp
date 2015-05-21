@@ -2,7 +2,7 @@
 
 
 GravityGenerator::GravityGenerator() {
-	gravity = -50.f;
+	gravity = -80.f;
 }
 
 
@@ -16,7 +16,6 @@ void GravityGenerator::updateForce(MoveableObject* target, float dt) {
 	if (verticalComponent.height < 505.f) {
 		verticalComponent.height = 505.f;
 		verticalComponent.velocity *= -.5f;
-		verticalComponent.acceleration = 0.f;
 		verticalComponent.force = 0.f;
 		if (target->getType() == PLAYER) {
 			Player* p = dynamic_cast<Player*>(target);

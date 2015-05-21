@@ -11,7 +11,6 @@ using glm::vec3;
 typedef struct VerticalMovement {
 	float height;
 	float velocity;
-	float acceleration;
 	float force;
 }VerticalMovement;
 
