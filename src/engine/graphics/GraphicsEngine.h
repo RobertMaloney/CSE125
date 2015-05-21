@@ -56,11 +56,11 @@ public:
    static int getKeyState(int);
 
    static void bindPlayerNode(GameObject* player);
-	static void updateObject(ObjectId objId, glm::quat &, float, float);
+	static void updateObject(ObjectId objId, glm::quat &, float, float, bool);
 	static void insertObject(ObjectId objId, MatrixNode*);
    static void removeObject(ObjectId objId);
 
-	static MatrixNode* addNode(Renderable*);
+	static MatrixNode* addNode(Renderable*, bool);
    static Renderable* selectModel(Model model);
 
 private:

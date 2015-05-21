@@ -13,6 +13,7 @@ class MatrixNode : public Node {
 private:
 	glm::mat4 m_matrix;
 	std::vector<Node*> m_children;
+	bool visible;
 
 public:
 	MatrixNode() {
@@ -52,6 +53,13 @@ public:
 	void addChild(Node* child) {
 		m_children.push_back(child);
 			child->setParent(this);
+	}
+
+	bool getVisible(){
+		return visible;
+	}
+	void setVisible(bool f){
+		visible = f;
 	}
 
 	static glm::mat4 quatAngle(glm::quat & q, float angle, float height) {
