@@ -6,19 +6,15 @@
 Player::Player(Model thebm, float radius, float theta, float azimuth, float direction) : MoveableObject() {
 	//this->loc = vec4(radius, theta, azimuth, direction);
    this->rm = thebm;
-   this->moves[0] = false;
-   this->moves[1] = false;
-   this->moves[2] = false;
-   this->moves[3] = false;
 
-	for (int i = 0; i < 4; ++i)
+	for (int i = 0; i < 5; ++i)
 		this->moves[i] = false;
 
 	this->type = PLAYER;
-	//this->velocity = 0;
+	this->isJumping = false;
 	this->modelRadius = 7.f;
-	this->setMass(10.f);
-
+	this->setMass(3.f);
+	this->height = 550.f;
 }
 
 Player::~Player() {
@@ -51,7 +47,7 @@ void Player::integrate(float dt) {
 	float sina = glm::sin(glm::radians(angle));
 	
 
-	float forceConst = 100.f * log(this->getMass());
+	float forceConst = 50.f * (log(this->getMass() == 0) ? 1 : log(this->getMass()));
 
 	if (moves[UP]) {
 		this->addForce(cosa * forceConst, sina * forceConst, 0.f);
@@ -62,15 +58,29 @@ void Player::integrate(float dt) {
 		this->addForce(cosa * -forceConst, sina * -forceConst, 0.f);
 	}
 
+	if (moves[JUMP] && !this->isJumping) {
+		this->verticalComponent.force = 10000.f * (log(this->getMass() == 0) ? 1 : log(this->getMass()));
+		this->isJumping = true;
+		std::cout << "is jumping " << std::endl;
+	}
+
 
 	MoveableObject::integrate(dt);
 
 }
 
 
+void Player::setJumping(bool b) {
+	this->isJumping = b;
+}
+
+bool Player::getJumping() {
+	return this->isJumping;
+}
+
 void Player::collide(float dt, GameObject & target) {
 	if (target.getType() == PLAYER) {
-		Player & other = dynamic_cast<Player&>(target);
+	/*	Player & other = dynamic_cast<Player&>(target);
 		vec3 p1 = this->orientation * vec3(0.f, 0.f, 505.f);
 		vec3 p2 = other.orientation * vec3(0.f, 0.f, 505.f);
 
@@ -101,9 +111,9 @@ void Player::collide(float dt, GameObject & target) {
 		
 		if (glm::length(normal) < this->getModelRadius() + other.getModelRadius()) {
 			float pen = this->getModelRadius() + other.getModelRadius() - glm::length(normal);
-			this->orientation *= glm::angleAxis(glm::radians(p1weight*pen), unitNormal/*-glm::normalize(v1)*/);
-			other.orientation *= glm::angleAxis(glm::radians(p2weight*pen), unitNormal/*-glm::normalize(v2)*/);
-		}
+			this->orientation *= glm::angleAxis(glm::radians(p1weight*pen), unitNormal/*-glm::normalize(v1));
+		//	other.orientation *= glm::angleAxis(glm::radians(p2weight*pen), unitNormal/*-glm::normalize(v2));
+	//	}*/
 	/*	vec3 p1mp2 = p1 - p2;
 		vec3 unormal12 = p1mp2/ (glm::length(p1mp2));
 		vec3 unormal21 = -p1mp2 / (glm::length(-p1mp2));
@@ -124,8 +134,3 @@ void Player::collide(float dt, GameObject & target) {
 	}
 
 }
-/*
-vec3 movePerImass = unitNormal * (penetration / (im1 + im2));
-this->orientation *= glm::angleAxis(glm::radians(im1 * glm::length(movePerImass)), glm::normalize(this->velocity + movePerImass));
-other.orientation *= glm::angleAxis(glm::radians(im2 * -glm::length(movePerImass)), glm::normalize(other.velocity + movePerImass));
-*/

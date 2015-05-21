@@ -5,10 +5,10 @@
 }*/
 MoveableObject::MoveableObject() : GameObject(){
 	this->velocity = vec3(.00001f, .00001f, 0.f);
-	//this->damping = .98f;
 	this->setMass(10.f);
-	//this->friction = .62;
 	this->restitution = .99f;
+	memset((void*) &this->verticalComponent, 0, sizeof(VerticalMovement));
+	this->verticalComponent.height = 505.f;
 }
 
 
@@ -32,17 +32,7 @@ float MoveableObject::getInverseMass() {
 	return this->inverseMass;
 }
 
-/*
-void MoveableObject::setFriction(float value) {
-	this->friction = value;
-}
 
-
-float MoveableObject::getFriction() {
-	return this->friction;
-}
-
-*/
 void MoveableObject::addForce(vec3 force) {
 	this->forceAccum += force;
 }
@@ -86,6 +76,11 @@ float MoveableObject::getRestitution() {
 }
 
 
+VerticalMovement & MoveableObject::getVerticalComponent() {
+	return this->verticalComponent;
+}
+
+
 vec3 MoveableObject::rotateInXYPlane(vec3 original, float radians) {
 	original.x = original.x * glm::cos(glm::radians(radians)) - original.y * glm::sin(glm::radians(radians));
 	original.y = original.x * glm::sin(glm::radians(radians)) + original.y * glm::cos(glm::radians(radians));
@@ -95,12 +90,19 @@ vec3 MoveableObject::rotateInXYPlane(vec3 original, float radians) {
 
 void MoveableObject::integrate(float dt) {
 	vec3 newAcceleration(0.f,0.f,0.f);
+	
+	// use the x-y components to move along the sphere
 	vec3 direction = glm::normalize(velocity);
 	float magnitude = glm::radians(glm::length(this->velocity));
 
+	// update height. handled by gravity generator
+	this->height = verticalComponent.height;
+
+	// do movement along the sphere (position update)
 	glm::quat dq = this->orientation * glm::angleAxis(magnitude, direction);
 	this->orientation = glm::normalize(glm::mix(this->orientation, dq, dt));
 
+	// calculate the new acceleration based on forces applied in the previous frame
 	newAcceleration = this->forceAccum * this->inverseMass + this->acceleration;
 	this->forceAccum *= 0.f;
 	this->velocity += newAcceleration * dt;

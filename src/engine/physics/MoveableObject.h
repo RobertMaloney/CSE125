@@ -7,6 +7,15 @@
 
 using glm::vec3;
 
+
+typedef struct VerticalMovement {
+	float height;
+	float velocity;
+	float acceleration;
+	float force;
+}VerticalMovement;
+
+
 class MoveableObject : public GameObject {
 
 public:
@@ -18,9 +27,6 @@ public:
 	void setMass(float value);
 	float getMass();
 	float getInverseMass();
-
-	//void setFriction(float value);
-	//float getFriction();
 
 	void addForce(vec3 force);
 	void addForce(float x, float y, float z);
@@ -34,6 +40,8 @@ public:
 	void setRestitution(float rest);
 	float getRestitution();
 
+	VerticalMovement & getVerticalComponent();
+
 	vec3 rotateInXYPlane(vec3 original, float radians);
 
 	virtual void integrate(float dt);
@@ -41,11 +49,14 @@ public:
 
 protected:
 
+
 	float inverseMass;
 	float restitution;
 	vec3 forceAccum;
 	vec3 velocity;
 	vec3 acceleration;
+
+	VerticalMovement verticalComponent;
 
 };
 

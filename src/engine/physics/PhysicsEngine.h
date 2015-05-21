@@ -54,7 +54,7 @@ private:
 	void generateForces(float dt);
 	void integrateObjects(float dt);
 	void resolveCollisions(float dt);
-	inline bool checkCollision(float dt, MoveableObject* ob1, GameObject* ob2);
+	inline bool checkCollision(MoveableObject* ob1, GameObject* ob2);
 
 	ObjectDB* objectDb;
 	vector<GameObject*> changed;
@@ -65,7 +65,7 @@ private:
 
 
  // check for a collision
- inline bool PhysicsEngine::checkCollision(float dt, MoveableObject* ob1, GameObject* ob2) {
+ inline bool PhysicsEngine::checkCollision(MoveableObject* ob1, GameObject* ob2) {
 	 // if something is null bad things are happening so crash
 	 assert(ob1 && ob2);
 

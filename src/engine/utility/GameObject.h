@@ -52,7 +52,7 @@ public:
    quat & getOrientation();
    float getAngle();
    float getHeight();
-
+   void setHeight(float height);
 	float getModelRadius();
 	void setModelRadius(float radius);
 

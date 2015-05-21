@@ -17,6 +17,7 @@ PhysicsEngine::~PhysicsEngine() {
 
 
 void PhysicsEngine::update(float dt) {
+	changed.clear();
 	this->generateForces(dt);
 	this->integrateObjects(dt);
 	this->resolveCollisions(dt);
@@ -51,12 +52,11 @@ void PhysicsEngine::resolveCollisions(float dt) {
 	for (auto it = interactions.begin(); it != interactions.end(); ++it) {
 		for (auto jt = objectDb->objects.begin(); jt != objectDb->objects.end(); ++jt) {
 			
-			if (jt->second != it->receiver && this->checkCollision(dt, it->receiver, jt->second)) {
+			if (jt->second != it->receiver && this->checkCollision(it->receiver, jt->second)) {
 				it->receiver->collide(dt, *jt->second);
 				if (jt->second->getType() != MOVEABLE) {
 					changed.push_back(jt->second);
 				}
-				return;
 			}
 		}
 	}

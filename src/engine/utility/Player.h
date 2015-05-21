@@ -11,7 +11,8 @@ class Player : public MoveableObject {
 
 protected:
 
-	bool moves[4];
+	bool moves[5];
+	bool isJumping;
 
 public:
 
@@ -19,7 +20,8 @@ public:
 		UP = 0,
 		RIGHT,
 		DOWN,
-		LEFT
+		LEFT,
+		JUMP
 	};
 
    Player() : Player(OB_TYPE) {};
@@ -29,6 +31,8 @@ public:
 
 	bool getMoving(int);
 	void setMoving(int, bool);
+	void setJumping(bool b);
+	bool getJumping();
 
 	virtual void integrate(float dt) override;
 	virtual void collide(float dt, GameObject & target) override;

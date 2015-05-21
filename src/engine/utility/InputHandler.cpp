@@ -2,8 +2,7 @@
 
 vector<Packet> InputHandler::input;
 
-void InputHandler::handleKey(int key, int action, int mods)
-{
+void InputHandler::handleKey(int key, int action, int mods) {
 	Packet p;
 
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
@@ -13,42 +12,45 @@ void InputHandler::handleKey(int key, int action, int mods)
 			cout << "client move forward" << endl;
 			p.writeByte(EventType::MOVE_FORWARD);
 			input.push_back(p);
-		}
-		else if (action == GLFW_RELEASE) {
+		} else if (action == GLFW_RELEASE) {
 			p.writeByte(EventType::STOP_FORWARD);
 			input.push_back(p);
 		}
-	}
-	else if (key == GLFW_KEY_A) {
+	} else if (key == GLFW_KEY_A) {
 		if (action == GLFW_PRESS) {
 			cout << "client move left" << endl;
 			p.writeByte(EventType::MOVE_LEFT);
 			input.push_back(p);
-		}
-		else if (action == GLFW_RELEASE) {
+		} else if (action == GLFW_RELEASE) {
 			p.writeByte(EventType::STOP_LEFT);
 			input.push_back(p);
 		}
-	}
-	else if (key == GLFW_KEY_S) {
+	} else if (key == GLFW_KEY_S) {
 		if (action == GLFW_PRESS) {
 			cout << "client move backward" << endl;
 			p.writeByte(EventType::MOVE_BACKWARD);
 			input.push_back(p);
-		}
-		else if (action == GLFW_RELEASE) {
+		} else if (action == GLFW_RELEASE) {
 			p.writeByte(EventType::STOP_BACKWARD);
 			input.push_back(p);
 		}
-	}
-	else if (key == GLFW_KEY_D) {
+	} else if (key == GLFW_KEY_D) {
 		if (action == GLFW_PRESS) {
 			cout << "client move right" << endl;
 			p.writeByte(EventType::MOVE_RIGHT);
 			input.push_back(p);
-		}
-		else if (action == GLFW_RELEASE) {
+		} else if (action == GLFW_RELEASE) {
 			p.writeByte(EventType::STOP_RIGHT);
+			input.push_back(p);
+		}
+	} else if (key == GLFW_KEY_SPACE) {
+		if (action == GLFW_PRESS) {
+			cout << "jumping" << endl;
+			p.writeByte(EventType::JUMP);
+			input.push_back(p);
+		} else if (action == GLFW_RELEASE) {
+			cout << "stop jumping" << endl;
+			p.writeByte(EventType::STOP_JUMP);
 			input.push_back(p);
 		}
 	}
