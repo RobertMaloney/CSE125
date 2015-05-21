@@ -37,7 +37,7 @@ void GameServer::initialize(int maxConns) {
 	maxConnections = maxConns;
 
 	gameState->initWithServer();
-	generateResources(5);
+	generateResources(500);
 }
 
 
@@ -165,7 +165,7 @@ void GameServer::generateResources(int num) {
       float direction = (float)(rand() % 360);
       Resource * newRe;
 
-      int pick = rand() % 6;
+      int pick = rand() % 5;
 
 
 	  //Scores are placeholder, need to handle them differently...
