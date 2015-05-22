@@ -3,7 +3,7 @@
 #include <gtx\string_cast.hpp>
 
 //TODO Config file
-Player::Player(Model thebm, float radius, float theta, float azimuth, float direction) : MoveableObject() {
+Player::Player(Model thebm, float radius, float theta, float azimuth, float direction) : MoveableObject(radius, theta, azimuth, direction) {
 	//this->loc = vec4(radius, theta, azimuth, direction);
     this->rm = thebm;
 
