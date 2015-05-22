@@ -16,6 +16,7 @@ class IMenuState
 public:
 	IMenuState * changeTo;
 	GameClient * gameclient;
+	bool submit;
 
 	IMenuState() : changeTo(nullptr) {}
 

@@ -3,6 +3,7 @@
 
 MenuState::MenuState()
 {
+	submit = false;
 }
 
 
@@ -156,16 +157,19 @@ void MenuState::menuDown()
 
 void MenuState::menuEnter()
 {
-	//check menu_select state
-	switch (menu_select) {
-	case (PLAY) :
-		play();
-		break;
-	case (QUIT) :
-		quit();
-		break;
-	default:
-		break;
+	if (!submit){
+		//check menu_select state
+		switch (menu_select) {
+		case (PLAY) :
+			play();
+			break;
+		case (QUIT) :
+			quit();
+			break;
+		default:
+			break;
+		}
+		submit = true;
 	}
 }
 
