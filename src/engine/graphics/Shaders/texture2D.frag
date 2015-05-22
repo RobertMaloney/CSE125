@@ -1,6 +1,6 @@
 
 in vec3 Color;
-in vec3 TexCoord;
+in vec2 TexCoord;
 
 out vec4 outColor;
 
