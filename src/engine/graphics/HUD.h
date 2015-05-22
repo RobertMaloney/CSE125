@@ -15,6 +15,7 @@ class HUD {
 public:
 	static GLuint makeHUD(std::string file) {
 		GLuint cubeId;
+		//GLuint HUD_NAME = 1;
 		//const std::string extension = ".png";
 
 		glGenTextures(1, &cubeId);

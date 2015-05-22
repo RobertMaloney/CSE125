@@ -15,6 +15,7 @@ class Skybox {
 public:
 	static GLuint makeSkybox(std::string folder) {
 		GLuint cubeId;
+		//GLuint SKYBOX_NAME = 0;
 		const std::string extension = ".png";
 		
 		glGenTextures(1, &cubeId);
