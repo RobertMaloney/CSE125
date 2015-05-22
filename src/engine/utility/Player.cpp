@@ -3,15 +3,16 @@
 #include <gtx\string_cast.hpp>
 
 //TODO Config file
-Player::Player(Model thebm, float radius, float theta, float azimuth, float direction) : MoveableObject() {
+Player::Player(Model thebm, float radius, float theta, float azimuth, float direction) : MoveableObject(radius, theta, azimuth, direction) {
 	//this->loc = vec4(radius, theta, azimuth, direction);
-   this->rm = thebm;
+    this->rm = thebm;
 
 	for (int i = 0; i < 5; ++i)
 		this->moves[i] = false;
 
 	this->type = PLAYER;
 	this->isJumping = false;
+	this->score = 0;
 	this->modelRadius = 7.f;
 	this->setMass(10.f);
 	this->height = 550.f;
@@ -105,31 +106,33 @@ bool Player::getJumping() {
 }
 
 void Player::collide(float dt, GameObject & target) {
-	switch (target.getType()) {
+	if (target.getVisible()){
+		switch (target.getType()) {
 		case PLAYER:
 			this->velocity *= -1;
 			break;
 		case GAMEOBJECT:
-			std::cout << " type " << target.getType() << std::endl;
-			std::cout << " id " << target.getId() << std::endl;
+			//std::cout << " type " << target.getType() << std::endl;
+			//std::cout << " id " << target.getId() << std::endl;
 			this->velocity *= -1;
 			break;
 		case IEATABLE:
-			if (target.getVisible()){
-				std::cout << "EAT " << endl;
-				IEatable* eatable = dynamic_cast<IEatable*>(&target);
-				if (eatable){
-					this->setScore(this->getScore() + eatable->getPoints());
-					std::cout << this->getId() << " new score: " << this->getScore() << endl;
-				}
-				else{
-					std::cout << "Error: EATABLE is null: " << typeid(target).name() << endl;
-				}
-				target.setVisible(false);
-				//TODO Render needs to figure out (not) rendering dead/invisible object
-						
+			
+			std::cout << "EAT " << endl;
+			IEatable* eatable = dynamic_cast<IEatable*>(&target);
+			if (eatable){
+				std::cout << this->getId() << " old score: " << this->getScore() << endl;
+				this->setScore(this->getScore() + eatable->getPoints());
+				std::cout << this->getId() << " new score: " << this->getScore() << endl;
 			}
+			else{
+				std::cout << "Error: EATABLE is null: " << typeid(target).name() << endl;
+			}
+			target.setVisible(false);
+			//TODO Render needs to figure out (not) rendering dead/invisible object
 			break;
+		}
+			
 	}
 	
 }

@@ -1,15 +1,16 @@
 #ifndef MENU_STATE_H
 #define MENU_STATE_H
 
-#include "IGameState.h"
-//#include "..\GameClient.h"
+#include "IMenuState.h"
 #include "..\network\Packet.h"
 
 #define MENU_SELECTIONS_NUM 2
 
-class MenuState : public IGameState
+
+class MenuState : public IMenuState
 {
 public:
+
 	enum MenuSelections{
 		PLAY,
 		QUIT
@@ -20,7 +21,7 @@ public:
 	MenuState();
 	~MenuState();
 
-	void init();
+	void init(GameClient *);
 	void cleanup();
 
 	void handleEvents();
@@ -29,6 +30,7 @@ public:
 
 	void connectToServer();
 	void login();
+
 
 	void MenuState::updateMenuState();
 

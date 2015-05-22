@@ -3,7 +3,7 @@
 /*MoveableObject::MoveableObject(float acceleration, float damping) : GameObject(), velocity(0) {
 
 }*/
-MoveableObject::MoveableObject() : GameObject(){
+MoveableObject::MoveableObject(float radius, float theta, float azimuth, float direction) : GameObject(radius, theta, azimuth, direction){
 	this->velocity = vec3(.00001f, .00001f, 0.f);
 	this->setMass(10.f);
 	this->restitution = .99f;
