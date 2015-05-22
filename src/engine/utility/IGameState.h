@@ -23,7 +23,7 @@ public:
 
 	IGameState() : changeTo(nullptr) {}
 
-	virtual ~IGameState()		= 0;
+	virtual ~IGameState(){}
 
 	virtual void init()			= 0;
 	virtual void cleanup()		= 0;
@@ -38,6 +38,5 @@ public:
 };
 
 
-inline IGameState::~IGameState() {}
 
 #endif

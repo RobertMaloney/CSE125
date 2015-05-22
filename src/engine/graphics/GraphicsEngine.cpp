@@ -106,7 +106,7 @@ void GraphicsEngine::Initialize() {
 	// SKYBOX
 	m_skyboxShader->Use();
 	m_skybox = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.f);
-	m_skyboxId = Skybox::makeSkybox("../../media/");
+	m_skyboxId = Skybox::makeSkybox("../../media/texture/skybox/");
 	m_skybox->setTextureId(m_skyboxId);
 	
 	//
@@ -117,7 +117,7 @@ void GraphicsEngine::Initialize() {
 
 	// WORLD
 	m_defaultShader->Use();
-	Renderable* worldModel = new Geometry("../../media/sphere.obj");
+	Renderable* worldModel = new Geometry("../../media/models/sphere.obj");
 	Geode* worldGeode = new Geode();
 	worldGeode->setRenderable(worldModel);
 	m_scene->addChild(worldGeode);
@@ -283,7 +283,7 @@ void GraphicsEngine::renderScene(Node* node, glm::mat4* matrix) {
 		//cout << glm::to_string(*matrix) << endl << endl;
 		geode->getRenderable()->render(matrix);
 	}
-	else if (mnode) {
+	else if (mnode && mnode->getVisible()) {
 		int numChildren = mnode->getNumChildren();
 		glm::mat4 newmat = *matrix;
 		mnode->postMult(newmat);
@@ -336,7 +336,7 @@ void GraphicsEngine::ScaleDown()
 
 void GraphicsEngine::bindPlayerNode(GameObject* player) {
    Renderable * model = GraphicsEngine::selectModel(player->getModel());
-   m_player = GraphicsEngine::addNode(model);
+   m_player = GraphicsEngine::addNode(model, true);
    m_player->addChild(m_mainCamera);
    m_player->addChild(m_minimapCamera);
 
@@ -345,13 +345,14 @@ void GraphicsEngine::bindPlayerNode(GameObject* player) {
 
 
 //Add node into scene graph using a model
-MatrixNode* GraphicsEngine::addNode(Renderable* objModel){
+MatrixNode* GraphicsEngine::addNode(Renderable* objModel, bool f){
 	//Renderable* objModel = new Geometry(modelPath);// "../../media/pb.obj");
 	Geode* objGeode = new Geode();
 	objGeode->setRenderable(objModel);
 	MatrixNode * m_node = new MatrixNode();
 	m_node->addChild(objGeode);
 	m_scene->addChild(m_node);
+	m_node->setVisible(f);
 	return m_node;
 }
 
@@ -362,15 +363,16 @@ MatrixNode* GraphicsEngine::addNode(Renderable* objModel){
 // Select blob model based on playerId, will be changed later
 Renderable * GraphicsEngine::selectModel(Model model){
    Renderable* newModel;
-   std::string pathString = "../../media/" + ResourceMap::getObjFile(model);
+   std::string pathString = "../../media/models/" + ResourceMap::getObjFile(model);
    const char * path = pathString.c_str();
    newModel = new Geometry(path);
 	return newModel;
 }
 
 // Translate from vec4 postion to matrix in the node of scene graph??
-void GraphicsEngine::updateObject(ObjectId objId, glm::quat & q, float angle, float height) {
+void GraphicsEngine::updateObject(ObjectId objId, glm::quat & q, float angle, float height, bool f) {
 	objNodeMap[objId]->getMatrix() = MatrixNode::quatAngle(q, angle, height);
+	objNodeMap[objId]->setVisible(f);
 }
 
 //A mapping from ObjectId to node in scene graph

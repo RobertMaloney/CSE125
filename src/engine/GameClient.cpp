@@ -38,11 +38,14 @@ void GameClient::run() {
 	GraphicsEngine::Initialize();
 
 	while (!GraphicsEngine::Closing()) {
+
 		updateState();
 		current_state->handleEvents();
+
 		current_state->update();
+
 		current_state->draw();
-		
+	
 		//GraphicsEngine::DrawAndPoll();
 
 		//this->sendEvents(InputHandler::input);

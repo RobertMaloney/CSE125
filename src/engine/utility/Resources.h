@@ -80,7 +80,7 @@ public:
 	Flower() : Flower(10){};
 	Flower(int points) : EatableResource(points, FLOWER){};
 	Flower(int points, float radius, float theta, float azimuth, float direction) :
-		EatableResource(points, MUSHROOM, radius, theta, azimuth, direction){};
+		EatableResource(points, FLOWER, radius, theta, azimuth, direction){};
 
    virtual ~Flower() { };
 };

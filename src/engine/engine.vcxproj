@@ -111,19 +111,21 @@
     <ClCompile Include="Network\Socket.cpp" />
     <ClCompile Include="Network\TCPConnection.cpp" />
     <ClCompile Include="Network\TCPListener.cpp" />
+    <ClCompile Include="physics\DragGenerator.cpp" />
+    <ClCompile Include="physics\GravityGenerator.cpp" />
     <ClCompile Include="utility\GameEngine.cpp" />
     <ClCompile Include="utility\GameObject.cpp" />
     <ClCompile Include="utility\GameState.cpp" />
     <ClCompile Include="utility\IdGenerator.cpp" />
     <ClCompile Include="utility\InputHandler.cpp" />
+    <ClCompile Include="physics\MoveableObject.cpp" />
     <ClCompile Include="utility\MenuState.cpp" />
-    <ClCompile Include="utility\MoveableObject.cpp" />
     <ClCompile Include="utility\ObjectDB.cpp" />
     <ClCompile Include="Utility\ObjLoader.cpp" />
     <ClCompile Include="utility\Player.cpp" />
     <ClCompile Include="utility\Resource.cpp" />
     <ClCompile Include="utility\Model.cpp" />
-    <ClCompile Include="utility\PhysicsEngine.cpp" />
+    <ClCompile Include="physics\PhysicsEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameClient.h" />
@@ -147,7 +149,11 @@
     <ClInclude Include="Network\Socket.h" />
     <ClInclude Include="Network\TCPConnection.h" />
     <ClInclude Include="Network\TCPListener.h" />
+    <ClInclude Include="physics\ForceGenerator.h" />
+    <ClInclude Include="physics\DragGenerator.h" />
+    <ClInclude Include="physics\GravityGenerator.h" />
     <ClInclude Include="utility\BlobModel.h" />
+    <ClInclude Include="utility\GameEngine.h" />
     <ClInclude Include="utility\IEatable.h" />
     <ClInclude Include="utility\Event.h" />
     <ClInclude Include="utility\GameObject.h" />
@@ -156,7 +162,7 @@
     <ClInclude Include="utility\IdGenerator.h" />
     <ClInclude Include="utility\InputHandler.h" />
     <ClInclude Include="utility\MenuState.h" />
-    <ClInclude Include="utility\MoveableObject.h" />
+    <ClInclude Include="physics\MoveableObject.h" />
     <ClInclude Include="utility\ObjectDB.h" />
     <ClInclude Include="Utility\ObjLoader.h" />
     <ClInclude Include="utility\Player.h" />
@@ -164,8 +170,9 @@
     <ClInclude Include="utility\Model.h" />
     <ClInclude Include="utility\Resources.h" />
     <ClInclude Include="utility\Serializable.h" />
+    <ClInclude Include="utility\Status.h" />
     <ClInclude Include="utility\System.h" />
-    <ClInclude Include="utility\PhysicsEngine.h" />
+    <ClInclude Include="physics\PhysicsEngine.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

@@ -27,7 +27,7 @@ void GameObject::serialize(Packet & p) {
 	p.writeFloat(this->angle);
 	p.writeFloat(this->height);
 	//p.writeFloat(this->score);
-	p.writeFloat(this->visible);
+	p.writeByte(this->visible);
     p.writeInt(static_cast<int>(this->rm));
 }
 
@@ -41,7 +41,7 @@ void GameObject::deserialize(Packet & p) {
 	this->angle = p.readFloat();
 	this->height = p.readFloat();
 	//this->score = p.readFloat();
-	this->visible = p.readFloat();
+	this->visible = p.readBool();
     this->rm = static_cast<Model>(p.readInt());
 }
 
@@ -58,8 +58,21 @@ float GameObject::getAngle() {
 }
 
 float GameObject::getHeight() {
-	return height;
+	return this->height;
 }
+
+void GameObject::setHeight(float height) {
+	this->height = height;
+}
+
+void GameObject::setModelHeight(float mheight) {
+	assert(!(mheight < 0.f));
+	this->modelHeight = mheight;
+}
+float GameObject::getModelHeight() {
+	return this->modelHeight;
+}
+
 ObjectId GameObject::getId() {
 	return id;
 }

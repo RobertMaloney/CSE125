@@ -29,7 +29,7 @@ bool ObjLoader::LoadObj(string filePath, vector<float> & vertexData) {
 	if (debug) cout << "# shapes: " << shapes.size() << endl;
 	if (debug) cout << "# mats: " << materials.size() << endl;
 
-	for (int i = 0; i < shapes.size(); ++i) {
+	for (unsigned int i = 0; i < shapes.size(); ++i) {
 		tinyobj::mesh_t _mesh = shapes[i].mesh;
 		if (debug) {
 			cout << "# pos: " << _mesh.positions.size() << endl;
@@ -41,7 +41,7 @@ bool ObjLoader::LoadObj(string filePath, vector<float> & vertexData) {
 		bool doNorms = _mesh.normals.size() > 2;
 		bool doTex = _mesh.texcoords.size() > 1;
 
-		for (int j = 0; j < _mesh.indices.size(); ++j) {
+		for (unsigned int j = 0; j < _mesh.indices.size(); ++j) {
 			int index = (int) _mesh.indices[j];
 			// positions
 			for (int k = 0; k < 3; ++k) {

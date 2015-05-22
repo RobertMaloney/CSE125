@@ -3,6 +3,7 @@
 
 #include "GameObject.h"
 #include "GameState.h"
+//#include "Status.h"
 
 using namespace std;
 
@@ -13,10 +14,9 @@ public:
 	GameEngine();
 	~GameEngine();
 
-	void init(GameState * g);
 
-private:
 	void calculatePercent();
+	void endGame();
 	GameState* gstate;
 
 };
