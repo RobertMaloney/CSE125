@@ -10,6 +10,7 @@
 #include "Shader.h"
 #include "Skybox.h"
 #include "HUD.h"
+#include "Ground.h"
 
 using namespace std;
 
@@ -32,9 +33,13 @@ CameraNode			*GraphicsEngine::m_minimapCamera = NULL;
 
 GLuint				GraphicsEngine::m_skyboxId = 0;
 GLuint				GraphicsEngine::m_HudId = 0;
+GLuint				GraphicsEngine::m_groundId = 0;
+
 Renderable			*GraphicsEngine::m_skybox = NULL;
 Renderable			*GraphicsEngine::m_HUD = NULL;
-Shader				*GraphicsEngine::m_defaultShader, *GraphicsEngine::m_skyboxShader, *GraphicsEngine::m_textureShader;
+Renderable			*GraphicsEngine::worldModel = NULL;
+
+Shader				*GraphicsEngine::m_defaultShader, *GraphicsEngine::m_skyboxShader, *GraphicsEngine::m_textureShader;// , *GraphicsEngine::m_tShader;
 
 
 unordered_map<ObjectId, MatrixNode*> GraphicsEngine::objNodeMap;
@@ -98,6 +103,7 @@ void GraphicsEngine::Initialize() {
 	m_defaultShader = new Shader("../engine/graphics/Shaders/default.vert", "../engine/graphics/Shaders/default.frag");
 	m_skyboxShader = new Shader("../engine/graphics/Shaders/skybox.vert", "../engine/graphics/Shaders/skybox.frag");
 	m_textureShader = new Shader("../engine/graphics/Shaders/texture2D.vert", "../engine/graphics/Shaders/texture2D.frag");
+	//m_tShader = new Shader("../engine/graphics/Shaders/t.vert", "../engine/graphics/Shaders/t.frag");
 
 	// Turn on z-buffering
 	glEnable(GL_DEPTH_TEST);
@@ -117,11 +123,18 @@ void GraphicsEngine::Initialize() {
 	m_HUD->setTextureId(m_HudId);
 
 	// WORLD
+	//m_textureShader->Use();
 	m_defaultShader->Use();
-	Renderable* worldModel = new Geometry("../../media/models/sphere.obj");
+	worldModel = new Geometry("../../media/models/sphere.obj");
+
+	//m_groundId = Ground::makeGround("../../media/texture/ground.png");
+	//worldModel->setTextureId(m_groundId);
+
 	Geode* worldGeode = new Geode();
 	worldGeode->setRenderable(worldModel);
+	//worldGeode->setTex(true);
 	m_scene->addChild(worldGeode);
+
 
 	// CAMERA
 	glm::mat4 camview = glm::lookAt(
@@ -282,6 +295,14 @@ void GraphicsEngine::renderScene(Node* node, glm::mat4* matrix) {
 	if (geode) {
 		// render geode
 		//cout << glm::to_string(*matrix) << endl << endl;
+		if (geode->getTex()){
+			//m_tShader->Use();
+			m_textureShader->Use();
+			//cout << "ts" << endl;
+		}
+		else{
+			m_defaultShader->Use();
+		}
 		geode->getRenderable()->render(matrix);
 	}
 	else if (mnode && mnode->getVisible()) {
@@ -367,7 +388,7 @@ Renderable * GraphicsEngine::selectModel(Model model){
    std::string pathString = "../../media/models/" + ResourceMap::getObjFile(model);
    const char * path = pathString.c_str();
    newModel = new Geometry(path);
-	return newModel;
+   return newModel;
 }
 
 // Translate from vec4 postion to matrix in the node of scene graph??

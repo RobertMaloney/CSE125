@@ -77,11 +77,9 @@ private:
 	static CameraNode				*m_minimapCamera;
 	static MatrixNode				*m_scene;
 
-	static GLuint					m_skyboxId;
-	static GLuint					m_HudId;
-	static Renderable				*m_skybox;
-	static Renderable				*m_HUD;
-	static Shader					*m_defaultShader, *m_skyboxShader, *m_textureShader;
+	static GLuint					m_skyboxId, m_HudId, m_groundId;// , m_tId;
+	static Renderable				*m_skybox, *m_HUD, *worldModel;
+	static Shader					*m_defaultShader, *m_skyboxShader, *m_textureShader;// , *m_tShader;
 
 
 	static unordered_map<ObjectId, MatrixNode*> objNodeMap;

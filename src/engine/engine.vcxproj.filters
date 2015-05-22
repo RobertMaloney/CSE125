@@ -16,7 +16,6 @@
     <ClCompile Include="utility\IdGenerator.cpp" />
     <ClCompile Include="utility\InputHandler.cpp" />
     <ClCompile Include="utility\MenuState.cpp" />
-    <ClCompile Include="utility\MoveableObject.cpp" />
     <ClCompile Include="utility\ObjectDB.cpp" />
     <ClCompile Include="Utility\ObjLoader.cpp" />
     <ClCompile Include="utility\Player.cpp" />
@@ -57,7 +56,6 @@
     <ClInclude Include="utility\IdGenerator.h" />
     <ClInclude Include="utility\InputHandler.h" />
     <ClInclude Include="utility\MenuState.h" />
-    <ClInclude Include="utility\MoveableObject.h" />
     <ClInclude Include="utility\ObjectDB.h" />
     <ClInclude Include="Utility\ObjLoader.h" />
     <ClInclude Include="utility\Player.h" />
@@ -71,7 +69,6 @@
     <ClInclude Include="utility\Resources.h" />
     <ClInclude Include="utility\Serializable.h" />
     <ClInclude Include="utility\System.h" />
-    <ClInclude Include="utility\PhysicsEngine.h" />
     <ClInclude Include="utility\IEatable.h" />
     <ClInclude Include="graphics\HUD.h" />
     <ClInclude Include="utility\GameEngine.h" />
@@ -83,5 +80,7 @@
     <None Include="Network\Endianness.inl" />
     <None Include="graphics\Shaders\texture2D.frag" />
     <None Include="graphics\Shaders\texture2D.vert" />
+    <None Include="graphics\Shaders\t.frag" />
+    <None Include="graphics\Shaders\t.vert" />
   </ItemGroup>
 </Project>

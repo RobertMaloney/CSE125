@@ -176,6 +176,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+    <None Include="graphics\Shaders\t.frag" />
+    <None Include="graphics\Shaders\t.vert" />
     <None Include="graphics\Shaders\texture2D.frag" />
     <None Include="graphics\Shaders\texture2D.vert" />
     <None Include="Network\Endianness.inl" />

@@ -16,7 +16,7 @@ private:
 	bool visible;
 
 public:
-	MatrixNode() {
+	MatrixNode(): Node() {
 		m_parent = 0;
 	}
 
@@ -67,5 +67,7 @@ public:
 		glm::quat rot = q * glm::angleAxis(glm::radians(angle), glm::vec3(0, 0, 1));
 		return glm::translate(glm::mat4(), pos) * glm::toMat4(rot);
 	}
+
+
 };
 #endif
