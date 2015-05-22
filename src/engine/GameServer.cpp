@@ -52,21 +52,21 @@ void GameServer::run() {
 		if (clients->size() < maxConnections) {
 			this->acceptWaitingClient();
 		}
-		std::cout << " accept : " << chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count() << std::endl;
+	//	std::cout << " accept : " << chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count() << std::endl;
 
-		start = high_resolution_clock::now();
+	//	start = high_resolution_clock::now();
 		this->processClientEvents(); 		// process the client input events
 
-		std::cout << " accept : " << chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count() << std::endl;
-		start = high_resolution_clock::now();
+	//	std::cout << " accept : " << chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count() << std::endl;
+	//	start = high_resolution_clock::now();
 		physics->update(PHYSICS_DT);      // do a physics step
-		std::cout << " physics : " << chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count() << std::endl;
-		start = high_resolution_clock::now();
+	//	std::cout << " physics : " << chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count() << std::endl;
+	//	start = high_resolution_clock::now();
 		engine->calculatePercent();
-		std::cout << " calculate percent : " << chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count() << std::endl;
-		start = high_resolution_clock::now();
+	//	std::cout << " calculate percent : " << chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count() << std::endl;
+	//	start = high_resolution_clock::now();
 		this->tick();                       // send state back to client
-		std::cout << " tick : " << chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count() << std::endl;
+	//	std::cout << " tick : " << chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count() << std::endl;
 
 		//calculates the ms from start until here.
 		elapsedTime = chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count();
@@ -76,9 +76,9 @@ void GameServer::run() {
 
 		
 		// sleep for unused time
-		start = high_resolution_clock::now();
+	//	start = high_resolution_clock::now();
 		sleep_for(microseconds(TIME_PER_FRAME - elapsedTime));
-		std::cout << " sleep for : " << chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count() << std::endl;
+		//std::cout << " sleep for : " << chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count() << std::endl;
 
 		//sleep_for(milliseconds(2000));
 
@@ -173,28 +173,44 @@ void GameServer::generateResources(int num) {
       float theta = (float)(rand() % 180);
       float azimuth = (float)(rand() % 360);
       float direction = (float)(rand() % 360);
-      Resource * newRe;
+      Resource * newRe = new Tree(30, radius, theta, azimuth, direction);
+	  newRe->setModelRadius(3.f);
+	  newRe->setModelHeight(17.f);
 
       int pick = rand() % 5;
 
-
+	  // tree      xy 6.f z 16.f
+	  // trunk     xyz      4.f
+	  // rock      xy 8.f z 4.f
+	  // mushroom  xy 2.f z 4.f
+	  // flower    xy 2.f z 1.5f
 	  //Scores are placeholder, need to handle them differently...
 	  if (pick == 0){
 		  newRe = new Tree(30, radius, theta, azimuth, direction);
+		  newRe->setModelRadius(3.f);
+		  newRe->setModelHeight(17.f);
 		  total = total + 30;
+	  } else if (pick == 1) {
+		  newRe = new Rock(radius, theta, azimuth, direction);
+		  newRe->setModelRadius(2.f);
+		  newRe->setModelHeight(4.5f);
 	  }
-	  else if (pick == 1)
-         newRe = new Rock(radius, theta, azimuth, direction);
 	  else if (pick == 2){
 		  newRe = new Stump(10, radius, theta, azimuth, direction);
+		  newRe->setModelRadius(2.f);
+		  newRe->setModelHeight(4.f);
 		  total = total + 10;
 	  }
 	  else if (pick == 3){
 		  newRe = new Mushroom(25, radius, theta, azimuth, direction);
+		  newRe->setModelRadius(1.f);
+		  newRe->setModelHeight(4.f);
 		  total = total + 25;
 	  }
 	  else if (pick == 4){
 		  newRe = new Flower(40, radius, theta, azimuth, direction);
+		  newRe->setModelRadius(1.f);
+		  newRe->setModelHeight(1.5f);
 		  total = total + 40;
 	  }
 

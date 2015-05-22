@@ -58,12 +58,21 @@ float GameObject::getAngle() {
 }
 
 float GameObject::getHeight() {
-	return height;
+	return this->height;
 }
 
 void GameObject::setHeight(float height) {
 	this->height = height;
 }
+
+void GameObject::setModelHeight(float mheight) {
+	assert(!(mheight < 0.f));
+	this->modelHeight = mheight;
+}
+float GameObject::getModelHeight() {
+	return this->modelHeight;
+}
+
 ObjectId GameObject::getId() {
 	return id;
 }

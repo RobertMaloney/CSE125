@@ -87,7 +87,7 @@ vec3 MoveableObject::rotateInXYPlane(vec3 original, float radians) {
 	return original;
 }
 
-
+#include "../utility/Player.h"
 void MoveableObject::integrate(float dt) {
 	vec3 newAcceleration(0.f,0.f,0.f);
 	
@@ -108,9 +108,12 @@ void MoveableObject::integrate(float dt) {
 	this->velocity += newAcceleration * dt;
 
 	// temporary form of friction
-	if (glm::length(this->velocity) > .0001f)
+	if (glm::length(this->velocity) > .0001f) {
+		if (this->type == PLAYER && dynamic_cast<Player*>(this)->getJumping()) {
+			return;
+		}
 		this->velocity *= .985f;
-	
+	}		
 }
 
 

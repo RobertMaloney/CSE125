@@ -16,6 +16,7 @@ Player::Player(Model thebm, float radius, float theta, float azimuth, float dire
 	this->setMass(10.f);
 	this->height = 550.f;
 	this->modelRadius = 5.f;
+	this->modelHeight = 5.f;
 	this->status = PENDING;
 }
 
@@ -109,6 +110,8 @@ void Player::collide(float dt, GameObject & target) {
 			this->velocity *= -1;
 			break;
 		case GAMEOBJECT:
+			std::cout << " type " << target.getType() << std::endl;
+			std::cout << " id " << target.getId() << std::endl;
 			this->velocity *= -1;
 			break;
 		case IEATABLE:

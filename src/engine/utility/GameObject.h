@@ -31,12 +31,15 @@ protected:
 
 	ObjectId id;
 	ObjectType type;
+
 	float modelRadius;
+	float modelHeight;
 
 	bool visible;
 
    // Model
    Model rm = TREE;
+
 
 
 public:
@@ -57,6 +60,9 @@ public:
    float getAngle();
    float getHeight();
    void setHeight(float h);
+
+   void setModelHeight(float mheight);
+   float getModelHeight();
 
    bool getVisible();
    void setVisible(bool v);
