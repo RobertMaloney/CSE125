@@ -18,6 +18,7 @@ using namespace std;
 // Graphics Engine Static Members
 vector<MatrixNode*> GraphicsEngine::m_objects;
 glm::mat4			GraphicsEngine::m_view, GraphicsEngine::m_projection;
+glm::vec2           GraphicsEngine::m_screen_scale;
 bool				GraphicsEngine::m_initialized = false;
 GLFWwindow			*GraphicsEngine::m_window;
 
@@ -132,16 +133,16 @@ void GraphicsEngine::Initialize() {
 	m_menu->setTextureId(m_menuId);
 
 	// WORLD
-	m_textureShader->Use();
-	//m_defaultShader->Use();
+	//m_textureShader->Use();
+	m_defaultShader->Use();
 	worldModel = new Geometry("../../media/models/sphere_t.obj");
 
-	m_groundId = Ground::makeGround("../../media/texture/ground.png");
-	worldModel->setTextureId(m_groundId);
+	//m_groundId = Ground::makeGround("../../media/texture/ground.png");
+	//worldModel->setTextureId(m_groundId);
 
 	Geode* worldGeode = new Geode();
 	worldGeode->setRenderable(worldModel);
-	worldGeode->setTex(true);
+	//worldGeode->setTex(true);
 	m_scene->addChild(worldGeode);
 
 
@@ -170,6 +171,8 @@ void GraphicsEngine::Initialize() {
 	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
 
 	m_initialized = true;
+
+	m_screen_scale = glm::vec2(0.001, 0.001);
 
 }
 
@@ -267,10 +270,11 @@ void GraphicsEngine::DrawAndPoll() {
 
 	renderScene(m_scene, &identity);
 
-
+	// HUD
 	glViewport(0, height - 200, 200, 200);
 	glClear(GL_DEPTH_BUFFER_BIT);
 
+	
 	//glm::mat4 identity;
 	glDepthMask(GL_FALSE);
 	m_textureShader->Use();
@@ -278,6 +282,7 @@ void GraphicsEngine::DrawAndPoll() {
 	//renderScene(m_scene, &identity);
 	glActiveTexture(GL_TEXTURE0);
 	glUniform1i(glGetUniformLocation(m_textureShader->Id(), "HUD"), 0);
+	glUniform2fv(glGetUniformLocation(m_textureShader->Id(), "scale"), 1, glm::value_ptr(m_screen_scale));
 	m_HUD->render(&identity);
 	glDepthMask(GL_TRUE);
 
@@ -304,6 +309,7 @@ void GraphicsEngine::DrawAndPollMenu()
 	//renderScene(m_scene, &identity);
 	glActiveTexture(GL_TEXTURE0);
 	glUniform1i(glGetUniformLocation(m_textureShader->Id(), "menu"), 0);
+	glUniform2fv(glGetUniformLocation(m_textureShader->Id(), "scale"), 1, glm::value_ptr(m_screen_scale));
 	m_menu->render(&identity);
 	glDepthMask(GL_TRUE);
 

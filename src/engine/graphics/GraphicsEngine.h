@@ -67,6 +67,7 @@ public:
 
 private:
 	static glm::mat4				m_view, m_projection;
+	static glm::vec2                m_screen_scale;
 	static bool						m_initialized;
 	static GLFWwindow				*m_window;
 	static GLint					m_uniView, m_uniProjection;
