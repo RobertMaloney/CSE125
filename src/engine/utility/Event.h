@@ -11,8 +11,11 @@ enum EventType {
    STOP_LEFT,
    MOVE_RIGHT,
    STOP_RIGHT,
+   LOOK,
    OBJECT_UPDATE,
-   CONFIRM
+   CONFIRM,
+   JUMP,
+   STOP_JUMP,
 };
 
 

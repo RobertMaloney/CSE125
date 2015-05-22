@@ -31,12 +31,15 @@ protected:
 
 	ObjectId id;
 	ObjectType type;
+
 	float modelRadius;
+	float modelHeight;
 
 	bool visible;
 
-    // Model
-    Model rm = TREE;
+   // Model
+   Model rm = TREE;
+
 
 
 public:
@@ -49,21 +52,26 @@ public:
 	ObjectId getId();
 	void setId(ObjectId theId);
 
-    Model getModel();
-    void setModel(Model model);
+   Model getModel();
+   void setModel(Model model);
 
-    quat & getOrientation();
-    float getAngle();
-    float getHeight();
+   quat & getOrientation();
+   void moveAngle(float);
+   float getAngle();
+   float getHeight();
+   void setHeight(float h);
 
-    bool getVisible();
-    void setVisible(bool v);
+   void setModelHeight(float mheight);
+   float getModelHeight();
 
-    float getModelRadius();
-    void setModelRadius(float radius);
+   bool getVisible();
+   void setVisible(bool v);
 
-    void setDeleteFlag(bool flag);
-    bool getDeleteFlag();
+   float getModelRadius();
+   void setModelRadius(float radius);
+
+   void setDeleteFlag(bool flag);
+   bool getDeleteFlag();
 
 	ObjectType getType() const;
 

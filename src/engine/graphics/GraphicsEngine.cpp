@@ -48,6 +48,16 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 }
 
 /**
+* Description: This function handles the cursor position
+*/
+const float lookScale = 0.3f;
+static void cursor_callback(GLFWwindow* window, double x, double y) {
+	std::cout << "(x,y): (" << x << ", " << y << ")\n";
+	InputHandler::handleMouse(-x * lookScale, y * lookScale);
+	glfwSetCursorPos(window, 0, 0);
+}
+
+/**
 * GraphicsEngine::Initialize()
 * Description: This function initializes the graphics pipeline, compiles the
 * shaders, creates the window, and sets up the view and projection matrices
@@ -73,6 +83,11 @@ void GraphicsEngine::Initialize() {
 	glfwSetKeyCallback(m_window, key_callback);
 	glfwMakeContextCurrent(m_window);
 	glfwSwapInterval(1);
+
+	// mouse handling
+	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetCursorPosCallback(m_window, cursor_callback);
+	glfwSetCursorPos(m_window, 0, 0);
 
 	glewExperimental = GL_TRUE;
 	glewInit();

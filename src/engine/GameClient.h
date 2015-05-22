@@ -5,6 +5,7 @@
 #include <iostream>
 #include <deque>
 #include <vector>
+#include <chrono>
 
 #include "network\TCPConnection.h"
 //#include "utility\InputHandler.h"
@@ -15,6 +16,11 @@
 #include "utility\GameState.h"
 #include "utility\IdGenerator.h"
 
+
+using std::chrono::high_resolution_clock;
+using std::chrono::duration_cast;
+using std::chrono::microseconds;
+using std::chrono::duration;
 
 using std::this_thread::sleep_for;
 using std::chrono::milliseconds;

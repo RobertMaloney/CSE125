@@ -25,7 +25,6 @@ void GameClient::init() {
 
 	//then change to that state (this also initializes the state if it's not initialized)
 	this->addState(newstate);
-
 }
 
 
@@ -40,12 +39,15 @@ void GameClient::run() {
 	GraphicsEngine::Initialize();
 
 	while (!GraphicsEngine::Closing()) {
+
 		updateState();
 
 		if (inMenu){
-			current_state->handleEvents();
-			current_state->update();
-			current_state->draw();
+		current_state->handleEvents();
+
+		current_state->update();
+
+		current_state->draw();
 		}
 		else{
 			this->sendEvents(InputHandler::input);
@@ -98,7 +100,7 @@ void GameClient::updateGameState() {
 		//If this game object is new 
 		if (!obj) {
 			obj = new GameObject();
-
+		
 			if (!gstate.addObject(objId, obj)){ // Adds to game state in client
 				delete obj;
 				obj = nullptr;
@@ -137,7 +139,7 @@ void GameClient::checkGameStatus(Player * p){
 
 		this->close();
 	}// else do nothing
-}
+		}
 
 void GameClient::close() {
 	GraphicsEngine::Destroy();

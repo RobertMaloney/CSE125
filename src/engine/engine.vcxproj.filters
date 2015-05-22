@@ -22,7 +22,12 @@
     <ClCompile Include="utility\Player.cpp" />
     <ClCompile Include="utility\Resource.cpp" />
     <ClCompile Include="utility\Model.cpp" />
-    <ClCompile Include="utility\PhysicsEngine.cpp" />
+    <ClCompile Include="graphics\Shader.cpp" />
+    <ClCompile Include="utility\GameEngine.cpp" />
+    <ClCompile Include="physics\MoveableObject.cpp" />
+    <ClCompile Include="physics\PhysicsEngine.cpp" />
+    <ClCompile Include="physics\GravityGenerator.cpp" />
+    <ClCompile Include="physics\DragGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameClient.h" />
@@ -58,6 +63,11 @@
     <ClInclude Include="utility\Player.h" />
     <ClInclude Include="utility\Resource.h" />
     <ClInclude Include="utility\Model.h" />
+    <ClInclude Include="physics\MoveableObject.h" />
+    <ClInclude Include="physics\PhysicsEngine.h" />
+    <ClInclude Include="physics\ForceGenerator.h" />
+    <ClInclude Include="physics\GravityGenerator.h" />
+    <ClInclude Include="physics\DragGenerator.h" />
     <ClInclude Include="utility\Resources.h" />
     <ClInclude Include="utility\Serializable.h" />
     <ClInclude Include="utility\System.h" />

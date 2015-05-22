@@ -41,7 +41,7 @@ void GameObject::deserialize(Packet & p) {
 	this->angle = p.readFloat();
 	this->height = p.readFloat();
 	//this->score = p.readFloat();
-	this->visible = p.readByte();
+	this->visible = p.readBool();
     this->rm = static_cast<Model>(p.readInt());
 }
 
@@ -49,13 +49,30 @@ quat & GameObject::getOrientation() {
 	return orientation;
 }
 
+void GameObject::moveAngle(float delta) {
+	angle += delta;
+}
+
 float GameObject::getAngle() {
 	return angle;
 }
 
 float GameObject::getHeight() {
-	return height;
+	return this->height;
 }
+
+void GameObject::setHeight(float height) {
+	this->height = height;
+}
+
+void GameObject::setModelHeight(float mheight) {
+	assert(!(mheight < 0.f));
+	this->modelHeight = mheight;
+}
+float GameObject::getModelHeight() {
+	return this->modelHeight;
+}
+
 ObjectId GameObject::getId() {
 	return id;
 }
