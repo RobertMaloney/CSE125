@@ -90,7 +90,8 @@ void Player::move(float dt) {
 
 
 void Player::collide(float dt, GameObject & target) {
-	switch (target.getType()) {
+	if (target.getVisible()){
+		switch (target.getType()) {
 		case PLAYER:
 			this->velocity *= -1;
 			break;
@@ -98,21 +99,21 @@ void Player::collide(float dt, GameObject & target) {
 			this->velocity *= -1;
 			break;
 		case IEATABLE:
-			if (target.getVisible()){
-				std::cout << "EAT " << endl;
-				IEatable* eatable = dynamic_cast<IEatable*>(&target);
-				if (eatable){
+			
+			std::cout << "EAT " << endl;
+			IEatable* eatable = dynamic_cast<IEatable*>(&target);
+			if (eatable){
 					this->setScore(this->getScore() + eatable->getPoints());
-					std::cout << this->getId() << " new score: " << this->getScore() << endl;
-				}
-				else{
-					std::cout << "Error: EATABLE is null: " << typeid(target).name() << endl;
-				}
-				target.setVisible(false);
-				//TODO Render needs to figure out (not) rendering dead/invisible object
-						
+				std::cout << this->getId() << " new score: " << this->getScore() << endl;
 			}
+			else{
+				std::cout << "Error: EATABLE is null: " << typeid(target).name() << endl;
+			}
+			target.setVisible(false);
+			//TODO Render needs to figure out (not) rendering dead/invisible object
 			break;
+		}
+			
 	}
 	
 }

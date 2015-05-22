@@ -4,23 +4,15 @@
 
 #include <vector>
 #include <deque>
-
-#include "IGameState.h"
-#include "..\graphics\GraphicsEngine.h"
 #include "ObjectDB.h"
 #include "Player.h"
 #include "Resource.h"
 #include "Model.h"
 //#include "..\network\Packet.h"
 
-
-//forward declarations
-
-
-
 using namespace std;
 
-class GameState : public IGameState 
+class GameState
 {
 protected:
 
@@ -30,9 +22,7 @@ protected:
 	int total;
 
 
-
 public:
-	vector<Packet> updates;
 	Player* top;
 
 	GameState();
@@ -40,11 +30,6 @@ public:
 
 	void init();
 	void initWithServer();
-	void cleanup();
-
-	void handleEvents();
-	void update();
-	void draw();
 
 	bool addPlayer(ObjectId theId, Player* p);
 	bool addObject(ObjectId id, GameObject* o);
@@ -58,10 +43,6 @@ public:
 
     Model selectPlayerModel(ObjectId playerId);
     bool addResource(ObjectId theId, Resource * ptr);
-
-	void sendEvents(vector<Packet> & events);
-	void receiveUpdates();
-	void updateGameState();
 };
 
 #endif

@@ -1,7 +1,6 @@
 #include "MenuState.h"
 #include "..\GameClient.h"
 
-
 MenuState::MenuState()
 {
 }
@@ -15,10 +14,11 @@ MenuState::~MenuState()
 /* init():
  * This function should initilaize all graphics for the menu and other things.
  */
-void MenuState::init()
+void MenuState::init(GameClient* gc)
 {
 	std::cout << "ENTERING: MenuState" << std::endl;
 	menu_select = 0;
+	gameclient = gc;
 }
 
 
@@ -95,13 +95,9 @@ void MenuState::login()
 	std::cout << "logging in id " << playerId << std::endl;
 
 	//gstate.addplayer
-	//MOVED to gamestate
+	//MOVED to gamestate  
 
-	//Initializes GraphicsEngine for this client with playerId (i.e. ClientID)
-	//MOVED TO GAMESTATE
-
-	//Binds player game object with the player node in Graphics engine
-	//GraphicsEngine::bindPlayerNode(player); MOVES TO GAMESTATE
+	
 	gameclient->connection->setNonBlocking(true);
 }
 
@@ -181,9 +177,16 @@ void MenuState::play()
 	//if success (no exceptions) login to server
 	this->login();
 
-	//push state to game state
-	GameState * gamestate = new GameState();
-	gameclient->addState(gamestate);
+	gameclient->gstate.init();
+
+	//init player
+	Player* player = new Player();
+	//Initializes GraphicsEngine for this client with playerId (i.e. ClientID)
+	gameclient->gstate.addPlayer(gameclient->playerid, player);
+	//Binds player game object with the player node in Graphics engine
+	GraphicsEngine::bindPlayerNode(player);
+
+	gameclient->inMenu = false;
 }
 
 

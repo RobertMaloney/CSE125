@@ -1,14 +1,10 @@
 #ifndef I_GAME_STATE_H
 #define I_GAME_STATE_H
 
-
-//#include "..\GameClient.h"
 #include "..\network\TCPConnection.h"
-
 
 //forward declarations
 class GameClient;
-
 
 /*
  * IGameState.h
@@ -23,21 +19,19 @@ public:
 
 	IGameState() : changeTo(nullptr) {}
 
-	virtual ~IGameState()		= 0;
+	virtual ~IGameState(){}
 
-	virtual void init()			= 0;
+	virtual void init(GameClient*)			= 0;
 	virtual void cleanup()		= 0;
 
 	virtual void handleEvents() = 0;
-	virtual void update()		= 0;
+	virtual void update()       = 0;
+
 	virtual void draw()			= 0;
 
 	//non-virtual methods
 	//void changeState(IGameState *state);
 	//IGameState * checkState();
 };
-
-
-inline IGameState::~IGameState() {}
 
 #endif
