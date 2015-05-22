@@ -74,9 +74,9 @@
     <ClInclude Include="utility\System.h" />
     <ClInclude Include="utility\PhysicsEngine.h" />
     <ClInclude Include="utility\IEatable.h" />
+    <ClInclude Include="graphics\HUD.h" />
     <ClInclude Include="utility\GameEngine.h" />
     <ClInclude Include="utility\Status.h" />
-    <ClInclude Include="graphics\HUD.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
