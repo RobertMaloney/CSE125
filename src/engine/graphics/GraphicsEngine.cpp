@@ -107,7 +107,7 @@ void GraphicsEngine::Initialize() {
 
 	// WORLD
 	m_defaultShader->Use();
-	Renderable* worldModel = new Geometry("../../media/sphere.obj");
+	Renderable* worldModel = new Geometry("../../media/models/sphere.obj");
 	Geode* worldGeode = new Geode();
 	worldGeode->setRenderable(worldModel);
 	m_scene->addChild(worldGeode);
@@ -325,7 +325,7 @@ MatrixNode* GraphicsEngine::addNode(Renderable* objModel, bool f){
 // Select blob model based on playerId, will be changed later
 Renderable * GraphicsEngine::selectModel(Model model){
    Renderable* newModel;
-   std::string pathString = "../../media/" + ResourceMap::getObjFile(model);
+   std::string pathString = "../../media/models/" + ResourceMap::getObjFile(model);
    const char * path = pathString.c_str();
    newModel = new Geometry(path);
 	return newModel;
