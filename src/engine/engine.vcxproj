@@ -138,6 +138,7 @@
     <ClInclude Include="Graphics\GraphicsEngine.h" />
     <ClInclude Include="graphics\HUD.h" />
     <ClInclude Include="graphics\MatrixNode.h" />
+    <ClInclude Include="graphics\Menu.h" />
     <ClInclude Include="graphics\Node.h" />
     <ClInclude Include="Graphics\Renderable.h" />
     <ClInclude Include="graphics\Shader.h" />

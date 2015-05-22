@@ -74,6 +74,7 @@
     <ClInclude Include="utility\GameEngine.h" />
     <ClInclude Include="utility\Status.h" />
     <ClInclude Include="utility\IMenuState.h" />
+    <ClInclude Include="graphics\Menu.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

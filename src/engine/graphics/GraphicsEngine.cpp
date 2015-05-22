@@ -11,6 +11,7 @@
 #include "Skybox.h"
 #include "HUD.h"
 #include "Ground.h"
+#include "Menu.h"
 
 using namespace std;
 
@@ -34,10 +35,12 @@ CameraNode			*GraphicsEngine::m_minimapCamera = NULL;
 GLuint				GraphicsEngine::m_skyboxId = 0;
 GLuint				GraphicsEngine::m_HudId = 0;
 GLuint				GraphicsEngine::m_groundId = 0;
+GLuint				GraphicsEngine::m_menuId = 0;
 
 Renderable			*GraphicsEngine::m_skybox = NULL;
 Renderable			*GraphicsEngine::m_HUD = NULL;
 Renderable			*GraphicsEngine::worldModel = NULL;
+Renderable			*GraphicsEngine::m_menu = NULL;
 
 Shader				*GraphicsEngine::m_defaultShader, *GraphicsEngine::m_skyboxShader, *GraphicsEngine::m_textureShader;// , *GraphicsEngine::m_tShader;
 
@@ -122,6 +125,12 @@ void GraphicsEngine::Initialize() {
 	m_HudId = HUD::makeHUD("../../media/texture/HUD.png");
 	m_HUD->setTextureId(m_HudId);
 
+	// HUD
+	m_textureShader->Use();
+	m_menu = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.f);
+	m_menuId = Menu::makeMenu("../../media/texture/start_bg.png");
+	m_menu->setTextureId(m_menuId);
+
 	// WORLD
 	//m_textureShader->Use();
 	m_defaultShader->Use();
@@ -161,6 +170,7 @@ void GraphicsEngine::Initialize() {
 	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
 
 	m_initialized = true;
+
 }
 
 void GraphicsEngine::ZoomIn(CameraNode *a) {
@@ -280,6 +290,24 @@ void GraphicsEngine::DrawAndPoll() {
 
 void GraphicsEngine::DrawAndPollMenu()
 {
+	int height, width;
+	glfwGetWindowSize(m_window, &width, &height);
+
+	glViewport(0, 0, width, height);
+	//MenuState
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glm::mat4 identity;
+	glDepthMask(GL_FALSE);
+	m_textureShader->Use();
+	glOrtho(0, 0, 0, 0, 0, 1);
+	//renderScene(m_scene, &identity);
+	glActiveTexture(GL_TEXTURE0);
+	glUniform1i(glGetUniformLocation(m_textureShader->Id(), "menu"), 0);
+	m_menu->render(&identity);
+	glDepthMask(GL_TRUE);
+
+	glfwSwapBuffers(m_window);
 	glfwPollEvents();
 }
 
