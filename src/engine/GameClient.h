@@ -27,8 +27,8 @@ public:
 	GameState gstate;
 	ObjectId playerid;
 
-	IGameState * current_state;
-	IGameState * next_state;
+	IMenuState * current_state;
+	IMenuState * next_state;
 	TCPConnection* connection;
 	bool inMenu;
 
@@ -42,9 +42,9 @@ public:
 	void close();
 
 	//managing states
-	void addState(IGameState *state);
+	void addState(IMenuState *state);
 	void removeState();
-	void changeState(IGameState *state); //this is a pop and push
+	void changeState(IMenuState *state); //this is a pop and push
 
 	void updateState();
 
@@ -58,7 +58,7 @@ public:
 
 private:
 	//stack of states
-	vector<IGameState *> states;
+	vector<IMenuState *> states;
 	vector<Packet> updates;
 };
 #endif

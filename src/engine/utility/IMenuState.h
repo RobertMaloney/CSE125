@@ -1,5 +1,5 @@
-#ifndef I_GAME_STATE_H
-#define I_GAME_STATE_H
+#ifndef I_MENU_STATE_H
+#define I_MENU_STATE_H
 
 #include "..\network\TCPConnection.h"
 
@@ -7,19 +7,19 @@
 class GameClient;
 
 /*
- * IGameState.h
- * Description: This class is the interface for all defferent game states. Clients 
- * should only have multiple games states, while the server has only one. 
+ * IMenuState.h
+ * Description: This class is the interface for all defferent menu states. Clients 
+ * have multiple menu states, while the server has none. Both client and server have only one game state. 
  */
-class IGameState
+class IMenuState
 {
 public:
-	IGameState * changeTo;
+	IMenuState * changeTo;
 	GameClient * gameclient;
 
-	IGameState() : changeTo(nullptr) {}
+	IMenuState() : changeTo(nullptr) {}
 
-	virtual ~IGameState(){}
+	virtual ~IMenuState(){}
 
 	virtual void init(GameClient*)			= 0;
 	virtual void cleanup()		= 0;

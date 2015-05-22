@@ -178,7 +178,7 @@ bool GameClient::shouldTerminate(SocketError err)
 }
 
 
-void GameClient::addState(IGameState *state)
+void GameClient::addState(IMenuState *state)
 {
 	//NOTE: this order matters
 	//state->gameclient = this;
@@ -197,7 +197,7 @@ void GameClient::removeState()
 }
 
 
-void GameClient::changeState(IGameState *state)
+void GameClient::changeState(IMenuState *state)
 {
 	//NOTE: this order matters
 	//state->gameclient = this;
