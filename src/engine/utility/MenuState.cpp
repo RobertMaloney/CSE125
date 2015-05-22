@@ -89,15 +89,26 @@ void MenuState::login()
 	gameclient->connection->setNonBlocking(false);
 	gameclient->connection->receive(p);
 
-	ObjectId playerId = p.readUInt();
-	//Player* player = new Player(); MOVE TO GAMESTATE
-	gameclient->playerid = playerId;
+	//ObjectId playerId = p.readUInt();
+	//gameclient->playerid = playerId;
 
-	std::cout << "logging in id " << playerId << std::endl;
+	gameclient->gstate.init();
+
+	Player * player = new Player();
+	cout << gameclient->playerid << ": " << player->getAngle() << endl;
+	player->deserialize(p);
+	gameclient->playerid = player->getId();
+	cout << gameclient->playerid  << ": " << player->getAngle() << endl;
+
+	//Initializes GraphicsEngine for this client with playerId (i.e. ClientID)
+	gameclient->gstate.addPlayer(gameclient->playerid, player);
+	//Binds player game object with the player node in Graphics engine
+	GraphicsEngine::bindPlayerNode(player);
+
+	std::cout << "logging in id " << gameclient->playerid << std::endl;
 
 	//gstate.addplayer
 	//MOVED to gamestate  
-
 	
 	gameclient->connection->setNonBlocking(true);
 }
@@ -180,15 +191,6 @@ void MenuState::play()
 	this->connectToServer();
 	//if success (no exceptions) login to server
 	this->login();
-
-	gameclient->gstate.init();
-
-	//init player
-	Player* player = new Player();
-	//Initializes GraphicsEngine for this client with playerId (i.e. ClientID)
-	gameclient->gstate.addPlayer(gameclient->playerid, player);
-	//Binds player game object with the player node in Graphics engine
-	GraphicsEngine::bindPlayerNode(player);
 
 	gameclient->inMenu = false;
 }

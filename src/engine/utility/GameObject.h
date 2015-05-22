@@ -44,8 +44,9 @@ protected:
 
 public:
 
-	GameObject(float radius = 505, float theta = 0, float azimuth = 0, float direction = 0);
-	GameObject(const vec4 & loc) : GameObject(loc.r, loc.g, loc.b, loc.a) {};
+	GameObject() :GameObject(505, 0, 0, 0){};
+	GameObject(float radius, float theta, float azimuth, float direction);//TODO
+	//GameObject(const vec4 & loc) : GameObject(loc.r, loc.g, loc.b, loc.a) {};
 
 	virtual ~GameObject();
 

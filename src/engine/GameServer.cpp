@@ -96,7 +96,15 @@ void GameServer::acceptWaitingClient() {
 	//Note: Server generates id for client/player, and addes the player to gamestate
 	//Note: default position foor player is 505,0,0,0
 	ObjectId playerId = idGen->createId();
-	Player* newPlayer = new Player();
+
+	float radius = 505;
+	float theta = (float)(rand() % 180);
+	float azimuth = (float)(rand() % 360);
+	float direction = (float)(rand() % 360);
+	cout << "server:" << direction << endl;
+	Player* newPlayer = new Player(TREE, radius, theta, azimuth, direction);
+	//newPlayer->setId(playerId);
+
 	if (!gameState->addPlayer(playerId, newPlayer)){
 		delete newPlayer;
 		return;
@@ -104,8 +112,12 @@ void GameServer::acceptWaitingClient() {
 	physics->registerInteraction(newPlayer, DRAG | GRAVITY);
 	connection->setNoDelay(true);
 	connection->setNonBlocking(true);
-	clients->insert(make_pair(connection, playerId));	
-	response.writeUInt(playerId);
+	clients->insert(make_pair(connection, playerId));
+
+	//response.writeUInt(playerId);
+	cout << "server:" << newPlayer->getId()<< ": "<<newPlayer->getAngle() << endl;
+	newPlayer->serialize(response);
+
 	connection->send(response);
 	vector<Packet> initial;
 	//initial.push_back(response);
