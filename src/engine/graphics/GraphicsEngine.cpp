@@ -102,7 +102,7 @@ void GraphicsEngine::Initialize() {
 	// SKYBOX
 	m_skyboxShader->Use();
 	m_skybox = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.f);
-	m_skyboxId = Skybox::makeSkybox("../../media/");
+	m_skyboxId = Skybox::makeSkybox("../../media/texture/skybox/");
 	m_skybox->setTextureId(m_skyboxId);
 
 	// WORLD
