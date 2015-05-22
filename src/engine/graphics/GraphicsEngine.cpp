@@ -82,7 +82,7 @@ void GraphicsEngine::Initialize() {
 	GLint fragLengths[] = { version.size(), fragInfo.size() };
 
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-	m_window = glfwCreateWindow(800, 800, "CSE 125", NULL, NULL);
+	m_window = glfwCreateWindow(800, 800, "Dusty Planet v.0.0.1", NULL, NULL);
 	glfwSetKeyCallback(m_window, key_callback);
 	glfwMakeContextCurrent(m_window);
 	glfwSwapInterval(1);
@@ -109,10 +109,10 @@ void GraphicsEngine::Initialize() {
 	m_skyboxId = Skybox::makeSkybox("../../media/texture/skybox/");
 	m_skybox->setTextureId(m_skyboxId);
 	
-	//
-	m_textureShader->Use();
+	// HUD
+    m_textureShader->Use();
 	m_HUD = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.f);
-	m_HudId = HUD::makeHUD("../../media/HUD.png");
+	m_HudId = HUD::makeHUD("../../media/texture/HUD.png");
 	m_HUD->setTextureId(m_HudId);
 
 	// WORLD
@@ -231,8 +231,8 @@ void GraphicsEngine::DrawAndPoll() {
 	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "view"), 1, GL_FALSE, glm::value_ptr(view));
 
 	renderScene(m_scene, &identity);
-	glViewport(width -200, height-200,200, 200);
 
+	glViewport(width -200, height-200,200, 200);
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 	//view = m_minimapCamera->getFlatViewMatrix();
