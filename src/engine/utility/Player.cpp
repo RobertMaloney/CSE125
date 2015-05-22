@@ -5,13 +5,14 @@
 //TODO Config file
 Player::Player(Model thebm, float radius, float theta, float azimuth, float direction) : MoveableObject() {
 	//this->loc = vec4(radius, theta, azimuth, direction);
-   this->rm = thebm;
+    this->rm = thebm;
 
 	for (int i = 0; i < 5; ++i)
 		this->moves[i] = false;
 
 	this->type = PLAYER;
 	this->isJumping = false;
+	this->score = 0;
 	this->modelRadius = 7.f;
 	this->setMass(10.f);
 	this->height = 550.f;
@@ -111,8 +112,8 @@ void Player::collide(float dt, GameObject & target) {
 			this->velocity *= -1;
 			break;
 		case GAMEOBJECT:
-			std::cout << " type " << target.getType() << std::endl;
-			std::cout << " id " << target.getId() << std::endl;
+			//std::cout << " type " << target.getType() << std::endl;
+			//std::cout << " id " << target.getId() << std::endl;
 			this->velocity *= -1;
 			break;
 		case IEATABLE:
@@ -120,7 +121,8 @@ void Player::collide(float dt, GameObject & target) {
 			std::cout << "EAT " << endl;
 			IEatable* eatable = dynamic_cast<IEatable*>(&target);
 			if (eatable){
-					this->setScore(this->getScore() + eatable->getPoints());
+				std::cout << this->getId() << " old score: " << this->getScore() << endl;
+				this->setScore(this->getScore() + eatable->getPoints());
 				std::cout << this->getId() << " new score: " << this->getScore() << endl;
 			}
 			else{

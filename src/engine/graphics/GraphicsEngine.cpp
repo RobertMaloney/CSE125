@@ -52,7 +52,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 */
 const float lookScale = 0.3f;
 static void cursor_callback(GLFWwindow* window, double x, double y) {
-	std::cout << "(x,y): (" << x << ", " << y << ")\n";
+	//std::cout << "(x,y): (" << x << ", " << y << ")\n";
 	InputHandler::handleMouse(-x * lookScale, y * lookScale);
 	glfwSetCursorPos(window, 0, 0);
 }
