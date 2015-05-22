@@ -43,9 +43,10 @@ void GameClient::run() {
 		updateState();
 
 		if (inMenu){
+			current_state->draw();
 			current_state->handleEvents();
 			current_state->update();
-			current_state->draw();
+
 		}
 		else{
 			this->sendEvents(InputHandler::input);

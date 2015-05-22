@@ -132,16 +132,16 @@ void GraphicsEngine::Initialize() {
 	m_menu->setTextureId(m_menuId);
 
 	// WORLD
-	//m_textureShader->Use();
-	m_defaultShader->Use();
-	worldModel = new Geometry("../../media/models/sphere.obj");
+	m_textureShader->Use();
+	//m_defaultShader->Use();
+	worldModel = new Geometry("../../media/models/sphere_t.obj");
 
-	//m_groundId = Ground::makeGround("../../media/texture/ground.png");
-	//worldModel->setTextureId(m_groundId);
+	m_groundId = Ground::makeGround("../../media/texture/ground.png");
+	worldModel->setTextureId(m_groundId);
 
 	Geode* worldGeode = new Geode();
 	worldGeode->setRenderable(worldModel);
-	//worldGeode->setTex(true);
+	worldGeode->setTex(true);
 	m_scene->addChild(worldGeode);
 
 

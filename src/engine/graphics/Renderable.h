@@ -130,7 +130,7 @@ public:
 				}
 				else{
 					glBindTexture(GL_TEXTURE_2D, m_texId);
-					//std::cout << "Tex" << std::endl;
+					std::cout << "Tex" << std::endl;
 				}
 			}
 			glUniformMatrix4fv(m_model, 1, GL_FALSE, glm::value_ptr(*matrix));
