@@ -116,20 +116,20 @@ void GraphicsEngine::Initialize() {
 	// SKYBOX
 	m_skyboxShader->Use();
 	m_skybox = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.f);
-	m_skyboxId = Skybox::makeSkybox("../../media/texture/skybox/");
+	m_skyboxId = Skybox::makeSkybox("../../media/texture/skybox/", 0);
 	m_skybox->setIsSkybox(true);
 	m_skybox->setTextureId(m_skyboxId);
 	
 	// HUD
     m_textureShader->Use();
 	m_HUD = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.f);
-	m_HudId = HUD::makeHUD("../../media/texture/HUD.png");
+	m_HudId = HUD::makeHUD("../../media/texture/HUD.png", 1);
 	m_HUD->setTextureId(m_HudId);
 
-	// HUD
+	// Menu
 	m_textureShader->Use();
 	m_menu = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.f);
-	m_menuId = Menu::makeMenu("../../media/texture/start_bg.png");
+	m_menuId = Menu::makeMenu("../../media/texture/start_bg.png", 2);
 	m_menu->setTextureId(m_menuId);
 
 	// WORLD
@@ -172,7 +172,7 @@ void GraphicsEngine::Initialize() {
 
 	m_initialized = true;
 
-	m_screen_scale = glm::vec2(0.001, 0.001);
+	m_screen_scale = glm::vec2(2.0f, 2.0f);
 
 }
 
@@ -280,8 +280,7 @@ void GraphicsEngine::DrawAndPoll() {
 	m_textureShader->Use();
 	glOrtho(0, 0, 0,0, 0, 1);
 	//renderScene(m_scene, &identity);
-	glActiveTexture(GL_TEXTURE0);
-	glUniform1i(glGetUniformLocation(m_textureShader->Id(), "HUD"), 0);
+	glUniform1i(glGetUniformLocation(m_textureShader->Id(), "tex"), 1);
 	glUniform2fv(glGetUniformLocation(m_textureShader->Id(), "scale"), 1, glm::value_ptr(m_screen_scale));
 	m_HUD->render(&identity);
 	glDepthMask(GL_TRUE);
@@ -307,8 +306,7 @@ void GraphicsEngine::DrawAndPollMenu()
 	m_textureShader->Use();
 	glOrtho(0, 0, 0, 0, 0, 1);
 	//renderScene(m_scene, &identity);
-	glActiveTexture(GL_TEXTURE0);
-	glUniform1i(glGetUniformLocation(m_textureShader->Id(), "menu"), 0);
+	glUniform1i(glGetUniformLocation(m_textureShader->Id(), "tex"), 2);
 	glUniform2fv(glGetUniformLocation(m_textureShader->Id(), "scale"), 1, glm::value_ptr(m_screen_scale));
 	m_menu->render(&identity);
 	glDepthMask(GL_TRUE);
