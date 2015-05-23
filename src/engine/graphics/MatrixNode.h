@@ -16,7 +16,7 @@ private:
 	bool visible;
 
 public:
-	MatrixNode(): Node() {
+	MatrixNode(){
 		m_parent = 0;
 	}
 
