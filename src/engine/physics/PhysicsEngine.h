@@ -77,6 +77,12 @@ private:
 	 vec3 loc1 = ob1->getOrientation() * glm::vec3(0, 0, 505.f);
 	 vec3 loc2 = ob2->getOrientation() * glm::vec3(0, 0, 505.f);
 	 
+	 if (ob1->getHeight() < ob2->getHeight()) {
+		 if (ob2->getHeight() < ob1->getHeight() + ob1->getModelHeight()) {
+			 return glm::distance(loc1, loc2) < ob1->getModelRadius() + ob2->getModelRadius();
+		 }
+		 return false;
+	 }
 
 	 if (ob1->getHeight() < ob2->getHeight() + ob2->getModelHeight()) {
 		 return glm::distance(loc1, loc2) < ob1->getModelRadius() + ob2->getModelRadius();

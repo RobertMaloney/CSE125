@@ -110,8 +110,6 @@ void Player::collide(float dt, GameObject & target) {
 			this->velocity *= -1;
 			break;
 		case GAMEOBJECT:
-			std::cout << " type " << target.getType() << std::endl;
-			std::cout << " id " << target.getId() << std::endl;
 			this->velocity *= -1;
 			break;
 		case IEATABLE:
