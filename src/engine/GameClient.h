@@ -9,14 +9,13 @@
 
 #include "network\TCPConnection.h"
 //#include "utility\InputHandler.h"
-//#include "graphics\GraphicsEngine.h"
+#include "graphics\GraphicsEngine.h"
 //#include "network\Packet.h"
 //#include "utility\Player.h"
 #include "utility\MenuState.h"
 #include "utility\GameState.h"
 #include "utility\IdGenerator.h"
 
-//forward declarations
 
 using std::chrono::high_resolution_clock;
 using std::chrono::duration_cast;
@@ -31,11 +30,13 @@ using std::cout;
 class GameClient {
 
 public:
-	//GameState gstate;
+	GameState gstate;
 	ObjectId playerid;
-	IGameState * current_state;
-	IGameState * next_state;
+
+	IMenuState * current_state;
+	IMenuState * next_state;
 	TCPConnection* connection;
+	bool inMenu;
 
     GameClient();
     ~GameClient();
@@ -44,19 +45,26 @@ public:
 	void cleanup();
 
 	void run();
+	void close();
 
 	//managing states
-	void addState(IGameState *state);
+	void addState(IMenuState *state);
 	void removeState();
-	void changeState(IGameState *state); //this is a pop and push
+	void changeState(IMenuState *state); //this is a pop and push
 
 	void updateState();
 
 	void checkError(SocketError err);
 	bool shouldTerminate(SocketError err);
 
+	void sendEvents(vector<Packet> & events);
+	void receiveUpdates();
+	void updateGameState();
+	void checkGameStatus(Player *);
+
 private:
 	//stack of states
-	vector<IGameState *> states;
+	vector<IMenuState *> states;
+	vector<Packet> updates;
 };
 #endif

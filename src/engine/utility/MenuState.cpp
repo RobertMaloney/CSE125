@@ -1,9 +1,9 @@
 #include "MenuState.h"
 #include "..\GameClient.h"
 
-
 MenuState::MenuState()
 {
+	submit = false;
 }
 
 
@@ -15,10 +15,11 @@ MenuState::~MenuState()
 /* init():
  * This function should initilaize all graphics for the menu and other things.
  */
-void MenuState::init()
+void MenuState::init(GameClient* gc)
 {
 	std::cout << "ENTERING: MenuState" << std::endl;
 	menu_select = 0;
+	gameclient = gc;
 }
 
 
@@ -88,20 +89,27 @@ void MenuState::login()
 	gameclient->connection->setNonBlocking(false);
 	gameclient->connection->receive(p);
 
-	ObjectId playerId = p.readUInt();
-	//Player* player = new Player(); MOVE TO GAMESTATE
-	gameclient->playerid = playerId;
+	//ObjectId playerId = p.readUInt();
+	//gameclient->playerid = playerId;
 
-	std::cout << "logging in id " << playerId << std::endl;
+	gameclient->gstate.init();
 
-	//gstate.addplayer
-	//MOVED to gamestate
+	Player * player = new Player();
+	cout << gameclient->playerid << ": " << player->getAngle() << endl;
+	player->deserialize(p);
+	gameclient->playerid = player->getId();
+	cout << gameclient->playerid  << ": " << player->getAngle() << endl;
 
 	//Initializes GraphicsEngine for this client with playerId (i.e. ClientID)
-	//MOVED TO GAMESTATE
-
+	gameclient->gstate.addPlayer(gameclient->playerid, player);
 	//Binds player game object with the player node in Graphics engine
-	//GraphicsEngine::bindPlayerNode(player); MOVES TO GAMESTATE
+	GraphicsEngine::bindPlayerNode(player);
+
+	std::cout << "logging in id " << gameclient->playerid << std::endl;
+
+	//gstate.addplayer
+	//MOVED to gamestate  
+	
 	gameclient->connection->setNonBlocking(true);
 }
 
@@ -160,16 +168,19 @@ void MenuState::menuDown()
 
 void MenuState::menuEnter()
 {
-	//check menu_select state
-	switch (menu_select) {
-	case (PLAY) :
-		play();
-		break;
-	case (QUIT) :
-		quit();
-		break;
-	default:
-		break;
+	if (!submit){
+		//check menu_select state
+		switch (menu_select) {
+		case (PLAY) :
+			play();
+			break;
+		case (QUIT) :
+			quit();
+			break;
+		default:
+			break;
+		}
+		submit = true;
 	}
 }
 
@@ -181,9 +192,7 @@ void MenuState::play()
 	//if success (no exceptions) login to server
 	this->login();
 
-	//push state to game state
-	GameState * gamestate = new GameState();
-	gameclient->addState(gamestate);
+	gameclient->inMenu = false;
 }
 
 

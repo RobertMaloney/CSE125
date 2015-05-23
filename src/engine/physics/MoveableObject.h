@@ -20,7 +20,8 @@ class MoveableObject : public GameObject {
 public:
 
 	//MoveableObject(float acceleration = .0005, float damping = .005);
-	MoveableObject();
+	MoveableObject() : MoveableObject(505,0,0,0){};
+	MoveableObject(float radius, float theta, float azimuth, float direction);
 	virtual ~MoveableObject();
 
 	void setMass(float value);

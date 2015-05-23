@@ -37,7 +37,7 @@ void GameServer::initialize(int maxConns) {
 	maxConnections = maxConns;
 
 	gameState->initWithServer();
-	generateResources(500);
+	engine->generateResources(5);
 }
 
 
@@ -96,7 +96,15 @@ void GameServer::acceptWaitingClient() {
 	//Note: Server generates id for client/player, and addes the player to gamestate
 	//Note: default position foor player is 505,0,0,0
 	ObjectId playerId = idGen->createId();
-	Player* newPlayer = new Player();
+
+	float radius = 505;
+	float theta = (float)(rand() % 180);
+	float azimuth = (float)(rand() % 360);
+	float direction = (float)(rand() % 360);
+	cout << "server:" << direction << endl;
+	Player* newPlayer = new Player(TREE, radius, theta, azimuth, direction);
+	//newPlayer->setId(playerId);
+
 	if (!gameState->addPlayer(playerId, newPlayer)){
 		delete newPlayer;
 		return;
@@ -104,8 +112,12 @@ void GameServer::acceptWaitingClient() {
 	physics->registerInteraction(newPlayer, DRAG | GRAVITY);
 	connection->setNoDelay(true);
 	connection->setNonBlocking(true);
-	clients->insert(make_pair(connection, playerId));	
-	response.writeUInt(playerId);
+	clients->insert(make_pair(connection, playerId));
+
+	//response.writeUInt(playerId);
+	cout << "server:" << newPlayer->getId()<< ": "<<newPlayer->getAngle() << endl;
+	newPlayer->serialize(response);
+
 	connection->send(response);
 	vector<Packet> initial;
 	//initial.push_back(response);
@@ -163,63 +175,4 @@ void GameServer::printUpdates(deque<Packet> & updates) {
 		}
 		cout << "\n";
 	}
-}
-
-void GameServer::generateResources(int num) {
-   int total = 0;
-   for (int i = 0; i < num; i++)
-   {
-      float radius = 505;
-      float theta = (float)(rand() % 180);
-      float azimuth = (float)(rand() % 360);
-      float direction = (float)(rand() % 360);
-      Resource * newRe = new Tree(30, radius, theta, azimuth, direction);
-	  newRe->setModelRadius(3.f);
-	  newRe->setModelHeight(17.f);
-
-      int pick = rand() % 5;
-
-	  // tree      xy 6.f z 16.f
-	  // trunk     xyz      4.f
-	  // rock      xy 8.f z 4.f
-	  // mushroom  xy 2.f z 4.f
-	  // flower    xy 2.f z 1.5f
-	  //Scores are placeholder, need to handle them differently...
-	  if (pick == 0){
-		  newRe = new Tree(30, radius, theta, azimuth, direction);
-		  newRe->setModelRadius(3.f);
-		  newRe->setModelHeight(17.f);
-		  total = total + 30;
-	  } else if (pick == 1) {
-		  newRe = new Rock(radius, theta, azimuth, direction);
-		  newRe->setModelRadius(2.f);
-		  newRe->setModelHeight(4.5f);
-	  }
-	  else if (pick == 2){
-		  newRe = new Stump(10, radius, theta, azimuth, direction);
-		  newRe->setModelRadius(2.f);
-		  newRe->setModelHeight(4.f);
-		  total = total + 10;
-	  }
-	  else if (pick == 3){
-		  newRe = new Mushroom(25, radius, theta, azimuth, direction);
-		  newRe->setModelRadius(1.f);
-		  newRe->setModelHeight(4.f);
-		  total = total + 25;
-	  }
-	  else if (pick == 4){
-		  newRe = new Flower(40, radius, theta, azimuth, direction);
-		  newRe->setModelRadius(1.f);
-		  newRe->setModelHeight(1.5f);
-		  total = total + 40;
-	  }
-
-      ObjectId resourceId = IdGenerator::getInstance().createId();
-      gameState->addResource(resourceId, newRe);
-
-      //radius is always 505
-      //randomize resource model?? (maybe we should separate blob model from resource model)
-      //randomize other coords
-   }
-   gameState->setTotal(total);
 }
