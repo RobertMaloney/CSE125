@@ -9,12 +9,16 @@
 #include <gtc\constants.hpp>
 #include "Shader.h"
 #include "Skybox.h"
+#include "HUD.h"
+#include "Ground.h"
+#include "Menu.h"
 
 using namespace std;
 
 // Graphics Engine Static Members
 vector<MatrixNode*> GraphicsEngine::m_objects;
 glm::mat4			GraphicsEngine::m_view, GraphicsEngine::m_projection;
+glm::vec2           GraphicsEngine::m_screen_scale;
 bool				GraphicsEngine::m_initialized = false;
 GLFWwindow			*GraphicsEngine::m_window;
 
@@ -30,8 +34,16 @@ CameraNode			*GraphicsEngine::m_mainCamera = NULL;
 CameraNode			*GraphicsEngine::m_minimapCamera = NULL;
 
 GLuint				GraphicsEngine::m_skyboxId = 0;
+GLuint				GraphicsEngine::m_HudId = 0;
+GLuint				GraphicsEngine::m_groundId = 0;
+GLuint				GraphicsEngine::m_menuId = 0;
+
 Renderable			*GraphicsEngine::m_skybox = NULL;
-Shader				*GraphicsEngine::m_defaultShader, *GraphicsEngine::m_skyboxShader;
+Renderable			*GraphicsEngine::m_HUD = NULL;
+Renderable			*GraphicsEngine::worldModel = NULL;
+Renderable			*GraphicsEngine::m_menu = NULL;
+
+Shader				*GraphicsEngine::m_defaultShader, *GraphicsEngine::m_skyboxShader, *GraphicsEngine::m_textureShader;// , *GraphicsEngine::m_tShader;
 
 
 unordered_map<ObjectId, MatrixNode*> GraphicsEngine::objNodeMap;
@@ -52,7 +64,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 */
 const float lookScale = 0.3f;
 static void cursor_callback(GLFWwindow* window, double x, double y) {
-	std::cout << "(x,y): (" << x << ", " << y << ")\n";
+	//std::cout << "(x,y): (" << x << ", " << y << ")\n";
 	InputHandler::handleMouse(-x * lookScale, y * lookScale);
 	glfwSetCursorPos(window, 0, 0);
 }
@@ -79,7 +91,7 @@ void GraphicsEngine::Initialize() {
 	GLint fragLengths[] = { version.size(), fragInfo.size() };
 
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-	m_window = glfwCreateWindow(800, 800, "CSE 125", NULL, NULL);
+	m_window = glfwCreateWindow(800, 800, "Dusty Planet v.0.0.1", NULL, NULL);
 	glfwSetKeyCallback(m_window, key_callback);
 	glfwMakeContextCurrent(m_window);
 	glfwSwapInterval(1);
@@ -94,6 +106,8 @@ void GraphicsEngine::Initialize() {
 
 	m_defaultShader = new Shader("../engine/graphics/Shaders/default.vert", "../engine/graphics/Shaders/default.frag");
 	m_skyboxShader = new Shader("../engine/graphics/Shaders/skybox.vert", "../engine/graphics/Shaders/skybox.frag");
+	m_textureShader = new Shader("../engine/graphics/Shaders/texture2D.vert", "../engine/graphics/Shaders/texture2D.frag");
+	//m_tShader = new Shader("../engine/graphics/Shaders/t.vert", "../engine/graphics/Shaders/t.frag");
 
 	// Turn on z-buffering
 	glEnable(GL_DEPTH_TEST);
@@ -102,15 +116,35 @@ void GraphicsEngine::Initialize() {
 	// SKYBOX
 	m_skyboxShader->Use();
 	m_skybox = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.f);
-	m_skyboxId = Skybox::makeSkybox("../../media/texture/skybox/");
+	m_skyboxId = Skybox::makeSkybox("../../media/texture/skybox/", 0);
+	m_skybox->setIsSkybox(true);
 	m_skybox->setTextureId(m_skyboxId);
+	
+	// HUD
+    m_textureShader->Use();
+	m_HUD = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.f);
+	m_HudId = HUD::makeHUD("../../media/texture/HUD.png", 1);
+	m_HUD->setTextureId(m_HudId);
+
+	// Menu
+	m_textureShader->Use();
+	m_menu = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.f);
+	m_menuId = Menu::makeMenu("../../media/texture/start_bg.png", 2);
+	m_menu->setTextureId(m_menuId);
 
 	// WORLD
+	//m_textureShader->Use();
 	m_defaultShader->Use();
-	Renderable* worldModel = new Geometry("../../media/models/sphere.obj");
+	worldModel = new Geometry("../../media/models/sphere.obj");
+
+	//m_groundId = Ground::makeGround("../../media/texture/ground.png", 3);
+	//worldModel->setTextureId(m_groundId);
+
 	Geode* worldGeode = new Geode();
 	worldGeode->setRenderable(worldModel);
+	//worldGeode->setTex(true);
 	m_scene->addChild(worldGeode);
+
 
 	// CAMERA
 	glm::mat4 camview = glm::lookAt(
@@ -125,8 +159,7 @@ void GraphicsEngine::Initialize() {
 	m_minimapCamera = new CameraNode();
 	m_minimapCamera->setViewMatrix(minimapview);
 
-	// PLAYER  (Player node is created by default)
-
+	// PLAYER  (Player node is created by default
 	/*Renderable * model = GraphicsEngine::selectModel(playerId);
 	m_player = GraphicsEngine::addNode(model);
 	m_player->addChild(m_mainCamera);
@@ -138,7 +171,24 @@ void GraphicsEngine::Initialize() {
 	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
 
 	m_initialized = true;
+
+	m_screen_scale = glm::vec2(2.0f, 2.0f);
+
 }
+
+void GraphicsEngine::ZoomIn(CameraNode *a) {
+	glm::mat4 mat = a->getFlatViewMatrix();
+	mat[3][2] += 10;
+	a->setViewMatrix(mat);
+
+}
+void GraphicsEngine::ZoomOut(CameraNode *a) {
+	glm::mat4 mat = a->getFlatViewMatrix();
+	mat[3][2] -= 10;
+	a->setViewMatrix(mat);
+
+}
+
 
 /**
 * GraphicsEngine::Closing()
@@ -208,17 +258,33 @@ void GraphicsEngine::DrawAndPoll() {
 	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "view"), 1, GL_FALSE, glm::value_ptr(view));
 
 	renderScene(m_scene, &identity);
-	glViewport(width -200, height-200,200, 200);
 
-	glClear( GL_DEPTH_BUFFER_BIT);
+	glViewport(width -200, height-200,200, 200);
+	glClear(GL_DEPTH_BUFFER_BIT);
 
 	//view = m_minimapCamera->getFlatViewMatrix();
-
+	
 	// minimap
 	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "view"), 1, GL_FALSE, glm::value_ptr(m_minimapCamera->getFlatViewMatrix()));
 	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "projection"), 1, GL_FALSE, glm::value_ptr(m_projection));
 
 	renderScene(m_scene, &identity);
+
+	// HUD
+	glViewport(0, height - 200, 200, 200);
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	
+	//glm::mat4 identity;
+	glDepthMask(GL_FALSE);
+	m_textureShader->Use();
+	glOrtho(0, 0, 0,0, 0, 1);
+	//renderScene(m_scene, &identity);
+	glUniform1i(glGetUniformLocation(m_textureShader->Id(), "tex"), 1);
+	glUniform2fv(glGetUniformLocation(m_textureShader->Id(), "scale"), 1, glm::value_ptr(m_screen_scale));
+	m_HUD->render(&identity);
+	glDepthMask(GL_TRUE);
+
 	glEnable(GL_DEPTH_TEST);
 
 	glfwSwapBuffers(m_window);
@@ -228,6 +294,24 @@ void GraphicsEngine::DrawAndPoll() {
 
 void GraphicsEngine::DrawAndPollMenu()
 {
+	int height, width;
+	glfwGetWindowSize(m_window, &width, &height);
+
+	glViewport(0, 0, width, height);
+	//MenuState
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glm::mat4 identity;
+	glDepthMask(GL_FALSE);
+	m_textureShader->Use();
+	glOrtho(0, 0, 0, 0, 0, 1);
+	//renderScene(m_scene, &identity);
+	glUniform1i(glGetUniformLocation(m_textureShader->Id(), "tex"), 2);
+	glUniform2fv(glGetUniformLocation(m_textureShader->Id(), "scale"), 1, glm::value_ptr(m_screen_scale));
+	m_menu->render(&identity);
+	glDepthMask(GL_TRUE);
+
+	glfwSwapBuffers(m_window);
 	glfwPollEvents();
 }
 
@@ -243,6 +327,14 @@ void GraphicsEngine::renderScene(Node* node, glm::mat4* matrix) {
 	if (geode) {
 		// render geode
 		//cout << glm::to_string(*matrix) << endl << endl;
+		if (geode->getTex()){
+			//m_tShader->Use();
+			m_textureShader->Use();
+			//cout << "ts" << endl;
+		}
+		else{
+			m_defaultShader->Use();
+		}
 		geode->getRenderable()->render(matrix);
 	}
 	else if (mnode && mnode->getVisible()) {
@@ -324,11 +416,12 @@ MatrixNode* GraphicsEngine::addNode(Renderable* objModel, bool f){
 
 // Select blob model based on playerId, will be changed later
 Renderable * GraphicsEngine::selectModel(Model model){
+   m_defaultShader->Use();
    Renderable* newModel;
    std::string pathString = "../../media/models/" + ResourceMap::getObjFile(model);
    const char * path = pathString.c_str();
    newModel = new Geometry(path);
-	return newModel;
+   return newModel;
 }
 
 // Translate from vec4 postion to matrix in the node of scene graph??

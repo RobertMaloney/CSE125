@@ -33,8 +33,9 @@ public:
 
 
 
-   Player() : Player(OB_TYPE) {};
-	Player(Model bm, float radius = 505, float theta = 0, float azimuth = 0, float direction = 0);
+    Player() : Player(OB_TYPE) {};
+	Player(Model bm) : Player(bm, 505, 0, 0, 0){};
+	Player(Model bm, float radius, float theta, float azimuth, float direction);
 
     ~Player();
 

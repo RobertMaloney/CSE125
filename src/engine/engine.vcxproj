@@ -136,7 +136,9 @@
     <ClInclude Include="graphics\Geode.h" />
     <ClInclude Include="Graphics\Geometry.h" />
     <ClInclude Include="Graphics\GraphicsEngine.h" />
+    <ClInclude Include="graphics\HUD.h" />
     <ClInclude Include="graphics\MatrixNode.h" />
+    <ClInclude Include="graphics\Menu.h" />
     <ClInclude Include="graphics\Node.h" />
     <ClInclude Include="Graphics\Renderable.h" />
     <ClInclude Include="graphics\Shader.h" />
@@ -157,7 +159,7 @@
     <ClInclude Include="utility\Event.h" />
     <ClInclude Include="utility\GameObject.h" />
     <ClInclude Include="utility\GameState.h" />
-    <ClInclude Include="utility\IGameState.h" />
+    <ClInclude Include="utility\IMenuState.h" />
     <ClInclude Include="utility\IdGenerator.h" />
     <ClInclude Include="utility\InputHandler.h" />
     <ClInclude Include="utility\MenuState.h" />
@@ -175,6 +177,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+    <None Include="graphics\Shaders\t.frag" />
+    <None Include="graphics\Shaders\t.vert" />
+    <None Include="graphics\Shaders\texture2D.frag" />
+    <None Include="graphics\Shaders\texture2D.vert" />
     <None Include="Network\Endianness.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

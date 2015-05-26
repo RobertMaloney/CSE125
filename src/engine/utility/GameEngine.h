@@ -3,7 +3,7 @@
 
 #include "GameObject.h"
 #include "GameState.h"
-//#include "Status.h"
+#include "Resources.h"
 
 using namespace std;
 
@@ -18,6 +18,7 @@ public:
 	void calculatePercent();
 	void endGame();
 	GameState* gstate;
+	void generateResources(int);
 
 };
 

@@ -17,7 +17,7 @@
 #include "utility/IdGenerator.h"
 #include "utility/GameState.h"
 #include "utility/GameEngine.h"
-#include "utility/Resources.h"
+
 
 using std::to_string;
 using std::this_thread::sleep_for;
@@ -54,7 +54,7 @@ private:
 
     void acceptWaitingClient();
     void printUpdates(deque<Packet> & updates);
-    void generateResources(int num);
+    //void generateResources(int num);
     inline bool shouldTerminate(SocketError err);
     
 	unsigned int maxConnections;

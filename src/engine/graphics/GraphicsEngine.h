@@ -59,12 +59,15 @@ public:
 	static void updateObject(ObjectId objId, glm::quat &, float, float, bool);
 	static void insertObject(ObjectId objId, MatrixNode*);
    static void removeObject(ObjectId objId);
+   static void ZoomIn(CameraNode *a);
+   static void ZoomOut(CameraNode *a);
 
 	static MatrixNode* addNode(Renderable*, bool);
    static Renderable* selectModel(Model model);
 
 private:
 	static glm::mat4				m_view, m_projection;
+	static glm::vec2                m_screen_scale;
 	static bool						m_initialized;
 	static GLFWwindow				*m_window;
 	static GLint					m_uniView, m_uniProjection;
@@ -75,9 +78,9 @@ private:
 	static CameraNode				*m_minimapCamera;
 	static MatrixNode				*m_scene;
 
-	static GLuint					m_skyboxId;
-	static Renderable				*m_skybox;
-	static Shader					*m_defaultShader, *m_skyboxShader;
+	static GLuint					m_skyboxId, m_HudId, m_groundId, m_menuId;// , m_tId;
+	static Renderable				*m_skybox, *m_HUD, *worldModel, *m_menu;
+	static Shader					*m_defaultShader, *m_skyboxShader, *m_textureShader;// , *m_tShader;
 
 
 	static unordered_map<ObjectId, MatrixNode*> objNodeMap;

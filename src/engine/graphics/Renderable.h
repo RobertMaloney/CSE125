@@ -26,6 +26,7 @@ private:
 	GLint		m_numElems, m_numVerts;
 	GLboolean	m_valid;
 	GLenum		m_drawType;
+	bool        isSkybox = false;
 
 protected:
 	glm::mat4 m_matrix;
@@ -124,7 +125,12 @@ public:
 		if (m_valid) {
 			glBindVertexArray(m_vao);
 			if (m_texId != 0) {
-				glBindTexture(GL_TEXTURE_CUBE_MAP, m_texId);
+				if (this->isSkybox){
+					glBindTexture(GL_TEXTURE_CUBE_MAP, m_texId);
+				}
+				else{
+					glBindTexture(GL_TEXTURE_2D, m_texId);
+				}
 			}
 			glUniformMatrix4fv(m_model, 1, GL_FALSE, glm::value_ptr(*matrix));
 			switch (m_renderMode) {
@@ -137,6 +143,9 @@ public:
 
 	void setTextureId(GLuint id) {
 		m_texId = id;
+	}
+	void setIsSkybox(bool v){
+		isSkybox = v;
 	}
 };
 #endif
