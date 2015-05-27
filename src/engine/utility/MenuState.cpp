@@ -154,20 +154,39 @@ void MenuState::updateMenuState() {
 
 void MenuState::menuUp()
 {
+	MenuStatus m = GraphicsEngine::getMenuStatus();
+
 	menu_select = menu_select - 1;
 	//not sure if mod handles negatives
 	if (menu_select < 0) menu_select = MENU_SELECTIONS_NUM - 1;
 
-	GraphicsEngine::setMenuStatus(MenuStatus::START);
-
+    if (m == MenuStatus::MWINREPLAY || m == MenuStatus::MWINQUIT){
+		GraphicsEngine::setMenuStatus(MenuStatus::MWINREPLAY);
+	}
+	else if (m == MenuStatus::MLOSEREPLAY || m == MenuStatus::MLOSEQUIT){
+		GraphicsEngine::setMenuStatus(MenuStatus::MLOSEREPLAY);
+	}
+	else{
+		GraphicsEngine::setMenuStatus(MenuStatus::START);
+	}
 }
 
 
 void MenuState::menuDown()
 {
+	MenuStatus m = GraphicsEngine::getMenuStatus();
+
 	menu_select = (menu_select + 1) % MENU_SELECTIONS_NUM;
 
-	GraphicsEngine::setMenuStatus(MenuStatus::QUIT);
+	if (m == MenuStatus::MWINREPLAY || m == MenuStatus::MWINQUIT){
+		GraphicsEngine::setMenuStatus(MenuStatus::MWINQUIT);
+	}
+	else if (m == MenuStatus::MLOSEREPLAY || m == MenuStatus::MLOSEQUIT){
+		GraphicsEngine::setMenuStatus(MenuStatus::MLOSEQUIT);
+	}
+	else{
+		GraphicsEngine::setMenuStatus(MenuStatus::QUIT);
+	}
 }
 
 
@@ -177,9 +196,11 @@ void MenuState::menuEnter()
 		//check menu_select state
 		switch (menu_select) {
 		case (PLAY) :
+			menu_select = 0;
 			play();
 			break;
 		case (QUIT) :
+			menu_select = 0;
 			quit();
 			break;
 		default:

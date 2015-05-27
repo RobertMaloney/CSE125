@@ -131,12 +131,16 @@ void GameClient::checkGameStatus(Player * p){
 		std::cout << "I win. yayyyyy" << endl;
 
         //Another menu status or leaderboard or whatever thing should happen here : ask player to replay or end the game....
-		this->close();//client
+		inMenu = true;
+		GraphicsEngine::setMenuStatus(MenuStatus::MWINREPLAY);
+		//this->close();//client
 	}
 	else if (p->getStatus() == GStatus::LOSE){
 		std::cout << "I lose :(" << endl;
 
-		this->close();
+		inMenu = true;
+		GraphicsEngine::setMenuStatus(MenuStatus::MLOSEREPLAY);
+		//this->close();
 	}// else do nothing
 }
 

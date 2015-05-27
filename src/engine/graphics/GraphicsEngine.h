@@ -38,7 +38,12 @@ typedef void (*KeyCallback) (int,int,int);
 
 enum MenuStatus {
 	START = 0,
-	QUIT
+	QUIT,
+	MWINREPLAY,
+	MWINQUIT,
+	MLOSEREPLAY,
+	MLOSEQUIT,
+	WAITING
 };
 
 
@@ -68,6 +73,7 @@ public:
     static void ZoomIn(CameraNode *a);
     static void ZoomOut(CameraNode *a);
 	static void setMenuStatus(MenuStatus ms);
+	static MenuStatus getMenuStatus();
 
 
 	static MatrixNode* addNode(Renderable*, bool);
@@ -87,7 +93,7 @@ private:
 	static CameraNode				*m_minimapCamera;
 	static MatrixNode				*m_scene;
 
-	static GLuint					m_skyboxId, m_HudId, m_groundId, m_menuId1, m_menuId2;// , m_tId;
+	static GLuint					m_skyboxId, m_HudId, m_groundId, m_menuId1, m_menuId2, m_menuId3, m_menuId4, m_menuId5, m_menuId6;// , m_tId;
 	static Renderable				*m_skybox, *m_HUD, *worldModel, *m_menu;
 	static Shader					*m_defaultShader, *m_skyboxShader, *m_textureShader;// , *m_tShader;
 

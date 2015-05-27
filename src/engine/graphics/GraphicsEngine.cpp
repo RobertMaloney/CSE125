@@ -38,6 +38,10 @@ GLuint				GraphicsEngine::m_HudId = 0;
 GLuint				GraphicsEngine::m_groundId = 0;
 GLuint				GraphicsEngine::m_menuId1 = 0;
 GLuint				GraphicsEngine::m_menuId2 = 0;
+GLuint				GraphicsEngine::m_menuId3 = 0;
+GLuint				GraphicsEngine::m_menuId4 = 0;
+GLuint				GraphicsEngine::m_menuId5 = 0;
+GLuint				GraphicsEngine::m_menuId6 = 0;
 
 Renderable			*GraphicsEngine::m_skybox = NULL;
 Renderable			*GraphicsEngine::m_HUD = NULL;
@@ -130,8 +134,12 @@ void GraphicsEngine::Initialize() {
 	// Menu
 	m_textureShader->Use();
 	m_menu = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.f);
-	m_menuId1 = HUD::makeHUD("../../media/texture/bg_start.png", 2);
-	m_menuId2 = HUD::makeHUD("../../media/texture/bg_quit.png", 3);
+	m_menuId1 = HUD::makeHUD("../../media/texture/bg_start.png", 2);//start start
+	m_menuId2 = HUD::makeHUD("../../media/texture/bg_quit.png", 3);//start quit
+	m_menuId3 = HUD::makeHUD("../../media/texture/win_replay.png", 4);//win replay
+	m_menuId4 = HUD::makeHUD("../../media/texture/win_quit.png", 5);//win quit
+	m_menuId5 = HUD::makeHUD("../../media/texture/lose_replay.png", 6);//lose replay
+	m_menuId6 = HUD::makeHUD("../../media/texture/lose_quit.png", 7);//lose quit
 	m_menu->setTextureId(m_menuId1);
 
 	// WORLD
@@ -297,6 +305,10 @@ void GraphicsEngine::setMenuStatus(MenuStatus i){
     ms = i;
 }
 
+MenuStatus GraphicsEngine::getMenuStatus(){
+	return ms;
+}
+
 void GraphicsEngine::DrawAndPollMenu()
 {
 	int height, width;
@@ -315,9 +327,25 @@ void GraphicsEngine::DrawAndPollMenu()
 		m_menu->setTextureId(m_menuId1);
 		glUniform1i(glGetUniformLocation(m_textureShader->Id(), "tex"), 2);
 	}
-	else{
+	else if(ms == QUIT){
 		m_menu->setTextureId(m_menuId2);
 		glUniform1i(glGetUniformLocation(m_textureShader->Id(), "tex"), 3);
+	}
+	else if (ms == MWINREPLAY){
+		m_menu->setTextureId(m_menuId3);
+		glUniform1i(glGetUniformLocation(m_textureShader->Id(), "tex"), 4);
+	}
+	else if (ms == MWINQUIT){
+		m_menu->setTextureId(m_menuId4);
+		glUniform1i(glGetUniformLocation(m_textureShader->Id(), "tex"), 5);
+	}
+	else if (ms == MLOSEREPLAY){
+		m_menu->setTextureId(m_menuId5);
+		glUniform1i(glGetUniformLocation(m_textureShader->Id(), "tex"), 6);
+	}
+	else if (ms == MLOSEQUIT){
+		m_menu->setTextureId(m_menuId6);
+		glUniform1i(glGetUniformLocation(m_textureShader->Id(), "tex"), 7);
 	}
 	
 	glUniform2fv(glGetUniformLocation(m_textureShader->Id(), "scale"), 1, glm::value_ptr(m_screen_scale));

@@ -13,7 +13,8 @@ public:
 
 	enum MenuSelections{
 		PLAY,
-		QUIT
+		QUIT,
+		REPLAY
 	};
 
 	vector<Packet> updates;
