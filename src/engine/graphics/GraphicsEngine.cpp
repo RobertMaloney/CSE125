@@ -45,6 +45,7 @@ GLuint				GraphicsEngine::m_HudIdN3 = 0;
 GLuint				GraphicsEngine::m_HudIdN4 = 0;
 
 GLuint				GraphicsEngine::m_groundId = 0;
+GLuint				GraphicsEngine::m_borderId = 0;
 
 GLuint				GraphicsEngine::m_menuId1 = 0;
 GLuint				GraphicsEngine::m_menuId2 = 0;
@@ -57,6 +58,7 @@ int					GraphicsEngine::HUDH = 100;
 
 
 Renderable			*GraphicsEngine::m_skybox = NULL;
+Renderable			*GraphicsEngine::m_border = NULL;
 
 Renderable			*GraphicsEngine::m_HUD1 = NULL;
 Renderable			*GraphicsEngine::m_HUD2 = NULL;
@@ -223,6 +225,9 @@ void GraphicsEngine::addHUD(){
 	m_HudId4 = HUD::makeHUD("../../media/texture/HUD4.png", 10);
 	m_HUD4->setTextureId(m_HudId4);
 
+
+	//TODO replace pictures with right ones
+
 	m_HUDN1 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_HudIdN1 = HUD::makeHUD("../../media/texture/HUD.png", 11);
 	m_HUDN1->setTextureId(m_HudIdN1);
@@ -238,6 +243,12 @@ void GraphicsEngine::addHUD(){
 	m_HUDN4 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_HudIdN4 = HUD::makeHUD("../../media/texture/HUD.png", 14);
 	m_HUDN4->setTextureId(m_HudIdN4);
+
+	//Mini map border
+
+	m_border = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
+	m_borderId = HUD::makeHUD("../../media/texture/border.png", 15);
+	m_border->setTextureId(m_borderId);
 
 	/*m_HUD1 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_HudId1 = HUD::makeHUD("../../media/texture/HUD.png", 1);
@@ -346,7 +357,6 @@ void GraphicsEngine::DrawAndPoll() {
 	glDepthMask(GL_FALSE);
 	m_textureShader->Use();
 	renderHUD(width, height, identity);
-
 	glEnable(GL_DEPTH_TEST);
 
 	glfwSwapBuffers(m_window);
@@ -429,6 +439,17 @@ void GraphicsEngine::renderHUD(int width, int height, glm::mat4 & identity){
 	glUniform2fv(glGetUniformLocation(m_textureShader->Id(), "scale"), 1, glm::value_ptr(m_screen_scale));
 	m_HUDN4->render(&identity);
 
+	//HUD on top of minimap
+	glViewport(width - HUDW*2, height - HUDH*2, HUDW*2, HUDH*2);
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	glOrtho(0, 0, 0, 0, 0, 1);
+	glUniform1i(glGetUniformLocation(m_textureShader->Id(), "tex"), 15);
+	glUniform2fv(glGetUniformLocation(m_textureShader->Id(), "scale"), 1, glm::value_ptr(m_screen_scale));
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_ONE, GL_ONE);
+	m_border->render(&identity);
+	glDisable(GL_BLEND);
 
 }
 
