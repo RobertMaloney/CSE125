@@ -82,6 +82,8 @@ private:
 	static Renderable				*m_skybox, *m_HUD, *worldModel, *m_menu;
 	static Shader					*m_defaultShader, *m_skyboxShader, *m_textureShader;// , *m_tShader;
 
+	static int						m_sunLight;
+
 
 	static unordered_map<ObjectId, MatrixNode*> objNodeMap;
 	
