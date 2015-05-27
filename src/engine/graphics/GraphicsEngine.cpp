@@ -48,6 +48,7 @@ GLuint				GraphicsEngine::m_groundId = 0;
 GLuint				GraphicsEngine::m_borderId = 0;
 GLuint				GraphicsEngine::m_plusId = 0;
 GLuint				GraphicsEngine::m_minusId = 0;
+GLuint				GraphicsEngine::m_timerId = 0;
 
 GLuint				GraphicsEngine::m_menuId1 = 0;
 GLuint				GraphicsEngine::m_menuId2 = 0;
@@ -63,6 +64,7 @@ Renderable			*GraphicsEngine::m_skybox = NULL;
 Renderable			*GraphicsEngine::m_border = NULL;
 Renderable			*GraphicsEngine::m_plus = NULL;
 Renderable			*GraphicsEngine::m_minus = NULL;
+Renderable			*GraphicsEngine::m_timer = NULL;
 
 Renderable			*GraphicsEngine::m_HUD1 = NULL;
 Renderable			*GraphicsEngine::m_HUD2 = NULL;
@@ -261,15 +263,22 @@ void GraphicsEngine::addHUD(){
 	m_minus = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_minusId = HUD::makeHUD("../../media/texture/minus.png", 17);
 	m_minus->setTextureId(m_minusId);
+
+	// Timer
+	m_timer = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
+	m_timerId = HUD::makeHUD("../../media/texture/timer.png", 18);
+	m_timer->setTextureId(m_timerId);
 }
 
-void GraphicsEngine::ZoomIn(CameraNode *a) {
+void GraphicsEngine::ZoomIn() {
+	CameraNode *a = m_minimapCamera;
 	glm::mat4 mat = a->getFlatViewMatrix();
 	mat[3][2] += 10;
 	a->setViewMatrix(mat);
 
 }
-void GraphicsEngine::ZoomOut(CameraNode *a) {
+void GraphicsEngine::ZoomOut() {
+	CameraNode *a = m_minimapCamera;
 	glm::mat4 mat = a->getFlatViewMatrix();
 	mat[3][2] -= 10;
 	a->setViewMatrix(mat);
@@ -444,6 +453,18 @@ void GraphicsEngine::renderHUD(int width, int height, glm::mat4 & identity){
 	m_HUDN4->render(&identity);
 
 
+	//HUD on top of minimap
+	glViewport(width - HUDW * 2, height - HUDH * 2, HUDW * 2, HUDH * 2);
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	glOrtho(0, 0, 0, 0, 0, 1);
+	glUniform1i(glGetUniformLocation(m_textureShader->Id(), "tex"), 15);
+	glUniform2fv(glGetUniformLocation(m_textureShader->Id(), "scale"), 1, glm::value_ptr(m_screen_scale));
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_ONE, GL_ONE);
+	m_border->render(&identity);
+	glDisable(GL_BLEND);
+
 	// Zoom in 
 	glViewport(width - HUDW * 2 - HUDW/2, height - HUDH + HUDW/2, HUDW/2, HUDH/2);
 	glClear(GL_DEPTH_BUFFER_BIT);
@@ -462,17 +483,16 @@ void GraphicsEngine::renderHUD(int width, int height, glm::mat4 & identity){
 	glUniform2fv(glGetUniformLocation(m_textureShader->Id(), "scale"), 1, glm::value_ptr(m_screen_scale));
 	m_minus->render(&identity);
 
-	//HUD on top of minimap
-	glViewport(width - HUDW * 2, height - HUDH * 2, HUDW * 2, HUDH * 2);
+	// Timer
+	glViewport(width - HUDW * 2 - HUDW / 2 - HUDW * 5/4, height - HUDH + HUDH / 4, HUDW * 5/4, HUDH * 3 / 4);
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 	glOrtho(0, 0, 0, 0, 0, 1);
-	glUniform1i(glGetUniformLocation(m_textureShader->Id(), "tex"), 15);
+	glUniform1i(glGetUniformLocation(m_textureShader->Id(), "tex"), 18);
 	glUniform2fv(glGetUniformLocation(m_textureShader->Id(), "scale"), 1, glm::value_ptr(m_screen_scale));
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_ONE, GL_ONE);
-	m_border->render(&identity);
-	glDisable(GL_BLEND);
+	m_timer->render(&identity);
+
+
 
 }
 

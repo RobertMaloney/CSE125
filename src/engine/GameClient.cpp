@@ -75,8 +75,14 @@ void GameClient::sendEvents(vector<Packet> & events)
 void GameClient::receiveUpdates()
 {
 	this->checkError(this->connection->receive(updates));
+	//this->receiveClientInput();
 }
 
+/*void GameClient::receiveClientInput()
+{
+	clientUpdates = vector<Packet>(InputHandler::clientInput);
+	InputHandler::clientInput.clear();
+}*/
 
 void GameClient::updateGameState() {
 	if (updates.size() <= 0) {
@@ -124,6 +130,26 @@ void GameClient::updateGameState() {
 		if (obj->getId() == this->playerid)
 		    this->checkGameStatus(dynamic_cast<Player*>(obj));
 	}
+
+
+	//client specific input updates
+	/*if (clientUpdates.size() <= 0) {
+		return;
+	}
+
+	for (auto packet = updates.begin(); packet != updates.end(); ++packet) {
+		if (packet->size() <= 0) {
+			continue;
+		}*/
+
+		// = packet->readByte();
+		//get event
+		//if it is zoom in
+		//graphicengine;.izooomin
+		//else it it zoom out
+		//then zoom out
+	//}
+
 }
 
 void GameClient::checkGameStatus(Player * p){
