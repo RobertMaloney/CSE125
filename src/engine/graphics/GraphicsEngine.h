@@ -63,12 +63,12 @@ public:
 	static void ScaleDown();
 	static KeyCallback GetKeyCallback();
 	//static void UpdatePlayer(deque<Packet> &, GameState &);
-    static int getKeyState(int);
+   static int getKeyState(int);
 
-    static void bindPlayerNode(GameObject* player);
+   static void bindPlayerNode(GameObject* player);
 	static void updateObject(ObjectId objId, glm::quat &, float, float, bool);
 	static void insertObject(ObjectId objId, MatrixNode*);
-    static void removeObject(ObjectId objId);
+   static void removeObject(ObjectId objId);
     static void ZoomIn();
     static void ZoomOut();
 	static void setMenuStatus(MenuStatus ms);
@@ -76,8 +76,8 @@ public:
 
 
 	static MatrixNode* addNode(Renderable*, bool);
-    static Renderable* selectModel(Model model);
-	
+   static Renderable* selectModel(Model model);
+
 
 private:
 	static glm::mat4				m_view, m_projection;
@@ -97,6 +97,9 @@ private:
 	static GLuint					m_timerId, m_plusId, m_minusId,m_borderId, m_skyboxId, m_HudId1, m_HudId2, m_HudId3, m_HudId4, m_HudIdN1, m_HudIdN2, m_HudIdN3, m_HudIdN4, m_groundId, m_menuId1, m_menuId2, m_menuId3, m_menuId4, m_menuId5, m_menuId6;// , m_tId;
 	static Renderable				*m_timer, *m_plus, *m_minus, *m_border, *m_skybox, *m_HUD1, *m_HUD2, *m_HUD3, *m_HUD4, *m_HUDN1, *m_HUDN2, *m_HUDN3, *m_HUDN4, *worldModel, *m_menu;
 	static Shader					*m_defaultShader, *m_skyboxShader, *m_textureShader;// , *m_tShader;
+
+	static int						m_sunLight;
+
 
 	static MenuStatus ms;
 	static unordered_map<ObjectId, MatrixNode*> objNodeMap;

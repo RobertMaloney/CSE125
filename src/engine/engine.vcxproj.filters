@@ -73,6 +73,7 @@
     <ClInclude Include="graphics\HUD.h" />
     <ClInclude Include="utility\GameEngine.h" />
     <ClInclude Include="utility\Status.h" />
+    <ClInclude Include="graphics\LightHandler.h" />
     <ClInclude Include="utility\IMenuState.h" />
   </ItemGroup>
   <ItemGroup>

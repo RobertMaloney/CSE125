@@ -105,6 +105,7 @@
     <ClCompile Include="GameClient.cpp" />
     <ClCompile Include="GameServer.cpp" />
     <ClCompile Include="Graphics\GraphicsEngine.cpp" />
+    <ClCompile Include="graphics\LightHandler.cpp" />
     <ClCompile Include="graphics\Shader.cpp" />
     <ClCompile Include="network\Packet.cpp" />
     <ClCompile Include="network\PacketHandler.cpp" />
@@ -136,6 +137,7 @@
     <ClInclude Include="graphics\Geode.h" />
     <ClInclude Include="Graphics\Geometry.h" />
     <ClInclude Include="Graphics\GraphicsEngine.h" />
+    <ClInclude Include="graphics\LightHandler.h" />
     <ClInclude Include="graphics\HUD.h" />
     <ClInclude Include="graphics\MatrixNode.h" />
     <ClInclude Include="graphics\Node.h" />
