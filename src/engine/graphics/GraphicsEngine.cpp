@@ -46,6 +46,8 @@ GLuint				GraphicsEngine::m_HudIdN4 = 0;
 
 GLuint				GraphicsEngine::m_groundId = 0;
 GLuint				GraphicsEngine::m_borderId = 0;
+GLuint				GraphicsEngine::m_plusId = 0;
+GLuint				GraphicsEngine::m_minusId = 0;
 
 GLuint				GraphicsEngine::m_menuId1 = 0;
 GLuint				GraphicsEngine::m_menuId2 = 0;
@@ -59,6 +61,8 @@ int					GraphicsEngine::HUDH = 100;
 
 Renderable			*GraphicsEngine::m_skybox = NULL;
 Renderable			*GraphicsEngine::m_border = NULL;
+Renderable			*GraphicsEngine::m_plus = NULL;
+Renderable			*GraphicsEngine::m_minus = NULL;
 
 Renderable			*GraphicsEngine::m_HUD1 = NULL;
 Renderable			*GraphicsEngine::m_HUD2 = NULL;
@@ -245,18 +249,18 @@ void GraphicsEngine::addHUD(){
 	m_HUDN4->setTextureId(m_HudIdN4);
 
 	//Mini map border
-
 	m_border = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_borderId = HUD::makeHUD("../../media/texture/border.png", 15);
 	m_border->setTextureId(m_borderId);
 
-	/*m_HUD1 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
-	m_HudId1 = HUD::makeHUD("../../media/texture/HUD.png", 1);
-	m_HUD1->setTextureId(m_HudId1);
+    // Zoom in and out buttons
+	m_plus = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
+	m_plusId = HUD::makeHUD("../../media/texture/plus.png", 16);
+	m_plus->setTextureId(m_plusId);
 
-	m_HUD2 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
-	m_HudId2 = HUD::makeHUD("../../media/texture/HUD.png", 8);
-	m_HUD2->setTextureId(m_HudId2);*/
+	m_minus = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
+	m_minusId = HUD::makeHUD("../../media/texture/minus.png", 17);
+	m_minus->setTextureId(m_minusId);
 }
 
 void GraphicsEngine::ZoomIn(CameraNode *a) {
@@ -439,8 +443,27 @@ void GraphicsEngine::renderHUD(int width, int height, glm::mat4 & identity){
 	glUniform2fv(glGetUniformLocation(m_textureShader->Id(), "scale"), 1, glm::value_ptr(m_screen_scale));
 	m_HUDN4->render(&identity);
 
+
+	// Zoom in 
+	glViewport(width - HUDW * 2 - HUDW/2, height - HUDH + HUDW/2, HUDW/2, HUDH/2);
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	glOrtho(0, 0, 0, 0, 0, 1);
+	glUniform1i(glGetUniformLocation(m_textureShader->Id(), "tex"), 16);
+	glUniform2fv(glGetUniformLocation(m_textureShader->Id(), "scale"), 1, glm::value_ptr(m_screen_scale));
+	m_plus->render(&identity);
+
+	// Zoom out
+	glViewport(width - HUDW * 2 - HUDW / 2, height - HUDH , HUDW / 2, HUDH / 2);
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	glOrtho(0, 0, 0, 0, 0, 1);
+	glUniform1i(glGetUniformLocation(m_textureShader->Id(), "tex"), 17);
+	glUniform2fv(glGetUniformLocation(m_textureShader->Id(), "scale"), 1, glm::value_ptr(m_screen_scale));
+	m_minus->render(&identity);
+
 	//HUD on top of minimap
-	glViewport(width - HUDW*2, height - HUDH*2, HUDW*2, HUDH*2);
+	glViewport(width - HUDW * 2, height - HUDH * 2, HUDW * 2, HUDH * 2);
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 	glOrtho(0, 0, 0, 0, 0, 1);
