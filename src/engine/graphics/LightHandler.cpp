@@ -20,6 +20,7 @@ int LightHandler::addLight(Light& l) {
 int LightHandler::addLight(int mode, vec3 pos, float sd, vec3 cd, float ss, vec3 cs, float sa, vec3 ca) {
 	Light l;
 	l.valid = true;
+	l.changed = true;
 	l.mode = mode;
 	l.position = pos;
 	l.scalarDiffuse = sd;
@@ -32,15 +33,22 @@ int LightHandler::addLight(int mode, vec3 pos, float sd, vec3 cd, float ss, vec3
 	return addLight(l);
 }
 
-void LightHandler::updateLighting(GLuint shaderId) {
-	if (!hasChanged) return; // optimized, but wont work with multiple shaders
+Light& LightHandler::getLight(int index) {
+	return lights[index];
+}
 
+void LightHandler::changePosition(int index, vec3 newpos) {
+	lights[index].position = newpos;
+	lights[index].changed = true;
+}
+
+void LightHandler::updateLighting(GLuint shaderId) {
 	int glslid = 0;
 	std::stringstream ss;
 	for (auto iter = lights.begin(); iter != lights.end() && glslid < MAXLIGHTS; ++iter, ++glslid) {
 		ss << "lights[" << glslid << "]";
-		std::cout << ss.str() << std::endl;
 		Light l = iter->second;
+		if (!l.changed) continue;
 
 		GLint lValid = glGetUniformLocation(shaderId, (ss.str() + ".valid").c_str());
 		GLint lMode = glGetUniformLocation(shaderId, (ss.str() + ".mode").c_str());
@@ -62,13 +70,12 @@ void LightHandler::updateLighting(GLuint shaderId) {
 		glUniform1f(lSA, l.scalarAmbient);
 		glUniform3fv(lCA, 1, glm::value_ptr(l.colorAmbient));
 
+		iter->second.changed = false;
 		ss.str("");
 	}
 
 	GLint nl = glGetUniformLocation(shaderId, "numLights");
 	glUniform1i(nl, glslid);
-
-	hasChanged = false;
 }
 
 void LightHandler::removeLightById(int id) {

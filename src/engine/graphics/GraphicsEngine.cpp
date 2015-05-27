@@ -34,6 +34,7 @@ GLuint				GraphicsEngine::m_skyboxId = 0;
 Renderable			*GraphicsEngine::m_skybox = NULL;
 Shader				*GraphicsEngine::m_defaultShader, *GraphicsEngine::m_skyboxShader;
 
+int					GraphicsEngine::m_sunLight;
 
 unordered_map<ObjectId, MatrixNode*> GraphicsEngine::objNodeMap;
 
@@ -134,7 +135,7 @@ void GraphicsEngine::Initialize() {
 	m_player->addChild(m_minimapCamera);*/
 
 	// LIGHTS
-	LightHandler::addLight(0, glm::vec3(-1, -1, -1), 1.f, glm::vec3(1, 1, 1), 0.f, glm::vec3(1, 1, 1), 0.5f, glm::vec3(1, 1, 1)); // direct light
+	m_sunLight = LightHandler::addLight(0, glm::vec3(-1, -1, -1), 1.f, glm::vec3(1, 1, 1), 0.f, glm::vec3(1, 1, 1), 0.5f, glm::vec3(1, 1, 1)); // direct light
 	LightHandler::addLight(1, glm::vec3(0, 0, -505), 1.f, glm::vec3(1, 1, 1), 0.f, glm::vec3(0), 0.f, glm::vec3(0)); // point light
 
 	if (glGetError() != 0) printf("Error Code: %d\n", glGetError());
@@ -198,6 +199,13 @@ void GraphicsEngine::DrawAndPoll() {
 
 	// render the rest of the scene
 	m_defaultShader->Use();
+
+	// SUN AROUND PLANET
+	glm::vec3 sunLightDir = LightHandler::getLight(m_sunLight).position;
+	sunLightDir = glm::angleAxis(glm::radians(0.03f), glm::vec3(2, -2, 0)) * sunLightDir;
+	LightHandler::changePosition(m_sunLight, sunLightDir);
+
+	// Update lights
 	LightHandler::updateLighting(m_defaultShader->Id());
 
 	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "projection"), 1, GL_FALSE, glm::value_ptr(m_projection));

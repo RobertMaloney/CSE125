@@ -13,6 +13,7 @@ using glm::vec3;
 
 struct Light {
 	bool valid;
+	bool changed;
 	int mode;
 	vec3 position;
 
@@ -40,6 +41,8 @@ public:
 	static void Initialize();
 	static int addLight(Light&);
 	static int addLight(int, vec3, float, vec3, float, vec3, float, vec3);
+	static Light& getLight(int);
+	static void changePosition(int, vec3);
 	static void updateLighting(GLuint);
 	static void removeLightById(int);
 };
