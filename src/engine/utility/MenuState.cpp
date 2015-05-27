@@ -157,12 +157,17 @@ void MenuState::menuUp()
 	menu_select = menu_select - 1;
 	//not sure if mod handles negatives
 	if (menu_select < 0) menu_select = MENU_SELECTIONS_NUM - 1;
+
+	GraphicsEngine::setMenuStatus(MenuStatus::START);
+
 }
 
 
 void MenuState::menuDown()
 {
 	menu_select = (menu_select + 1) % MENU_SELECTIONS_NUM;
+
+	GraphicsEngine::setMenuStatus(MenuStatus::QUIT);
 }
 
 

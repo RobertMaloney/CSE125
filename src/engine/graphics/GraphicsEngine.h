@@ -36,6 +36,12 @@ using namespace std;
 
 typedef void (*KeyCallback) (int,int,int);
 
+enum MenuStatus {
+	START = 0,
+	QUIT
+};
+
+
 class GraphicsEngine {
 public:
 	static void Initialize();
@@ -53,17 +59,20 @@ public:
 	static void ScaleDown();
 	static KeyCallback GetKeyCallback();
 	//static void UpdatePlayer(deque<Packet> &, GameState &);
-   static int getKeyState(int);
+    static int getKeyState(int);
 
-   static void bindPlayerNode(GameObject* player);
+    static void bindPlayerNode(GameObject* player);
 	static void updateObject(ObjectId objId, glm::quat &, float, float, bool);
 	static void insertObject(ObjectId objId, MatrixNode*);
-   static void removeObject(ObjectId objId);
-   static void ZoomIn(CameraNode *a);
-   static void ZoomOut(CameraNode *a);
+    static void removeObject(ObjectId objId);
+    static void ZoomIn(CameraNode *a);
+    static void ZoomOut(CameraNode *a);
+	static void setMenuStatus(MenuStatus ms);
+
 
 	static MatrixNode* addNode(Renderable*, bool);
-   static Renderable* selectModel(Model model);
+    static Renderable* selectModel(Model model);
+	
 
 private:
 	static glm::mat4				m_view, m_projection;
@@ -78,11 +87,11 @@ private:
 	static CameraNode				*m_minimapCamera;
 	static MatrixNode				*m_scene;
 
-	static GLuint					m_skyboxId, m_HudId, m_groundId, m_menuId;// , m_tId;
+	static GLuint					m_skyboxId, m_HudId, m_groundId, m_menuId1, m_menuId2;// , m_tId;
 	static Renderable				*m_skybox, *m_HUD, *worldModel, *m_menu;
 	static Shader					*m_defaultShader, *m_skyboxShader, *m_textureShader;// , *m_tShader;
 
-
+	static MenuStatus ms;
 	static unordered_map<ObjectId, MatrixNode*> objNodeMap;
 	
 	static void renderScene(Node*, glm::mat4*);

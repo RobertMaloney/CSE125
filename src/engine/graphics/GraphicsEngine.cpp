@@ -11,7 +11,6 @@
 #include "Skybox.h"
 #include "HUD.h"
 #include "Ground.h"
-#include "Menu.h"
 
 using namespace std;
 
@@ -33,10 +32,12 @@ MatrixNode			*GraphicsEngine::m_player = NULL,
 CameraNode			*GraphicsEngine::m_mainCamera = NULL;
 CameraNode			*GraphicsEngine::m_minimapCamera = NULL;
 
+MenuStatus          GraphicsEngine::ms = START;
 GLuint				GraphicsEngine::m_skyboxId = 0;
 GLuint				GraphicsEngine::m_HudId = 0;
 GLuint				GraphicsEngine::m_groundId = 0;
-GLuint				GraphicsEngine::m_menuId = 0;
+GLuint				GraphicsEngine::m_menuId1 = 0;
+GLuint				GraphicsEngine::m_menuId2 = 0;
 
 Renderable			*GraphicsEngine::m_skybox = NULL;
 Renderable			*GraphicsEngine::m_HUD = NULL;
@@ -129,15 +130,16 @@ void GraphicsEngine::Initialize() {
 	// Menu
 	m_textureShader->Use();
 	m_menu = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.f);
-	m_menuId = Menu::makeMenu("../../media/texture/start_bg.png", 2);
-	m_menu->setTextureId(m_menuId);
+	m_menuId1 = HUD::makeHUD("../../media/texture/bg_start.png", 2);
+	m_menuId2 = HUD::makeHUD("../../media/texture/bg_quit.png", 3);
+	m_menu->setTextureId(m_menuId1);
 
 	// WORLD
 	//m_textureShader->Use();
 	m_defaultShader->Use();
 	worldModel = new Geometry("../../media/models/sphere.obj");
 
-	//m_groundId = Ground::makeGround("../../media/texture/ground.png", 3);
+	//m_groundId = Ground::makeGround("../../media/texture/ground.png", 4);
 	//worldModel->setTextureId(m_groundId);
 
 	Geode* worldGeode = new Geode();
@@ -291,6 +293,9 @@ void GraphicsEngine::DrawAndPoll() {
 	glfwPollEvents();
 }
 
+void GraphicsEngine::setMenuStatus(MenuStatus i){
+    ms = i;
+}
 
 void GraphicsEngine::DrawAndPollMenu()
 {
@@ -306,7 +311,15 @@ void GraphicsEngine::DrawAndPollMenu()
 	m_textureShader->Use();
 	glOrtho(0, 0, 0, 0, 0, 1);
 	//renderScene(m_scene, &identity);
-	glUniform1i(glGetUniformLocation(m_textureShader->Id(), "tex"), 2);
+	if (ms == START){
+		m_menu->setTextureId(m_menuId1);
+		glUniform1i(glGetUniformLocation(m_textureShader->Id(), "tex"), 2);
+	}
+	else{
+		m_menu->setTextureId(m_menuId2);
+		glUniform1i(glGetUniformLocation(m_textureShader->Id(), "tex"), 3);
+	}
+	
 	glUniform2fv(glGetUniformLocation(m_textureShader->Id(), "scale"), 1, glm::value_ptr(m_screen_scale));
 	m_menu->render(&identity);
 	glDepthMask(GL_TRUE);
