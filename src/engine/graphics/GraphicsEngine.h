@@ -42,8 +42,7 @@ enum MenuStatus {
 	MWINREPLAY,
 	MWINQUIT,
 	MLOSEREPLAY,
-	MLOSEQUIT,
-	WAITING
+	MLOSEQUIT
 };
 
 
@@ -92,6 +91,8 @@ private:
 	static CameraNode				*m_mainCamera;
 	static CameraNode				*m_minimapCamera;
 	static MatrixNode				*m_scene;
+	static int						HUDW;
+	static int                      HUDH;
 
 	static GLuint					m_skyboxId, m_HudId1, m_HudId2, m_groundId, m_menuId1, m_menuId2, m_menuId3, m_menuId4, m_menuId5, m_menuId6;// , m_tId;
 	static Renderable				*m_skybox, *m_HUD1, *m_HUD2, *worldModel, *m_menu;

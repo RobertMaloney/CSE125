@@ -70,7 +70,7 @@ void MenuState::connectToServer()
 {	
 	//need to use the client's TCP connection that was already created in init()
 	TCPConnection * client_connection = gameclient->connection;
-	SocketError err = client_connection->connect(DEFAULT_SERVER_IP, DEFAULT_SERVER_PORT);
+	SocketError err = client_connection->connect(DEFAULT_SERVER_IP, DEFAULT_SERVER_PORT); //"128.54.70.18", DEFAULT_SERVER_PORT);//DEFAULT_SERVER_IP, DEFAULT_SERVER_PORT);
 	if (gameclient->shouldTerminate(err)) {
 		client_connection->close();
 		delete client_connection;

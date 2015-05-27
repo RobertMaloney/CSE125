@@ -43,6 +43,9 @@ GLuint				GraphicsEngine::m_menuId3 = 0;
 GLuint				GraphicsEngine::m_menuId4 = 0;
 GLuint				GraphicsEngine::m_menuId5 = 0;
 GLuint				GraphicsEngine::m_menuId6 = 0;
+int					GraphicsEngine::HUDW = 100;
+int					GraphicsEngine::HUDH = 100;
+
 
 Renderable			*GraphicsEngine::m_skybox = NULL;
 Renderable			*GraphicsEngine::m_HUD1 = NULL;
@@ -129,11 +132,11 @@ void GraphicsEngine::Initialize() {
 	
 	// HUD
     m_textureShader->Use();
-	m_HUD1 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 0.1f);
+	m_HUD1 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_HudId1 = HUD::makeHUD("../../media/texture/HUD.png", 1);
 	m_HUD1->setTextureId(m_HudId1);
 
-	m_HUD2 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 0.1f);
+	m_HUD2 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_HudId2 = HUD::makeHUD("../../media/texture/HUD.png", 8);
 	m_HUD2->setTextureId(m_HudId2);
 
@@ -287,7 +290,7 @@ void GraphicsEngine::DrawAndPoll() {
 	renderScene(m_scene, &identity);
 
 	// HUD
-	glViewport(0, height - 200, 200, 200);
+	glViewport(0, height - HUDH, HUDW, HUDH);
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 	
@@ -300,7 +303,12 @@ void GraphicsEngine::DrawAndPoll() {
 	glUniform2fv(glGetUniformLocation(m_textureShader->Id(), "scale"), 1, glm::value_ptr(m_screen_scale));
 	m_HUD1->render(&identity);
 
+	// HUD2
+	glViewport(0, height - HUDH - HUDH, HUDW, HUDH);
+	glClear(GL_DEPTH_BUFFER_BIT);
 
+	glDepthMask(GL_FALSE);
+	m_textureShader->Use();
 	glUniform1i(glGetUniformLocation(m_textureShader->Id(), "tex"), 8);
 	glUniform2fv(glGetUniformLocation(m_textureShader->Id(), "scale"), 1, glm::value_ptr(m_screen_scale));
 	m_HUD2->render(&identity);
