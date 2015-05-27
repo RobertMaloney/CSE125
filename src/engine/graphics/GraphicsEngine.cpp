@@ -275,18 +275,20 @@ void GraphicsEngine::addHUD(){
 	m_timer->setTextureId(m_timerId);
 }
 
+//TODO it is not working
 void GraphicsEngine::ZoomIn() {
-	CameraNode *a = m_minimapCamera;
+	/*CameraNode *a = m_minimapCamera;
 	glm::mat4 mat = a->getFlatViewMatrix();
 	mat[3][2] += 10;
-	a->setViewMatrix(mat);
+	a->setViewMatrix(mat);*/
 
 }
+//TODO it is not working
 void GraphicsEngine::ZoomOut() {
-	CameraNode *a = m_minimapCamera;
+	/*CameraNode *a = m_minimapCamera;
 	glm::mat4 mat = a->getFlatViewMatrix();
 	mat[3][2] -= 10;
-	a->setViewMatrix(mat);
+	a->setViewMatrix(mat);*/
 
 }
 
@@ -360,7 +362,7 @@ void GraphicsEngine::DrawAndPoll() {
 
 	renderScene(m_scene, &identity);
 
-	glViewport(width -200, height-200,200, 200);
+	glViewport(width -HUDW*2, height-HUDW*2,HUDW*2, HUDH*2);
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 	//view = m_minimapCamera->getFlatViewMatrix();
