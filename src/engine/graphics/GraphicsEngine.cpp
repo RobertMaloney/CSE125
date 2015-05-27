@@ -34,7 +34,8 @@ CameraNode			*GraphicsEngine::m_minimapCamera = NULL;
 
 MenuStatus          GraphicsEngine::ms = START;
 GLuint				GraphicsEngine::m_skyboxId = 0;
-GLuint				GraphicsEngine::m_HudId = 0;
+GLuint				GraphicsEngine::m_HudId1 = 0;
+GLuint				GraphicsEngine::m_HudId2 = 0;
 GLuint				GraphicsEngine::m_groundId = 0;
 GLuint				GraphicsEngine::m_menuId1 = 0;
 GLuint				GraphicsEngine::m_menuId2 = 0;
@@ -44,7 +45,8 @@ GLuint				GraphicsEngine::m_menuId5 = 0;
 GLuint				GraphicsEngine::m_menuId6 = 0;
 
 Renderable			*GraphicsEngine::m_skybox = NULL;
-Renderable			*GraphicsEngine::m_HUD = NULL;
+Renderable			*GraphicsEngine::m_HUD1 = NULL;
+Renderable			*GraphicsEngine::m_HUD2 = NULL;
 Renderable			*GraphicsEngine::worldModel = NULL;
 Renderable			*GraphicsEngine::m_menu = NULL;
 
@@ -127,9 +129,13 @@ void GraphicsEngine::Initialize() {
 	
 	// HUD
     m_textureShader->Use();
-	m_HUD = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.f);
-	m_HudId = HUD::makeHUD("../../media/texture/HUD.png", 1);
-	m_HUD->setTextureId(m_HudId);
+	m_HUD1 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 0.1f);
+	m_HudId1 = HUD::makeHUD("../../media/texture/HUD.png", 1);
+	m_HUD1->setTextureId(m_HudId1);
+
+	m_HUD2 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 0.1f);
+	m_HudId2 = HUD::makeHUD("../../media/texture/HUD.png", 8);
+	m_HUD2->setTextureId(m_HudId2);
 
 	// Menu
 	m_textureShader->Use();
@@ -292,7 +298,13 @@ void GraphicsEngine::DrawAndPoll() {
 	//renderScene(m_scene, &identity);
 	glUniform1i(glGetUniformLocation(m_textureShader->Id(), "tex"), 1);
 	glUniform2fv(glGetUniformLocation(m_textureShader->Id(), "scale"), 1, glm::value_ptr(m_screen_scale));
-	m_HUD->render(&identity);
+	m_HUD1->render(&identity);
+
+
+	glUniform1i(glGetUniformLocation(m_textureShader->Id(), "tex"), 8);
+	glUniform2fv(glGetUniformLocation(m_textureShader->Id(), "scale"), 1, glm::value_ptr(m_screen_scale));
+	m_HUD2->render(&identity);
+
 	glDepthMask(GL_TRUE);
 
 	glEnable(GL_DEPTH_TEST);

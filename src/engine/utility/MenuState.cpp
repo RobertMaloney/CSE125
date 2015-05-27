@@ -4,6 +4,7 @@
 MenuState::MenuState()
 {
 	submit = false;
+	replay_flag = false;
 }
 
 
@@ -160,6 +161,8 @@ void MenuState::menuUp()
 	//not sure if mod handles negatives
 	if (menu_select < 0) menu_select = MENU_SELECTIONS_NUM - 1;
 
+
+	// Status for GraphicsEngine to select texture, not related to select state in menu state
     if (m == MenuStatus::MWINREPLAY || m == MenuStatus::MWINQUIT){
 		GraphicsEngine::setMenuStatus(MenuStatus::MWINREPLAY);
 	}
@@ -178,6 +181,8 @@ void MenuState::menuDown()
 
 	menu_select = (menu_select + 1) % MENU_SELECTIONS_NUM;
 
+
+	// Status for GraphicsEngine to select texture, not related to select state in menu state
 	if (m == MenuStatus::MWINREPLAY || m == MenuStatus::MWINQUIT){
 		GraphicsEngine::setMenuStatus(MenuStatus::MWINQUIT);
 	}
@@ -197,7 +202,12 @@ void MenuState::menuEnter()
 		switch (menu_select) {
 		case (PLAY) :
 			menu_select = 0;
-			play();
+			if (replay_flag){
+				replay();
+			}
+			else{
+				play();
+			}
 			break;
 		case (QUIT) :
 			menu_select = 0;
@@ -221,11 +231,23 @@ void MenuState::play()
 	gameclient->inMenu = false;
 }
 
+void MenuState::replay(){
 
-//TODO: implement this
+	//TODO: Do clean up? restart here.....
+
+	//make new TCPconnection and connect to server
+	//this->connectToServer();
+	//if success (no exceptions) login to server
+	//this->login();
+
+	gameclient->inMenu = false;
+}
+
+
 void MenuState::quit()
 {
-
+	//TODO: clean up for safely close....
+	GraphicsEngine::CloseGame();
 }
 
 
@@ -241,7 +263,12 @@ void MenuState::checkMenu()
 	//DEBUGGING: check menu selection
 	switch (menu_select) {
 	case (PLAY) :
-		std::cout << "PLAY" << std::endl;
+		if (replay_flag){
+			std::cout << "REPLAY" << std::endl;
+		}
+		else{
+			std::cout << "PLAY" << std::endl;
+		}
 		break;
 	case (QUIT) :
 		std::cout << "QUIT" << std::endl;
