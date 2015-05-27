@@ -32,7 +32,7 @@ typedef addrinfo AddressInfo;
 
 // Constants
 const string DEFAULT_SERVER_IP("127.0.0.1");
-const string DEFAULT_SERVER_PORT("1234");
+const string DEFAULT_SERVER_PORT("9000");
 const int INACTIVE_SOCKET = -1;
 const int MAX_PACKET_SIZE = 65507;
 

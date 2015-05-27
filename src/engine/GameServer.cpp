@@ -37,7 +37,7 @@ void GameServer::initialize(int maxConns) {
 	maxConnections = maxConns;
 
 	gameState->initWithServer();
-	generateResources(500);
+	engine->generateResources(5);
 }
 
 
@@ -48,30 +48,40 @@ void GameServer::run() {
 	while (true) {
 		start = high_resolution_clock::now();
 		// try to allow a new player to join
+
 		if (clients->size() < maxConnections) {
 			this->acceptWaitingClient();
 		}
-		//std::cout << " accept : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
+	//	std::cout << " accept : " << chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count() << std::endl;
+
+	//	start = high_resolution_clock::now();
 		this->processClientEvents(); 		// process the client input events
 
-		//std::cout << " process : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
-		physics->update(TIME_PER_FRAME);      // do a physics step
-
+	//	std::cout << " accept : " << chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count() << std::endl;
+	//	start = high_resolution_clock::now();
+		physics->update(PHYSICS_DT);      // do a physics step
+	//	std::cout << " physics : " << chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count() << std::endl;
+	//	start = high_resolution_clock::now();
 		engine->calculatePercent();
-
-		//std::cout << " physics : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
+	//	std::cout << " calculate percent : " << chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count() << std::endl;
+	//	start = high_resolution_clock::now();
 		this->tick();                       // send state back to client
+	//	std::cout << " tick : " << chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count() << std::endl;
 
-		//std::cout << " tick : " << chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count() << std::endl;
 		//calculates the ms from start until here.
-		elapsedTime = chrono::duration_cast<chrono::milliseconds>(high_resolution_clock::now() - start).count();
+		elapsedTime = chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count();
 		if (elapsedTime > TIME_PER_FRAME) {  // this is so know if we need to slow down the loop
-	//		cerr << "Server loop took long than a frame." << endl;
+			cerr << "Server loop took long than a frame." << endl;
 		}
-		//std::cout << " sleep for : " << TIME_PER_FRAME - elapsedTime << std::endl;
 
+		
 		// sleep for unused time
-		sleep_for(milliseconds(TIME_PER_FRAME - elapsedTime));
+	//	start = high_resolution_clock::now();
+		sleep_for(microseconds(TIME_PER_FRAME - elapsedTime));
+		//std::cout << " sleep for : " << chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count() << std::endl;
+
+		//sleep_for(milliseconds(2000));
+
 	}
 }
 
@@ -86,16 +96,28 @@ void GameServer::acceptWaitingClient() {
 	//Note: Server generates id for client/player, and addes the player to gamestate
 	//Note: default position foor player is 505,0,0,0
 	ObjectId playerId = idGen->createId();
-	Player* newPlayer = new Player();
+
+	float radius = 505;
+	float theta = (float)(rand() % 180);
+	float azimuth = (float)(rand() % 360);
+	float direction = (float)(rand() % 360);
+	cout << "server:" << direction << endl;
+	Player* newPlayer = new Player(TREE, radius, theta, azimuth, direction);
+	//newPlayer->setId(playerId);
+
 	if (!gameState->addPlayer(playerId, newPlayer)){
 		delete newPlayer;
 		return;
 	}
-	physics->registerMoveable(newPlayer);
+	physics->registerInteraction(newPlayer, DRAG | GRAVITY);
 	connection->setNoDelay(true);
 	connection->setNonBlocking(true);
-	clients->insert(make_pair(connection, playerId));	
-	response.writeUInt(playerId);
+	clients->insert(make_pair(connection, playerId));
+
+	//response.writeUInt(playerId);
+	cout << "server:" << newPlayer->getId()<< ": "<<newPlayer->getAngle() << endl;
+	newPlayer->serialize(response);
+
 	connection->send(response);
 	vector<Packet> initial;
 	//initial.push_back(response);
@@ -153,47 +175,4 @@ void GameServer::printUpdates(deque<Packet> & updates) {
 		}
 		cout << "\n";
 	}
-}
-
-void GameServer::generateResources(int num) {
-   int total = 0;
-   for (int i = 0; i < num; i++)
-   {
-      float radius = 505;
-      float theta = (float)(rand() % 180);
-      float azimuth = (float)(rand() % 360);
-      float direction = (float)(rand() % 360);
-      Resource * newRe;
-
-      int pick = rand() % 5;
-
-
-	  //Scores are placeholder, need to handle them differently...
-	  if (pick == 0){
-		  newRe = new Tree(30, radius, theta, azimuth, direction);
-		  total = total + 30;
-	  }
-	  else if (pick == 1)
-         newRe = new Rock(radius, theta, azimuth, direction);
-	  else if (pick == 2){
-		  newRe = new Stump(10, radius, theta, azimuth, direction);
-		  total = total + 10;
-	  }
-	  else if (pick == 3){
-		  newRe = new Mushroom(25, radius, theta, azimuth, direction);
-		  total = total + 25;
-	  }
-	  else if (pick == 4){
-		  newRe = new Flower(40, radius, theta, azimuth, direction);
-		  total = total + 40;
-	  }
-
-      ObjectId resourceId = IdGenerator::getInstance().createId();
-      gameState->addResource(resourceId, newRe);
-
-      //radius is always 505
-      //randomize resource model?? (maybe we should separate blob model from resource model)
-      //randomize other coords
-   }
-   gameState->setTotal(total);
 }

@@ -56,16 +56,28 @@ void lookHandler(ObjectId id, Packet &p) {
 	p.readFloat(); // y
 }
 
+void jumpHandler(ObjectId id, Packet & p) {
+	(dynamic_cast<Player*>(ObjectDB::getInstance().get(id)))->setMoving(Player::JUMP, true);
+}
+
+
+void stopJumpHandler(ObjectId id, Packet & p) {
+	(dynamic_cast<Player*>(ObjectDB::getInstance().get(id)))->setMoving(Player::JUMP, false);
+}
+
+
 PacketHandler::PacketHandler(){
 	eventHandlers[EventType::MOVE_FORWARD] = EventHandler(forwardHandler);
 	eventHandlers[EventType::MOVE_BACKWARD] = EventHandler(backwardHandler);
 	eventHandlers[EventType::MOVE_LEFT] = EventHandler(leftHandler);
 	eventHandlers[EventType::MOVE_RIGHT] = EventHandler(rightHandler);
+	eventHandlers[EventType::JUMP] = EventHandler(jumpHandler);
 
 	eventHandlers[EventType::STOP_FORWARD] = EventHandler(stopForwardHandler);
 	eventHandlers[EventType::STOP_BACKWARD] = EventHandler(stopBackwardHandler);
 	eventHandlers[EventType::STOP_LEFT] = EventHandler(stopLeftHandler);
 	eventHandlers[EventType::STOP_RIGHT] = EventHandler(stopRightHandler);
+	eventHandlers[EventType::STOP_JUMP] = EventHandler(stopJumpHandler);
 
 	eventHandlers[EventType::LOOK] = EventHandler(lookHandler);
 }

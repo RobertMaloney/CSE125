@@ -9,6 +9,7 @@ private:
 	Renderable *m_renderable;
 
 public:
+
 	virtual MatrixNode* asMatrixNode() {
 		return 0;
 	}

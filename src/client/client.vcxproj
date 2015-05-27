@@ -67,6 +67,7 @@
       <AdditionalLibraryDirectories>..\..\lib\dusty-core\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <OutputFile>$(SolutionDir)\bin\win32\debug\client\$(TargetName)$(TargetExt)</OutputFile>
       <ProgramDatabaseFile>$(OutDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <Profile>true</Profile>
     </Link>
     <PostBuildEvent>
       <Command>call $(SolutionDir)\debugBuild.bat</Command>

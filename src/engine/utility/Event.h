@@ -13,7 +13,9 @@ enum EventType {
    STOP_RIGHT,
    LOOK,
    OBJECT_UPDATE,
-   CONFIRM
+   CONFIRM,
+   JUMP,
+   STOP_JUMP,
 };
 
 

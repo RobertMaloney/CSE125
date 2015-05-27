@@ -63,6 +63,7 @@
       <AdditionalDependencies>dusty-core.lib;%(AdditionalDependencies);</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\lib\dusty-core\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <OutputFile>$(SolutionDir)\bin\win32\debug\server\$(TargetName)$(TargetExt)</OutputFile>
+      <Profile>true</Profile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
