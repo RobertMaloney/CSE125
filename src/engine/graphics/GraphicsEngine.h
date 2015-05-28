@@ -36,6 +36,16 @@ using namespace std;
 
 typedef void (*KeyCallback) (int,int,int);
 
+enum MenuStatus {
+	START = 0,
+	QUIT,
+	MWINREPLAY,
+	MWINQUIT,
+	MLOSEREPLAY,
+	MLOSEQUIT
+};
+
+
 class GraphicsEngine {
 public:
 	static void Initialize();
@@ -59,12 +69,16 @@ public:
 	static void updateObject(ObjectId objId, glm::quat &, float, float, bool);
 	static void insertObject(ObjectId objId, MatrixNode*);
    static void removeObject(ObjectId objId);
-   static void ZoomIn(CameraNode *a);
-   static void ZoomOut(CameraNode *a);
+    static void ZoomIn();
+    static void ZoomOut();
+	static void setMenuStatus(MenuStatus ms);
+	static MenuStatus getMenuStatus();
+
    static void setCursor(int);
 
 	static MatrixNode* addNode(Renderable*, bool);
    static Renderable* selectModel(Model model);
+
 
 private:
 	static glm::mat4				m_view, m_projection;
@@ -78,17 +92,22 @@ private:
 	static CameraNode				*m_mainCamera;
 	static CameraNode				*m_minimapCamera;
 	static MatrixNode				*m_scene;
+	static int						HUDW;
+	static int                      HUDH;
 
-	static GLuint					m_skyboxId, m_HudId, m_groundId, m_menuId;// , m_tId;
-	static Renderable				*m_skybox, *m_HUD, *worldModel, *m_menu;
+	static GLuint					m_timerId, m_plusId, m_minusId,m_borderId, m_skyboxId, m_HudId1, m_HudId2, m_HudId3, m_HudId4, m_HudIdN1, m_HudIdN2, m_HudIdN3, m_HudIdN4, m_groundId, m_menuId1, m_menuId2, m_menuId3, m_menuId4, m_menuId5, m_menuId6;// , m_tId;
+	static Renderable				*m_timer, *m_plus, *m_minus, *m_border, *m_skybox, *m_HUD1, *m_HUD2, *m_HUD3, *m_HUD4, *m_HUDN1, *m_HUDN2, *m_HUDN3, *m_HUDN4, *worldModel, *m_menu;
 	static Shader					*m_defaultShader, *m_skyboxShader, *m_textureShader;// , *m_tShader;
 
 	static int						m_sunLight;
 
 
+	static MenuStatus ms;
 	static unordered_map<ObjectId, MatrixNode*> objNodeMap;
 	
 	static void renderScene(Node*, glm::mat4*);
+	static void addHUD();
+	static void renderHUD(int width, int height, glm::mat4 & identity);
 };
 
 #endif

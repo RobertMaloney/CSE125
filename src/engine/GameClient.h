@@ -61,10 +61,12 @@ public:
 	void receiveUpdates();
 	void updateGameState();
 	void checkGameStatus(Player *);
+	//void receiveClientInput();
 
 private:
 	//stack of states
 	vector<IMenuState *> states;
 	vector<Packet> updates;
+	//vector<Packet> clientUpdates;
 };
 #endif

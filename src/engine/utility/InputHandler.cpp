@@ -3,6 +3,7 @@
 
 
 vector<Packet> InputHandler::input;
+vector<Packet> InputHandler::clientInput;
 
 void InputHandler::handleKey(int key, int action, int mods) {
 	Packet p;
@@ -68,6 +69,24 @@ void InputHandler::handleKey(int key, int action, int mods) {
 			cout << "client confirm" << endl;
 			p.writeByte(EventType::CONFIRM);
 			input.push_back(p);
+		}
+	}
+	// Plus Zoom in
+	else if (key == GLFW_KEY_EQUAL) { //+
+		if (action == GLFW_PRESS) {
+			cout << "zoom in" << endl;
+			//p.writeByte(EventType::ZOOM_IN);
+			//clientInput.push_back(p);
+			GraphicsEngine::ZoomIn();
+		}
+	}
+	// Minus zoom out
+	else if (key == GLFW_KEY_MINUS) {//=
+		if (action == GLFW_PRESS) {
+			cout << "zoom out" << endl;
+			//p.writeByte(EventType::ZOOM_OUT);
+			//clientInput.push_back(p);
+			GraphicsEngine::ZoomOut();
 		}
 	}
 }

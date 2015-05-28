@@ -13,10 +13,12 @@ public:
 
 	enum MenuSelections{
 		PLAY,
-		QUIT
+		QUIT,
+		REPLAY
 	};
 
 	vector<Packet> updates;
+	bool replay_flag;
 
 	MenuState();
 	~MenuState();
@@ -43,6 +45,7 @@ private:
 
 	void play();
 	void quit();
+	void replay();
 
 	void receiveInput();
 
