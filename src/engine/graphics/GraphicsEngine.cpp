@@ -6,6 +6,7 @@
 #include "..\graphics\Cube.h"
 #include "..\graphics\Geometry.h"
 #include "..\utility\System.h"
+#include "..\utility\Config.h"
 #include <gtc\constants.hpp>
 #include "Shader.h"
 #include "Skybox.h"
@@ -93,7 +94,7 @@ void GraphicsEngine::Initialize() {
 	GLint fragLengths[] = { version.size(), fragInfo.size() };
 
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-	m_window = glfwCreateWindow(800, 800, "Dusty Planet v.0.0.1", NULL, NULL);
+	m_window = glfwCreateWindow(Config::settings["graphics"]["width"].asInt(), Config::settings["graphics"]["height"].asInt(), "Dusty Planet v0.9", NULL, NULL);
 	glfwSetKeyCallback(m_window, key_callback);
 	glfwMakeContextCurrent(m_window);
 	glfwSwapInterval(1);
@@ -224,7 +225,7 @@ void GraphicsEngine::DrawAndPoll() {
 	glViewport(0, 0, width, height);
 	m_projection = glm::perspective(
 		45.f,
-		((float)height) / width,
+		((float)width) / height,
 		0.1f, 1000.f);
 
 	std::pair<glm::mat4, glm::vec3> cameraData = m_mainCamera->getFlatViewMatrix();
@@ -268,7 +269,13 @@ void GraphicsEngine::DrawAndPoll() {
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 	//view = m_minimapCamera->getFlatViewMatrix();
-	
+
+	// change aspect ratio
+	m_projection = glm::perspective(
+		45.f,
+		1.f,
+		0.1f, 1000.f);
+
 	// minimap
 	cameraData = m_minimapCamera->getFlatViewMatrix();
 	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "view"), 1, GL_FALSE, glm::value_ptr(cameraData.first));

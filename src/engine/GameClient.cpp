@@ -1,5 +1,5 @@
 #include "GameClient.h"
-
+#include "utility\Config.h"
 
 GameClient::GameClient() 
 {
@@ -33,6 +33,10 @@ void GameClient::run() {
 	bool loggedIn = false;
 
 	//deque<Packet> updates; 
+
+	// LOAD CONFIG
+	if (!Config::parseJson("config_client.json"))
+		std::cout << "Errors parsing config\n";
 
 	this->init();
 	//this->login();
