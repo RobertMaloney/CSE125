@@ -121,7 +121,6 @@
     <ClCompile Include="utility\IdGenerator.cpp" />
     <ClCompile Include="utility\InputHandler.cpp" />
     <ClCompile Include="physics\MoveableObject.cpp" />
-    <ClCompile Include="utility\jsoncpp.cpp" />
     <ClCompile Include="utility\MenuState.cpp" />
     <ClCompile Include="utility\ObjectDB.cpp" />
     <ClCompile Include="Utility\ObjLoader.cpp" />
@@ -170,8 +169,6 @@
     <ClInclude Include="utility\IMenuState.h" />
     <ClInclude Include="utility\IdGenerator.h" />
     <ClInclude Include="utility\InputHandler.h" />
-    <ClInclude Include="utility\json\json-forwards.h" />
-    <ClInclude Include="utility\json\json.h" />
     <ClInclude Include="utility\MenuState.h" />
     <ClInclude Include="physics\MoveableObject.h" />
     <ClInclude Include="utility\ObjectDB.h" />
