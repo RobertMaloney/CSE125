@@ -9,7 +9,7 @@
 #include <glew.h>
 #include <SOIL.h>
 
-std::string files[] = { "skybox_right", "skybox_left", "skybox_top", "skybox_bottom", "skybox_back", "skybox_front" };
+std::string files[] = { "blue", "blue_cloud_4", "blue_sun", "blue_cloud_1", "blue_cloud_2", "blue_cloud_3" };
 
 class Skybox {
 public:
