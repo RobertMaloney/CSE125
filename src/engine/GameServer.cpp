@@ -55,7 +55,7 @@ void GameServer::initialize() {
 	gameState->initWithServer();
 	engine->generateResources(configFile["num resources"].asInt());
    //engine->generateClouds(configFile["num clouds"].asInt());
-   //engine->generateClusterTree(10, 10, 505, 100);
+   engine->generateClusterTree(505, 10, 10, 200);
 }
 
 

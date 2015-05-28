@@ -132,22 +132,61 @@ void GameEngine::generateClouds(int num) {
 
 void GameEngine::generateClusterTree(float radius, float theta, float azimuth, int num)
 {
-   float dist = 5;
+   float adist = .5f;
+   float tdist = .5f;
+   int total = gstate->getTotal();
    for (int i = 0; i < num; i++)
    {
-      int floor = theta - dist, ceiling = theta + dist, range = (ceiling - floor);
+      float floor = theta - tdist, ceiling = theta + tdist, range = (ceiling - floor);
       float theta = floor + float((range * rand()) / (RAND_MAX + 1.0));
 
-      floor = azimuth - dist, ceiling = azimuth + dist, range = (ceiling - floor);
+      floor = azimuth - adist, ceiling = azimuth + adist, range = (ceiling - floor);
       float azimuth = floor + float((range * rand()) / (RAND_MAX + 1.0));
 
       float direction = (float)(rand() % 360);
-      Resource * newRe = new Tree(30, radius, theta, azimuth, direction);
-      newRe->setModelRadius(3.f);
-      newRe->setModelHeight(17.f);
+      Resource * newRe;
 
+      int pick = rand() % 100;
+
+      // tree      xy 6.f z 16.f
+      // trunk     xyz      4.f
+      // rock      xy 8.f z 4.f
+      // mushroom  xy 2.f z 4.f
+      // flower    xy 2.f z 1.5f
+      //Scores are placeholder, need to handle them differently...
+      if (pick >= 0 && pick < 60){
+         newRe = new Tree(30, radius, theta, azimuth, direction);
+         newRe->setModelRadius(3.f);
+         newRe->setModelHeight(17.f);
+         total = total + 30;
+      }
+      else if (pick >= 60 && pick < 70) {
+         newRe = new Rock(radius, theta, azimuth, direction);
+         newRe->setModelRadius(2.f);
+         newRe->setModelHeight(4.5f);
+      }
+      else if (pick >= 70 && pick < 80){
+         newRe = new Stump(10, radius, theta, azimuth, direction);
+         newRe->setModelRadius(2.f);
+         newRe->setModelHeight(4.f);
+         total = total + 10;
+      }
+      else if (pick >= 80 && pick < 90){
+         newRe = new Mushroom(25, radius, theta, azimuth, direction);
+         newRe->setModelRadius(1.f);
+         newRe->setModelHeight(4.f);
+         total = total + 25;
+      }
+      else if (pick >= 90){
+         newRe = new Flower(40, radius, theta, azimuth, direction);
+         newRe->setModelRadius(1.f);
+         newRe->setModelHeight(1.5f);
+         total = total + 40;
+      }
+
+      //cout << azimuth << " " << theta << " " << direction;
       ObjectId resourceId = IdGenerator::getInstance().createId();
       gstate->addResource(resourceId, newRe);
    }
-   gstate->setTotal(100);
+   gstate->setTotal(total);
 }
