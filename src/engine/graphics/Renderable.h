@@ -161,15 +161,6 @@ public:
 		return m_texId;
 	}
 
-	void setTextureUnit(int unit) {
-		textureUnit = unit;
-	}
-
-	int getTextureUnit() {
-		return textureUnit;
-	}
-
-
 	void setIsSkybox(bool v){
 		isSkybox = v;
 	}
