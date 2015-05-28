@@ -185,7 +185,7 @@ void GraphicsEngine::Initialize() {
 	m_groundId = HUD::makeHUD("../../media/texture/ground.png");  
 	worldModel->setTextureId(m_groundId);
 
-	cout << "menu1 " << m_menuId1 << endl;
+	/*cout << "menu1 " << m_menuId1 << endl;
 	cout << "menu2 " << m_menuId2 << endl;
 	cout << "menu3 " << m_menuId3 << endl;
 	cout << "menu4 " << m_menuId4 << endl;
@@ -208,7 +208,7 @@ void GraphicsEngine::Initialize() {
 
 	cout << "g1 " << m_groundId << endl;
 	cout << "menu" << m_menu->getTextureId() << endl;
-	cout << "world" << worldModel->getTextureId() << endl;
+	cout << "world" << worldModel->getTextureId() << endl;*/
 
 
 	Geode* worldGeode = new Geode();
