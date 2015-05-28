@@ -69,7 +69,8 @@ const float lookScale = 0.3f;
 static void cursor_callback(GLFWwindow* window, double x, double y) {
 	//std::cout << "(x,y): (" << x << ", " << y << ")\n";
 	InputHandler::handleMouse(-x * lookScale, y * lookScale);
-	glfwSetCursorPos(window, 0, 0);
+
+	if (glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_DISABLED) glfwSetCursorPos(window, 0, 0);
 }
 
 /**
@@ -100,7 +101,7 @@ void GraphicsEngine::Initialize() {
 	glfwSwapInterval(1);
 
 	// mouse handling
-	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	setCursor(GLFW_CURSOR_NORMAL);
 	glfwSetCursorPosCallback(m_window, cursor_callback);
 	glfwSetCursorPos(m_window, 0, 0);
 
@@ -459,4 +460,8 @@ void GraphicsEngine::insertObject(ObjectId objId, MatrixNode* n) {
 //A mapping from ObjectId to node in scene graph
 void GraphicsEngine::removeObject(ObjectId objId) {
   objNodeMap.erase(objId);
+}
+
+void GraphicsEngine::setCursor(int state) {
+	glfwSetInputMode(m_window, GLFW_CURSOR, state);
 }
