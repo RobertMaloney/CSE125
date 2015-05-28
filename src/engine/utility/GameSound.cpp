@@ -1,15 +1,15 @@
 #include "GameSound.h"
 
-sf::Sound	*GameSound::menumove		= NULL,
-			*GameSound::menuconfirm		= NULL,
+sf::Sound	*GameSound::menumove,
+			*GameSound::menuconfirm,
 			*GameSound::blobmove		= NULL,
 			*GameSound::nom				= NULL,
 			*GameSound::regburp			= NULL,
 			*GameSound::bigburp			= NULL,
 			*GameSound::jump			= NULL;
 
-sf::SoundBuffer	*GameSound::menumove_buf		= NULL,
-				*GameSound::menuconfirm_buf		= NULL,
+sf::SoundBuffer	*GameSound::menumove_buf,
+				*GameSound::menuconfirm_buf,
 				*GameSound::blobmove_buf		= NULL,
 				*GameSound::nom_buf				= NULL,
 				*GameSound::regburp_buf			= NULL,
@@ -18,11 +18,11 @@ sf::SoundBuffer	*GameSound::menumove_buf		= NULL,
 
 void GameSound::init()
 {
-	menumove_buf = new sf::SoundBuffer();
-	menuconfirm_buf = new sf::SoundBuffer();
+	//menumove_buf = new sf::SoundBuffer();
+	//menuconfirm_buf = new sf::SoundBuffer();
 
-	menuconfirm = new sf::Sound();
-	menumove = new sf::Sound();
+	//menuconfirm = new sf::Sound();
+	//menumove = new sf::Sound();
 
 	if (!menumove_buf->loadFromFile("../../../media/sound/menumove.wav"))
 		return;
