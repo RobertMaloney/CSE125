@@ -175,14 +175,14 @@ void GraphicsEngine::Initialize() {
 	// WORLD
 	//m_textureShader->Use();
 	m_defaultShader->Use();
-	worldModel = new Geometry("../../media/models/sphere.obj");
+	worldModel = new Geometry("../../media/models/sphere_t.obj");
 
-	//m_groundId = Ground::makeGround("../../media/texture/ground.png", 4);
-	//worldModel->setTextureId(m_groundId);
+	m_groundId = Ground::makeGround("../../media/texture/ground.png", 20);
+	worldModel->setTextureId(m_groundId);
 
 	Geode* worldGeode = new Geode();
 	worldGeode->setRenderable(worldModel);
-	//worldGeode->setTex(true);
+	worldGeode->setTex(true);
 	m_scene->addChild(worldGeode);
 
 
@@ -355,7 +355,7 @@ void GraphicsEngine::DrawAndPoll() {
 
 	// Update lights
 	LightHandler::updateLighting(m_defaultShader->Id());
-
+	glUniform1f(glGetUniformLocation(m_defaultShader->Id(), "hasTex"), 0);
 	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "projection"), 1, GL_FALSE, glm::value_ptr(m_projection));
 	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "view"), 1, GL_FALSE, glm::value_ptr(view));
 	glUniform3fv(glGetUniformLocation(m_defaultShader->Id(), "camPos"), 1, glm::value_ptr(cameraData.second));
@@ -369,6 +369,7 @@ void GraphicsEngine::DrawAndPoll() {
 	
 	// minimap
 	cameraData = m_minimapCamera->getFlatViewMatrix();
+	glUniform1f(glGetUniformLocation(m_defaultShader->Id(), "hasTex"), 0);
 	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "view"), 1, GL_FALSE, glm::value_ptr(cameraData.first));
 	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "projection"), 1, GL_FALSE, glm::value_ptr(m_projection));
 	glUniform3fv(glGetUniformLocation(m_defaultShader->Id(), "camPos"), 1, glm::value_ptr(cameraData.second));
@@ -505,14 +506,6 @@ void GraphicsEngine::renderHUD(int width, int height, glm::mat4 & identity){
 
 }
 
-void GraphicsEngine::setMenuStatus(MenuStatus i){
-    ms = i;
-}
-
-MenuStatus GraphicsEngine::getMenuStatus(){
-	return ms;
-}
-
 void GraphicsEngine::DrawAndPollMenu()
 {
 	int height, width;
@@ -571,14 +564,15 @@ void GraphicsEngine::renderScene(Node* node, glm::mat4* matrix) {
 
 	if (geode) {
 		// render geode
-		//cout << glm::to_string(*matrix) << endl << endl;
+		m_defaultShader->Use();
 		if (geode->getTex()){
-			//m_tShader->Use();
-			m_textureShader->Use();
-			//cout << "ts" << endl;
+			glUniform1f(glGetUniformLocation(m_defaultShader->Id(), "hasTex"), 1);
+			glUniform1i(glGetUniformLocation(m_defaultShader->Id(), "tex"), 20);
+			cout << "hey hey" << endl;
 		}
 		else{
-			m_defaultShader->Use();
+			glUniform1f(glGetUniformLocation(m_defaultShader->Id(), "hasTex"), 0);
+
 		}
 		geode->getRenderable()->render(matrix);
 	}
@@ -632,6 +626,14 @@ void GraphicsEngine::ScaleDown()
 		m_player->getMatrix() = glm::scale(m_player->getMatrix(), glm::vec3(0.8, 0.8, 0.8));
 }
 
+void GraphicsEngine::setMenuStatus(MenuStatus i){
+	ms = i;
+}
+
+MenuStatus GraphicsEngine::getMenuStatus(){
+	return ms;
+}
+
 
 void GraphicsEngine::bindPlayerNode(GameObject* player) {
    Renderable * model = GraphicsEngine::selectModel(player->getModel());
@@ -662,6 +664,7 @@ MatrixNode* GraphicsEngine::addNode(Renderable* objModel, bool f){
 // Select blob model based on playerId, will be changed later
 Renderable * GraphicsEngine::selectModel(Model model){
    m_defaultShader->Use();
+   glUniform3fv(glGetUniformLocation(m_defaultShader->Id(), "hasTex"), 1, false);
    Renderable* newModel;
    std::string pathString = "../../media/models/" + ResourceMap::getObjFile(model);
    const char * path = pathString.c_str();

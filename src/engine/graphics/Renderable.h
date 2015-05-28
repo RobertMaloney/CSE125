@@ -144,6 +144,7 @@ public:
 	void setTextureId(GLuint id) {
 		m_texId = id;
 	}
+
 	void setIsSkybox(bool v){
 		isSkybox = v;
 	}
