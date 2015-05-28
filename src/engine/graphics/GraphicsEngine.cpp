@@ -59,7 +59,7 @@ GLuint				GraphicsEngine::m_menuId5 = 0;
 GLuint				GraphicsEngine::m_menuId6 = 0;
 int					GraphicsEngine::HUDW = 100;
 int					GraphicsEngine::HUDH = 100;
-int                 GraphicsEngine::B = 20;
+int                 GraphicsEngine::B = 20; //used to change the size of the mini map :)
 
 
 Renderable			*GraphicsEngine::m_skybox = NULL;
@@ -364,18 +364,10 @@ void GraphicsEngine::DrawAndPoll() {
 	renderScene(m_scene, &identity);
 
 
-	// HUD
-	glDepthMask(GL_FALSE);
-	m_textureShader->Use();
-	renderHUD(width, height, identity);
-	glEnable(GL_DEPTH_TEST);
-
-	glDepthMask(GL_TRUE);
-
-
 	//Mini map
-	m_defaultShader->Use();
-	glViewport(width - HUDW * 2 + B/2, height - HUDW * 2 + B/2, HUDW * 2 - B, HUDH * 2 - B);
+	//m_defaultShader->Use();
+	glViewport(width - HUDW * 2 + B / 2, height - HUDW * 2 + B / 2, HUDW * 2 - B, HUDH * 2 - B);
+	//glViewport(width - HUDW * 2 , height - HUDW * 2 , HUDW * 2, HUDH * 2);
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 	//view = m_minimapCamera->getFlatViewMatrix();
@@ -389,9 +381,12 @@ void GraphicsEngine::DrawAndPoll() {
 
 	renderScene(m_scene, &identity);
 
+
+	// HUD
+	glDepthMask(GL_FALSE);
+	m_textureShader->Use();
+	renderHUD(width, height, identity);
 	glEnable(GL_DEPTH_TEST);
-
-
 
 	glfwSwapBuffers(m_window);
 	glfwPollEvents();
