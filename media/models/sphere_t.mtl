@@ -12,5 +12,5 @@ newmtl 07___Default
 	Kd 0.5882 0.5882 0.5882
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka Z:\CSE125\media\texture\ground.png
-	map_Kd Z:\CSE125\media\texture\ground.png
+	map_Ka C:\Users\yus017\Desktop\CSE125\media\texture\ground.png
+	map_Kd C:\Users\yus017\Desktop\CSE125\media\texture\ground.png
