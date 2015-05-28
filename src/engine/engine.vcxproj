@@ -58,8 +58,8 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\lib\SOIL\include;..\..\lib\glew\include;..\..\lib\glm\include;..\..\lib\jsoncpp\include;..\..\lib\tinyobjloader\include;..\..\lib\glfw\include;%(AdditionalLibraryDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SFML_STATIC;WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\lib\sfml\include;..\..\lib\SOIL\include;..\..\lib\glew\include;..\..\lib\glm\include;..\..\lib\jsoncpp\include;..\..\lib\tinyobjloader\include;..\..\lib\glfw\include;%(AdditionalLibraryDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
@@ -71,8 +71,8 @@
     </Link>
     <Lib>
       <OutputFile>$(SolutionDir)\lib\dusty-core\lib\dusty-core.lib</OutputFile>
-      <AdditionalLibraryDirectories>..\..\lib\jsoncpp\include;..\..\lib\SOIL\lib;..\..\lib\glew\lib;..\..\lib\glm\lib;..\..\lib\glfw\lib;..\..\lib\tinyobjloader\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;glew32s.lib;tinyobjloader.lib;SOIL.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\lib\sfml\lib;..\..\lib\jsoncpp\include;..\..\lib\SOIL\lib;..\..\lib\glew\lib;..\..\lib\glm\lib;..\..\lib\glfw\lib;..\..\lib\tinyobjloader\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-audio-s-d.lib;sfml-system-s-d.lib;openal32.lib;flac.lib;vorbis.lib;vorbisenc.lib;vorbisfile.lib;ogg.lib;glfw3.lib;opengl32.lib;glew32s.lib;tinyobjloader.lib;SOIL.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -117,6 +117,7 @@
     <ClCompile Include="utility\Config.cpp" />
     <ClCompile Include="utility\GameEngine.cpp" />
     <ClCompile Include="utility\GameObject.cpp" />
+    <ClCompile Include="utility\GameSound.cpp" />
     <ClCompile Include="utility\GameState.cpp" />
     <ClCompile Include="utility\IdGenerator.cpp" />
     <ClCompile Include="utility\InputHandler.cpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="utility\Config.h" />
     <ClInclude Include="utility\Configurable.h" />
     <ClInclude Include="utility\GameEngine.h" />
+    <ClInclude Include="utility\GameSound.h" />
     <ClInclude Include="utility\IEatable.h" />
     <ClInclude Include="utility\Event.h" />
     <ClInclude Include="utility\GameObject.h" />

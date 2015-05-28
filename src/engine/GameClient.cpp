@@ -17,6 +17,9 @@ GameClient::~GameClient() {
 
 
 void GameClient::init() {
+	//get sound ready
+	GameSound::init();
+
 	//get socket ready
 	Socket::initialize();
 
