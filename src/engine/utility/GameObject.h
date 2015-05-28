@@ -6,6 +6,7 @@
 #include "../network/Packet.h"
 #include "Serializable.h"
 #include "IdGenerator.h"
+#include "../physics/Collidable.h"
 #include "Model.h"
 
 using glm::mat4;
@@ -21,7 +22,7 @@ enum ObjectType {
     IEATABLE
 };
 
-class GameObject : public Serializable  {
+class GameObject : public Serializable, public Collidable  {
 
 protected:
 
@@ -75,6 +76,8 @@ public:
    bool getDeleteFlag();
 
 	ObjectType getType() const;
+
+	virtual void collide(float dt, GameObject & target);
 
 	void serialize(Packet & p);
 	void deserialize(Packet & p);

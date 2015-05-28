@@ -1,5 +1,25 @@
 #include "PhysicsEngine.h"
 
+
+Interaction::Interaction() {
+	forces = new vector<ForceGenerator*>();
+}
+
+
+Interaction::~Interaction() {
+	if (this->forces) {
+		delete this->forces;
+	}
+}
+
+bool Interaction::operator<(Interaction & rhs) {
+	return this->receiver < rhs.receiver;
+}
+
+bool Interaction::operator<(const Interaction & rhs) const {
+	return this->receiver < rhs.receiver;
+}
+
 PhysicsEngine::PhysicsEngine() {
 	objectDb = &ObjectDB::getInstance();
 	forces.insert(make_pair(GRAVITY, new GravityGenerator()));
@@ -20,6 +40,7 @@ void PhysicsEngine::update(float dt) {
 	changed.clear();
 	this->generateForces(dt);
 	this->integrateObjects(dt);
+	this->generateCollisions();
 	this->resolveCollisions(dt);
 }
 
@@ -31,41 +52,39 @@ vector<GameObject*> & PhysicsEngine::getChangedObjects(){
 
 void PhysicsEngine::registerInteraction(MoveableObject* object, unsigned int flags) {
 	assert(object);
-	Interaction i;
-	i.receiver = object;
-	
+
 	// check to see if this object is being watched by the engine. if not add it to list of moveable objects
-	auto contains = find_if(moveables.begin(), moveables.end(), 
-		[&] (MoveableObject* obj) -> bool { 
-			return obj == object; 
+	auto contains = find_if(interactions.begin(), interactions.end(), 
+		[&] (pair<MoveableObject*, unsigned int> pair) -> bool { 
+		   return pair.first == object;
 	});
 
-	if (contains == moveables.end()) {
-		moveables.push_back(object); 
+	if (contains == interactions.end()) {
+		interactions.insert(make_pair(object, flags));
+		return;
 	}
-
-	if (flags & GRAVITY) {
-		i.generator = forces.find(GRAVITY)->second;
-		interactions.push_back(i);
-	}
-	if (flags & DRAG) {
-		i.generator = forces.find(DRAG)->second;
-		interactions.push_back(i);
-	}
+	
+	interactions[object] |= flags;
 }
 
 
-// get all the collisions be sure to avoid duplicate collisions
-void PhysicsEngine::resolveCollisions(float dt) {
-
-	// lLoop over all pairs of objects. check if they are colliding, if they are call there collision 
-	// methods
-	//set<pair<MoveableObject*, GameObject*>> collisions;
-	for (auto it = moveables.begin(); it != moveables.end(); ++it) {
+void PhysicsEngine::generateCollisions() {
+	// loop over each object that has interactions
+	for (auto it = interactions.begin(); it != interactions.end(); ++it) {
+		
+		// loop over all objects
 		for (auto jt = objectDb->objects.begin(); jt != objectDb->objects.end(); ++jt) {
-			
-			if (jt->second != *it && this->checkCollision(*it, jt->second)) {
-				(*it)->collide(dt, *jt->second);
+		
+			// if object is not itself and it is colliding with something then make a collision
+			// pair and add it to the set of collisions in this frame.
+			if (jt->second != it->first && this->checkCollision(it->first, jt->second)) {
+
+				// this provides ordering on the pairs so we dont get duplicates
+				GameObject* l = (it->first < jt->second) ? it->first : jt->second;
+				GameObject* r = (l == it->first) ? jt->second : it->first;
+				collisionSet.insert(make_pair(l, r));
+
+				// if we hit a static object then we need to make sure we send it in the network update
 				if (jt->second->getType() != MOVEABLE) {
 					changed.push_back(jt->second);
 				}
@@ -75,21 +94,40 @@ void PhysicsEngine::resolveCollisions(float dt) {
 }
 
 
+// get all the collisions be sure to avoid duplicate collisions
+void PhysicsEngine::resolveCollisions(float dt) {
+	for (auto it = collisionSet.begin(); it != collisionSet.end(); ++it) {
+		it->first->collide(dt, *it->second);
+		it->second->collide(dt, *it->first);
+	}
+	collisionSet.clear();
+}
+
+
 void PhysicsEngine::generateForces(float dt) {
-	for (Interaction i : interactions) {
-		i.generator->updateForce(i.receiver, dt);
+	for (auto it = interactions.begin(); it != interactions.end(); ++it) {
+		if (it->second & GRAVITY) {
+			auto forceIterator = forces.find(GRAVITY);
+			forceIterator->second->updateForce(it->first, dt);
+		}
+		if (it->second & DRAG) {
+			auto forceIterator = forces.find(DRAG);
+			forceIterator->second->updateForce(it->first, dt);
+		}
 	}
 }
 
 
 // update all the objects in the game by one timestep
 void PhysicsEngine::integrateObjects(float dt) {
-	for (Interaction i : interactions){
-		i.receiver->integrate(dt);
-		changed.push_back(i.receiver);
+	for (auto it = interactions.begin(); it != interactions.end(); ++it) {
+		it->first->integrate(dt);
+		changed.push_back(it->first);
 	}
 }
 
 
+void PhysicsEngine::loadConfiguration() {
 
+}
 

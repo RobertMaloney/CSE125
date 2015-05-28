@@ -1,14 +1,12 @@
 #include "MoveableObject.h"
 
-/*MoveableObject::MoveableObject(float acceleration, float damping) : GameObject(), velocity(0) {
-
-}*/
 MoveableObject::MoveableObject(float radius, float theta, float azimuth, float direction) : GameObject(radius, theta, azimuth, direction){
 	this->velocity = vec3(.00001f, .00001f, 0.f);
 	this->setMass(10.f);
 	this->restitution = .99f;
 	memset((void*) &this->verticalComponent, 0, sizeof(VerticalMovement));
 	this->verticalComponent.height = 505.f;
+	
 }
 
 
@@ -78,6 +76,7 @@ float MoveableObject::getRestitution() {
 
 VerticalMovement & MoveableObject::getVerticalComponent() {
 	return this->verticalComponent;
+	
 }
 
 
@@ -90,7 +89,6 @@ vec3 MoveableObject::rotateInXYPlane(vec3 original, float radians) {
 #include "../utility/Player.h"
 void MoveableObject::integrate(float dt) {
 	vec3 newAcceleration(0.f,0.f,0.f);
-	
 	// use the x-y components to move along the sphere
 	vec3 direction = glm::normalize(velocity);
 	float magnitude = glm::radians(glm::length(this->velocity));

@@ -27,6 +27,7 @@
     <ClCompile Include="physics\PhysicsEngine.cpp" />
     <ClCompile Include="physics\GravityGenerator.cpp" />
     <ClCompile Include="physics\DragGenerator.cpp" />
+    <ClCompile Include="utility\jsoncpp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameClient.h" />
@@ -75,6 +76,7 @@
     <ClInclude Include="utility\Status.h" />
     <ClInclude Include="utility\IMenuState.h" />
     <ClInclude Include="graphics\Menu.h" />
+    <ClInclude Include="physics\Collidable.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

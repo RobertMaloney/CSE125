@@ -110,3 +110,7 @@ void GameObject::setModelRadius(float radius) {
 ObjectType GameObject::getType() const {
 	return this->type;
 }
+
+void GameObject::collide(float dt, GameObject & target) {
+
+}

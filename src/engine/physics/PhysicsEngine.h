@@ -29,13 +29,19 @@ enum {
 };
 
 
-typedef struct {
+class Interaction {
 
-	ForceGenerator* generator;
+public:
+
+	Interaction();
+	~Interaction();
+
+	vector<ForceGenerator*>* forces;
 	MoveableObject* receiver;
 
-}Interaction;
-
+	bool operator<(Interaction & rhs);
+	bool operator<(const Interaction & rhs) const;
+};
 
 class PhysicsEngine {
 
@@ -45,6 +51,7 @@ public:
 	~PhysicsEngine();
 
 	void update(float dt);
+	void loadConfiguration();
 	vector<GameObject*> & getChangedObjects();
 
 	void registerInteraction(MoveableObject* object, unsigned int flags);
@@ -57,12 +64,15 @@ private:
 	void generateForces(float dt);
 	void integrateObjects(float dt);
 	void resolveCollisions(float dt);
+	void generateCollisions();
+
 	inline bool checkCollision(MoveableObject* ob1, GameObject* ob2);
+	inline bool alreadyRegistered(MoveableObject* object, ForceGenerator* force);
 
 	ObjectDB* objectDb;
 	vector<GameObject*> changed;
-	vector<MoveableObject*> moveables;
-	vector<Interaction> interactions;
+	set<pair<GameObject*, GameObject*>> collisionSet;
+	unordered_map<MoveableObject*, unsigned int> interactions;
 	unordered_map<unsigned int, ForceGenerator*> forces;
 
 };
@@ -90,5 +100,7 @@ private:
 	 return false;
 
 }
+
+
 
 #endif

@@ -71,7 +71,7 @@
     </Link>
     <Lib>
       <OutputFile>$(SolutionDir)\lib\dusty-core\lib\dusty-core.lib</OutputFile>
-      <AdditionalLibraryDirectories>..\..\lib\SOIL\lib;..\..\lib\glew\lib;..\..\lib\glm\lib;..\..\lib\glfw\lib;..\..\lib\tinyobjloader\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\lib\jsoncpp\include;..\..\lib\SOIL\lib;..\..\lib\glew\lib;..\..\lib\glm\lib;..\..\lib\glfw\lib;..\..\lib\tinyobjloader\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;glew32s.lib;tinyobjloader.lib;SOIL.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
@@ -98,7 +98,7 @@
     </Link>
     <Lib>
       <OutputFile>$(SolutionDir)\lib\dusty-core\lib\dusty-core.lib</OutputFile>
-      <AdditionalLibraryDirectories>..\..\lib\glew\lib;..\..\lib\glm\lib;..\..\lib\glfw\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\lib\jsoncpp\include;..\..\lib\glew\lib;..\..\lib\glm\lib;..\..\lib\glfw\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -126,6 +126,7 @@
     <ClCompile Include="utility\Resource.cpp" />
     <ClCompile Include="utility\Model.cpp" />
     <ClCompile Include="physics\PhysicsEngine.cpp" />
+    <ClCompile Include="utility\jsoncpp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameClient.h" />
@@ -150,6 +151,7 @@
     <ClInclude Include="Network\Socket.h" />
     <ClInclude Include="Network\TCPConnection.h" />
     <ClInclude Include="Network\TCPListener.h" />
+    <ClInclude Include="physics\Collidable.h" />
     <ClInclude Include="physics\ForceGenerator.h" />
     <ClInclude Include="physics\DragGenerator.h" />
     <ClInclude Include="physics\GravityGenerator.h" />

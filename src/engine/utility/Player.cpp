@@ -5,7 +5,7 @@
 //TODO Config file
 Player::Player(Model thebm, float radius, float theta, float azimuth, float direction) : MoveableObject(radius, theta, azimuth, direction) {
 	//this->loc = vec4(radius, theta, azimuth, direction);
-    this->rm = thebm;
+	this->rm = thebm;
 
 	for (int i = 0; i < 5; ++i)
 		this->moves[i] = false;
@@ -25,27 +25,27 @@ Player::~Player() {
 
 }
 
-int Player::getScore(){
+int Player::getScore() {
 	return this->score;
 }
 
-void Player::setScore(int s){
+void Player::setScore(int s) {
 	this->score = s;
 }
 
-int Player::getPercent(){
+int Player::getPercent() {
 	return this->percent;
 }
 
-void Player::setPercent(int p){
+void Player::setPercent(int p) {
 	this->percent = p;
 }
 
-GStatus Player::getStatus(){
+GStatus Player::getStatus() {
 	return this->status;
 }
 
-void Player::setStatus(GStatus s){
+void Player::setStatus(GStatus s) {
 	this->status = s;
 }
 
@@ -62,33 +62,41 @@ void Player::setMoving(int index, bool b) {
 void Player::integrate(float dt) {
 
 	if (moves[RIGHT]) {
+		std::cout << "move right" << std::endl;
 		angle -= 1.f;
 		this->velocity = this->rotateInXYPlane(this->velocity, glm::radians(-1.f));
 	}
 	if (moves[LEFT]) {
+
+		std::cout << "move left" << std::endl;
 		angle += 1.f;
 		this->velocity = this->rotateInXYPlane(this->velocity, glm::radians(1.f));
 	}
 
 	float cosa = glm::cos(glm::radians(angle));
 	float sina = glm::sin(glm::radians(angle));
-	
 
-	float forceConst = 50.f * (log(this->getMass() == 0) ? 1 : log(this->getMass()));
+
+	float forceConst = 1000.f * (log(this->getMass() == 0) ? 1 : log(this->getMass()));
 
 	if (moves[UP]) {
+
+		std::cout << "move up" << std::endl;
 		this->addForce(cosa * forceConst, sina * forceConst, 0.f);
 
 	}
-	
+
 	if (moves[DOWN]) {
+
+		std::cout << "move down" << std::endl;
 		this->addForce(cosa * -forceConst, sina * -forceConst, 0.f);
 	}
 
 	if (moves[JUMP] && !this->isJumping) {
+
+		std::cout << "move jump" << std::endl;
 		this->verticalComponent.force = 80000.f * (log(this->getMass() == 0) ? 1 : log(this->getMass()));
 		this->isJumping = true;
-		std::cout << "is jumping " << std::endl;
 	}
 
 
@@ -106,35 +114,32 @@ bool Player::getJumping() {
 }
 
 void Player::collide(float dt, GameObject & target) {
-	if (target.getVisible()){
-		switch (target.getType()) {
+	if (!target.getVisible()) {
+		return;
+	}
+
+	switch (target.getType()) {
 		case PLAYER:
 			this->velocity *= -1;
 			break;
 		case GAMEOBJECT:
-			//std::cout << " type " << target.getType() << std::endl;
-			//std::cout << " id " << target.getId() << std::endl;
 			this->velocity *= -1;
 			break;
 		case IEATABLE:
-			
+
 			std::cout << "EAT " << endl;
 			IEatable* eatable = dynamic_cast<IEatable*>(&target);
-			if (eatable){
+			if (eatable) {
 				std::cout << this->getId() << " old score: " << this->getScore() << endl;
 				this->setScore(this->getScore() + eatable->getPoints());
 				std::cout << this->getId() << " new score: " << this->getScore() << endl;
-			}
-			else{
+			} else {
 				std::cout << "Error: EATABLE is null: " << typeid(target).name() << endl;
 			}
 			target.setVisible(false);
 			//TODO Render needs to figure out (not) rendering dead/invisible object
 			break;
-		}
-			
 	}
-	
 }
 
 void Player::serialize(Packet & p) {

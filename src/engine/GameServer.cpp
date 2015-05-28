@@ -26,18 +26,32 @@ GameServer::~GameServer() {
 	clients = nullptr;
 	delete physics;
 }
-
+#include "json/json.h"
+#include <fstream>
+using std::ifstream;
 
 void GameServer::initialize(int maxConns) {
 	Socket::initialize();
-	this->listener = new TCPListener();
-	this->listener->bind(DEFAULT_SERVER_IP, DEFAULT_SERVER_PORT);
-	this->listener->listen(maxConns);
-	this->listener->setNonBlocking(true);
-	maxConnections = maxConns;
+	Json::Value configFile;
+	Json::Reader reader;
+	ifstream inStream;
+	inStream.open("../server/config_server.json");
 
+	if (!reader.parse(inStream, configFile, true)) {
+		inStream.close();
+		cerr << "Problem parsing json config file" << endl;
+		throw runtime_error("Problem parsing json config.");
+	}
+	inStream.close();
+
+	this->listener = new TCPListener();
+	maxConnections = configFile["max players"].asInt();
+	this->listener->bind(configFile["ip"].asString(), configFile["port"].asString());
+	this->listener->listen(maxConnections);
+	this->listener->setNonBlocking(true);
+	
 	gameState->initWithServer();
-	engine->generateResources(5);
+	engine->generateResources(configFile["num resources"].asInt());
 }
 
 

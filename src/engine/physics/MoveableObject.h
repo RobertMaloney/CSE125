@@ -5,8 +5,8 @@
 #include <iostream>
 #include "../utility/GameObject.h"
 
-using glm::vec3;
 
+using glm::vec3;
 
 typedef struct VerticalMovement {
 	float height;
@@ -45,7 +45,7 @@ public:
 	vec3 rotateInXYPlane(vec3 original, float radians);
 
 	virtual void integrate(float dt);
-	virtual void collide(float dt, GameObject & target);
+	virtual void collide(float dt, GameObject & target) override;
 
 protected:
 
