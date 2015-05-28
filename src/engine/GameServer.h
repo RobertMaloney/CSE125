@@ -45,7 +45,7 @@ public:
     ~GameServer();
 
 	void run();
-    void initialize(int maxConns);
+    void initialize();
 
     void tick();
     void processClientEvents();

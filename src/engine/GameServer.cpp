@@ -28,7 +28,7 @@ GameServer::~GameServer() {
 }
 
 
-void GameServer::initialize(int maxConns) {
+void GameServer::initialize() {
 	Socket::initialize();
 	Json::Reader reader;
 	ifstream inStream;

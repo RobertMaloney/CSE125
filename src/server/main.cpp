@@ -6,7 +6,7 @@ using std::cout;
 
 int main(int argc, char* argv[]) {
 	GameServer server;
-	server.initialize(4);
+	server.initialize();
     server.run();
 
     return 0;
