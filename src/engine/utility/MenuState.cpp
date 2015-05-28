@@ -67,9 +67,22 @@ void MenuState::draw()
 
 void MenuState::connectToServer()
 {	
+	Json::Value config;
+	Json::Reader reader;
+	ifstream inStream;
+	inStream.open("../server/config_server.json");
+
+	if (!reader.parse(inStream, config, true)) {
+		inStream.close();
+		cerr << "Problem parsing json config file" << endl;
+		throw runtime_error("Problem parsing json config.");
+	}
+	inStream.close();
+
+
 	//need to use the client's TCP connection that was already created in init()
 	TCPConnection * client_connection = gameclient->connection;
-	SocketError err = client_connection->connect(DEFAULT_SERVER_IP, DEFAULT_SERVER_PORT);
+	SocketError err = client_connection->connect(config["ip"].asString(), config["port"].asString());
 	if (gameclient->shouldTerminate(err)) {
 		client_connection->close();
 		delete client_connection;

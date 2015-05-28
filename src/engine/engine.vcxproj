@@ -156,6 +156,7 @@
     <ClInclude Include="physics\DragGenerator.h" />
     <ClInclude Include="physics\GravityGenerator.h" />
     <ClInclude Include="utility\BlobModel.h" />
+    <ClInclude Include="utility\Configurable.h" />
     <ClInclude Include="utility\GameEngine.h" />
     <ClInclude Include="utility\IEatable.h" />
     <ClInclude Include="utility\Event.h" />

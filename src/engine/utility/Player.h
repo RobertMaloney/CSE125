@@ -55,6 +55,7 @@ public:
 
 	virtual void integrate(float dt);
 	virtual void collide(float dt, GameObject & target) override;
+	virtual void loadConfiguration(Json::Value config);
 
 	void serialize(Packet & p);
 	void deserialize(Packet & p);

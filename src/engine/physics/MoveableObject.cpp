@@ -80,7 +80,35 @@ VerticalMovement & MoveableObject::getVerticalComponent() {
 }
 
 
+void MoveableObject::setJumpForce(float force) {
+	this->jumpForce = force;
+}
+
+
+float MoveableObject::getJumpForce() {
+	return this->jumpForce;
+}
+
+
+void MoveableObject::setMoveForce(float force) {
+	this->moveForce = force;
+}
+
+
+float MoveableObject::getMoveForce() {
+	return this->moveForce;
+}
+
+void MoveableObject::setAngleSpeed(float speed) {
+	this->angleSpeed = speed;
+}
+
+float MoveableObject::getAngleSpeed() {
+	return this->angleSpeed;
+}
+
 vec3 MoveableObject::rotateInXYPlane(vec3 original, float radians) {
+	std::cout << "rotating velocity : " << radians << std::endl;
 	original.x = original.x * glm::cos(glm::radians(radians)) - original.y * glm::sin(glm::radians(radians));
 	original.y = original.x * glm::sin(glm::radians(radians)) + original.y * glm::cos(glm::radians(radians));
 	return original;
@@ -117,4 +145,9 @@ void MoveableObject::integrate(float dt) {
 
 void MoveableObject::collide(float dt, GameObject & target) {
 	this->velocity *= -1;
+}
+
+
+void MoveableObject::loadConfiguration(Json::Value config) {
+	this->verticalComponent.height = this->height;
 }

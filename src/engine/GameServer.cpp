@@ -26,13 +26,10 @@ GameServer::~GameServer() {
 	clients = nullptr;
 	delete physics;
 }
-#include "json/json.h"
-#include <fstream>
-using std::ifstream;
+
 
 void GameServer::initialize(int maxConns) {
 	Socket::initialize();
-	Json::Value configFile;
 	Json::Reader reader;
 	ifstream inStream;
 	inStream.open("../server/config_server.json");
@@ -44,11 +41,16 @@ void GameServer::initialize(int maxConns) {
 	}
 	inStream.close();
 
-	this->listener = new TCPListener();
 	maxConnections = configFile["max players"].asInt();
+	TIME_PER_FRAME = (long long) (1000000.f / configFile["fps"].asFloat());
+	PHYSICS_DT = (float) (TIME_PER_FRAME / 1000000.f);
+
+	this->listener = new TCPListener();
 	this->listener->bind(configFile["ip"].asString(), configFile["port"].asString());
 	this->listener->listen(maxConnections);
 	this->listener->setNonBlocking(true);
+
+	physics->loadConfiguration(configFile["physics engine"]);
 	
 	gameState->initWithServer();
 	engine->generateResources(configFile["num resources"].asInt());
@@ -115,9 +117,9 @@ void GameServer::acceptWaitingClient() {
 	float theta = (float)(rand() % 180);
 	float azimuth = (float)(rand() % 360);
 	float direction = (float)(rand() % 360);
-	cout << "server:" << direction << endl;
+
 	Player* newPlayer = new Player(TREE, radius, theta, azimuth, direction);
-	//newPlayer->setId(playerId);
+	newPlayer->loadConfiguration(configFile["player"]);
 
 	if (!gameState->addPlayer(playerId, newPlayer)){
 		delete newPlayer;
@@ -128,13 +130,10 @@ void GameServer::acceptWaitingClient() {
 	connection->setNonBlocking(true);
 	clients->insert(make_pair(connection, playerId));
 
-	//response.writeUInt(playerId);
-	cout << "server:" << newPlayer->getId()<< ": "<<newPlayer->getAngle() << endl;
 	newPlayer->serialize(response);
-
 	connection->send(response);
+
 	vector<Packet> initial;
-	//initial.push_back(response);
 	ObjectDB::getInstance().getObjectState(initial);
 	connection->send(initial);
 }

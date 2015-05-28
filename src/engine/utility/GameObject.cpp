@@ -111,6 +111,35 @@ ObjectType GameObject::getType() const {
 	return this->type;
 }
 
+
+ObjectType GameObject::typeFromString(string typeName) {
+	
+	transform(typeName.begin(), typeName.end(), typeName.begin(), ::tolower);
+
+	if (typeName == "player") {
+		return ObjectType::PLAYER;
+	}
+	if (typeName == "moveable") {
+		return ObjectType::MOVEABLE;
+	}
+	if (typeName == "ieatable") {
+		return ObjectType::IEATABLE;
+	}
+
+	return ObjectType::GAMEOBJECT;
+}
+
 void GameObject::collide(float dt, GameObject & target) {
 
+}
+
+
+void GameObject::loadConfiguration(Json::Value config) {
+	//"orientation": null,
+	this->angle = config["angle"].asFloat();
+	this->height = config["height"].asFloat();
+	this->type = this->typeFromString(config["type"].asString());
+	this->modelRadius = config["modelRadius"].asFloat();
+	this->modelHeight = config["modelHeight"].asFloat();
+	this->visible = config["visible"].asBool();
 }

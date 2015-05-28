@@ -1,8 +1,9 @@
 #ifndef PHYSICSENGINE_H
 #define PHYSICSENGINE_H
 
-
+#include "json/json.h"
 #include "../utility/ObjectDB.h"
+#include "../utility/Configurable.h"
 #include "ForceGenerator.h"
 #include "GravityGenerator.h"
 #include "DragGenerator.h"
@@ -29,21 +30,7 @@ enum {
 };
 
 
-class Interaction {
-
-public:
-
-	Interaction();
-	~Interaction();
-
-	vector<ForceGenerator*>* forces;
-	MoveableObject* receiver;
-
-	bool operator<(Interaction & rhs);
-	bool operator<(const Interaction & rhs) const;
-};
-
-class PhysicsEngine {
+class PhysicsEngine : public Configurable {
 
 public:
 	
@@ -51,7 +38,7 @@ public:
 	~PhysicsEngine();
 
 	void update(float dt);
-	void loadConfiguration();
+	virtual void loadConfiguration(Json::Value config);
 	vector<GameObject*> & getChangedObjects();
 
 	void registerInteraction(MoveableObject* object, unsigned int flags);

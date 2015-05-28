@@ -1,25 +1,6 @@
 #include "PhysicsEngine.h"
 
 
-Interaction::Interaction() {
-	forces = new vector<ForceGenerator*>();
-}
-
-
-Interaction::~Interaction() {
-	if (this->forces) {
-		delete this->forces;
-	}
-}
-
-bool Interaction::operator<(Interaction & rhs) {
-	return this->receiver < rhs.receiver;
-}
-
-bool Interaction::operator<(const Interaction & rhs) const {
-	return this->receiver < rhs.receiver;
-}
-
 PhysicsEngine::PhysicsEngine() {
 	objectDb = &ObjectDB::getInstance();
 	forces.insert(make_pair(GRAVITY, new GravityGenerator()));
@@ -127,7 +108,12 @@ void PhysicsEngine::integrateObjects(float dt) {
 }
 
 
-void PhysicsEngine::loadConfiguration() {
+void PhysicsEngine::loadConfiguration(Json::Value config) {
+	GravityGenerator* gGenerator = (GravityGenerator*) forces.find(GRAVITY)->second;
+	gGenerator->gravity = -1.f * config["gravity"].asFloat();
 
+	DragGenerator* dGenerator = (DragGenerator*) forces.find(DRAG)->second;
+	dGenerator->k1 = config["k1"].asFloat();
+	dGenerator->k2 = config["k2"].asFloat();
 }
 

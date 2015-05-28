@@ -1,8 +1,11 @@
 {
-	"controls": {
-		"MoveUp": "W",
-		"MoveDown": "S",
-		"MoveLeft": "A",
-		"MoveRight": "D"
-	}
+    "ip": "127.0.0.1",
+    "port": "9000",
+    "controls": {
+        "MoveUp": "W",
+        "MoveDown": "S",
+        "MoveLeft": "A",
+        "MoveRight": "D"
+    }
+
 }

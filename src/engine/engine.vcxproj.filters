@@ -77,6 +77,7 @@
     <ClInclude Include="utility\IMenuState.h" />
     <ClInclude Include="graphics\Menu.h" />
     <ClInclude Include="physics\Collidable.h" />
+    <ClInclude Include="utility\Configurable.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

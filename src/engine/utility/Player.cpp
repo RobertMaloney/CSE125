@@ -10,14 +10,14 @@ Player::Player(Model thebm, float radius, float theta, float azimuth, float dire
 	for (int i = 0; i < 5; ++i)
 		this->moves[i] = false;
 
-	this->type = PLAYER;
+//	this->type = PLAYER;
 	this->isJumping = false;
 	this->score = 0;
-	this->modelRadius = 7.f;
+	/*this->modelRadius = 7.f;
 	this->setMass(10.f);
 	this->height = 550.f;
 	this->modelRadius = 5.f;
-	this->modelHeight = 5.f;
+	this->modelHeight = 5.f;*/
 	this->status = PENDING;
 }
 
@@ -58,50 +58,44 @@ void Player::setMoving(int index, bool b) {
 }
 
 
-
 void Player::integrate(float dt) {
+	float forceScaleByMass = (log(this->getMass()) == 0) ? 1 : log(this->getMass());
+	float forceConst = this->moveForce * forceScaleByMass;
 
 	if (moves[RIGHT]) {
-		std::cout << "move right" << std::endl;
-		angle -= 1.f;
-		this->velocity = this->rotateInXYPlane(this->velocity, glm::radians(-1.f));
+		float cosa = glm::cos(glm::radians(angle - 90.f));
+		float sina = glm::sin(glm::radians(angle - 90.f));
+		this->addForce(cosa * forceConst, sina * forceConst, 0.f);
+	 //	angle -= this->angleSpeed;
+		//this->velocity = this->rotateInXYPlane(this->velocity, -this->angleSpeed);
 	}
-	if (moves[LEFT]) {
 
-		std::cout << "move left" << std::endl;
-		angle += 1.f;
-		this->velocity = this->rotateInXYPlane(this->velocity, glm::radians(1.f));
+	if (moves[LEFT]) {
+		float cosa = glm::cos(glm::radians(angle + 90.f));
+		float sina = glm::sin(glm::radians(angle + 90.f));
+		this->addForce(cosa * forceConst, sina * forceConst, 0.f);
+		/*angle += this->angleSpeed;
+		this->velocity = this->rotateInXYPlane(this->velocity, this->angleSpeed);*/
 	}
+
 
 	float cosa = glm::cos(glm::radians(angle));
 	float sina = glm::sin(glm::radians(angle));
 
-
-	float forceConst = 1000.f * (log(this->getMass() == 0) ? 1 : log(this->getMass()));
-
 	if (moves[UP]) {
-
-		std::cout << "move up" << std::endl;
 		this->addForce(cosa * forceConst, sina * forceConst, 0.f);
-
 	}
 
 	if (moves[DOWN]) {
-
-		std::cout << "move down" << std::endl;
 		this->addForce(cosa * -forceConst, sina * -forceConst, 0.f);
 	}
 
 	if (moves[JUMP] && !this->isJumping) {
-
-		std::cout << "move jump" << std::endl;
-		this->verticalComponent.force = 80000.f * (log(this->getMass() == 0) ? 1 : log(this->getMass()));
+		this->verticalComponent.force = this->jumpForce * forceScaleByMass;
 		this->isJumping = true;
 	}
 
-
 	MoveableObject::integrate(dt);
-
 }
 
 
@@ -141,6 +135,24 @@ void Player::collide(float dt, GameObject & target) {
 			break;
 	}
 }
+
+
+void Player::loadConfiguration(Json::Value config) {
+	// orientation not here yet
+	this->angle = config["angle"].asFloat();
+	this->height = config["height"].asFloat();
+	this->verticalComponent.height = this->height;
+	this->type = this->typeFromString(config["type"].asString());
+	this->modelRadius = config["modelRadius"].asFloat();
+	this->modelHeight = config["modelHeight"].asFloat();
+	this->visible = config["visible"].asBool();
+	this->angleSpeed = config["angleSpeed"].asFloat();
+	this->jumpForce = config["jumpForce"].asFloat();
+	this->moveForce = config["moveForce"].asFloat();
+	this->inverseMass = 1.f / config["mass"].asFloat();
+	this->restitution = config["restitution"].asFloat();
+}
+
 
 void Player::serialize(Packet & p) {
 

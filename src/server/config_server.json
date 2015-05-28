@@ -1,6 +1,56 @@
 {
     "max players": 4,
+    "fps": 60,
     "ip": "127.0.0.1",
     "port": "9000",
-    "num resources": 5
+    "num resources": 5,
+
+    "physics engine": {
+        "gravity": 10,
+        "drag": {
+            "k1": 1,
+            "k2": 1
+        }
+    },
+
+    "player": {
+        "orientation": null,
+        "angle": 0,
+        "height": 505,
+        "type": "Player",
+        "modelRadius": 6,
+        "modelHeight": 6,
+        "visible": true,
+        "angleSpeed": 2,
+        "jumpForce": 800,
+        "moveForce": 100,
+        "mass": 10,
+        "restitution": 1
+    },
+
+    "moveable object": {
+        "orientation": null,
+        "angle": 0,
+        "height": 505,
+        "type": "MoveableObject",
+        "modelRadius": 1,
+        "modelHeight": 1,
+        "visible":  true,
+        "angleSpeed": 1,
+        "jumpForce": 80000,
+        "moveForce": 1000,
+        "mass": 10,
+        "restitution": 1
+    },
+
+    "game object": {
+        "orientation": null,
+        "angle": 0,
+        "height": 505,
+        "type": "GameObject",
+        "modelRadius": 1,
+        "modelHeight": 1,
+        "visible":  true
+    }
+
 }

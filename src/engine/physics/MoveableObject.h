@@ -3,6 +3,7 @@
 
 #include <glm.hpp>
 #include <iostream>
+
 #include "../utility/GameObject.h"
 
 
@@ -19,7 +20,6 @@ class MoveableObject : public GameObject {
 
 public:
 
-	//MoveableObject(float acceleration = .0005, float damping = .005);
 	MoveableObject() : MoveableObject(505,0,0,0){};
 	MoveableObject(float radius, float theta, float azimuth, float direction);
 	virtual ~MoveableObject();
@@ -40,16 +40,28 @@ public:
 	void setRestitution(float rest);
 	float getRestitution();
 
+	void setJumpForce(float force);
+	float getJumpForce();
+
+	void setMoveForce(float force);
+	float getMoveForce();
+	
+	void setAngleSpeed(float speed);
+	float getAngleSpeed();
+
 	VerticalMovement & getVerticalComponent();
 
 	vec3 rotateInXYPlane(vec3 original, float radians);
 
 	virtual void integrate(float dt);
 	virtual void collide(float dt, GameObject & target) override;
+	virtual void loadConfiguration(Json::Value config);
 
 protected:
 
-
+	float angleSpeed;
+	float jumpForce;
+	float moveForce;
 	float inverseMass;
 	float restitution;
 	vec3 forceAccum;
