@@ -11,8 +11,8 @@ class Node {
 protected:
 	Node* m_parent;
 	bool withTexture = false;
-public:
 
+public:
 	virtual MatrixNode* asMatrixNode() = 0;
 	virtual Geode* asGeode() = 0;
 	virtual CameraNode* asCamera() = 0;

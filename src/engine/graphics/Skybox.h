@@ -13,13 +13,13 @@ std::string files[] = { "blue", "blue_cloud_4", "blue_sun", "blue_cloud_1", "blu
 
 class Skybox {
 public:
-	static GLuint makeSkybox(std::string folder, int i) {
+	static GLuint makeSkybox(std::string folder) {
 		GLuint cubeId;
 		//GLuint SKYBOX_NAME = 0;
 		const std::string extension = ".png";
 		
 		glGenTextures(1, &cubeId);
-		glActiveTexture(GL_TEXTURE0+i);
+		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, cubeId);
 
 		int width, height;
@@ -43,6 +43,7 @@ public:
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
 		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 		
 		return cubeId;

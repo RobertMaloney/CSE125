@@ -27,6 +27,7 @@ private:
 	GLboolean	m_valid;
 	GLenum		m_drawType;
 	bool        isSkybox = false;
+	int			textureUnit;
 
 protected:
 	glm::mat4 m_matrix;
@@ -69,6 +70,8 @@ protected:
 		glEnableVertexAttribArray(colAttrib);
 		glVertexAttribPointer(colAttrib, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 		glBindVertexArray(0);
+
+		textureUnit = 0;
 	}
 
 	// This bufferObject handles vertices only
@@ -125,10 +128,18 @@ public:
 		if (m_valid) {
 			glBindVertexArray(m_vao);
 			if (m_texId != 0) {
+				//std::cout << m_texId << std::endl;
+				glActiveTexture(GL_TEXTURE0);
 				if (this->isSkybox){
 					glBindTexture(GL_TEXTURE_CUBE_MAP, m_texId);
 				}
 				else{
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
 					glBindTexture(GL_TEXTURE_2D, m_texId);
 				}
 			}
@@ -144,6 +155,12 @@ public:
 	void setTextureId(GLuint id) {
 		m_texId = id;
 	}
+
+
+	GLuint getTextureId() {
+		return m_texId;
+	}
+
 	void setIsSkybox(bool v){
 		isSkybox = v;
 	}
