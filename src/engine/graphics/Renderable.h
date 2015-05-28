@@ -149,6 +149,8 @@ public:
 				case VERTICES: glDrawArrays(m_drawType, 0, m_numVerts / 9); break; // 3 vec3 per triangle
 			}
 			glBindVertexArray(0);
+			//glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+			//glBindTexture(GL_TEXTURE_2D, 0);
 		}
 	}
 
