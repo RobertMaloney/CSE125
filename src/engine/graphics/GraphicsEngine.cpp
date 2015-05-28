@@ -59,6 +59,7 @@ GLuint				GraphicsEngine::m_menuId5 = 0;
 GLuint				GraphicsEngine::m_menuId6 = 0;
 int					GraphicsEngine::HUDW = 100;
 int					GraphicsEngine::HUDH = 100;
+int                 GraphicsEngine::B = 20;
 
 
 Renderable			*GraphicsEngine::m_skybox = NULL;
@@ -362,11 +363,27 @@ void GraphicsEngine::DrawAndPoll() {
 
 	renderScene(m_scene, &identity);
 
-	glViewport(width -HUDW*2, height-HUDW*2,HUDW*2, HUDH*2);
+
+
+
+
+
+	// HUD
+	glDepthMask(GL_FALSE);
+	m_textureShader->Use();
+	renderHUD(width, height, identity);
+	glEnable(GL_DEPTH_TEST);
+
+	glDepthMask(GL_TRUE);
+
+
+	//Mini map
+	m_defaultShader->Use();
+	glViewport(width - HUDW * 2 + B/2, height - HUDW * 2 + B/2, HUDW * 2 - B, HUDH * 2 - B);
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 	//view = m_minimapCamera->getFlatViewMatrix();
-	
+
 	// minimap
 	cameraData = m_minimapCamera->getFlatViewMatrix();
 	glUniform1f(glGetUniformLocation(m_defaultShader->Id(), "hasTex"), 0);
@@ -376,11 +393,9 @@ void GraphicsEngine::DrawAndPoll() {
 
 	renderScene(m_scene, &identity);
 
-	// HUD
-	glDepthMask(GL_FALSE);
-	m_textureShader->Use();
-	renderHUD(width, height, identity);
 	glEnable(GL_DEPTH_TEST);
+
+
 
 	glfwSwapBuffers(m_window);
 	glfwPollEvents();
@@ -470,10 +485,10 @@ void GraphicsEngine::renderHUD(int width, int height, glm::mat4 & identity){
 	glOrtho(0, 0, 0, 0, 0, 1);
 	glUniform1i(glGetUniformLocation(m_textureShader->Id(), "tex"), 15);
 	glUniform2fv(glGetUniformLocation(m_textureShader->Id(), "scale"), 1, glm::value_ptr(m_screen_scale));
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_ONE, GL_ONE);
+	//glEnable(GL_BLEND);
+	//glBlendFunc(GL_ONE, GL_ONE);
 	m_border->render(&identity);
-	glDisable(GL_BLEND);
+	//glDisable(GL_BLEND);
 
 	// Zoom in 
 	glViewport(width - HUDW * 2 - HUDW/2, height - HUDH + HUDW/2, HUDW/2, HUDH/2);
