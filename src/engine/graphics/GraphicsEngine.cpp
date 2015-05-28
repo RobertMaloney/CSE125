@@ -364,10 +364,6 @@ void GraphicsEngine::DrawAndPoll() {
 	renderScene(m_scene, &identity);
 
 
-
-
-
-
 	// HUD
 	glDepthMask(GL_FALSE);
 	m_textureShader->Use();
@@ -485,10 +481,10 @@ void GraphicsEngine::renderHUD(int width, int height, glm::mat4 & identity){
 	glOrtho(0, 0, 0, 0, 0, 1);
 	glUniform1i(glGetUniformLocation(m_textureShader->Id(), "tex"), 15);
 	glUniform2fv(glGetUniformLocation(m_textureShader->Id(), "scale"), 1, glm::value_ptr(m_screen_scale));
-	//glEnable(GL_BLEND);
-	//glBlendFunc(GL_ONE, GL_ONE);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	m_border->render(&identity);
-	//glDisable(GL_BLEND);
+	glDisable(GL_BLEND);
 
 	// Zoom in 
 	glViewport(width - HUDW * 2 - HUDW/2, height - HUDH + HUDW/2, HUDW/2, HUDH/2);
