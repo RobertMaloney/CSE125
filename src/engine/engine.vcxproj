@@ -105,6 +105,7 @@
     <ClCompile Include="GameClient.cpp" />
     <ClCompile Include="GameServer.cpp" />
     <ClCompile Include="Graphics\GraphicsEngine.cpp" />
+    <ClCompile Include="graphics\LightHandler.cpp" />
     <ClCompile Include="graphics\Shader.cpp" />
     <ClCompile Include="network\Packet.cpp" />
     <ClCompile Include="network\PacketHandler.cpp" />
@@ -113,12 +114,14 @@
     <ClCompile Include="Network\TCPListener.cpp" />
     <ClCompile Include="physics\DragGenerator.cpp" />
     <ClCompile Include="physics\GravityGenerator.cpp" />
+    <ClCompile Include="utility\Config.cpp" />
     <ClCompile Include="utility\GameEngine.cpp" />
     <ClCompile Include="utility\GameObject.cpp" />
     <ClCompile Include="utility\GameState.cpp" />
     <ClCompile Include="utility\IdGenerator.cpp" />
     <ClCompile Include="utility\InputHandler.cpp" />
     <ClCompile Include="physics\MoveableObject.cpp" />
+    <ClCompile Include="utility\jsoncpp.cpp" />
     <ClCompile Include="utility\MenuState.cpp" />
     <ClCompile Include="utility\ObjectDB.cpp" />
     <ClCompile Include="Utility\ObjLoader.cpp" />
@@ -137,6 +140,7 @@
     <ClInclude Include="graphics\Geode.h" />
     <ClInclude Include="Graphics\Geometry.h" />
     <ClInclude Include="Graphics\GraphicsEngine.h" />
+    <ClInclude Include="graphics\LightHandler.h" />
     <ClInclude Include="graphics\HUD.h" />
     <ClInclude Include="graphics\MatrixNode.h" />
     <ClInclude Include="graphics\Menu.h" />
@@ -156,6 +160,7 @@
     <ClInclude Include="physics\DragGenerator.h" />
     <ClInclude Include="physics\GravityGenerator.h" />
     <ClInclude Include="utility\BlobModel.h" />
+    <ClInclude Include="utility\Config.h" />
     <ClInclude Include="utility\Configurable.h" />
     <ClInclude Include="utility\GameEngine.h" />
     <ClInclude Include="utility\IEatable.h" />
@@ -165,6 +170,8 @@
     <ClInclude Include="utility\IMenuState.h" />
     <ClInclude Include="utility\IdGenerator.h" />
     <ClInclude Include="utility\InputHandler.h" />
+    <ClInclude Include="utility\json\json-forwards.h" />
+    <ClInclude Include="utility\json\json.h" />
     <ClInclude Include="utility\MenuState.h" />
     <ClInclude Include="physics\MoveableObject.h" />
     <ClInclude Include="utility\ObjectDB.h" />

@@ -6,9 +6,11 @@
 #include "..\graphics\Cube.h"
 #include "..\graphics\Geometry.h"
 #include "..\utility\System.h"
+#include "..\utility\Config.h"
 #include <gtc\constants.hpp>
 #include "Shader.h"
 #include "Skybox.h"
+#include "LightHandler.h"
 #include "HUD.h"
 #include "Ground.h"
 #include "Menu.h"
@@ -45,6 +47,7 @@ Renderable			*GraphicsEngine::m_menu = NULL;
 
 Shader				*GraphicsEngine::m_defaultShader, *GraphicsEngine::m_skyboxShader, *GraphicsEngine::m_textureShader;// , *GraphicsEngine::m_tShader;
 
+int					GraphicsEngine::m_sunLight;
 
 unordered_map<ObjectId, MatrixNode*> GraphicsEngine::objNodeMap;
 
@@ -66,7 +69,8 @@ const float lookScale = 0.3f;
 static void cursor_callback(GLFWwindow* window, double x, double y) {
 	//std::cout << "(x,y): (" << x << ", " << y << ")\n";
 	InputHandler::handleMouse(-x * lookScale, y * lookScale);
-	glfwSetCursorPos(window, 0, 0);
+
+	if (glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_DISABLED) glfwSetCursorPos(window, 0, 0);
 }
 
 /**
@@ -91,13 +95,13 @@ void GraphicsEngine::Initialize() {
 	GLint fragLengths[] = { version.size(), fragInfo.size() };
 
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-	m_window = glfwCreateWindow(800, 800, "Dusty Planet v.0.0.1", NULL, NULL);
+	m_window = glfwCreateWindow(Config::settings["graphics"]["width"].asInt(), Config::settings["graphics"]["height"].asInt(), "Dusty Planet v0.9", NULL, NULL);
 	glfwSetKeyCallback(m_window, key_callback);
 	glfwMakeContextCurrent(m_window);
 	glfwSwapInterval(1);
 
 	// mouse handling
-	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	setCursor(GLFW_CURSOR_NORMAL);
 	glfwSetCursorPosCallback(m_window, cursor_callback);
 	glfwSetCursorPos(m_window, 0, 0);
 
@@ -164,7 +168,10 @@ void GraphicsEngine::Initialize() {
 	m_player = GraphicsEngine::addNode(model);
 	m_player->addChild(m_mainCamera);
 	m_player->addChild(m_minimapCamera);*/
-	
+
+	// LIGHTS
+	m_sunLight = LightHandler::addLight(0, glm::vec3(-1, -1, -1), 1.f, glm::vec3(1, 1, 1), 0.f, glm::vec3(1, 1, 1), 0.5f, glm::vec3(1, 1, 1)); // direct light
+	LightHandler::addLight(1, glm::vec3(0, 0, -505), 1.f, glm::vec3(1, 1, 1), 0.f, glm::vec3(0), 0.f, glm::vec3(0)); // point light
 
 	if (glGetError() != 0) printf("Error Code: %d\n", glGetError());
 
@@ -177,13 +184,13 @@ void GraphicsEngine::Initialize() {
 }
 
 void GraphicsEngine::ZoomIn(CameraNode *a) {
-	glm::mat4 mat = a->getFlatViewMatrix();
+	glm::mat4 mat = a->getFlatViewMatrix().first;
 	mat[3][2] += 10;
 	a->setViewMatrix(mat);
 
 }
 void GraphicsEngine::ZoomOut(CameraNode *a) {
-	glm::mat4 mat = a->getFlatViewMatrix();
+	glm::mat4 mat = a->getFlatViewMatrix().first;
 	mat[3][2] -= 10;
 	a->setViewMatrix(mat);
 
@@ -219,10 +226,11 @@ void GraphicsEngine::DrawAndPoll() {
 	glViewport(0, 0, width, height);
 	m_projection = glm::perspective(
 		45.f,
-		((float)height) / width,
+		((float)width) / height,
 		0.1f, 1000.f);
 
-	glm::mat4 view = m_mainCamera->getFlatViewMatrix();
+	std::pair<glm::mat4, glm::vec3> cameraData = m_mainCamera->getFlatViewMatrix();
+	glm::mat4 view = cameraData.first;
 	glm::mat4 skybox_view = glm::mat4(glm::mat3(view));
 
 	//glm::vec4 glPos = m_projection * skybox_view * glm::vec4(1.f, 1.f, 1.f, 1.f);
@@ -243,19 +251,18 @@ void GraphicsEngine::DrawAndPoll() {
 
 	// render the rest of the scene
 	m_defaultShader->Use();
-	GLint light = glGetUniformLocation(m_defaultShader->Id(), "pointLight");
-	const float radius = 2.f;
-	float sine = radius*glm::sin(glm::radians(90 * glfwGetTime()));
-	float cosine = radius*glm::cos(glm::radians(90 * glfwGetTime()));
-	glm::vec3 lightpos(cosine, sine, 1);
-	glUniform3fv(light, 1, glm::value_ptr(lightpos));
 
-	GLint dirLight = glGetUniformLocation(m_defaultShader->Id(), "dirLight");
-	glm::vec3 dirLightVec(-1, -1, -1);
-	glUniform3fv(dirLight, 1, glm::value_ptr(dirLightVec));
+	// SUN AROUND PLANET
+	glm::vec3 sunLightDir = LightHandler::getLight(m_sunLight).position;
+	sunLightDir = glm::angleAxis(glm::radians(0.03f), glm::vec3(2, -2, 0)) * sunLightDir;
+	LightHandler::changePosition(m_sunLight, sunLightDir);
+
+	// Update lights
+	LightHandler::updateLighting(m_defaultShader->Id());
 
 	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "projection"), 1, GL_FALSE, glm::value_ptr(m_projection));
 	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "view"), 1, GL_FALSE, glm::value_ptr(view));
+	glUniform3fv(glGetUniformLocation(m_defaultShader->Id(), "camPos"), 1, glm::value_ptr(cameraData.second));
 
 	renderScene(m_scene, &identity);
 
@@ -263,10 +270,18 @@ void GraphicsEngine::DrawAndPoll() {
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 	//view = m_minimapCamera->getFlatViewMatrix();
-	
+
+	// change aspect ratio
+	m_projection = glm::perspective(
+		45.f,
+		1.f,
+		0.1f, 1000.f);
+
 	// minimap
-	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "view"), 1, GL_FALSE, glm::value_ptr(m_minimapCamera->getFlatViewMatrix()));
+	cameraData = m_minimapCamera->getFlatViewMatrix();
+	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "view"), 1, GL_FALSE, glm::value_ptr(cameraData.first));
 	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "projection"), 1, GL_FALSE, glm::value_ptr(m_projection));
+	glUniform3fv(glGetUniformLocation(m_defaultShader->Id(), "camPos"), 1, glm::value_ptr(cameraData.second));
 
 	renderScene(m_scene, &identity);
 
@@ -445,4 +460,8 @@ void GraphicsEngine::insertObject(ObjectId objId, MatrixNode* n) {
 //A mapping from ObjectId to node in scene graph
 void GraphicsEngine::removeObject(ObjectId objId) {
   objNodeMap.erase(objId);
+}
+
+void GraphicsEngine::setCursor(int state) {
+	glfwSetInputMode(m_window, GLFW_CURSOR, state);
 }

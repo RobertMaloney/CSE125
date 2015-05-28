@@ -27,7 +27,9 @@
     <ClCompile Include="physics\PhysicsEngine.cpp" />
     <ClCompile Include="physics\GravityGenerator.cpp" />
     <ClCompile Include="physics\DragGenerator.cpp" />
+    <ClCompile Include="graphics\LightHandler.cpp" />
     <ClCompile Include="utility\jsoncpp.cpp" />
+    <ClCompile Include="utility\Config.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameClient.h" />
@@ -74,8 +76,12 @@
     <ClInclude Include="graphics\HUD.h" />
     <ClInclude Include="utility\GameEngine.h" />
     <ClInclude Include="utility\Status.h" />
+    <ClInclude Include="graphics\LightHandler.h" />
     <ClInclude Include="utility\IMenuState.h" />
     <ClInclude Include="graphics\Menu.h" />
+    <ClInclude Include="utility\Config.h" />
+    <ClInclude Include="utility\json\json.h" />
+    <ClInclude Include="utility\json\json-forwards.h" />
     <ClInclude Include="physics\Collidable.h" />
     <ClInclude Include="utility\Configurable.h" />
   </ItemGroup>

@@ -61,6 +61,7 @@ public:
    static void removeObject(ObjectId objId);
    static void ZoomIn(CameraNode *a);
    static void ZoomOut(CameraNode *a);
+   static void setCursor(int);
 
 	static MatrixNode* addNode(Renderable*, bool);
    static Renderable* selectModel(Model model);
@@ -81,6 +82,8 @@ private:
 	static GLuint					m_skyboxId, m_HudId, m_groundId, m_menuId;// , m_tId;
 	static Renderable				*m_skybox, *m_HUD, *worldModel, *m_menu;
 	static Shader					*m_defaultShader, *m_skyboxShader, *m_textureShader;// , *m_tShader;
+
+	static int						m_sunLight;
 
 
 	static unordered_map<ObjectId, MatrixNode*> objNodeMap;
