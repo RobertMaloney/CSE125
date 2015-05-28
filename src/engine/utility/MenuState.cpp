@@ -193,6 +193,7 @@ void MenuState::play()
 	this->login();
 
 	gameclient->inMenu = false;
+	GraphicsEngine::setCursor(GLFW_CURSOR_DISABLED);
 }
 
 

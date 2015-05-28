@@ -61,6 +61,7 @@ public:
    static void removeObject(ObjectId objId);
    static void ZoomIn(CameraNode *a);
    static void ZoomOut(CameraNode *a);
+   static void setCursor(int);
 
 	static MatrixNode* addNode(Renderable*, bool);
    static Renderable* selectModel(Model model);
