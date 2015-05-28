@@ -112,3 +112,42 @@ void GameEngine::generateResources(int num) {
 	gstate->setTotal(total);
 }
 
+void GameEngine::generateClouds(int num) {
+   for (int i = 0; i < num; i++)
+   {
+      int floor = 700, ceiling = 800, range = (ceiling - floor);
+      int radius = floor + int((range * rand()) / (RAND_MAX + 1.0));
+
+      float theta = (float)(rand() % 180);
+      float azimuth = (float)(rand() % 360);
+      float direction = (float)(0);
+      Resource * newRe = new Cloud(radius, theta, azimuth, direction);
+      newRe->setModelRadius(3.f);
+      newRe->setModelHeight(17.f);
+
+      ObjectId resourceId = IdGenerator::getInstance().createId();
+      gstate->addResource(resourceId, newRe);
+   }
+}
+
+void GameEngine::generateClusterTree(float radius, float theta, float azimuth, int num)
+{
+   float dist = 5;
+   for (int i = 0; i < num; i++)
+   {
+      int floor = theta - dist, ceiling = theta + dist, range = (ceiling - floor);
+      float theta = floor + float((range * rand()) / (RAND_MAX + 1.0));
+
+      floor = azimuth - dist, ceiling = azimuth + dist, range = (ceiling - floor);
+      float azimuth = floor + float((range * rand()) / (RAND_MAX + 1.0));
+
+      float direction = (float)(rand() % 360);
+      Resource * newRe = new Tree(30, radius, theta, azimuth, direction);
+      newRe->setModelRadius(3.f);
+      newRe->setModelHeight(17.f);
+
+      ObjectId resourceId = IdGenerator::getInstance().createId();
+      gstate->addResource(resourceId, newRe);
+   }
+   gstate->setTotal(100);
+}

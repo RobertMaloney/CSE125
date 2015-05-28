@@ -70,7 +70,7 @@ class Grass : public Resource{
 public:
 	Grass() : Resource(GRASS) {};
     Grass(float radius, float theta, float azimuth, float direction) :
-      Resource(GRASS, radius, theta, azimuth, direction) {};;
+      Resource(GRASS, radius, theta, azimuth, direction) {};
 
    virtual ~Grass() {};
 };
@@ -83,4 +83,11 @@ public:
 		EatableResource(points, FLOWER, radius, theta, azimuth, direction){};
 
    virtual ~Flower() { };
+};
+
+class Cloud : public Resource {
+public:
+   Cloud() : Resource(CLOUD) {};
+   Cloud(float radius, float theta, float azimuth, float direction) :
+      Resource(CLOUD, radius, theta, azimuth, direction) {};
 };

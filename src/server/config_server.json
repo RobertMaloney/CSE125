@@ -3,7 +3,8 @@
     "fps": 60,
     "ip": "127.0.0.1",
     "port": "9000",
-    "num resources": 5,
+   "num resources": 5,
+   "num clouds" : 20,
 
     "physics engine": {
         "gravity": 10,

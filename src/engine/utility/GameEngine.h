@@ -19,6 +19,8 @@ public:
 	void endGame();
 	GameState* gstate;
 	void generateResources(int);
+   void generateClouds(int);
+   void generateClusterTree(float, float, float, int);
 
 };
 

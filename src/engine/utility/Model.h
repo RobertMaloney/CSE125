@@ -14,7 +14,8 @@ enum Model {
    STUMP,
    GRASS,
    MUSHROOM,
-   FLOWER
+   FLOWER,
+   CLOUD
 };
 
 class ResourceMap {

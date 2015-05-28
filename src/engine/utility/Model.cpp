@@ -11,7 +11,8 @@ std::map<Model, std::string> ResourceMap::map = {
       { STUMP, "stump" },
       { GRASS, "grass" },
       { MUSHROOM, "mushroom" },
-      { FLOWER, "flower" }
+      { FLOWER, "flower" },
+      { CLOUD, "cloud2" }
 };
 
 std::string ResourceMap::getObjFile(Model rm)
