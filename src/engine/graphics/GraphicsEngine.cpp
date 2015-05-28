@@ -393,6 +393,9 @@ void GraphicsEngine::DrawAndPoll() {
 }
 
 void GraphicsEngine::renderHUD(int width, int height, glm::mat4 & identity){
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	//HUD1
 	glViewport(0, height - HUDH, HUDW, HUDH);
 	glClear(GL_DEPTH_BUFFER_BIT);
@@ -476,10 +479,8 @@ void GraphicsEngine::renderHUD(int width, int height, glm::mat4 & identity){
 	glOrtho(0, 0, 0, 0, 0, 1);
 	glUniform1i(glGetUniformLocation(m_textureShader->Id(), "tex"), 15);
 	glUniform2fv(glGetUniformLocation(m_textureShader->Id(), "scale"), 1, glm::value_ptr(m_screen_scale));
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	m_border->render(&identity);
-	glDisable(GL_BLEND);
 
 	// Zoom in 
 	glViewport(width - HUDW * 2 - HUDW/2, height - HUDH + HUDW/2, HUDW/2, HUDH/2);
@@ -509,6 +510,7 @@ void GraphicsEngine::renderHUD(int width, int height, glm::mat4 & identity){
 	m_timer->render(&identity);
 
 
+	glDisable(GL_BLEND);
 
 }
 
