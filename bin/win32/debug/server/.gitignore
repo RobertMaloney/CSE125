@@ -1,2 +1,5 @@
 *
 !.gitignore
+
+#the server doesnt use openal32.dll in sfml but only need to for includes
+!openal32.dll

@@ -1,6 +1,7 @@
 #include "Player.h"
 #include <iostream>
 #include <gtx\string_cast.hpp>
+#include "GameSound.h"
 
 //TODO Config file
 Player::Player(Model thebm, float radius, float theta, float azimuth, float direction) : MoveableObject(radius, theta, azimuth, direction) {
@@ -166,8 +167,18 @@ void Player::serialize(Packet & p) {
 
 
 void Player::deserialize(Packet & p) {
+	int oldscore = this->score;
+
 	GameObject::deserialize(p);
 	this->score = p.readInt();
 	this->percent = p.readInt();
 	this->status = static_cast<GStatus>(p.readInt());
+
+	int newscore = this->score;
+
+	//check if need to burp
+	if (oldscore < 40 && newscore >= 40)
+		GameSound::regburp->play();
+	else if ( oldscore < 80 && newscore >= 80)
+		GameSound::bigburp->play();
 }

@@ -1,2 +1,5 @@
 *
 !.gitignore
+
+#for sfml
+!openal32.dll

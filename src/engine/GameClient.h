@@ -15,6 +15,7 @@
 #include "utility\MenuState.h"
 #include "utility\GameState.h"
 #include "utility\IdGenerator.h"
+#include "utility\GameSound.h"
 
 
 using std::chrono::high_resolution_clock;
@@ -66,6 +67,7 @@ private:
 	//stack of states
 	vector<IMenuState *> states;
 	vector<Packet> updates;
+	vector<Packet> clientonly_updates;
 	//vector<Packet> clientUpdates;
 };
 #endif

@@ -1,5 +1,6 @@
 #include "MenuState.h"
 #include "..\GameClient.h"
+#include "GameSound.h"
 
 
 bool MenuState::replay_flag = false;
@@ -172,6 +173,9 @@ void MenuState::updateMenuState() {
 
 void MenuState::menuUp()
 {
+	//play sound
+	GameSound::menumove->play();
+
 	MenuStatus m = GraphicsEngine::getMenuStatus();
 
 	menu_select = menu_select - 1;
@@ -197,6 +201,9 @@ void MenuState::menuUp()
 
 void MenuState::menuDown()
 {
+	//play sound
+	GameSound::menumove->play();
+
 	MenuStatus m = GraphicsEngine::getMenuStatus();
 
 	menu_select = (menu_select + 1) % MENU_SELECTIONS_NUM;
@@ -221,6 +228,9 @@ void MenuState::menuDown()
 void MenuState::menuEnter()
 {
 	if (!submit){
+		//play sound
+		GameSound::menuconfirm->play();
+
 		//check menu_select state
 
 		switch (menu_select) {

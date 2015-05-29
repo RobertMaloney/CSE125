@@ -18,6 +18,9 @@ GameClient::~GameClient() {
 
 
 void GameClient::init() {
+	//get sound ready
+	GameSound::init();
+
 	//get socket ready
 	Socket::initialize();
 
@@ -79,6 +82,8 @@ void GameClient::sendEvents(vector<Packet> & events)
 void GameClient::receiveUpdates()
 {
 	this->checkError(this->connection->receive(updates));
+	clientonly_updates = vector<Packet>(InputHandler::clientInput);
+	InputHandler::clientInput.clear();
 	//this->receiveClientInput();
 }
 
@@ -89,12 +94,64 @@ void GameClient::receiveUpdates()
 }*/
 
 void GameClient::updateGameState() {
-	if (updates.size() <= 0) {
+	if (updates.size() <= 0 && clientonly_updates.size() <= 0) {
 		return;
 	}
 
 	ObjectId objId;
 	GameObject* obj = nullptr;
+	byte clientonly_event;
+
+	//sounds
+	for (auto packet = clientonly_updates.begin(); packet != clientonly_updates.end(); ++packet) {
+		if (packet->size() <= 0) {
+			continue;
+		}
+
+		clientonly_event = packet->readByte();
+		packet->reset();
+
+		switch (clientonly_event) {
+		case MOVE_FORWARD:
+			GameSound::blobmove->pause();
+			GameSound::blobmove->play();
+			break;
+		case STOP_FORWARD:
+			GameSound::blobmove->pause();
+			break;
+		case MOVE_BACKWARD:
+			GameSound::blobmove->pause();
+			GameSound::blobmove->play();
+			break;
+		case STOP_BACKWARD:
+			GameSound::blobmove->pause();
+			break;
+		case MOVE_LEFT:
+			GameSound::blobmove->pause();
+			GameSound::blobmove->play();
+			break;
+		case STOP_LEFT:
+			GameSound::blobmove->pause();
+			break;
+		case MOVE_RIGHT:
+			GameSound::blobmove->pause();
+			GameSound::blobmove->play();
+			break;
+		case STOP_RIGHT:
+			GameSound::blobmove->pause();
+			break;
+		case JUMP:
+			GameSound::jump->play();
+			break;
+		default:
+			//do nothing
+			break;
+		}
+	}
+
+	//clear client only updates
+	clientonly_updates.clear();
+
 
 	//Note: Loop through all packets(gameobjects for now), identify which object it relates to or if it is a new object
 	for (auto packet = updates.begin(); packet != updates.end(); ++packet) {
@@ -128,32 +185,16 @@ void GameClient::updateGameState() {
 		}
 
 		//Update the object in node (in GraphicsEngine)
-		GraphicsEngine::updateObject(obj->getId(), obj->getOrientation(), obj->getAngle(), obj->getHeight(), obj->getVisible());
+		GraphicsEngine::updateObject(	obj->getId(), 
+										obj->getOrientation(), 
+										obj->getAngle(), 
+										obj->getHeight(), 
+										obj->getVisible());
 
 
 		if (obj->getId() == this->playerid)
 		    this->checkGameStatus(dynamic_cast<Player*>(obj));
 	}
-
-
-	//client specific input updates
-	/*if (clientUpdates.size() <= 0) {
-		return;
-	}
-
-	for (auto packet = updates.begin(); packet != updates.end(); ++packet) {
-		if (packet->size() <= 0) {
-			continue;
-		}*/
-
-		// = packet->readByte();
-		//get event
-		//if it is zoom in
-		//graphicengine;.izooomin
-		//else it it zoom out
-		//then zoom out
-	//}
-
 }
 
 void GameClient::checkGameStatus(Player * p){
