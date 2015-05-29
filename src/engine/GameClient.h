@@ -68,6 +68,7 @@ private:
 	//stack of states
 	vector<IMenuState *> states;
 	vector<Packet> updates;
+	vector<Packet> clientonly_updates;
 	//vector<Packet> clientUpdates;
 };
 #endif
