@@ -3,7 +3,6 @@
 
 
 vector<Packet> InputHandler::input;
-vector<Packet> InputHandler::clientInput;
 
 void InputHandler::handleKey(int key, int action, int mods) {
 	Packet p;
@@ -75,8 +74,6 @@ void InputHandler::handleKey(int key, int action, int mods) {
 	else if (key == GLFW_KEY_EQUAL) { //+
 		if (action == GLFW_PRESS) {
 			cout << "zoom in" << endl;
-			//p.writeByte(EventType::ZOOM_IN);
-			//clientInput.push_back(p);
 			GraphicsEngine::ZoomIn();
 		}
 	}
@@ -84,9 +81,17 @@ void InputHandler::handleKey(int key, int action, int mods) {
 	else if (key == GLFW_KEY_MINUS) {//=
 		if (action == GLFW_PRESS) {
 			cout << "zoom out" << endl;
-			//p.writeByte(EventType::ZOOM_OUT);
-			//clientInput.push_back(p);
 			GraphicsEngine::ZoomOut();
+		}
+	}
+	// Escape pause
+	else if (key == GLFW_KEY_Y) {//Esc
+		if (action == GLFW_PRESS) {
+			cout << "Game Pause" << endl;
+			//GraphicsEngine::ZoomOut();
+		    GameClient::inMenu = true;
+			MenuState::pause_flag = true;
+			GraphicsEngine::setMenuStatus(MenuStatus::MCONTINUE);
 		}
 	}
 }

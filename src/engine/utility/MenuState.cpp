@@ -1,10 +1,13 @@
 #include "MenuState.h"
 #include "..\GameClient.h"
 
+
+bool MenuState::replay_flag = false;
+bool MenuState::pause_flag = false;
+
 MenuState::MenuState()
 {
 	submit = false;
-	replay_flag = false;
 }
 
 
@@ -182,9 +185,12 @@ void MenuState::menuUp()
 	else if (m == MenuStatus::MLOSEREPLAY || m == MenuStatus::MLOSEQUIT){
 		GraphicsEngine::setMenuStatus(MenuStatus::MLOSEREPLAY);
 	}
+	else if (m == MenuStatus::MCONTINUE || m == MenuStatus::MPAUSEQUIT){
+		GraphicsEngine::setMenuStatus(MenuStatus::MCONTINUE);
+	}
 	else{
 		GraphicsEngine::setMenuStatus(MenuStatus::START);
-}
+    }
 }
 
 
@@ -202,6 +208,9 @@ void MenuState::menuDown()
 	else if (m == MenuStatus::MLOSEREPLAY || m == MenuStatus::MLOSEQUIT){
 		GraphicsEngine::setMenuStatus(MenuStatus::MLOSEQUIT);
 	}
+	else if (m == MenuStatus::MCONTINUE || m == MenuStatus::MPAUSEQUIT){
+		GraphicsEngine::setMenuStatus(MenuStatus::MPAUSEQUIT);
+	}
 	else{
 		GraphicsEngine::setMenuStatus(MenuStatus::QUIT);
 }
@@ -217,9 +226,15 @@ void MenuState::menuEnter()
 			menu_select = 0;
 			if (replay_flag){
 				replay();
+				replay_flag = false;
+			}
+			else if (pause_flag){
+				cout << "yes" << endl;
+				conti();
+				pause_flag = false;
 			}
 			else{
-			play();
+			    play();
 			}
 			break;
 		case (QUIT) :
@@ -240,8 +255,16 @@ void MenuState::play()
 	this->connectToServer();
 	//if success (no exceptions) login to server
 	this->login();
+	//gameclient->inMenu = false;
+	GameClient::inMenu = false;
+	GraphicsEngine::setCursor(GLFW_CURSOR_DISABLED);
+}
 
-	gameclient->inMenu = false;
+void MenuState::conti()
+{
+
+	//gameclient->inMenu = false;
+	GameClient::inMenu = false;
 	GraphicsEngine::setCursor(GLFW_CURSOR_DISABLED);
 }
 
@@ -254,7 +277,9 @@ void MenuState::replay(){
 	//if success (no exceptions) login to server
 	//this->login();
 
-	gameclient->inMenu = false;
+	//gameclient->inMenu = false;
+	GameClient::inMenu = false;
+	GraphicsEngine::setCursor(GLFW_CURSOR_DISABLED);
 }
 
 
@@ -280,8 +305,11 @@ void MenuState::checkMenu()
 		if (replay_flag){
 			std::cout << "REPLAY" << std::endl;
 		}
+		else if (pause_flag){
+			std::cout << "PAUSE" << std::endl;
+		}
 		else{
-		std::cout << "PLAY" << std::endl;
+		    std::cout << "PLAY" << std::endl;
 		}
 		break;
 	case (QUIT) :

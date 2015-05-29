@@ -17,6 +17,8 @@ public:
 	IMenuState * changeTo;
 	GameClient * gameclient;
 	bool submit;
+	static bool replay_flag;
+	static bool pause_flag;
 
 	IMenuState() : changeTo(nullptr) {}
 

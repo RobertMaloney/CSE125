@@ -33,10 +33,9 @@ public:
 	GameState gstate;
 	ObjectId playerid;
 
-	IMenuState * current_state;
-	IMenuState * next_state;
+	IMenuState * mstate;
 	TCPConnection* connection;
-	bool inMenu;
+	static bool inMenu;
 
     GameClient();
     ~GameClient();
@@ -52,7 +51,7 @@ public:
 	void removeState();
 	void changeState(IMenuState *state); //this is a pop and push
 
-	void updateState();
+	//void updateState();
 
 	void checkError(SocketError err);
 	bool shouldTerminate(SocketError err);

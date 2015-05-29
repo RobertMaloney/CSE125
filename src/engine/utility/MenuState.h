@@ -7,7 +7,7 @@
 #define MENU_SELECTIONS_NUM 2
 
 
-class MenuState : public IMenuState
+class MenuState : public IMenuState  //Only one menu state, cannot have more ><
 {
 public:
 
@@ -18,7 +18,7 @@ public:
 	};
 
 	vector<Packet> updates;
-	bool replay_flag;
+
 
 	MenuState();
 	~MenuState();
@@ -46,6 +46,7 @@ private:
 	void play();
 	void quit();
 	void replay();
+	void conti();
 
 	void receiveInput();
 

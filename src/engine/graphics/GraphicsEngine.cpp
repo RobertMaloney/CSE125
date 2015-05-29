@@ -57,6 +57,9 @@ GLuint				GraphicsEngine::m_menuId3 = 0;
 GLuint				GraphicsEngine::m_menuId4 = 0;
 GLuint				GraphicsEngine::m_menuId5 = 0;
 GLuint				GraphicsEngine::m_menuId6 = 0;
+GLuint				GraphicsEngine::m_menuId7 = 0;
+GLuint				GraphicsEngine::m_menuId8 = 0;
+
 int					GraphicsEngine::HUDW = 100;
 int					GraphicsEngine::HUDH = 100;
 int                 GraphicsEngine::B = 20; //used to change the size of the mini map :)
@@ -176,6 +179,8 @@ void GraphicsEngine::Initialize() {
 	m_menuId4 = HUD::makeHUD("../../media/texture/win_quit.png");//win quit    
 	m_menuId5 = HUD::makeHUD("../../media/texture/lose_replay.png");//lose replay  
 	m_menuId6 = HUD::makeHUD("../../media/texture/lose_quit.png");//lose quit  TODO bug  
+	m_menuId7 = HUD::makeHUD("../../media/texture/bg_continue.png");//lose replay  
+	m_menuId8 = HUD::makeHUD("../../media/texture/bg_pausequit.png");//lose quit  TODO bug  
 
 
 	// WORLD
@@ -534,6 +539,12 @@ void GraphicsEngine::DrawAndPollMenu()
 		break;
 	case(MLOSEQUIT):
 		m_menu->setTextureId(m_menuId6);
+		break;
+	case(MCONTINUE) :
+		m_menu->setTextureId(m_menuId7);
+		break;
+	case(MPAUSEQUIT) :
+		m_menu->setTextureId(m_menuId8);
 		break;
 	}
 	

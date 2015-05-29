@@ -1,10 +1,11 @@
 #include "GameClient.h"
 #include "utility\Config.h"
 
+bool GameClient::inMenu = true;
+
 GameClient::GameClient() 
 {
     connection = new TCPConnection();
-	inMenu = true;
 }
 
 
@@ -20,11 +21,10 @@ void GameClient::init() {
 	//get socket ready
 	Socket::initialize();
 
-	//make first state, menu
-	MenuState *newstate = new MenuState();
-
+    mstate = new MenuState();
+	mstate->init(this);
 	//then change to that state (this also initializes the state if it's not initialized)
-	this->addState(newstate);
+	//this->addState(newstate);
 }
 
 
@@ -44,12 +44,12 @@ void GameClient::run() {
 
 	while (!GraphicsEngine::Closing()) {
 
-		updateState();
+		//updateState();
 
 		if (inMenu){
-			current_state->draw();
-			current_state->handleEvents();
-			current_state->update();
+			mstate->draw();
+			mstate->handleEvents();
+			mstate->update();
 			//current_state->draw();
 		}
 		else{
@@ -162,12 +162,15 @@ void GameClient::checkGameStatus(Player * p){
 
         //Another menu status or leaderboard or whatever thing should happen here : ask player to replay or end the game....
 		inMenu = true;
+		MenuState::replay_flag = true;
+
 		GraphicsEngine::setMenuStatus(MenuStatus::MWINREPLAY);
 	}
 	else if (p->getStatus() == GStatus::LOSE){
 		std::cout << "I lose :(" << endl;
 
 		inMenu = true;
+		MenuState::replay_flag = true;
 		GraphicsEngine::setMenuStatus(MenuStatus::MLOSEREPLAY);
 	}// else do nothing
 }
@@ -177,14 +180,14 @@ void GameClient::close() {
 	system("pause");
 }
 
-void GameClient::updateState()
+/*void GameClient::updateState()
 {
 	//check if there's a state to change to
 	if (next_state == nullptr)
 		return;
 	current_state = next_state;
 	next_state = nullptr;
-}
+}*/
 
 
 
@@ -211,16 +214,16 @@ bool GameClient::shouldTerminate(SocketError err)
 }
 
 
-void GameClient::addState(IMenuState *state)
+/*void GameClient::addState(IMenuState *state)
 {
 	//NOTE: this order matters
 	//state->gameclient = this;
 	state->init(this);
 	this->next_state = state;
 	this->states.push_back(state);
-}
+}*/
 
-
+/*
 void GameClient::removeState()
 {
 	//handle case when there's only one state?
@@ -228,8 +231,8 @@ void GameClient::removeState()
 	this->states.pop_back();
 	this->next_state = states.back();
 }
-
-
+*/
+/*
 void GameClient::changeState(IMenuState *state)
 {
 	//NOTE: this order matters
@@ -238,3 +241,4 @@ void GameClient::changeState(IMenuState *state)
 	this->next_state = state;
 	this->states.push_back(state);
 }
+*/

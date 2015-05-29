@@ -42,7 +42,9 @@ enum MenuStatus {
 	MWINREPLAY,
 	MWINQUIT,
 	MLOSEREPLAY,
-	MLOSEQUIT
+	MLOSEQUIT,
+	MCONTINUE,
+	MPAUSEQUIT
 };
 
 
@@ -96,7 +98,7 @@ private:
 	static int                      HUDH;
 	static int                      B;
 
-	static GLuint					m_timerId, m_plusId, m_minusId,m_borderId, m_skyboxId, m_HudId1, m_HudId2, m_HudId3, m_HudId4, m_HudIdN1, m_HudIdN2, m_HudIdN3, m_HudIdN4, m_groundId, m_menuId1, m_menuId2, m_menuId3, m_menuId4, m_menuId5, m_menuId6;// , m_tId;
+	static GLuint					m_timerId, m_plusId, m_minusId,m_borderId, m_skyboxId, m_HudId1, m_HudId2, m_HudId3, m_HudId4, m_HudIdN1, m_HudIdN2, m_HudIdN3, m_HudIdN4, m_groundId, m_menuId1, m_menuId2, m_menuId3, m_menuId4, m_menuId5, m_menuId6, m_menuId7, m_menuId8;// , m_tId;
 	static Renderable				*m_timer, *m_plus, *m_minus, *m_border, *m_skybox, *m_HUD1, *m_HUD2, *m_HUD3, *m_HUD4, *m_HUDN1, *m_HUDN2, *m_HUDN3, *m_HUDN4, *worldModel, *m_menu;
 	static Shader					*m_defaultShader, *m_skyboxShader, *m_textureShader;// , *m_tShader;
 
