@@ -26,6 +26,9 @@ void MenuState::init(GameClient* gc)
 	std::cout << "ENTERING: MenuState" << std::endl;
 	menu_select = 0;
 	gameclient = gc;
+
+	//play menu music
+	GameSound::menumusic->play();
 }
 
 
@@ -34,7 +37,8 @@ void MenuState::init(GameClient* gc)
  */
 void MenuState::cleanup()
 {
-
+	//stop menu music
+	GameSound::menumusic->stop();
 }
 
 
@@ -271,6 +275,12 @@ void MenuState::play()
 	//gameclient->inMenu = false;
 	GameClient::inMenu = false;
 	GraphicsEngine::setCursor(GLFW_CURSOR_DISABLED);
+
+	//cleanupmenu
+	this->cleanup();
+
+	// start ingame bgm here unfortunately
+	GameSound::ingamemusic->play();
 }
 
 void MenuState::conti()
