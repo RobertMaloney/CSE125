@@ -16,6 +16,9 @@ public:
 						*bigburp,
 						*jump;
 
+	static sf::Music	*menumusic,
+						*ingamemusic;
+
 	static void init();
 
 
@@ -26,7 +29,11 @@ private:
 							*nom_buf, 
 							*regburp_buf, 
 							*bigburp_buf, 
-							*jump_buf;
+							*jump_buf
+							
+							//*menumusic_buf,
+							//*ingamemusic_buf
+							;
 
 	
 };
