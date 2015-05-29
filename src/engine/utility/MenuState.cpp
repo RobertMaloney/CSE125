@@ -275,6 +275,12 @@ void MenuState::play()
 	//gameclient->inMenu = false;
 	GameClient::inMenu = false;
 	GraphicsEngine::setCursor(GLFW_CURSOR_DISABLED);
+
+	//cleanupmenu
+	this->cleanup();
+
+	// start ingame bgm here unfortunately
+	GameSound::ingamemusic->play();
 }
 
 void MenuState::conti()

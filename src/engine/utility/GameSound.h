@@ -3,7 +3,8 @@
 
 #define SFML_STATIC
 #include <SFML/Audio.hpp>
-
+//#include <SFML/System.hpp>
+#pragma comment(lib, "winmm.lib") // SO weird I need this for music
 
 class GameSound 
 {

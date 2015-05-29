@@ -73,12 +73,14 @@ void GameSound::init()
 	jump->setBuffer(*jump_buf);
 
 	//MUSIC
-	if (!menumusic->openFromFile("../../media/sound/menumusic.wav"))
+	if (!menumusic->openFromFile("../../media/sound/menubgm.flac"))
 		return;
-	//menumusic->setBuffer(*menumusic_buf);
+	menumusic->setVolume(50);
+	menumusic->setLoop(true);
 
-	if (!ingamemusic->openFromFile("../../media/sound/ingamemusic.wav"))
+	if (!ingamemusic->openFromFile("../../media/sound/ingamebgm.flac"))
 		return;
-	//ingamemusic->setBuffer(*ingamemusic_buf);
+	ingamemusic->setVolume(50);
+	ingamemusic->setLoop(true);
 	
 }
