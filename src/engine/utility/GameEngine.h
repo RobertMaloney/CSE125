@@ -21,7 +21,7 @@ public:
 	void generateResources(int);
    void generateClouds(int);
    void generateClusterTree(float, float, float, int);
-
+   void generateRockRing();
 };
 
 

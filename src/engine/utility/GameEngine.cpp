@@ -113,20 +113,34 @@ void GameEngine::generateResources(int num) {
 }
 
 void GameEngine::generateClouds(int num) {
+   float adist = 120.f;
+   float tdist = 20.f;
+   float theta = 0;
+   float azimuth = 0;
+
+   int squareRoot = 360/adist;
    for (int i = 0; i < num; i++)
    {
-      int floor = 700, ceiling = 800, range = (ceiling - floor);
-      int radius = floor + int((range * rand()) / (RAND_MAX + 1.0));
+      float floor = 700, ceiling = 800, range = (ceiling - floor);
+      float radius = floor + float((range * rand()) / (RAND_MAX + 1.0));
 
       float theta = (float)(rand() % 180);
       float azimuth = (float)(rand() % 360);
       float direction = (float)(0);
       Resource * newRe = new Cloud(radius, theta, azimuth, direction);
-      newRe->setModelRadius(3.f);
-      newRe->setModelHeight(17.f);
 
       ObjectId resourceId = IdGenerator::getInstance().createId();
       gstate->addResource(resourceId, newRe);
+
+      /*float floor = 700, ceiling = 800, range = (ceiling - floor);
+      float radius = floor + int((range * rand()) / (RAND_MAX + 1.0));
+
+      azimuth = int(azimuth + adist) % 360;
+      float direction = (float)(0);
+      Resource * newRe = new Cloud(radius, theta, azimuth, direction);
+
+      ObjectId resourceId = IdGenerator::getInstance().createId();
+      gstate->addResource(resourceId, newRe);*/
    }
 }
 
@@ -189,4 +203,37 @@ void GameEngine::generateClusterTree(float radius, float theta, float azimuth, i
       gstate->addResource(resourceId, newRe);
    }
    gstate->setTotal(total);
+}
+
+void GameEngine::generateRockRing()
+{
+   float adist = .2f;
+   float tdist = .5f;
+   float theta = 180.f;
+   float azimuth = 160.f;
+   float radius = 505;
+   int num = 10;
+
+   for (int i = 0; i < num; i++)
+   {
+      azimuth = fmod(azimuth + adist, 360);
+      float floor = azimuth - adist, ceiling = azimuth + adist, range = (ceiling - floor);
+      azimuth = floor + float((range * rand()) / (RAND_MAX + 1.0));
+
+      for (int j = 0; j < num; j++)
+      {
+         floor = theta - tdist, ceiling = theta + tdist, range = (ceiling - floor);
+         theta = floor + float((range * rand()) / (RAND_MAX + 1.0));
+
+         cout << azimuth << " " << theta << endl;
+         //float floor = azimuth - adist, ceiling = azimuth + adist, range = (ceiling - floor);
+         //azimuth = floor + float((range * rand()) / (RAND_MAX + 1.0));
+
+         float direction = (float)(0);
+         Resource * newRe = new Rock(radius, theta, azimuth, direction);
+
+         ObjectId resourceId = IdGenerator::getInstance().createId();
+         gstate->addResource(resourceId, newRe);
+      }
+   }
 }

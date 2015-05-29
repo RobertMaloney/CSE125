@@ -31,7 +31,7 @@ bool GameState::addPlayer(ObjectId theId, Player* p) {
 	if (!map->add(theId, p)){
 		return false;
 	}
-    p->setModel(selectPlayerModel(theId));
+   p->setModel(selectPlayerModel(theId));
 	p->setId(theId);
 	players.push_back(p);
 	return true;
@@ -39,7 +39,7 @@ bool GameState::addPlayer(ObjectId theId, Player* p) {
 
 // Temp method to select player model
 Model GameState::selectPlayerModel(ObjectId playerId){
-   switch (playerId % 3){
+   switch (playerId % 4){
    case 0:
       return OB_TYPE;
    case 1:
