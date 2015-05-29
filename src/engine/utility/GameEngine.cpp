@@ -146,8 +146,8 @@ void GameEngine::generateClouds(int num) {
 
 void GameEngine::generateClusterTree(float radius, float theta, float azimuth, int num)
 {
-   float adist = .5f;
-   float tdist = .5f;
+   float adist = .3f;
+   float tdist = .3f;
    int total = gstate->getTotal();
    for (int i = 0; i < num; i++)
    {
