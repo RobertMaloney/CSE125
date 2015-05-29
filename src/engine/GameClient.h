@@ -15,6 +15,7 @@
 #include "utility\MenuState.h"
 #include "utility\GameState.h"
 #include "utility\IdGenerator.h"
+#include "utility\GameSound.h"
 
 
 using std::chrono::high_resolution_clock;
@@ -33,10 +34,9 @@ public:
 	GameState gstate;
 	ObjectId playerid;
 
-	IMenuState * current_state;
-	IMenuState * next_state;
+	IMenuState * mstate;
 	TCPConnection* connection;
-	bool inMenu;
+	static bool inMenu;
 
     GameClient();
     ~GameClient();
@@ -52,7 +52,7 @@ public:
 	void removeState();
 	void changeState(IMenuState *state); //this is a pop and push
 
-	void updateState();
+	//void updateState();
 
 	void checkError(SocketError err);
 	bool shouldTerminate(SocketError err);
@@ -67,6 +67,7 @@ private:
 	//stack of states
 	vector<IMenuState *> states;
 	vector<Packet> updates;
+	vector<Packet> clientonly_updates;
 	//vector<Packet> clientUpdates;
 };
 #endif

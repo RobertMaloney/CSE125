@@ -12,6 +12,8 @@
 #include "Skybox.h"
 #include "LightHandler.h"
 #include "HUD.h"
+#include "Ground.h"
+#include "..\utility\GameSound.h"
 
 using namespace std;
 
@@ -57,6 +59,9 @@ GLuint				GraphicsEngine::m_menuId3 = 0;
 GLuint				GraphicsEngine::m_menuId4 = 0;
 GLuint				GraphicsEngine::m_menuId5 = 0;
 GLuint				GraphicsEngine::m_menuId6 = 0;
+GLuint				GraphicsEngine::m_menuId7 = 0;
+GLuint				GraphicsEngine::m_menuId8 = 0;
+
 int					GraphicsEngine::HUDW = 100;
 int					GraphicsEngine::HUDH = 100;
 int                 GraphicsEngine::B = 20; //used to change the size of the mini map :)
@@ -176,6 +181,8 @@ void GraphicsEngine::Initialize() {
 	m_menuId4 = HUD::makeHUD("../../media/texture/win_quit.png");//win quit    
 	m_menuId5 = HUD::makeHUD("../../media/texture/lose_replay.png");//lose replay  
 	m_menuId6 = HUD::makeHUD("../../media/texture/lose_quit.png");//lose quit  TODO bug  
+	m_menuId7 = HUD::makeHUD("../../media/texture/bg_continue.png");//lose replay  
+	m_menuId8 = HUD::makeHUD("../../media/texture/bg_pausequit.png");//lose quit  TODO bug  
 
 
 	// WORLD
@@ -535,6 +542,12 @@ void GraphicsEngine::DrawAndPollMenu()
 	case(MLOSEQUIT):
 		m_menu->setTextureId(m_menuId6);
 		break;
+	case(MCONTINUE) :
+		m_menu->setTextureId(m_menuId7);
+		break;
+	case(MPAUSEQUIT) :
+		m_menu->setTextureId(m_menuId8);
+		break;
 	}
 	
 	glUniform1i(glGetUniformLocation(m_textureShader->Id(), "tex"), 0);// m_menu->getTextureUnit());
@@ -664,8 +677,16 @@ Renderable * GraphicsEngine::selectModel(Model model){
 
 // Translate from vec4 postion to matrix in the node of scene graph??
 void GraphicsEngine::updateObject(ObjectId objId, glm::quat & q, float angle, float height, bool f) {
+	bool old_visible = objNodeMap[objId]->getVisible();
+	
 	objNodeMap[objId]->getMatrix() = MatrixNode::quatAngle(q, angle, height);
 	objNodeMap[objId]->setVisible(f);
+
+	bool new_visible = objNodeMap[objId]->getVisible();
+
+	//check for visible to invisible transition
+	if (old_visible != new_visible)
+		GameSound::nom->play(); //I play sound here because I want it to be client side only
 }
 
 //A mapping from ObjectId to node in scene graph

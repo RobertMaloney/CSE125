@@ -4,17 +4,17 @@
 #include <deque>
 #include "..\network\Packet.h"
 #include "..\utility\Event.h"
+#include "..\GameClient.h"
 
 using std::deque;
 
 class InputHandler
 {
 public:
-	
-   static vector<Packet> input;
-   static vector<Packet> clientInput;
-   static void handleKey(int key, int action, int mods);
-   static void handleMouse(float x, float y);
+	static vector<Packet> input;
+	static vector<Packet> clientInput;
+	static void handleKey(int key, int action, int mods);
+	static void handleMouse(float x, float y);
 
 private:
 

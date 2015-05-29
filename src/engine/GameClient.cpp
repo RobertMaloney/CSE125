@@ -1,10 +1,11 @@
 #include "GameClient.h"
 #include "utility\Config.h"
 
+bool GameClient::inMenu = true;
+
 GameClient::GameClient() 
 {
     connection = new TCPConnection();
-	inMenu = true;
 }
 
 
@@ -17,14 +18,16 @@ GameClient::~GameClient() {
 
 
 void GameClient::init() {
+	//get sound ready
+	GameSound::init();
+
 	//get socket ready
 	Socket::initialize();
 
-	//make first state, menu
-	MenuState *newstate = new MenuState();
-
+    mstate = new MenuState();
+	mstate->init(this);
 	//then change to that state (this also initializes the state if it's not initialized)
-	this->addState(newstate);
+	//this->addState(newstate);
 }
 
 
@@ -44,12 +47,12 @@ void GameClient::run() {
 
 	while (!GraphicsEngine::Closing()) {
 
-		updateState();
+		//updateState();
 
 		if (inMenu){
-			current_state->draw();
-			current_state->handleEvents();
-			current_state->update();
+			mstate->draw();
+			mstate->handleEvents();
+			mstate->update();
 			//current_state->draw();
 		}
 		else{
@@ -79,6 +82,8 @@ void GameClient::sendEvents(vector<Packet> & events)
 void GameClient::receiveUpdates()
 {
 	this->checkError(this->connection->receive(updates));
+	clientonly_updates = vector<Packet>(InputHandler::clientInput);
+	InputHandler::clientInput.clear();
 	//this->receiveClientInput();
 }
 
@@ -89,12 +94,64 @@ void GameClient::receiveUpdates()
 }*/
 
 void GameClient::updateGameState() {
-	if (updates.size() <= 0) {
+	if (updates.size() <= 0 && clientonly_updates.size() <= 0) {
 		return;
 	}
 
 	ObjectId objId;
 	GameObject* obj = nullptr;
+	byte clientonly_event;
+
+	//sounds
+	for (auto packet = clientonly_updates.begin(); packet != clientonly_updates.end(); ++packet) {
+		if (packet->size() <= 0) {
+			continue;
+		}
+
+		clientonly_event = packet->readByte();
+		packet->reset();
+
+		switch (clientonly_event) {
+		case MOVE_FORWARD:
+			GameSound::blobmove->pause();
+			GameSound::blobmove->play();
+			break;
+		case STOP_FORWARD:
+			GameSound::blobmove->pause();
+			break;
+		case MOVE_BACKWARD:
+			GameSound::blobmove->pause();
+			GameSound::blobmove->play();
+			break;
+		case STOP_BACKWARD:
+			GameSound::blobmove->pause();
+			break;
+		case MOVE_LEFT:
+			GameSound::blobmove->pause();
+			GameSound::blobmove->play();
+			break;
+		case STOP_LEFT:
+			GameSound::blobmove->pause();
+			break;
+		case MOVE_RIGHT:
+			GameSound::blobmove->pause();
+			GameSound::blobmove->play();
+			break;
+		case STOP_RIGHT:
+			GameSound::blobmove->pause();
+			break;
+		case JUMP:
+			GameSound::jump->play();
+			break;
+		default:
+			//do nothing
+			break;
+		}
+	}
+
+	//clear client only updates
+	clientonly_updates.clear();
+
 
 	//Note: Loop through all packets(gameobjects for now), identify which object it relates to or if it is a new object
 	for (auto packet = updates.begin(); packet != updates.end(); ++packet) {
@@ -128,32 +185,16 @@ void GameClient::updateGameState() {
 		}
 
 		//Update the object in node (in GraphicsEngine)
-		GraphicsEngine::updateObject(obj->getId(), obj->getOrientation(), obj->getAngle(), obj->getHeight(), obj->getVisible());
+		GraphicsEngine::updateObject(	obj->getId(), 
+										obj->getOrientation(), 
+										obj->getAngle(), 
+										obj->getHeight(), 
+										obj->getVisible());
 
 
 		if (obj->getId() == this->playerid)
 		    this->checkGameStatus(dynamic_cast<Player*>(obj));
 	}
-
-
-	//client specific input updates
-	/*if (clientUpdates.size() <= 0) {
-		return;
-	}
-
-	for (auto packet = updates.begin(); packet != updates.end(); ++packet) {
-		if (packet->size() <= 0) {
-			continue;
-		}*/
-
-		// = packet->readByte();
-		//get event
-		//if it is zoom in
-		//graphicengine;.izooomin
-		//else it it zoom out
-		//then zoom out
-	//}
-
 }
 
 void GameClient::checkGameStatus(Player * p){
@@ -162,12 +203,17 @@ void GameClient::checkGameStatus(Player * p){
 
         //Another menu status or leaderboard or whatever thing should happen here : ask player to replay or end the game....
 		inMenu = true;
+		MenuState::submit = false;
+		MenuState::replay_flag = true;
+
 		GraphicsEngine::setMenuStatus(MenuStatus::MWINREPLAY);
 	}
 	else if (p->getStatus() == GStatus::LOSE){
 		std::cout << "I lose :(" << endl;
 
 		inMenu = true;
+		MenuState::submit = false;
+		MenuState::replay_flag = true;
 		GraphicsEngine::setMenuStatus(MenuStatus::MLOSEREPLAY);
 	}// else do nothing
 }
@@ -177,14 +223,14 @@ void GameClient::close() {
 	system("pause");
 }
 
-void GameClient::updateState()
+/*void GameClient::updateState()
 {
 	//check if there's a state to change to
 	if (next_state == nullptr)
 		return;
 	current_state = next_state;
 	next_state = nullptr;
-}
+}*/
 
 
 
@@ -211,16 +257,16 @@ bool GameClient::shouldTerminate(SocketError err)
 }
 
 
-void GameClient::addState(IMenuState *state)
+/*void GameClient::addState(IMenuState *state)
 {
 	//NOTE: this order matters
 	//state->gameclient = this;
 	state->init(this);
 	this->next_state = state;
 	this->states.push_back(state);
-}
+}*/
 
-
+/*
 void GameClient::removeState()
 {
 	//handle case when there's only one state?
@@ -228,8 +274,8 @@ void GameClient::removeState()
 	this->states.pop_back();
 	this->next_state = states.back();
 }
-
-
+*/
+/*
 void GameClient::changeState(IMenuState *state)
 {
 	//NOTE: this order matters
@@ -238,3 +284,4 @@ void GameClient::changeState(IMenuState *state)
 	this->next_state = state;
 	this->states.push_back(state);
 }
+*/
