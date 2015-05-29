@@ -195,26 +195,6 @@ void GameClient::updateGameState() {
 		if (obj->getId() == this->playerid)
 		    this->checkGameStatus(dynamic_cast<Player*>(obj));
 	}
-
-
-	//client specific input updates
-	/*if (clientUpdates.size() <= 0) {
-		return;
-	}
-
-	for (auto packet = updates.begin(); packet != updates.end(); ++packet) {
-		if (packet->size() <= 0) {
-			continue;
-		}*/
-
-		// = packet->readByte();
-		//get event
-		//if it is zoom in
-		//graphicengine;.izooomin
-		//else it it zoom out
-		//then zoom out
-	//}
-
 }
 
 void GameClient::checkGameStatus(Player * p){

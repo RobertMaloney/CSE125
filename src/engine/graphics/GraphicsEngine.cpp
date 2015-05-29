@@ -13,6 +13,7 @@
 #include "LightHandler.h"
 #include "HUD.h"
 #include "Ground.h"
+#include "..\utility\GameSound.h"
 
 using namespace std;
 
@@ -679,8 +680,16 @@ Renderable * GraphicsEngine::selectModel(Model model){
 
 // Translate from vec4 postion to matrix in the node of scene graph??
 void GraphicsEngine::updateObject(ObjectId objId, glm::quat & q, float angle, float height, bool f) {
+	bool old_visible = objNodeMap[objId]->getVisible();
+	
 	objNodeMap[objId]->getMatrix() = MatrixNode::quatAngle(q, angle, height);
 	objNodeMap[objId]->setVisible(f);
+
+	bool new_visible = objNodeMap[objId]->getVisible();
+
+	//check for visible to invisible transition
+	if (old_visible != new_visible)
+		GameSound::nom->play(); //I play sound here because I want it to be client side only
 }
 
 //A mapping from ObjectId to node in scene graph
