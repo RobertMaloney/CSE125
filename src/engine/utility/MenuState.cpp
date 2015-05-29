@@ -4,10 +4,11 @@
 
 bool MenuState::replay_flag = false;
 bool MenuState::pause_flag = false;
+bool MenuState::submit = false;
 
 MenuState::MenuState()
 {
-	submit = false;
+	
 }
 
 
@@ -221,15 +222,17 @@ void MenuState::menuEnter()
 {
 	if (!submit){
 		//check menu_select state
+
 		switch (menu_select) {
 		case (PLAY) :
 			menu_select = 0;
+
 			if (replay_flag){
 				replay();
 				replay_flag = false;
 			}
 			else if (pause_flag){
-				cout << "yes" << endl;
+
 				conti();
 				pause_flag = false;
 			}
@@ -264,6 +267,7 @@ void MenuState::conti()
 {
 
 	//gameclient->inMenu = false;
+
 	GameClient::inMenu = false;
 	GraphicsEngine::setCursor(GLFW_CURSOR_DISABLED);
 }

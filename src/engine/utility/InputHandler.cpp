@@ -91,6 +91,7 @@ void InputHandler::handleKey(int key, int action, int mods) {
 			//GraphicsEngine::ZoomOut();
 		    GameClient::inMenu = true;
 			MenuState::pause_flag = true;
+			MenuState::submit = false;
 			GraphicsEngine::setMenuStatus(MenuStatus::MCONTINUE);
 		}
 	}

@@ -16,9 +16,10 @@ class IMenuState
 public:
 	IMenuState * changeTo;
 	GameClient * gameclient;
-	bool submit;
+
 	static bool replay_flag;
 	static bool pause_flag;
+	static bool submit;
 
 	IMenuState() : changeTo(nullptr) {}
 

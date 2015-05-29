@@ -162,6 +162,7 @@ void GameClient::checkGameStatus(Player * p){
 
         //Another menu status or leaderboard or whatever thing should happen here : ask player to replay or end the game....
 		inMenu = true;
+		MenuState::submit = false;
 		MenuState::replay_flag = true;
 
 		GraphicsEngine::setMenuStatus(MenuStatus::MWINREPLAY);
@@ -170,6 +171,7 @@ void GameClient::checkGameStatus(Player * p){
 		std::cout << "I lose :(" << endl;
 
 		inMenu = true;
+		MenuState::submit = false;
 		MenuState::replay_flag = true;
 		GraphicsEngine::setMenuStatus(MenuStatus::MLOSEREPLAY);
 	}// else do nothing
