@@ -8,9 +8,9 @@ vector<Packet> InputHandler::clientInput;
 void InputHandler::handleKey(int key, int action, int mods) {
 	Packet p;
 
-	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-		GraphicsEngine::CloseGame();
-	else if (key == GLFW_KEY_W) {
+	//if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+		//GraphicsEngine::CloseGame();
+	if (key == GLFW_KEY_W) {
 		if (action == GLFW_PRESS) {
 			cout << "client move forward" << endl;
 			p.writeByte(EventType::MOVE_FORWARD);
@@ -96,11 +96,12 @@ void InputHandler::handleKey(int key, int action, int mods) {
 		}
 	}
 	// Escape pause
-	else if (key == GLFW_KEY_Y) {//Esc
+	else if (key == GLFW_KEY_ESCAPE) {//Esc
 		if (action == GLFW_PRESS) {
 			cout << "Game Pause" << endl;
 			//GraphicsEngine::ZoomOut();
 		    GameClient::inMenu = true;
+			GraphicsEngine::setCursor(GLFW_CURSOR_NORMAL);
 			MenuState::pause_flag = true;
 			MenuState::submit = false;
 			GraphicsEngine::setMenuStatus(MenuStatus::MCONTINUE);

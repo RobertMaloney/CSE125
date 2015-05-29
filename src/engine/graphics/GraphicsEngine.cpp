@@ -188,7 +188,7 @@ void GraphicsEngine::Initialize() {
 	// WORLD
 	//m_textureShader->Use();
 	m_defaultShader->Use();
-	worldModel = new Geometry("../../media/models/sphere_t.obj");
+	worldModel = new Geometry("../../media/models/sphere_t2.obj");
 
 	m_groundId = HUD::makeHUD("../../media/texture/ground.png");  
 	worldModel->setTextureId(m_groundId);
