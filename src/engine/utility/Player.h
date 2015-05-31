@@ -3,7 +3,7 @@
 
 #include <string>
 #include "Model.h"
-#include "IEatable.h"
+#include "Resources.h"
 #include "Status.h"
 #include "../physics/MoveableObject.h"
 

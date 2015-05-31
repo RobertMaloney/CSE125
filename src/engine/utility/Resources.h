@@ -27,6 +27,54 @@ class EatableResource : public Resource, public IEatable {
 		}
 };
 
+class PowerUpResource : public Resource {
+protected:
+   float jumpForce;
+   float moveForce;
+   float mass;
+
+   PowerUpResource(float jumpForce, float moveForce, float mass, Model m) : Resource(m){
+      this->type = POWERUP;
+      this->jumpForce = jumpForce;
+      this->moveForce = moveForce;
+      this->mass = mass;
+   };
+
+   PowerUpResource(float jumpForce, float moveForce, float mass,
+         Model m, float radius, float theta, float azimuth, float direction) :
+      Resource(m, radius, theta, azimuth, direction){
+      this->type = POWERUP;
+      this->jumpForce = jumpForce;
+      this->moveForce = moveForce;
+      this->mass = mass;
+   };
+
+public:
+   float getJumpForce() {
+      return this->jumpForce;
+   }
+
+   float getMoveForce() {
+      return this->moveForce;
+   }
+
+   float getMass() {
+      return this->mass;
+   }
+
+   void setJumpForce(float jf) {
+      this->jumpForce = jf;
+   }
+
+   void setMoveForce(float mf) {
+      this->moveForce = mf;
+   }
+
+   void setMass(float m) {
+      this->mass = m;
+   }
+};
+
 class Mushroom : public EatableResource {
 public:
     Mushroom() : Mushroom(10){};
@@ -90,4 +138,11 @@ public:
    Cloud() : Resource(CLOUD) {};
    Cloud(float radius, float theta, float azimuth, float direction) :
       Resource(CLOUD, radius, theta, azimuth, direction) {};
+};
+
+class Pill : public PowerUpResource {
+public:
+   Pill() : PowerUpResource(10000, 20, -10, PILL) {};
+   Pill(float radius, float theta, float azimuth, float direction) :
+      PowerUpResource(10000, 20, -10, PILL, radius, theta, azimuth, direction){};
 };

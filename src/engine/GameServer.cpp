@@ -53,10 +53,11 @@ void GameServer::initialize() {
 	physics->loadConfiguration(configFile["physics engine"]);
 	
 	gameState->initWithServer();
-	engine->generateResources(configFile["num resources"].asInt());
+	//engine->generateResources(configFile["num resources"].asInt());
    engine->generateClouds(configFile["num clouds"].asInt());
+   engine->generatePills(50);
    engine->generateClusterTree(505, 10, 10, 200);
-   //engine->generateRockRing();
+   engine->generateRockRing();
 }
 
 

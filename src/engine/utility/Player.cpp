@@ -113,27 +113,43 @@ void Player::collide(float dt, GameObject & target) {
 		return;
 	}
 
-	switch (target.getType()) {
-		case PLAYER:
-			this->velocity *= -1;
+   switch (target.getType()) {
+   case PLAYER:
+      this->velocity *= -1;
+      break;
+   case GAMEOBJECT:
+      this->velocity *= -1;
+      break;
+   case IEATABLE:
+         {
+            std::cout << "EAT " << endl;
+            IEatable* eatable = dynamic_cast<IEatable*>(&target);
+            if (eatable) {
+               std::cout << this->getId() << " old score: " << this->getScore() << endl;
+               this->setScore(this->getScore() + eatable->getPoints());
+               std::cout << this->getId() << " new score: " << this->getScore() << endl;
+            }
+            else {
+               std::cout << "Error: EATABLE is null: " << typeid(target).name() << endl;
+            }
+            target.setVisible(false);
+            //TODO Render needs to figure out (not) rendering dead/invisible object
+         }
 			break;
-		case GAMEOBJECT:
-			this->velocity *= -1;
-			break;
-		case IEATABLE:
+   case POWERUP:
+         {
+            std::cout << "POWER UP" << endl;
+            PowerUpResource * powerUp = dynamic_cast<PowerUpResource *>(&target);
+            if (powerUp) {
+               this->setJumpForce(this->getJumpForce() + powerUp->getJumpForce());
+               this->setMoveForce(this->getMoveForce() + powerUp->getMoveForce());
 
-			std::cout << "EAT " << endl;
-			IEatable* eatable = dynamic_cast<IEatable*>(&target);
-			if (eatable) {
-				std::cout << this->getId() << " old score: " << this->getScore() << endl;
-				this->setScore(this->getScore() + eatable->getPoints());
-				std::cout << this->getId() << " new score: " << this->getScore() << endl;
-			} else {
-				std::cout << "Error: EATABLE is null: " << typeid(target).name() << endl;
-			}
-			target.setVisible(false);
-			//TODO Render needs to figure out (not) rendering dead/invisible object
-			break;
+               float newMass = this->getMass() + powerUp->getMass();
+               if (newMass > 0.f) this->setMass(newMass);
+            }
+            target.setVisible(false);
+         }
+         break;
 	}
 }
 

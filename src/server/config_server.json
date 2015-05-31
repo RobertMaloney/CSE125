@@ -3,11 +3,11 @@
     "fps": 60,
     "ip": "127.0.0.1",
     "port": "9000",
-   "num resources": 5,
-   "num clouds" : 25,
+   "num resources": 500,
+   "num clouds" : 40,
 
     "physics engine": {
-        "gravity": 10,
+        "gravity": 80,
         "drag": {
             "k1": 1,
             "k2": 1
@@ -23,7 +23,7 @@
         "modelHeight": 6,
         "visible": true,
         "angleSpeed": 2,
-        "jumpForce": 800,
+        "jumpForce": 8000,
         "moveForce": 100,
         "mass": 10,
         "restitution": 1

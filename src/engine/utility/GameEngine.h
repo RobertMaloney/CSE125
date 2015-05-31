@@ -3,7 +3,6 @@
 
 #include "GameObject.h"
 #include "GameState.h"
-#include "Resources.h"
 
 using namespace std;
 
@@ -22,6 +21,7 @@ public:
    void generateClouds(int);
    void generateClusterTree(float, float, float, int);
    void generateRockRing();
+   void generatePills(int);
 };
 
 
