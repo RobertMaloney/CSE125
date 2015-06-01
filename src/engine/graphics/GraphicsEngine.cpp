@@ -190,7 +190,7 @@ void GraphicsEngine::Initialize() {
 	m_defaultShader->Use();
 	worldModel = new Geometry("../../media/models/sphere_t2.obj");
 
-	m_groundId = HUD::makeHUD("../../media/texture/ground.png");  
+	m_groundId = HUD::makeHUD("../../media/texture/earth32.png");  
 	worldModel->setTextureId(m_groundId);
 
 	/*cout << "menu1 " << m_menuId1 << endl;
