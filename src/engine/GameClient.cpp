@@ -26,6 +26,7 @@ void GameClient::init() {
 
     mstate = new MenuState();
 	mstate->init(this);
+
 	//then change to that state (this also initializes the state if it's not initialized)
 	//this->addState(newstate);
 }
