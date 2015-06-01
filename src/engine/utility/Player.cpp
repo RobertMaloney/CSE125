@@ -11,9 +11,10 @@ Player::Player(Model thebm, float radius, float theta, float azimuth, float dire
 	for (int i = 0; i < 5; ++i)
 		this->moves[i] = false;
 
-//	this->type = PLAYER;
+  	this->type = PLAYER;
 	this->isJumping = false;
 	this->score = 0;
+	this->percent = 0;
 	/*this->modelRadius = 7.f;
 	this->setMass(10.f);
 	this->height = 550.f;
