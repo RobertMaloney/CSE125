@@ -7,7 +7,7 @@
    "num clouds" : 40,
 
     "physics engine": {
-        "gravity": 80,
+        "gravity": 100,
         "drag": {
             "k1": 1,
             "k2": 1
@@ -23,7 +23,7 @@
         "modelHeight": 6,
         "visible": true,
         "angleSpeed": 2,
-        "jumpForce": 8000,
+        "jumpForce": 15000,
         "moveForce": 100,
         "mass": 10,
         "restitution": 1

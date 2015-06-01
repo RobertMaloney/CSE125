@@ -3,7 +3,8 @@
 
 #define SFML_STATIC
 #include <SFML/Audio.hpp>
-
+//#include <SFML/System.hpp>
+#pragma comment(lib, "winmm.lib") // SO weird I need this for music
 
 class GameSound 
 {
@@ -16,6 +17,9 @@ public:
 						*bigburp,
 						*jump;
 
+	static sf::Music	*menumusic,
+						*ingamemusic;
+
 	static void init();
 
 
@@ -26,7 +30,11 @@ private:
 							*nom_buf, 
 							*regburp_buf, 
 							*bigburp_buf, 
-							*jump_buf;
+							*jump_buf
+							
+							//*menumusic_buf,
+							//*ingamemusic_buf
+							;
 
 	
 };
