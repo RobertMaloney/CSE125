@@ -73,6 +73,10 @@ GLuint				GraphicsEngine::m_menuId8 = 0;
 int					GraphicsEngine::HUDW = 100;
 int					GraphicsEngine::HUDH = 100;
 int                 GraphicsEngine::B = 20; //used to change the size of the mini map :)
+int					GraphicsEngine::p1p = 0;
+int					GraphicsEngine::p2p = 0;
+int					GraphicsEngine::p3p = 0;
+int					GraphicsEngine::p4p = 0;
 
 Renderable			*GraphicsEngine::m_skybox = NULL;
 Renderable			*GraphicsEngine::m_border = NULL;
@@ -248,8 +252,11 @@ void GraphicsEngine::Initialize() {
 
 	m_screen_scale = glm::vec2(2.0f, 2.0f);
 }
+
 void GraphicsEngine::RenderScore(int Player1, int Player2, int Player3, int Player4)
 {
+	//cout << Player1 << " " << Player2 << " " << Player3 << " " << Player4 << endl;
+
 	int Hud11, Hud12, Hud21, Hud22, Hud31, Hud32, Hud41, Hud42 = 0;
 
 	Hud11 = Player1 / 10;
@@ -294,6 +301,7 @@ void GraphicsEngine::RenderScore(int Player1, int Player2, int Player3, int Play
 	m_HUDN41->setTextureId(FindTexuture(Hud41));
 	m_HUDN42->setTextureId(FindTexuture(Hud42));
 }
+
 GLuint GraphicsEngine::FindTexuture(int id){
 
 	switch (id){
@@ -357,28 +365,28 @@ void GraphicsEngine::addHUD(){
 	m_HUDN11 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_HUDN11->setTextureId(m_HudIdSpa);
 	m_HUDN12 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
-	m_HUDN12->setTextureId(m_HudIdSpa);
+	m_HUDN12->setTextureId(m_HudIdN0);
 	m_HUDN13 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_HUDN13->setTextureId(m_HudIdPer);
 
 	m_HUDN21 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_HUDN21->setTextureId(m_HudIdSpa);
 	m_HUDN22 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
-	m_HUDN22->setTextureId(m_HudIdSpa);
+	m_HUDN22->setTextureId(m_HudIdN0);
 	m_HUDN23 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_HUDN23->setTextureId(m_HudIdPer);
 
 	m_HUDN31 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_HUDN31->setTextureId(m_HudIdSpa);
 	m_HUDN32 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
-	m_HUDN32->setTextureId(m_HudIdSpa);
+	m_HUDN32->setTextureId(m_HudIdN0);
 	m_HUDN33 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_HUDN33->setTextureId(m_HudIdPer);
 
 	m_HUDN41 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_HUDN41->setTextureId(m_HudIdSpa);
 	m_HUDN42 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
-	m_HUDN42->setTextureId(m_HudIdSpa);
+	m_HUDN42->setTextureId(m_HudIdN0);
 	m_HUDN43 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_HUDN43->setTextureId(m_HudIdPer);
 
@@ -488,7 +496,7 @@ void GraphicsEngine::DrawAndPoll() {
 	LightHandler::changePosition(m_sunLight, sunLightDir);
 
 	//Update HUD 
-	RenderScore(23, 9, 10, 50); 
+	RenderScore(p1p, p2p, p3p, p4p); //p,,b,g,o
 
 	// Update lights
 	LightHandler::updateLighting(m_defaultShader->Id());
@@ -827,6 +835,24 @@ void GraphicsEngine::updateObject(ObjectId objId, glm::quat & q, float angle, fl
 	//check for visible to invisible transition
 	if (old_visible != new_visible)
 		GameSound::nom->play(); //I play sound here because I want it to be client side only
+}
+
+void GraphicsEngine::updatePercent(Model m, int p) {
+	//cout << "p= " << p << endl;
+	switch (m){
+	case PB_TYPE:
+		p1p = p;
+		break;
+	case BB_TYPE:
+		p2p = p;
+		break;
+	case GB_TYPE:
+		p3p = p;
+		break;
+	case OB_TYPE:
+		p4p = p;
+		break;
+	}
 }
 
 //A mapping from ObjectId to node in scene graph

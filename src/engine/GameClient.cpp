@@ -197,6 +197,12 @@ void GameClient::updateGameState() {
 
 		if (obj->getId() == this->playerid)
 		    this->checkGameStatus(dynamic_cast<Player*>(obj));
+
+		if (obj->getType() == PLAYER){
+			//cout << "Percent = " << (static_cast<Player*>(obj))->getPercent() << endl; 
+			GraphicsEngine::updatePercent(obj->getModel(), (static_cast<Player*>(obj))->getPercent());
+		}
+		
 	}
 }
 
