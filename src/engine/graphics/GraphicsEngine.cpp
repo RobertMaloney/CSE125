@@ -46,6 +46,14 @@ GLuint				GraphicsEngine::m_HudIdN1 = 0;
 GLuint				GraphicsEngine::m_HudIdN2 = 0;
 GLuint				GraphicsEngine::m_HudIdN3 = 0;
 GLuint				GraphicsEngine::m_HudIdN4 = 0;
+GLuint				GraphicsEngine::m_HudIdN5 = 0;
+GLuint				GraphicsEngine::m_HudIdN6 = 0;
+GLuint				GraphicsEngine::m_HudIdN7 = 0;
+GLuint				GraphicsEngine::m_HudIdN8 = 0;
+GLuint				GraphicsEngine::m_HudIdN9 = 0;
+GLuint				GraphicsEngine::m_HudIdN0 = 0;
+GLuint				GraphicsEngine::m_HudIdPer = 0;
+GLuint				GraphicsEngine::m_HudIdSpa = 0;
 
 GLuint				GraphicsEngine::m_groundId = 0;
 GLuint				GraphicsEngine::m_borderId = 0;
@@ -65,21 +73,35 @@ GLuint				GraphicsEngine::m_menuId8 = 0;
 int					GraphicsEngine::HUDW = 100;
 int					GraphicsEngine::HUDH = 100;
 int                 GraphicsEngine::B = 20; //used to change the size of the mini map :)
+int					GraphicsEngine::p1p = 0;
+int					GraphicsEngine::p2p = 0;
+int					GraphicsEngine::p3p = 0;
+int					GraphicsEngine::p4p = 0;
 
 Renderable			*GraphicsEngine::m_skybox = NULL;
 Renderable			*GraphicsEngine::m_border = NULL;
 Renderable			*GraphicsEngine::m_plus = NULL;
 Renderable			*GraphicsEngine::m_minus = NULL;
 Renderable			*GraphicsEngine::m_timer = NULL;
+Renderable			*GraphicsEngine::m_timer1 = NULL;
+Renderable			*GraphicsEngine::m_timer2 = NULL;
 
 Renderable			*GraphicsEngine::m_HUD1 = NULL;
 Renderable			*GraphicsEngine::m_HUD2 = NULL;
 Renderable			*GraphicsEngine::m_HUD3 = NULL;
 Renderable			*GraphicsEngine::m_HUD4 = NULL;
-Renderable			*GraphicsEngine::m_HUDN1 = NULL;
-Renderable			*GraphicsEngine::m_HUDN2 = NULL;
-Renderable			*GraphicsEngine::m_HUDN3 = NULL;
-Renderable			*GraphicsEngine::m_HUDN4 = NULL;
+Renderable			*GraphicsEngine::m_HUDN11 = NULL;
+Renderable			*GraphicsEngine::m_HUDN12 = NULL;
+Renderable			*GraphicsEngine::m_HUDN13 = NULL;
+Renderable			*GraphicsEngine::m_HUDN21 = NULL;
+Renderable			*GraphicsEngine::m_HUDN22 = NULL;
+Renderable			*GraphicsEngine::m_HUDN23 = NULL;
+Renderable			*GraphicsEngine::m_HUDN31 = NULL;
+Renderable			*GraphicsEngine::m_HUDN32 = NULL;
+Renderable			*GraphicsEngine::m_HUDN33 = NULL;
+Renderable			*GraphicsEngine::m_HUDN41 = NULL;
+Renderable			*GraphicsEngine::m_HUDN42 = NULL;
+Renderable			*GraphicsEngine::m_HUDN43 = NULL;
 
 Renderable			*GraphicsEngine::worldModel = NULL;
 Renderable			*GraphicsEngine::m_menu = NULL;
@@ -142,7 +164,6 @@ void GraphicsEngine::Initialize() {
 	// mouse handling
 	setCursor(GLFW_CURSOR_NORMAL);
 	glfwSetCursorPosCallback(m_window, cursor_callback);
-	glfwSetCursorPos(m_window, 0, 0);
 
 	glewExperimental = GL_TRUE;
 	glewInit();
@@ -193,32 +214,6 @@ void GraphicsEngine::Initialize() {
 	m_groundId = HUD::makeHUD("../../media/texture/earth32.png");  
 	worldModel->setTextureId(m_groundId);
 
-	/*cout << "menu1 " << m_menuId1 << endl;
-	cout << "menu2 " << m_menuId2 << endl;
-	cout << "menu3 " << m_menuId3 << endl;
-	cout << "menu4 " << m_menuId4 << endl;
-	cout << "menu5 " << m_menuId5 << endl;
-	cout << "menu6 " << m_menuId6 << endl;
-
-	cout << "HUD1 " << m_HudId1 << endl;
-	cout << "HUD2 " << m_HudId2 << endl;
-	cout << "HUD3 " << m_HudId3 << endl;
-	cout << "HUD4 " << m_HudId4 << endl;
-	cout << "HUD5 " << m_HudIdN1 << endl;
-	cout << "HUD6 " << m_HudIdN2 << endl;
-	cout << "HUD7 " << m_HudIdN3 << endl;
-	cout << "HUD8 " << m_HudIdN4 << endl;
-
-	cout << "border " << m_borderId << endl;
-	cout << "plus " << m_plusId << endl;
-	cout << "minus " << m_minusId << endl;
-	cout << "timer " << m_timerId << endl;
-
-	cout << "g1 " << m_groundId << endl;
-	cout << "menu" << m_menu->getTextureId() << endl;
-	cout << "world" << worldModel->getTextureId() << endl;*/
-
-
 	Geode* worldGeode = new Geode();
 	worldGeode->setRenderable(worldModel);
 	worldGeode->setTex(true);
@@ -237,6 +232,7 @@ void GraphicsEngine::Initialize() {
 	minimapview = glm::rotate(minimapview, glm::radians(180.f), glm::vec3(0, 0, 1));
 	m_minimapCamera = new CameraNode();
 	m_minimapCamera->setViewMatrix(minimapview);
+	m_minimapCamera->setAllowScaling(false);
 
 	// PLAYER  (Player node is created by default
 	/*Renderable * model = GraphicsEngine::selectModel(playerId);
@@ -257,6 +253,84 @@ void GraphicsEngine::Initialize() {
 	m_screen_scale = glm::vec2(2.0f, 2.0f);
 }
 
+void GraphicsEngine::RenderScore(int Player1, int Player2, int Player3, int Player4)
+{
+	//cout << Player1 << " " << Player2 << " " << Player3 << " " << Player4 << endl;
+
+	int Hud11, Hud12, Hud21, Hud22, Hud31, Hud32, Hud41, Hud42 = 0;
+
+	Hud11 = Player1 / 10;
+	Hud12 = Player1 % 10;
+
+	Hud21 = Player2 / 10;
+	Hud22 = Player2 % 10;
+
+	Hud31 = Player3 / 10;
+	Hud32 = Player3 % 10;
+
+	Hud41 = Player4 / 10;
+	Hud42 = Player4 % 10;
+	
+	if (Hud41 == 0)
+	{ 
+		Hud41 = 10;
+	}
+	if (Hud21 == 0)
+	{
+		Hud21 = 10;
+	}
+	if (Hud31 == 0)
+	{
+		Hud31 = 10;
+	}
+	if (Hud11 == 0)
+	{
+		Hud11 = 10;
+	}
+	
+	
+	m_HUDN11->setTextureId(FindTexuture(Hud11));
+	m_HUDN12->setTextureId(FindTexuture(Hud12));
+
+	m_HUDN21->setTextureId(FindTexuture(Hud21));
+	m_HUDN22->setTextureId(FindTexuture(Hud22));
+
+	m_HUDN31->setTextureId(FindTexuture(Hud31));
+	m_HUDN32->setTextureId(FindTexuture(Hud32));
+	
+	m_HUDN41->setTextureId(FindTexuture(Hud41));
+	m_HUDN42->setTextureId(FindTexuture(Hud42));
+}
+
+GLuint GraphicsEngine::FindTexuture(int id){
+
+	switch (id){
+	case 1: return m_HudIdN1;
+		break;
+	case 2: return m_HudIdN2;
+		break;
+	case 3: return m_HudIdN3;
+		break;
+	case 4: return m_HudIdN4;
+		break;
+	case 5: return m_HudIdN5;
+		break;
+	case 6: return m_HudIdN6;
+		break;
+	case 7: return m_HudIdN7;
+		break;
+	case 8: return m_HudIdN8;
+		break;
+	case 9: return m_HudIdN9;
+		break;
+	case 0: return m_HudIdN0;
+		break;
+	case 10: return m_HudIdSpa;
+		break;
+
+	}
+}
+
 void GraphicsEngine::addHUD(){
 	m_HUD1 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_HudId1 = HUD::makeHUD("../../media/texture/HUD1.png");
@@ -275,22 +349,47 @@ void GraphicsEngine::addHUD(){
 	m_HUD4->setTextureId(m_HudId4);
 
 	//TODO replace pictures with right ones
+	m_HudIdN1 = HUD::makeHUD("../../media/texture/1.png");
+	m_HudIdN2 = HUD::makeHUD("../../media/texture/2.png");
+	m_HudIdN3 = HUD::makeHUD("../../media/texture/3.png");
+	m_HudIdN4 = HUD::makeHUD("../../media/texture/4.png");
+	m_HudIdN5 = HUD::makeHUD("../../media/texture/5.png");
+	m_HudIdN6 = HUD::makeHUD("../../media/texture/6.png");
+	m_HudIdN7 = HUD::makeHUD("../../media/texture/7.png");
+	m_HudIdN8 = HUD::makeHUD("../../media/texture/8.png");
+	m_HudIdN9 = HUD::makeHUD("../../media/texture/9.png");
+	m_HudIdN0 = HUD::makeHUD("../../media/texture/0.png");
+	m_HudIdPer = HUD::makeHUD("../../media/texture/%.png");
+	m_HudIdSpa = HUD::makeHUD("../../media/texture/space.png");
 
-	m_HUDN1 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
-	m_HudIdN1 = HUD::makeHUD("../../media/texture/HUD.png");
-	m_HUDN1->setTextureId(m_HudIdN1);
+	m_HUDN11 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
+	m_HUDN11->setTextureId(m_HudIdSpa);
+	m_HUDN12 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
+	m_HUDN12->setTextureId(m_HudIdN0);
+	m_HUDN13 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
+	m_HUDN13->setTextureId(m_HudIdPer);
 
-	m_HUDN2 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
-	m_HudIdN2 = HUD::makeHUD("../../media/texture/HUD.png");
-	m_HUDN2->setTextureId(m_HudIdN2);
+	m_HUDN21 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
+	m_HUDN21->setTextureId(m_HudIdSpa);
+	m_HUDN22 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
+	m_HUDN22->setTextureId(m_HudIdN0);
+	m_HUDN23 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
+	m_HUDN23->setTextureId(m_HudIdPer);
 
-	m_HUDN3 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
-	m_HudIdN3 = HUD::makeHUD("../../media/texture/HUD.png");
-	m_HUDN3->setTextureId(m_HudIdN3);
+	m_HUDN31 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
+	m_HUDN31->setTextureId(m_HudIdSpa);
+	m_HUDN32 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
+	m_HUDN32->setTextureId(m_HudIdN0);
+	m_HUDN33 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
+	m_HUDN33->setTextureId(m_HudIdPer);
 
-	m_HUDN4 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
-	m_HudIdN4 = HUD::makeHUD("../../media/texture/HUD.png");
-	m_HUDN4->setTextureId(m_HudIdN4);
+	m_HUDN41 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
+	m_HUDN41->setTextureId(m_HudIdSpa);
+	m_HUDN42 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
+	m_HUDN42->setTextureId(m_HudIdN0);
+	m_HUDN43 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
+	m_HUDN43->setTextureId(m_HudIdPer);
+
 
 	//Mini map border
 	m_border = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
@@ -310,6 +409,12 @@ void GraphicsEngine::addHUD(){
 	m_timer = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_timerId = HUD::makeHUD("../../media/texture/timer.png");
 	m_timer->setTextureId(m_timerId);
+
+	m_timer1 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
+	m_timer1->setTextureId(m_HudIdN0);
+
+	m_timer2 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
+	m_timer2->setTextureId(m_HudIdN0);
 }
 
 //TODO it is not working
@@ -362,9 +467,9 @@ void GraphicsEngine::DrawAndPoll() {
 		((float)width) / height,
 		0.1f, 1000.f);
 
-	std::pair<glm::mat4, glm::vec3> cameraData = m_mainCamera->getFlatViewMatrix();
-	glm::mat4 view = cameraData.first;
-	glm::mat4 skybox_view = glm::mat4(glm::mat3(view));
+	MatrixData cameraData = m_mainCamera->getFlatViewMatrix();
+	glm::mat4 view = cameraData.flattened;
+	glm::mat4 skybox_view = glm::scale(glm::mat4(glm::mat3(cameraData.flattened)), glm::vec3(1) / cameraData.scale); // try optimizing later
 
 	//glm::vec4 glPos = m_projection * skybox_view * glm::vec4(1.f, 1.f, 1.f, 1.f);
 	//std::cout << glm::to_string(glPos) << std::endl;
@@ -390,12 +495,15 @@ void GraphicsEngine::DrawAndPoll() {
 	sunLightDir = glm::angleAxis(glm::radians(0.03f), glm::vec3(2, -2, 0)) * sunLightDir;
 	LightHandler::changePosition(m_sunLight, sunLightDir);
 
+	//Update HUD 
+	RenderScore(p1p, p2p, p3p, p4p); //p,,b,g,o
+
 	// Update lights
 	LightHandler::updateLighting(m_defaultShader->Id());
 	glUniform1f(glGetUniformLocation(m_defaultShader->Id(), "hasTex"), 0);
 	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "projection"), 1, GL_FALSE, glm::value_ptr(m_projection));
 	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "view"), 1, GL_FALSE, glm::value_ptr(view));
-	glUniform3fv(glGetUniformLocation(m_defaultShader->Id(), "camPos"), 1, glm::value_ptr(cameraData.second));
+	glUniform3fv(glGetUniformLocation(m_defaultShader->Id(), "camPos"), 1, glm::value_ptr(cameraData.translation));
 
 	renderScene(m_scene, &identity);
 
@@ -409,17 +517,14 @@ void GraphicsEngine::DrawAndPoll() {
 	//view = m_minimapCamera->getFlatViewMatrix();
 	
 	// change aspect ratio
-	m_projection = glm::perspective(
-		45.f,
-		1.f,
-		0.1f, 1000.f);
+	m_projection = glm::perspective(45.f, 1.f, 0.1f, 1000.f);
 
 	// minimap
 	cameraData = m_minimapCamera->getFlatViewMatrix();
 	glUniform1f(glGetUniformLocation(m_defaultShader->Id(), "hasTex"), 0);
-	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "view"), 1, GL_FALSE, glm::value_ptr(cameraData.first));
+	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "view"), 1, GL_FALSE, glm::value_ptr(cameraData.flattened));
 	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "projection"), 1, GL_FALSE, glm::value_ptr(m_projection));
-	glUniform3fv(glGetUniformLocation(m_defaultShader->Id(), "camPos"), 1, glm::value_ptr(cameraData.second));
+	glUniform3fv(glGetUniformLocation(m_defaultShader->Id(), "camPos"), 1, glm::value_ptr(cameraData.translation));
 
 	renderScene(m_scene, &identity);
 
@@ -464,26 +569,60 @@ void GraphicsEngine::renderHUD(int width, int height, glm::mat4 & identity){
 
 	//TODO: replace with numbers...
 	//HUDN1
-	glViewport(0 + HUDW, height - HUDH, HUDW, HUDH);
+	float first = HUDW / 3;
+	float second = HUDW / 3 + (HUDW / 3);
+
+
+	glViewport(0 + HUDW, height - HUDH, HUDW/3, HUDH);
 	glClear(GL_DEPTH_BUFFER_BIT);
-	m_HUDN1->render(&identity);
+	m_HUDN11->render(&identity);
+
+	glViewport(0 + HUDW + first, height - HUDH, HUDW/3, HUDH);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_HUDN12->render(&identity);
+
+	glViewport(0 + HUDW+second, height - HUDH, HUDW/3, HUDH);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_HUDN13->render(&identity);
 
 	// HUDN2
-	glViewport(0 + HUDW, height - HUDH - HUDH, HUDW, HUDH);
+	glViewport(0 + HUDW, height - HUDH - HUDH, HUDW / 3, HUDH);
 	glClear(GL_DEPTH_BUFFER_BIT);
-	m_HUDN2->render(&identity);
+	m_HUDN21->render(&identity);
 
+	glViewport(0 + HUDW + first, height - HUDH - HUDH, HUDW / 3, HUDH);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_HUDN22->render(&identity);
+
+	glViewport(0 + HUDW + second, height - HUDH - HUDH, HUDW / 3, HUDH);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_HUDN23->render(&identity);
 
 	//HUDN3
-	glViewport(0 + HUDW, height - HUDH - HUDH - HUDH, HUDW, HUDH);
+	glViewport(0 + HUDW, height - HUDH - HUDH - HUDH, HUDW / 3, HUDH);
 	glClear(GL_DEPTH_BUFFER_BIT);
-	m_HUDN3->render(&identity);
+	m_HUDN31->render(&identity);
+
+	glViewport(0 + HUDW + first, height - HUDH - HUDH - HUDH, HUDW / 3, HUDH);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_HUDN32->render(&identity);
+
+	glViewport(0 + HUDW + second, height - HUDH - HUDH - HUDH, HUDW / 3, HUDH);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_HUDN33->render(&identity);
 
 	// HUDN4
-	glViewport(0 + HUDW, height - HUDH - HUDH - HUDH - HUDH, HUDW, HUDH);
+	glViewport(0 + HUDW, height - HUDH - HUDH - HUDH - HUDH, HUDW / 3, HUDH);
 	glClear(GL_DEPTH_BUFFER_BIT);
-	m_HUDN4->render(&identity);
+	m_HUDN41->render(&identity);
 
+	glViewport(0 + HUDW + first, height - HUDH - HUDH - HUDH - HUDH, HUDW / 3, HUDH);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_HUDN42->render(&identity);
+
+	glViewport(0 + HUDW + second, height - HUDH - HUDH - HUDH - HUDH, HUDW / 3, HUDH);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_HUDN43->render(&identity);
 
 	//HUD on top of minimap
 	glViewport(width - HUDW * 2, height - HUDH * 2, HUDW * 2, HUDH * 2);
@@ -504,6 +643,12 @@ void GraphicsEngine::renderHUD(int width, int height, glm::mat4 & identity){
 	glViewport(width - HUDW * 2 - HUDW / 2 - HUDW * 5/4, height - HUDH + HUDH / 4, HUDW * 5/4, HUDH * 3 / 4);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_timer->render(&identity);
+	glViewport(width - HUDW * 2 - HUDW / 2 - HUDW * 5 / 4, height - HUDH + HUDH / 4, (HUDW * 5 / 4 )/2, HUDH * 3 / 4);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_timer1->render(&identity);
+	glViewport(width - HUDW * 2 - HUDW / 2 - HUDW * 5 / 4 + ((HUDW * 5 / 4) / 2), height - HUDH + HUDH / 4, (HUDW * 5 / 4)/2, HUDH * 3 / 4);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_timer2->render(&identity);
 
 	glDisable(GL_BLEND);
 }
@@ -676,10 +821,10 @@ Renderable * GraphicsEngine::selectModel(Model model){
 }
 
 // Translate from vec4 postion to matrix in the node of scene graph??
-void GraphicsEngine::updateObject(ObjectId objId, glm::quat & q, float angle, float height, bool f) {
+void GraphicsEngine::updateObject(ObjectId objId, glm::quat & q, float angle, float height, float scale, bool f) {
 	bool old_visible = objNodeMap[objId]->getVisible();
 	
-	objNodeMap[objId]->getMatrix() = MatrixNode::quatAngle(q, angle, height);
+	objNodeMap[objId]->getMatrix() = MatrixNode::quatAngle(q, angle, height, scale);
 	objNodeMap[objId]->setVisible(f);
 
 	bool new_visible = objNodeMap[objId]->getVisible();
@@ -687,6 +832,24 @@ void GraphicsEngine::updateObject(ObjectId objId, glm::quat & q, float angle, fl
 	//check for visible to invisible transition
 	if (old_visible != new_visible)
 		GameSound::nom->play(); //I play sound here because I want it to be client side only
+}
+
+void GraphicsEngine::updatePercent(Model m, int p) {
+	//cout << "p= " << p << endl;
+	switch (m){
+	case PB_TYPE:
+		p1p = p;
+		break;
+	case BB_TYPE:
+		p2p = p;
+		break;
+	case GB_TYPE:
+		p3p = p;
+		break;
+	case OB_TYPE:
+		p4p = p;
+		break;
+	}
 }
 
 //A mapping from ObjectId to node in scene graph
