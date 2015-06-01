@@ -142,7 +142,6 @@ void GraphicsEngine::Initialize() {
 	// mouse handling
 	setCursor(GLFW_CURSOR_NORMAL);
 	glfwSetCursorPosCallback(m_window, cursor_callback);
-	glfwSetCursorPos(m_window, 0, 0);
 
 	glewExperimental = GL_TRUE;
 	glewInit();
