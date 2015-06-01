@@ -79,7 +79,7 @@ void GameObject::setModelHeight(float mheight) {
 	this->modelHeight = mheight;
 }
 float GameObject::getModelHeight() {
-	return this->modelHeight;
+	return this->modelHeight * this->scale; // scale to maintain collisions;
 }
 
 ObjectId GameObject::getId() {
