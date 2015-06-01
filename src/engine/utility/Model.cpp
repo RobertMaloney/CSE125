@@ -7,13 +7,18 @@ std::map<Model, std::string> ResourceMap::map = {
       { BB_TYPE, "bb" },
       { GB_TYPE, "gb" },
       { TREE, "tree" },
-      { ROCK, "rock" },
       { STUMP, "stump" },
       { GRASS, "grass" },
       { MUSHROOM, "mushroom" },
       { FLOWER, "flower" },
       { CLOUD, "cloud" },
-      { PILL, "pill" }
+      { PILL, "pill" },
+      { ROCK_1, "rock1" },
+      { ROCK_2, "rock2" },
+      { ROCK_3, "rock3" },
+      { ROCK_4, "rock4" },
+      { TALL_ROCK_1, "rock5" },
+      { TALL_ROCK_2, "rock6" }
 };
 
 std::string ResourceMap::getObjFile(Model rm)

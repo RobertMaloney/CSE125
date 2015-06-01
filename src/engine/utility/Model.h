@@ -10,13 +10,18 @@ enum Model {
    BB_TYPE,
    GB_TYPE,
    TREE,
-   ROCK,
    STUMP,
    GRASS,
    MUSHROOM,
    FLOWER,
    CLOUD,
-   PILL
+   PILL,
+   ROCK_1,
+   ROCK_2,
+   ROCK_3,
+   ROCK_4,
+   TALL_ROCK_1,
+   TALL_ROCK_2
 };
 
 class ResourceMap {

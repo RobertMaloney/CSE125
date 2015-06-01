@@ -97,12 +97,60 @@ public:
 
 class Rock : public Resource{
 public:
-	Rock() : Resource(ROCK){};
+	Rock() : Resource(ROCK_1){
+      int pick = rand() % 4;
+
+      if (pick == 0)
+         this->setModel(ROCK_1);
+      else if (pick == 1)
+         this->setModel(ROCK_2);
+      else if (pick == 2)
+         this->setModel(ROCK_3);
+      else if (pick == 3)
+         this->setModel(ROCK_4);
+   };
+
 	Rock(float radius, float theta, float azimuth, float direction) :
-		Resource(ROCK, radius, theta, azimuth, direction) {};
+		Resource(TALL_ROCK_1, radius, theta, azimuth, direction) {
+      int pick = rand() % 3;
+
+      if (pick == 0)
+         this->setModel(ROCK_1);
+      else if (pick == 1)
+         this->setModel(ROCK_2);
+      else if (pick == 2)
+         this->setModel(ROCK_3);
+      else if (pick == 3)
+         this->setModel(ROCK_4);
+   };
 
    virtual ~Rock() {};
 };
+
+class TallRock : public Resource{
+public:
+   TallRock() : Resource(TALL_ROCK_1){
+      int pick = rand() % 3;
+
+      if (pick == 0)
+         this->setModel(TALL_ROCK_1);
+      else if (pick == 1)
+         this->setModel(TALL_ROCK_2);
+   };
+
+   TallRock(float radius, float theta, float azimuth, float direction) :
+      Resource(TALL_ROCK_1, radius, theta, azimuth, direction) {
+      int pick = rand() % 3;
+
+      if (pick == 0)
+         this->setModel(TALL_ROCK_1);
+      else if (pick == 1)
+         this->setModel(TALL_ROCK_2);
+   };
+
+   virtual ~TallRock() {};
+};
+
 
 class Stump : public EatableResource{
 public:
@@ -138,6 +186,8 @@ public:
    Cloud() : Resource(CLOUD) {};
    Cloud(float radius, float theta, float azimuth, float direction) :
       Resource(CLOUD, radius, theta, azimuth, direction) {};
+
+   virtual ~Cloud() { };
 };
 
 class Pill : public PowerUpResource {
@@ -145,4 +195,6 @@ public:
    Pill() : PowerUpResource(10000, 20, -10, PILL) {};
    Pill(float radius, float theta, float azimuth, float direction) :
       PowerUpResource(10000, 20, -10, PILL, radius, theta, azimuth, direction){};
+
+   virtual ~Pill() { };
 };
