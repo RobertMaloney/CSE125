@@ -68,7 +68,7 @@ public:
    static int getKeyState(int);
 
    static void bindPlayerNode(GameObject* player);
-	static void updateObject(ObjectId objId, glm::quat &, float, float, bool);
+	static void updateObject(ObjectId objId, glm::quat &, float, float, float, bool);
 	static void insertObject(ObjectId objId, MatrixNode*);
    static void removeObject(ObjectId objId);
     static void ZoomIn();

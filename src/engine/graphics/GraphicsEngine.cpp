@@ -142,7 +142,6 @@ void GraphicsEngine::Initialize() {
 	// mouse handling
 	setCursor(GLFW_CURSOR_NORMAL);
 	glfwSetCursorPosCallback(m_window, cursor_callback);
-	glfwSetCursorPos(m_window, 0, 0);
 
 	glewExperimental = GL_TRUE;
 	glewInit();
@@ -237,6 +236,7 @@ void GraphicsEngine::Initialize() {
 	minimapview = glm::rotate(minimapview, glm::radians(180.f), glm::vec3(0, 0, 1));
 	m_minimapCamera = new CameraNode();
 	m_minimapCamera->setViewMatrix(minimapview);
+	m_minimapCamera->setAllowScaling(false);
 
 	// PLAYER  (Player node is created by default
 	/*Renderable * model = GraphicsEngine::selectModel(playerId);
@@ -362,9 +362,9 @@ void GraphicsEngine::DrawAndPoll() {
 		((float)width) / height,
 		0.1f, 1000.f);
 
-	std::pair<glm::mat4, glm::vec3> cameraData = m_mainCamera->getFlatViewMatrix();
-	glm::mat4 view = cameraData.first;
-	glm::mat4 skybox_view = glm::mat4(glm::mat3(view));
+	MatrixData cameraData = m_mainCamera->getFlatViewMatrix();
+	glm::mat4 view = cameraData.flattened;
+	glm::mat4 skybox_view = glm::scale(glm::mat4(glm::mat3(cameraData.flattened)), glm::vec3(1) / cameraData.scale); // try optimizing later
 
 	//glm::vec4 glPos = m_projection * skybox_view * glm::vec4(1.f, 1.f, 1.f, 1.f);
 	//std::cout << glm::to_string(glPos) << std::endl;
@@ -395,7 +395,7 @@ void GraphicsEngine::DrawAndPoll() {
 	glUniform1f(glGetUniformLocation(m_defaultShader->Id(), "hasTex"), 0);
 	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "projection"), 1, GL_FALSE, glm::value_ptr(m_projection));
 	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "view"), 1, GL_FALSE, glm::value_ptr(view));
-	glUniform3fv(glGetUniformLocation(m_defaultShader->Id(), "camPos"), 1, glm::value_ptr(cameraData.second));
+	glUniform3fv(glGetUniformLocation(m_defaultShader->Id(), "camPos"), 1, glm::value_ptr(cameraData.translation));
 
 	renderScene(m_scene, &identity);
 
@@ -409,17 +409,14 @@ void GraphicsEngine::DrawAndPoll() {
 	//view = m_minimapCamera->getFlatViewMatrix();
 	
 	// change aspect ratio
-	m_projection = glm::perspective(
-		45.f,
-		1.f,
-		0.1f, 1000.f);
+	m_projection = glm::perspective(45.f, 1.f, 0.1f, 1000.f);
 
 	// minimap
 	cameraData = m_minimapCamera->getFlatViewMatrix();
 	glUniform1f(glGetUniformLocation(m_defaultShader->Id(), "hasTex"), 0);
-	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "view"), 1, GL_FALSE, glm::value_ptr(cameraData.first));
+	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "view"), 1, GL_FALSE, glm::value_ptr(cameraData.flattened));
 	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "projection"), 1, GL_FALSE, glm::value_ptr(m_projection));
-	glUniform3fv(glGetUniformLocation(m_defaultShader->Id(), "camPos"), 1, glm::value_ptr(cameraData.second));
+	glUniform3fv(glGetUniformLocation(m_defaultShader->Id(), "camPos"), 1, glm::value_ptr(cameraData.translation));
 
 	renderScene(m_scene, &identity);
 
@@ -676,10 +673,10 @@ Renderable * GraphicsEngine::selectModel(Model model){
 }
 
 // Translate from vec4 postion to matrix in the node of scene graph??
-void GraphicsEngine::updateObject(ObjectId objId, glm::quat & q, float angle, float height, bool f) {
+void GraphicsEngine::updateObject(ObjectId objId, glm::quat & q, float angle, float height, float scale, bool f) {
 	bool old_visible = objNodeMap[objId]->getVisible();
 	
-	objNodeMap[objId]->getMatrix() = MatrixNode::quatAngle(q, angle, height);
+	objNodeMap[objId]->getMatrix() = MatrixNode::quatAngle(q, angle, height, scale);
 	objNodeMap[objId]->setVisible(f);
 
 	bool new_visible = objNodeMap[objId]->getVisible();

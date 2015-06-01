@@ -191,7 +191,8 @@ void GameClient::updateGameState() {
 		GraphicsEngine::updateObject(	obj->getId(), 
 										obj->getOrientation(), 
 										obj->getAngle(), 
-										obj->getHeight(), 
+										obj->getHeight(),
+										obj->getScale(),
 										obj->getVisible());
 
 
