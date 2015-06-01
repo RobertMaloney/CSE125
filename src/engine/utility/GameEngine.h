@@ -17,7 +17,8 @@ public:
 	void calculatePercent();
 	void endGame();
 	GameState* gstate;
-	void generateResources(int);
+	void generateResources(int, int, int);
+   void generateRandomResources(int);
    void generateClouds(int);
    void generateClusterTree(float, float, float, int);
    void generateRockRing();

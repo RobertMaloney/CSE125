@@ -212,9 +212,9 @@ public:
 
 class Pill : public PowerUpResource {
 public:
-   Pill() : PowerUpResource(10000, 20, -10, PILL) {};
+   Pill() : PowerUpResource(5000, 20, -10, PILL) {};
    Pill(float radius, float theta, float azimuth, float direction) :
-      PowerUpResource(10000, 20, -10, PILL, radius, theta, azimuth, direction){};
+      PowerUpResource(5000, 20, -10, PILL, radius, theta, azimuth, direction){};
 
    virtual ~Pill() { };
 };

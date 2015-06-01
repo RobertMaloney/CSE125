@@ -48,8 +48,16 @@ void GameEngine::endGame(){
 	std::cout << "GAME END" << endl;
 }
 
+void GameEngine::generateResources(int randResources, int clouds, int pills)
+{
+   //generateRandomResources(randResources);
+   generateClouds(clouds);
+   generatePills(pills);
+   generateClusterTree(505, 10, 10, 200);
+   generateRockRing();
+}
 
-void GameEngine::generateResources(int num) {
+void GameEngine::generateRandomResources(int num) {
 	int total = 0;
 	for (int i = 0; i < num; i++)
 	{
@@ -211,7 +219,7 @@ void GameEngine::generateRockRing()
 
          theta = fmod(theta + tdist, 360);
 
-         cout << azimuth << " " << theta << endl;
+         //cout << azimuth << " " << theta << endl;
          //float floor = azimuth - adist, ceiling = azimuth + adist, range = (ceiling - floor);
          //azimuth = floor + float((range * rand()) / (RAND_MAX + 1.0));
 

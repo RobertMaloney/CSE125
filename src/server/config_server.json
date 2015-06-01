@@ -4,7 +4,8 @@
     "ip": "127.0.0.1",
     "port": "9000",
    "num resources": 500,
-   "num clouds" : 40,
+   "num clouds": 40,
+   "num pills": 30,
 
     "physics engine": {
         "gravity": 100,
