@@ -128,6 +128,7 @@ void Player::collide(float dt, GameObject & target) {
 				std::cout << this->getId() << " old score: " << this->getScore() << endl;
 				this->setScore(this->getScore() + eatable->getPoints());
 				std::cout << this->getId() << " new score: " << this->getScore() << endl;
+				this->setScale((this->getScore() + SCORE_SCALE_RATIO) / SCORE_SCALE_RATIO);
 			} else {
 				std::cout << "Error: EATABLE is null: " << typeid(target).name() << endl;
 			}

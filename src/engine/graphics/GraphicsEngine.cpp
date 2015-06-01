@@ -676,10 +676,10 @@ Renderable * GraphicsEngine::selectModel(Model model){
 }
 
 // Translate from vec4 postion to matrix in the node of scene graph??
-void GraphicsEngine::updateObject(ObjectId objId, glm::quat & q, float angle, float height, bool f) {
+void GraphicsEngine::updateObject(ObjectId objId, glm::quat & q, float angle, float height, float scale, bool f) {
 	bool old_visible = objNodeMap[objId]->getVisible();
 	
-	objNodeMap[objId]->getMatrix() = MatrixNode::quatAngle(q, angle, height);
+	objNodeMap[objId]->getMatrix() = MatrixNode::quatAngle(q, angle, height, scale);
 	objNodeMap[objId]->setVisible(f);
 
 	bool new_visible = objNodeMap[objId]->getVisible();

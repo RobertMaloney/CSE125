@@ -5,6 +5,7 @@
 GameObject::GameObject(float radius, float theta, float azimuth, float direction) {
 	//this->loc = vec4(radius, theta, azimuth, direction);
 	this->modelRadius = 1.f;
+	this->scale = 1.f;
 	this->type = GAMEOBJECT;
 	this->angle = direction;
 	this->height = radius;
@@ -26,7 +27,7 @@ void GameObject::serialize(Packet & p) {
 	}
 	p.writeFloat(this->angle);
 	p.writeFloat(this->height);
-	//p.writeFloat(this->score);
+	p.writeFloat(this->scale);
 	p.writeByte(this->visible);
     p.writeInt(static_cast<int>(this->rm));
 }
@@ -40,7 +41,7 @@ void GameObject::deserialize(Packet & p) {
 	}
 	this->angle = p.readFloat();
 	this->height = p.readFloat();
-	//this->score = p.readFloat();
+	this->scale = p.readFloat();
 	this->visible = p.readBool();
     this->rm = static_cast<Model>(p.readInt());
 }
@@ -63,6 +64,14 @@ float GameObject::getHeight() {
 
 void GameObject::setHeight(float height) {
 	this->height = height;
+}
+
+float GameObject::getScale() {
+	return this->scale;
+}
+
+void GameObject::setScale(float s) {
+	this->scale = s;
 }
 
 void GameObject::setModelHeight(float mheight) {

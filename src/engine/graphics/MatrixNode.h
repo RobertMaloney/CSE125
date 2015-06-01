@@ -62,10 +62,11 @@ public:
 		visible = f;
 	}
 
-	static glm::mat4 quatAngle(glm::quat & q, float angle, float height) {
+	static glm::mat4 quatAngle(glm::quat & q, float angle, float height, float scale) {
 		glm::vec3 pos = q * glm::vec3(0, 0, height);
 		glm::quat rot = q * glm::angleAxis(glm::radians(angle), glm::vec3(0, 0, 1));
-		return glm::translate(glm::mat4(), pos) * glm::toMat4(rot);
+		glm::mat4 m = glm::translate(glm::mat4(), pos) * glm::toMat4(rot);
+		return glm::scale(m, glm::vec3(scale, scale, scale));
 	}
 
 

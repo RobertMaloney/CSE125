@@ -11,6 +11,8 @@ using namespace std;
 
 
 class Player : public MoveableObject {
+private:
+	const float SCORE_SCALE_RATIO = 100.f;
 
 protected:
 
