@@ -11,7 +11,6 @@
 #include "../physics/Collidable.h"
 #include "Model.h"
 
-
 using glm::mat4;
 using glm::vec2;
 using glm::vec4;
@@ -23,7 +22,8 @@ enum ObjectType {
 	PLAYER,
 	MOVEABLE,
 	GAMEOBJECT,
-	IEATABLE
+	IEATABLE,
+   POWERUP
 };
 
 class GameObject : public Serializable, public Collidable, public Configurable {
