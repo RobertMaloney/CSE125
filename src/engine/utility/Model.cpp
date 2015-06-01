@@ -18,7 +18,8 @@ std::map<Model, std::string> ResourceMap::map = {
       { ROCK_3, "rock3" },
       { ROCK_4, "rock4" },
       { TALL_ROCK_1, "rock5" },
-      { TALL_ROCK_2, "rock6" }
+      { TALL_ROCK_2, "rock6" },
+      { TALL_ROCK_3, "rock7" }
 };
 
 std::string ResourceMap::getObjFile(Model rm)
