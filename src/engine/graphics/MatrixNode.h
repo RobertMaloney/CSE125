@@ -9,6 +9,15 @@
 #include <vector>
 #include <iostream>
 
+struct MatrixData {
+	glm::mat4 flattened;
+	glm::vec3 scale;
+	glm::quat orientation;
+	glm::vec3 translation;
+	glm::vec3 skew;
+	glm::vec4 perspective;
+};
+
 class MatrixNode : public Node {
 private:
 	glm::mat4 m_matrix;

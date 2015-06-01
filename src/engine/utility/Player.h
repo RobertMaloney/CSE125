@@ -12,7 +12,7 @@ using namespace std;
 
 class Player : public MoveableObject {
 private:
-	const float SCORE_SCALE_RATIO = 100.f;
+	const float SCORE_SCALE_RATIO = 250.f;
 
 protected:
 

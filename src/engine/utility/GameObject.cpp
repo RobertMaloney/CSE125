@@ -108,7 +108,7 @@ void GameObject::setVisible(bool v){
 }
 
 float GameObject::getModelRadius() {
-	return this->modelRadius;
+	return this->modelRadius * this->scale; // scale to maintain collisions
 }
 
 void GameObject::setModelRadius(float radius) {
