@@ -26,6 +26,7 @@ void GameClient::init() {
 
     mstate = new MenuState();
 	mstate->init(this);
+
 	//then change to that state (this also initializes the state if it's not initialized)
 	//this->addState(newstate);
 }
@@ -41,9 +42,10 @@ void GameClient::run() {
 	if (!Config::parseJson("config_client.json"))
 		std::cout << "Errors parsing config\n";
 
-	this->init();
-	//this->login();
+	//init graphics
 	GraphicsEngine::Initialize();
+
+	this->init();
 
 	while (!GraphicsEngine::Closing()) {
 

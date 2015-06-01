@@ -11,6 +11,7 @@ class GameSound
 public:
 	static sf::Sound	*menumove,
 						*menuconfirm,
+						*menuback,
 						*blobmove,
 						*nom,
 						*regburp,
@@ -26,6 +27,7 @@ public:
 private:
 	static sf::SoundBuffer	*menumove_buf, 
 							*menuconfirm_buf,
+							*menuback_buf,
 							*blobmove_buf,
 							*nom_buf, 
 							*regburp_buf, 
