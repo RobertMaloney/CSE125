@@ -32,12 +32,23 @@ protected:
    float jumpForce;
    float moveForce;
    float mass;
+   int durationInSeconds;
+
+   PowerUpResource(Model m) : Resource(m)
+   {
+      this->type = POWERUP;
+      this->jumpForce = 0;
+      this->moveForce = 0;
+      this->mass = 0;
+      this->durationInSeconds = 0;
+   }
 
    PowerUpResource(float jumpForce, float moveForce, float mass, Model m) : Resource(m){
       this->type = POWERUP;
       this->jumpForce = jumpForce;
       this->moveForce = moveForce;
       this->mass = mass;
+      this->durationInSeconds = 0;
    };
 
    PowerUpResource(float jumpForce, float moveForce, float mass,
@@ -47,6 +58,7 @@ protected:
       this->jumpForce = jumpForce;
       this->moveForce = moveForce;
       this->mass = mass;
+      this->durationInSeconds = 0;
    };
 
 public:
@@ -62,6 +74,10 @@ public:
       return this->mass;
    }
 
+   int getDurationInSeconds() {
+      return this->durationInSeconds;
+   }
+
    void setJumpForce(float jf) {
       this->jumpForce = jf;
    }
@@ -72,6 +88,10 @@ public:
 
    void setMass(float m) {
       this->mass = m;
+   }
+
+   void setDurationInSeconds(int seconds) {
+      this->durationInSeconds = seconds;
    }
 };
 
