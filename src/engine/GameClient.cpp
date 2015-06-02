@@ -71,7 +71,7 @@ void GameClient::run() {
 	}
 
 	//stop ingame music here unfortunately
-	GameSound::ingamemusic->stop();
+	GameSound::ingamebgm->stop();
 
 	this->close();
 }
@@ -168,6 +168,10 @@ void GameClient::updateGameState() {
 		packet->reset();
 		obj = gstate.getObject(objId);
 
+		//sound purposes
+		bool oldeat = false;
+		bool oldhit = false; 
+
 		//If this game object is new 
 		if (!obj) {
 			obj = new GameObject();
@@ -185,6 +189,8 @@ void GameClient::updateGameState() {
 			GraphicsEngine::insertObject(obj->getId(), GraphicsEngine::addNode(GraphicsEngine::selectModel(obj->getModel()), obj->getVisible()));
 		}
 		else {
+			oldeat = obj->getEat();
+			oldhit = obj->getHit();
 			//Update the object in game state
 			if (obj->getType() == PLAYER && obj->getId() != this->playerid){
 				Player p;
@@ -205,6 +211,14 @@ void GameClient::updateGameState() {
 										obj->getHeight(),
 										obj->getScale(),
 										obj->getVisible());
+
+		//play collision sounds
+		if (obj->getId() == this->playerid) {
+			if (oldeat == false && obj->getEat() == true)
+				GameSound::nom->play();
+			if (oldhit == false && obj->getHit() == true)
+				GameSound::playOuch();
+		}
 
 
 		if (obj->getId() == this->playerid) {

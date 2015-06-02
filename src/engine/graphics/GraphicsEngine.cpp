@@ -830,8 +830,8 @@ void GraphicsEngine::updateObject(ObjectId objId, glm::quat & q, float angle, fl
 	bool new_visible = objNodeMap[objId]->getVisible();
 
 	//check for visible to invisible transition
-	if (old_visible != new_visible)
-		GameSound::nom->play(); //I play sound here because I want it to be client side only
+	//if (old_visible != new_visible)
+		//GameSound::nom->play(); //I play sound here because I want it to be client side only
 }
 
 void GraphicsEngine::updatePercent(Model m, int p) {

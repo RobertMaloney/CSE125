@@ -8,7 +8,8 @@
 #include "../physics/MoveableObject.h"
 
 using namespace std;
-
+#define MAX_STOMACH_SIZE 100
+#define MAX_BURP_COUNT 5
 
 class Player : public MoveableObject {
 private:
@@ -22,6 +23,8 @@ protected:
 
    int score;
    int percent;
+   int stomach;
+   int burp_count;
    GStatus status;
 
 public:

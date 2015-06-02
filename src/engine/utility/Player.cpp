@@ -20,6 +20,8 @@ Player::Player(Model thebm, float radius, float theta, float azimuth, float dire
 	this->height = 550.f;
 	this->modelRadius = 5.f;
 	this->modelHeight = 5.f;*/
+	this->stomach = 0;
+	this->burp_count = 0;
 	this->status = PENDING;
 }
 
@@ -113,16 +115,21 @@ void Player::collide(float dt, GameObject & target) {
 	if (!target.getVisible()) {
 		return;
 	}
+	this->eat = false;
+	this->hit = false;
 
    switch (target.getType()) {
    case PLAYER:
       this->velocity *= -1;
+	  this->hit = true;
       break;
    case GAMEOBJECT:
       this->velocity *= -1;
+	  this->hit = true;
       break;
    case IEATABLE:
          {
+			this->eat = true;
             std::cout << "EAT " << endl;
             IEatable* eatable = dynamic_cast<IEatable*>(&target);
             if (eatable) {
@@ -143,6 +150,7 @@ void Player::collide(float dt, GameObject & target) {
 			break;
    case POWERUP:
          {
+			 this->eat = true;
             std::cout << "POWER UP" << endl;
             PowerUpResource * powerUp = dynamic_cast<PowerUpResource *>(&target);
             if (powerUp) {
@@ -197,10 +205,26 @@ void Player::deserialize(Packet & p) {
 	this->status = static_cast<GStatus>(p.readInt());
 
 	int newscore = this->score;
-
+	if (newscore - oldscore != 0) {
+		//std::cout << "newscore: " << newscore << "oldscore:" << oldscore << std::endl;
+		//std::cout << "stomach:" << stomach << std::endl;
+		stomach = stomach + newscore - oldscore;
+		std::cout << "stomach:" << stomach << std::endl;
+	}
 	//check if need to burp
-	if (oldscore < 40 && newscore >= 40)
-		GameSound::regburp->play();
-	else if ( oldscore < 80 && newscore >= 80)
-		GameSound::bigburp->play();
+	//stomach = stomach + newscore - oldscore;
+	//std::cout << "stomach:" << stomach << std::endl;
+	if (stomach >= MAX_STOMACH_SIZE) {
+		burp_count += 1;
+		std::cout << "should burp" << std::endl;
+		if (burp_count < MAX_BURP_COUNT) {
+			GameSound::regburp->play();
+		}
+		else {
+			GameSound::bigburp->play();
+			burp_count = 0;
+		}
+		stomach = 0;
+	}
+		
 }

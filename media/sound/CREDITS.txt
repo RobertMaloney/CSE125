@@ -1,0 +1,9 @@
+Media credits
+
+menu bgm
+Secrets of The Schoolyard
+source - http://incompetech.com/music/royalty-free/index.html/index.html?feels%5B%5D=Mysterious
+
+ingame bgm
+On the Ground
+http://incompetech.com/music/royalty-free/index.html/index.html?feels%5B%5D=Mysterious
