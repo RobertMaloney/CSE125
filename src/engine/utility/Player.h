@@ -8,7 +8,7 @@
 #include "../physics/MoveableObject.h"
 
 using namespace std;
-#define MAX_STOMACH_SIZE 50
+#define MAX_STOMACH_SIZE 100
 #define MAX_BURP_COUNT 5
 
 class Player : public MoveableObject {

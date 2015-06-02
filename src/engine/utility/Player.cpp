@@ -20,8 +20,8 @@ Player::Player(Model thebm, float radius, float theta, float azimuth, float dire
 	this->height = 550.f;
 	this->modelRadius = 5.f;
 	this->modelHeight = 5.f;*/
-	int stomach = 0;
-	int burp_count = 0;
+	this->stomach = 0;
+	this->burp_count = 0;
 	this->status = PENDING;
 }
 
@@ -204,9 +204,15 @@ void Player::deserialize(Packet & p) {
 	this->status = static_cast<GStatus>(p.readInt());
 
 	int newscore = this->score;
-
+	if (newscore - oldscore != 0) {
+		//std::cout << "newscore: " << newscore << "oldscore:" << oldscore << std::endl;
+		//std::cout << "stomach:" << stomach << std::endl;
+		stomach = stomach + newscore - oldscore;
+		std::cout << "stomach:" << stomach << std::endl;
+	}
 	//check if need to burp
-	stomach = stomach + newscore - oldscore;
+	//stomach = stomach + newscore - oldscore;
+	//std::cout << "stomach:" << stomach << std::endl;
 	if (stomach >= MAX_STOMACH_SIZE) {
 		burp_count += 1;
 		std::cout << "should burp" << std::endl;
