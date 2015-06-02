@@ -70,16 +70,12 @@ void Player::integrate(float dt) {
 		float cosa = glm::cos(glm::radians(angle - 90.f));
 		float sina = glm::sin(glm::radians(angle - 90.f));
 		this->addForce(cosa * forceConst, sina * forceConst, 0.f);
-	 //	angle -= this->angleSpeed;
-		//this->velocity = this->rotateInXYPlane(this->velocity, -this->angleSpeed);
 	}
 
 	if (moves[LEFT]) {
 		float cosa = glm::cos(glm::radians(angle + 90.f));
 		float sina = glm::sin(glm::radians(angle + 90.f));
 		this->addForce(cosa * forceConst, sina * forceConst, 0.f);
-		/*angle += this->angleSpeed;
-		this->velocity = this->rotateInXYPlane(this->velocity, this->angleSpeed);*/
 	}
 
 
@@ -124,8 +120,10 @@ void Player::collide(float dt, GameObject & target) {
 	  this->hit = true;
       break;
    case GAMEOBJECT:
-      this->velocity *= -1;
-	  this->hit = true;
+	   if (target.getType() != CLOUD) {
+		   this->velocity *= -1;
+	   }
+      this->hit = true;
       break;
    case IEATABLE:
          {
