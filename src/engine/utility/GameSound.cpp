@@ -10,7 +10,9 @@ sf::Sound	*GameSound::menumove		= NULL,
 			*GameSound::jump			= NULL;
 
 sf::Music	*GameSound::menubgm			= NULL,
-			*GameSound::ingamebgm		= NULL;
+			*GameSound::menubgm2		= NULL,
+			*GameSound::ingamebgm		= NULL,
+			*GameSound::ingamebgm2		= NULL;
 
 sf::SoundBuffer	*GameSound::menumove_buf		= NULL,
 				*GameSound::menuconfirm_buf		= NULL,
@@ -42,7 +44,9 @@ void GameSound::init()
 	jump = new sf::Sound();
 
 	menubgm = new sf::Music();
+	menubgm2 = new sf::Music();
 	ingamebgm = new sf::Music();
+	ingamebgm2 = new sf::Music();
 	
 	//menumove
 	loadSound(menumove, menumove_buf, "../../media/sound/menumove.wav");
@@ -71,11 +75,17 @@ void GameSound::init()
 
 	//MUSIC
 
-	//menumusic
-	loadMusic(menubgm, "../../media/sound/menubgm2.flac");
+	//menubgm1
+	loadMusic(menubgm, "../../media/sound/menubgm.flac");
 
-	//menumusic
-	loadMusic(ingamebgm, "../../media/sound/ingamebgm2.flac");
+	//menubgm2
+	loadMusic(menubgm2, "../../media/sound/menubgm2.flac");
+
+	//ingamebgm
+	loadMusic(ingamebgm, "../../media/sound/ingamebgm.flac");
+
+	//ingamebgm2
+	loadMusic(ingamebgm2, "../../media/sound/ingamebgm2.flac");
 }
 
 

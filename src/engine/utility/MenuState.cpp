@@ -25,6 +25,7 @@ void MenuState::init(GameClient* gc)
 {
 	std::cout << "ENTERING: MenuState" << std::endl;
 	menu_select = 0;
+	music_select = 0;
 	gameclient = gc;
 
 	//play menu music
@@ -168,6 +169,9 @@ void MenuState::updateMenuState() {
 			case (CONFIRM) :
 				menuEnter();
 				break;
+			case (ADD) :
+				changeBgm();
+				break;
 			default:
 				//nothing
 				break;
@@ -265,6 +269,23 @@ void MenuState::menuEnter()
 	}
 }
 
+
+void MenuState::changeBgm()
+{
+	music_select = (music_select + 1) % MENU_BGM_SELECTIONS_NUM;
+	switch (music_select) {
+	case (BGM1) :
+		GameSound::menubgm2->stop();
+		GameSound::menubgm->play();
+		break;
+	case (BGM2) :
+		GameSound::menubgm->stop();
+		GameSound::menubgm2->play();
+		break;
+	default :
+		break;
+	}
+}
 
 void MenuState::play()
 {

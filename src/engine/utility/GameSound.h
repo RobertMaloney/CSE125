@@ -19,7 +19,9 @@ public:
 						*jump;
 
 	static sf::Music	*menubgm,
-						*ingamebgm;
+						*menubgm2,
+						*ingamebgm,
+						*ingamebgm2;
 
 	static void init();
 
