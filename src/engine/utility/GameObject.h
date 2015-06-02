@@ -23,7 +23,7 @@ enum ObjectType {
 	MOVEABLE,
 	GAMEOBJECT,
 	IEATABLE,
-   POWERUP
+    POWERUP
 };
 
 class GameObject : public Serializable, public Collidable, public Configurable {

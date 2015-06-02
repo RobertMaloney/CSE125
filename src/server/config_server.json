@@ -3,9 +3,9 @@
     "fps": 60,
     "ip": "127.0.0.1",
     "port": "9000",
-   "num resources": 500,
-   "num clouds": 40,
-   "num pills": 30,
+   "num resources": 1,
+   "num clouds": 1,
+   "num pills": 0,
 
     "physics engine": {
         "gravity": 100,

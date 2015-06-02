@@ -27,16 +27,16 @@ void GameEngine::calculatePercent(){
 		}
 	}	
 	//std::cout << occupied << "  " << total << endl;
-	if (occupied == total){
+	if (occupied >= total * .10){
 		//Win or lose
 		for (auto it = gstate->getPlayers().begin(); it != gstate->getPlayers().end(); ++it) {
 			if ((*it) == gstate->top){//win
 				(*it)->setStatus(GStatus::WIN);
-				std::cout << (*it)->getId() << ": YOU WIN "  << endl;
+				//std::cout << (*it)->getId() << ": YOU WIN "  << endl;
 			}
 			else{//lose
 				(*it)->setStatus(GStatus::LOSE);
-				std::cout << (*it)->getId() << ": YOU LOSE " << endl;
+				//std::cout << (*it)->getId() << ": YOU LOSE " << endl;
 			}
 			
 		}
@@ -45,7 +45,7 @@ void GameEngine::calculatePercent(){
 }
 
 void GameEngine::endGame(){
-	std::cout << "GAME END" << endl;
+	//std::cout << "GAME END" << endl;
 }
 
 void GameEngine::generateResources(int randResources, int clouds, int pills)

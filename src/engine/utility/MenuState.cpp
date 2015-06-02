@@ -318,14 +318,9 @@ void MenuState::conti()
 
 void MenuState::replay(){
 
-	//TODO: Do clean up? restart here.....
-
-	//make new TCPconnection and connect to server
-	//this->connectToServer();
-	//if success (no exceptions) login to server
-	//this->login();
-
-	//gameclient->inMenu = false;
+	Packet p;
+	p.writeByte(static_cast<byte>(EventType::REPLAY));
+	gameclient->connection->send(p);
 	GameClient::inMenu = false;
 	GraphicsEngine::setCursor(GLFW_CURSOR_DISABLED);
 }
@@ -351,20 +346,21 @@ void MenuState::checkMenu()
 	switch (menu_select) {
 	case (PLAY) :
 		if (replay_flag){
-			std::cout << "REPLAY" << std::endl;
+			replay();
+	//		std::cout << "REPLAY" << std::endl;
 		}
 		else if (pause_flag){
-			std::cout << "PAUSE" << std::endl;
+	//		std::cout << "PAUSE" << std::endl;
 		}
 		else{
-		    std::cout << "PLAY" << std::endl;
+//		    std::cout << "PLAY" << std::endl;
 		}
 		break;
 	case (QUIT) :
-		std::cout << "QUIT" << std::endl;
+	//	std::cout << "QUIT" << std::endl;
 		break;
 	default:
-		std::cout << "UNKNOWN MENU SELECTION" << std::endl;
+	//	std::cout << "UNKNOWN MENU SELECTION" << std::endl;
 		break;
 	}
 }
