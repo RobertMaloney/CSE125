@@ -191,6 +191,7 @@ void Player::deserialize(Packet & p) {
 	int oldscore = this->score;
 
 	GameObject::deserialize(p);
+
 	this->score = p.readInt();
 	this->percent = p.readInt();
 	this->status = static_cast<GStatus>(p.readInt());

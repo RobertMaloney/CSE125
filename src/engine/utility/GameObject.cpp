@@ -21,6 +21,9 @@ GameObject::~GameObject() {
 
 void GameObject::serialize(Packet & p) {
 	p.writeUInt(id);
+
+	p.writeInt(static_cast<int>(this->type));
+
 	for (int i = 0; i < 4; ++i) {
 		//p.writeFloat(this->loc[i]);
 		p.writeFloat(this->orientation[i]);
@@ -35,6 +38,8 @@ void GameObject::serialize(Packet & p) {
 
 void GameObject::deserialize(Packet & p) {
 	this->id = p.readUInt();
+
+	this->type = static_cast<ObjectType>(p.readInt());
 	for (int i = 0; i < 4; ++i) {
 		//this->loc[i] = p.readFloat();
 		this->orientation[i] = p.readFloat();

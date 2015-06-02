@@ -186,7 +186,16 @@ void GameClient::updateGameState() {
 		}
 		else {
 			//Update the object in game state
-			obj->deserialize(*packet);//For now it only updates obj (pos) in game state
+			if (obj->getType() == PLAYER && obj->getId() != this->playerid){
+				Player p;
+				p.deserialize(*packet);
+				//cout << "Percent = " << (static_cast<Player*>(obj))->getPercent() << endl; 
+				GraphicsEngine::updatePercent(obj->getModel(), p.getPercent());
+				obj = &p;
+			}
+			else {
+				obj->deserialize(*packet);//For now it only updates obj (pos) in game state
+			}
 		}
 
 		//Update the object in node (in GraphicsEngine)
@@ -198,14 +207,10 @@ void GameClient::updateGameState() {
 										obj->getVisible());
 
 
-		if (obj->getId() == this->playerid)
-		    this->checkGameStatus(dynamic_cast<Player*>(obj));
-
-		if (obj->getType() == PLAYER){
-			//cout << "Percent = " << (static_cast<Player*>(obj))->getPercent() << endl; 
-			GraphicsEngine::updatePercent(obj->getModel(), (static_cast<Player*>(obj))->getPercent());
+		if (obj->getId() == this->playerid) {
+			this->checkGameStatus(dynamic_cast<Player*>(obj));
+			GraphicsEngine::updatePercent(obj->getModel(), dynamic_cast<Player*>(obj)->getPercent());
 		}
-		
 	}
 }
 
