@@ -172,6 +172,9 @@ void MenuState::updateMenuState() {
 			case (ADD) :
 				changeBgm();
 				break;
+			case (SUB) :
+				GameSound::playOuch();
+				break;
 			default:
 				//nothing
 				break;
