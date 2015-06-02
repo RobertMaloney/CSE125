@@ -113,16 +113,21 @@ void Player::collide(float dt, GameObject & target) {
 	if (!target.getVisible()) {
 		return;
 	}
+	this->eat = false;
+	this->hit = false;
 
    switch (target.getType()) {
    case PLAYER:
       this->velocity *= -1;
+	  this->hit = true;
       break;
    case GAMEOBJECT:
       this->velocity *= -1;
+	  this->hit = true;
       break;
    case IEATABLE:
          {
+			this->eat = true;
             std::cout << "EAT " << endl;
             IEatable* eatable = dynamic_cast<IEatable*>(&target);
             if (eatable) {
@@ -143,6 +148,7 @@ void Player::collide(float dt, GameObject & target) {
 			break;
    case POWERUP:
          {
+			 this->eat = true;
             std::cout << "POWER UP" << endl;
             PowerUpResource * powerUp = dynamic_cast<PowerUpResource *>(&target);
             if (powerUp) {

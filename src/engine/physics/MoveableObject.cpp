@@ -146,7 +146,10 @@ void MoveableObject::integrate(float dt) {
 			return;
 		}
 		this->velocity *= .985f;
-	}		
+	}
+
+	this->eat = false;
+	this->hit = false;
 }
 
 
