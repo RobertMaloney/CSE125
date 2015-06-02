@@ -18,13 +18,14 @@ public:
 						*bigburp,
 						*jump;
 
-	static sf::Music	*menumusic,
-						*ingamemusic;
+	static sf::Music	*menubgm,
+						*ingamebgm;
 
 	static void init();
 
 
 private:
+	//music doesn't need buffer
 	static sf::SoundBuffer	*menumove_buf, 
 							*menuconfirm_buf,
 							*menuback_buf,
@@ -33,11 +34,10 @@ private:
 							*regburp_buf, 
 							*bigburp_buf, 
 							*jump_buf
-							
-							//*menumusic_buf,
-							//*ingamemusic_buf
 							;
 
+	static void loadSound(sf::Sound *sound, sf::SoundBuffer *buffer, std::string path);
+	static void loadMusic(sf::Music *music, std::string path);
 	
 };
 

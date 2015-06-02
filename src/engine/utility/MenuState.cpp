@@ -28,7 +28,7 @@ void MenuState::init(GameClient* gc)
 	gameclient = gc;
 
 	//play menu music
-	GameSound::menumusic->play();
+	GameSound::menubgm->play();
 }
 
 
@@ -38,7 +38,7 @@ void MenuState::init(GameClient* gc)
 void MenuState::cleanup()
 {
 	//stop menu music
-	GameSound::menumusic->stop();
+	GameSound::menubgm->stop();
 }
 
 
@@ -280,7 +280,7 @@ void MenuState::play()
 	this->cleanup();
 
 	// start ingame bgm here unfortunately
-	GameSound::ingamemusic->play();
+	GameSound::ingamebgm->play();
 }
 
 void MenuState::conti()

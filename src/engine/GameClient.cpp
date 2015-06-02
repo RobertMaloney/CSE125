@@ -71,7 +71,7 @@ void GameClient::run() {
 	}
 
 	//stop ingame music here unfortunately
-	GameSound::ingamemusic->stop();
+	GameSound::ingamebgm->stop();
 
 	this->close();
 }
