@@ -209,7 +209,7 @@ void GraphicsEngine::Initialize() {
 	// WORLD
 	//m_textureShader->Use();
 	m_defaultShader->Use();
-	worldModel = new Geometry("../../media/models/sphere_t3.obj");
+	worldModel = new Geometry("../../media/models/sphere_t2.obj");
 
 	m_groundId = HUD::makeHUD("../../media/texture/grass.png");  
 	worldModel->setTextureId(m_groundId);
@@ -222,7 +222,7 @@ void GraphicsEngine::Initialize() {
 
 	// CAMERA
 	glm::mat4 camview = glm::lookAt(
-		glm::vec3(0.f, 24.f, 16.f),
+      glm::vec3(0.f, 25.f, 16.f),
 		glm::vec3(0.f, 0.f, 0.f),
 		glm::vec3(0.f, 0.f, 1.f));
 	m_mainCamera = new CameraNode();

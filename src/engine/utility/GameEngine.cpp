@@ -56,7 +56,7 @@ void GameEngine::generateResources(Json::Value configFile)
    generateRandomResources(1);
    //generateClouds( configFile["num clouds"].asInt());
    //generatePills(configFile["num pills"].asInt());
-   generateClusterTree(500, 10, 10, 200);
+   generateClusterTree(505, 10, 10, 200);
    //generateRockRing();
    generateNPC(15);
 }
@@ -165,7 +165,7 @@ void GameEngine::generateClusterTree(float radius, float theta, float azimuth, i
       // flower    xy 2.f z 1.5f
       //Scores are placeholder, need to handle them differently...
       if (pick >= 0 && pick < 60){
-         newRe = new Tree(30, radius, theta, azimuth, direction);
+         newRe = new Tree(30, 500, theta, azimuth, direction);
          float floor = 1.0, ceiling = 2.0, range = (ceiling - floor);
          float scale = floor + float((range * rand()) / (RAND_MAX + 1.0));
          newRe->setScale(scale);

@@ -13,8 +13,8 @@ GravityGenerator::~GravityGenerator() {
 #include "../utility/NPC.h"
 void GravityGenerator::updateForce(MoveableObject* target, float dt) {
 	VerticalMovement & verticalComponent = target->getVerticalComponent();
-	if (verticalComponent.height < 505.f) {
-		verticalComponent.height = 505.f;
+	if (verticalComponent.height < 500.f) {
+		verticalComponent.height = 500.f;
 		verticalComponent.velocity *= -.5f;
 		verticalComponent.force = 0.f;
 		if (target->getType() == PLAYER) {
