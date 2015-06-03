@@ -115,7 +115,7 @@ float MoveableObject::getAngleSpeed() {
 }
 
 vec3 MoveableObject::rotateInXYPlane(vec3 original, float radians) {
-	std::cout << "rotating velocity : " << radians << std::endl;
+	//std::cout << "rotating velocity : " << radians << std::endl;
 	original.x = original.x * glm::cos(glm::radians(radians)) - original.y * glm::sin(glm::radians(radians));
 	original.y = original.x * glm::sin(glm::radians(radians)) + original.y * glm::cos(glm::radians(radians));
 	return original;

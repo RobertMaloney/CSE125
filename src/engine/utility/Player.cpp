@@ -177,7 +177,7 @@ void Player::collide(float dt, GameObject & target) {
                this->setMoveForce(this->getMoveForce() + powerUp->getMoveForce());
 
                float newMass = this->getMass() + powerUp->getMass();
-               if (newMass > 0.f) this->setMass(newMass);
+               if (newMass > 10.f) this->setMass(newMass);
             }
             target.setVisible(false);
          }
