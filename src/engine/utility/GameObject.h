@@ -49,6 +49,10 @@ protected:
 	// Model
 	Model rm = TREE;
 
+	//actions
+	bool eat;
+	bool hit;
+
 
 
 public:
@@ -77,6 +81,9 @@ public:
 
 	bool getVisible();
 	void setVisible(bool v);
+
+	bool getEat();
+	bool getHit();
 
 	float getModelRadius();
 	void setModelRadius(float radius);

@@ -85,6 +85,8 @@ void InputHandler::handleKey(int key, int action, int mods) {
 	else if (key == GLFW_KEY_EQUAL) { //+
 		if (action == GLFW_PRESS) {
 			cout << "zoom in" << endl;
+			p.writeByte(EventType::ADD);
+			input.push_back(p);
 			GraphicsEngine::ZoomIn();
 		}
 	}
@@ -92,6 +94,8 @@ void InputHandler::handleKey(int key, int action, int mods) {
 	else if (key == GLFW_KEY_MINUS) {//=
 		if (action == GLFW_PRESS) {
 			cout << "zoom out" << endl;
+			p.writeByte(EventType::SUB);
+			input.push_back(p);
 			GraphicsEngine::ZoomOut();
 		}
 	}

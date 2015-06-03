@@ -20,6 +20,8 @@ Player::Player(Model thebm, float radius, float theta, float azimuth, float dire
 	this->height = 550.f;
 	this->modelRadius = 5.f;
 	this->modelHeight = 5.f;*/
+	this->stomach = 0;
+	this->burp_count = 0;
 	this->status = PENDING;
 }
 
@@ -113,36 +115,42 @@ void Player::collide(float dt, GameObject & target) {
 	if (!target.getVisible()) {
 		return;
 	}
+	this->eat = false;
+	this->hit = false;
 
    switch (target.getType()) {
    case PLAYER:
       this->velocity *= -1;
+	  this->hit = true;
       break;
    case GAMEOBJECT:
       this->velocity *= -1;
+	  this->hit = true;
       break;
    case IEATABLE:
-      {
-         std::cout << "EAT " << endl;
-         IEatable* eatable = dynamic_cast<IEatable*>(&target);
-         if (eatable) {
-            std::cout << this->getId() << " old score: " << this->getScore() << endl;
-            this->setScore(this->getScore() + eatable->getPoints());
-            std::cout << this->getId() << " new score: " << this->getScore() << endl;
-			float mass = this->getMass() / this->getMassScale();
-			this->setScale((this->getScore() + SCORE_SCALE_RATIO) / SCORE_SCALE_RATIO);
-			this->setMassScale((this->getScore() + SCORE_MASS_RATIO) / SCORE_MASS_RATIO);
-			this->setMass(mass * this->getMassScale());
+         {
+			this->eat = true;
+            std::cout << "EAT " << endl;
+            IEatable* eatable = dynamic_cast<IEatable*>(&target);
+            if (eatable) {
+               std::cout << this->getId() << " old score: " << this->getScore() << endl;
+               this->setScore(this->getScore() + eatable->getPoints());
+               std::cout << this->getId() << " new score: " << this->getScore() << endl;
+				float mass = this->getMass() / this->getMassScale();
+				this->setScale((this->getScore() + SCORE_SCALE_RATIO) / SCORE_SCALE_RATIO);
+				this->setMassScale((this->getScore() + SCORE_MASS_RATIO) / SCORE_MASS_RATIO);
+				this->setMass(mass * this->getMassScale());
+            }
+            else {
+               std::cout << "Error: EATABLE is null: " << typeid(target).name() << endl;
+            }
+            target.setVisible(false);
+            //TODO Render needs to figure out (not) rendering dead/invisible object
          }
-         else {
-            std::cout << "Error: EATABLE is null: " << typeid(target).name() << endl;
-         }
-         target.setVisible(false);
-         //TODO Render needs to figure out (not) rendering dead/invisible object
-      }
-		break;
+			break;
    case NPCOBJ:
       {
+         this->eat = true;
          IEatable* eatable = dynamic_cast<IEatable*>(&target);
          if (eatable) {
             std::cout << this->getId() << " old score: " << this->getScore() << endl;
@@ -160,19 +168,20 @@ void Player::collide(float dt, GameObject & target) {
       }
       break;
    case POWERUP:
-      {
-         std::cout << "POWER UP" << endl;
-         PowerUpResource * powerUp = dynamic_cast<PowerUpResource *>(&target);
-         if (powerUp) {
-            this->setJumpForce(this->getJumpForce() + powerUp->getJumpForce());
-            this->setMoveForce(this->getMoveForce() + powerUp->getMoveForce());
+         {
+			 this->eat = true;
+            std::cout << "POWER UP" << endl;
+            PowerUpResource * powerUp = dynamic_cast<PowerUpResource *>(&target);
+            if (powerUp) {
+               this->setJumpForce(this->getJumpForce() + powerUp->getJumpForce());
+               this->setMoveForce(this->getMoveForce() + powerUp->getMoveForce());
 
-            float newMass = this->getMass() + powerUp->getMass();
-            if (newMass > 0.f) this->setMass(newMass);
+               float newMass = this->getMass() + powerUp->getMass();
+               if (newMass > 0.f) this->setMass(newMass);
+            }
+            target.setVisible(false);
          }
-         target.setVisible(false);
-      }
-      break;
+         break;
 	}
 }
 
@@ -209,15 +218,32 @@ void Player::deserialize(Packet & p) {
 	int oldscore = this->score;
 
 	GameObject::deserialize(p);
+
 	this->score = p.readInt();
 	this->percent = p.readInt();
 	this->status = static_cast<GStatus>(p.readInt());
 
 	int newscore = this->score;
-
+	if (newscore - oldscore != 0) {
+		//std::cout << "newscore: " << newscore << "oldscore:" << oldscore << std::endl;
+		//std::cout << "stomach:" << stomach << std::endl;
+		stomach = stomach + newscore - oldscore;
+		std::cout << "stomach:" << stomach << std::endl;
+	}
 	//check if need to burp
-	if (oldscore < 40 && newscore >= 40)
+	//stomach = stomach + newscore - oldscore;
+	//std::cout << "stomach:" << stomach << std::endl;
+	if (stomach >= MAX_STOMACH_SIZE) {
+		burp_count += 1;
+		std::cout << "should burp" << std::endl;
+		if (burp_count < MAX_BURP_COUNT) {
 		GameSound::regburp->play();
-	else if ( oldscore < 80 && newscore >= 80)
+		}
+		else {
 		GameSound::bigburp->play();
+			burp_count = 0;
+		}
+		stomach = 0;
+	}
+		
 }
