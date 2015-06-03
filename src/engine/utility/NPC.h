@@ -3,14 +3,16 @@
 
 #include <string>
 #include "Model.h"
+#include "IEatable.h"
 #include "../physics/MoveableObject.h"
 #include "Config.h"
 
-class NPC : public MoveableObject, public Configurable {
+class NPC : public MoveableObject, public Configurable, public IEatable {
 protected:
    bool moves[5];
    bool isJumping;
    int step;
+   int points;
 
 public:
    enum {
@@ -42,6 +44,9 @@ public:
 
    virtual void updateStep();
    void loadConfiguration(Json::Value config);
+
+   int getPoints();
+   void setPoints(int points);
 };
 
 #endif

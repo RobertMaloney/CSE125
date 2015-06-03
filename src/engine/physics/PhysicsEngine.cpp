@@ -52,7 +52,8 @@ void PhysicsEngine::registerInteraction(MoveableObject* object, unsigned int fla
 void PhysicsEngine::generateCollisions() {
 	// loop over each object that has interactions
 	for (auto it = interactions.begin(); it != interactions.end(); ++it) {
-		
+      if (it->first->getType() == NPCOBJ) continue; // NPCS do not collide
+
 		// loop over all objects
 		for (auto jt = objectDb->objects.begin(); jt != objectDb->objects.end(); ++jt) {
 		

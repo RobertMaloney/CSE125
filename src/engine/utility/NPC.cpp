@@ -5,8 +5,8 @@ NPC::NPC(Model m, float radius, float theta, float azimuth, float direction) :
    this->rm = m;
    this->type = NPCOBJ;
    this->resetMoves();
-   
    this->isJumping = false;
+   this->points = 0;
 }
 
 NPC::~NPC() {
@@ -123,4 +123,15 @@ void NPC::loadConfiguration(Json::Value config) {
    this->moveForce = config["moveForce"].asFloat();
    this->inverseMass = 1.f / config["mass"].asFloat();
    this->restitution = config["restitution"].asFloat();
+   this->points = config["points"].asInt();
+}
+
+int NPC::getPoints()
+{
+   return this->points;
+}
+
+void NPC::setPoints(int p)
+{
+   this->points = p;
 }

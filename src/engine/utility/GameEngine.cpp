@@ -56,16 +56,16 @@ void GameEngine::generateResources(Json::Value configFile)
    generateRandomResources(1);
    //generateClouds( configFile["num clouds"].asInt());
    //generatePills(configFile["num pills"].asInt());
-   //generateClusterTree(505, 10, 10, 200);
+   generateClusterTree(500, 10, 10, 200);
    //generateRockRing();
-   generateNPC(1);
+   generateNPC(15);
 }
 
 void GameEngine::generateRandomResources(int num) {
 	int total = 0;
 	for (int i = 0; i < num; i++)
 	{
-		float radius = 505;
+		float radius = 495;
 		float theta = (float)(rand() % 180);
 		float azimuth = (float)(rand() % 360);
 		float direction = (float)(rand() % 360);
@@ -166,6 +166,9 @@ void GameEngine::generateClusterTree(float radius, float theta, float azimuth, i
       //Scores are placeholder, need to handle them differently...
       if (pick >= 0 && pick < 60){
          newRe = new Tree(30, radius, theta, azimuth, direction);
+         float floor = 1.0, ceiling = 2.0, range = (ceiling - floor);
+         float scale = floor + float((range * rand()) / (RAND_MAX + 1.0));
+         newRe->setScale(scale);
          newRe->setModelRadius(3.f);
          newRe->setModelHeight(17.f);
          total = total + 30;
@@ -198,7 +201,7 @@ void GameEngine::generateClusterTree(float radius, float theta, float azimuth, i
       ObjectId resourceId = IdGenerator::getInstance().createId();
       gstate->addResource(resourceId, newRe);
    }
-   gstate->setTotal(total);
+   gstate->setTotal(gstate->getTotal() + total);
 }
 
 void GameEngine::generateRockRing()
@@ -252,6 +255,7 @@ void GameEngine::generatePills(int num) {
 }
 
 void GameEngine::generateNPC(int num) {
+   int total = 0;
    for (int i = 0; i < num; i++)
    {
       float radius = 505;
@@ -260,10 +264,13 @@ void GameEngine::generateNPC(int num) {
       float azimuth = (float)(rand() % 360);
       float direction = (float)(rand() % 360);
       MoveableObject * newNPC = new NPC(BUNNY, radius, theta, azimuth, direction);
+      newNPC->addVelocity(newNPC->rotateInXYPlane(newNPC->getVelocity(), direction));
       newNPC->loadConfiguration(configFile["bunny"]);
+      total = total + ((NPC*)newNPC)->getPoints();
       pe->registerInteraction(newNPC, DRAG | GRAVITY);
 
       ObjectId resourceId = IdGenerator::getInstance().createId();
       gstate->addObject(resourceId, newNPC);
    }
+   gstate->setTotal(gstate->getTotal() + total);
 }
