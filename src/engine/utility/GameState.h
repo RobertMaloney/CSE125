@@ -44,6 +44,7 @@ public:
 	void reset(ObjectId clientId);
 	bool isResetting();
 	void setResetting(bool b);
+	void reset();
 
 	static GameState & getInstance();
 

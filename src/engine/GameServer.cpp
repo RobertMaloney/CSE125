@@ -140,9 +140,9 @@ void GameServer::tick() {
 	vector<Packet> updates;
 	
 	if (gameState->isResetting()) {
-	
-		ObjectDB::getInstance().getObjectState(updates);
 		serverLock.lock();
+		gameState->reset();
+		ObjectDB::getInstance().getObjectState(updates);
 		gameState->setResetting(false);
 		serverLock.unlock();
 	} else {

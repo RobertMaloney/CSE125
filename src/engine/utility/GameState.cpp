@@ -100,6 +100,24 @@ void GameState::setResetting(bool b) {
 	this->resetting = b;
 }
 
+void GameState::reset() {
+	for (auto it = map->objects.begin(); it != map->objects.end(); ++it) {
+		switch (it->second->getType()) {
+		case PLAYER: {
+				Player* p = dynamic_cast<Player*>(it->second);
+				p->loadConfiguration(configFile["player"]);
+				//	p->setScore(0);
+			//	p->setStatus(GStatus::PENDING);
+			//	p->setPercent(0);					
+			}
+			break;
+		default:
+			it->second->setVisible(true);
+			break;
+		}
+	}
+}
+
 void GameState::reset(ObjectId clientId) {
 	static set<ObjectId> clients;
 
@@ -108,13 +126,6 @@ void GameState::reset(ObjectId clientId) {
 	}
 
 	if (clients.size() == this->players.size()) {
-		for (auto it = resources.begin(); it != resources.end(); ++it){
-			(*it)->loadConfiguration(configFile["game object"]);
-		}
-		for (auto it = players.begin(); it != players.begin(); ++it) {
-			(*it)->loadConfiguration(configFile["player"]);
-			(*it)->setStatus(PENDING);
-		}
 		this->resetting = true;
 		clients.clear();
 	}
