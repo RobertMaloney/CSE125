@@ -15,17 +15,32 @@
         }
     },
 
-    "player": {
+   "player": {
+      "orientation": null,
+      "angle": 0,
+      "height": 505,
+      "type": "Player",
+      "modelRadius": 6,
+      "modelHeight": 6,
+      "visible": true,
+      "angleSpeed": 2,
+      "jumpForce": 15000,
+      "moveForce": 100,
+      "mass": 10,
+      "restitution": 1
+   },
+
+   "bunny": {
         "orientation": null,
         "angle": 0,
         "height": 505,
-        "type": "Player",
-        "modelRadius": 6,
-        "modelHeight": 6,
+        "type": "Bunny",
+        "modelRadius": 3,
+        "modelHeight": 3,
         "visible": true,
         "angleSpeed": 2,
-        "jumpForce": 15000,
-        "moveForce": 100,
+        "jumpForce": 5000,
+        "moveForce": 50,
         "mass": 10,
         "restitution": 1
     },

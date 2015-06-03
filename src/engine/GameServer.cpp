@@ -7,7 +7,7 @@ GameServer::GameServer() {
 	this->idGen = &IdGenerator::getInstance();
 	this->gameState = &GameState::getInstance();
 	this->physics = new PhysicsEngine();
-	this->engine = new GameEngine();
+	this->engine = new GameEngine(this->physics);
 }
 
 
@@ -53,8 +53,7 @@ void GameServer::initialize() {
 	physics->loadConfiguration(configFile["physics engine"]);
 	
 	gameState->initWithServer();
-   engine->generateResources(configFile["num resources"].asInt(),
-      configFile["num clouds"].asInt(), configFile["num pills"].asInt());
+   engine->generateResources(configFile);
 }
 
 

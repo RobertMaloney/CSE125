@@ -123,6 +123,7 @@
     <ClCompile Include="utility\InputHandler.cpp" />
     <ClCompile Include="physics\MoveableObject.cpp" />
     <ClCompile Include="utility\MenuState.cpp" />
+    <ClCompile Include="utility\NPC.cpp" />
     <ClCompile Include="utility\ObjectDB.cpp" />
     <ClCompile Include="Utility\ObjLoader.cpp" />
     <ClCompile Include="utility\Player.cpp" />
@@ -172,6 +173,7 @@
     <ClInclude Include="utility\InputHandler.h" />
     <ClInclude Include="utility\MenuState.h" />
     <ClInclude Include="physics\MoveableObject.h" />
+    <ClInclude Include="utility\NPC.h" />
     <ClInclude Include="utility\ObjectDB.h" />
     <ClInclude Include="Utility\ObjLoader.h" />
     <ClInclude Include="utility\Player.h" />

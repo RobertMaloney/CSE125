@@ -1,8 +1,9 @@
 #include "GameEngine.h"
 
 
-GameEngine::GameEngine() {
+GameEngine::GameEngine(PhysicsEngine * pe) {
 	gstate = &GameState::getInstance();
+   this->pe = pe;
 }
 
 
@@ -48,13 +49,16 @@ void GameEngine::endGame(){
 	std::cout << "GAME END" << endl;
 }
 
-void GameEngine::generateResources(int randResources, int clouds, int pills)
+void GameEngine::generateResources(Json::Value configFile)
 {
-   //generateRandomResources(randResources);
-   generateClouds(clouds);
-   generatePills(pills);
-   generateClusterTree(505, 10, 10, 200);
-   generateRockRing();
+   this->configFile = configFile;
+   //generateRandomResources(configFile["num resources"].asInt());
+   generateRandomResources(1);
+   //generateClouds( configFile["num clouds"].asInt());
+   //generatePills(configFile["num pills"].asInt());
+   //generateClusterTree(505, 10, 10, 200);
+   //generateRockRing();
+   generateNPC(1);
 }
 
 void GameEngine::generateRandomResources(int num) {
@@ -244,5 +248,22 @@ void GameEngine::generatePills(int num) {
 
       ObjectId resourceId = IdGenerator::getInstance().createId();
       gstate->addResource(resourceId, newRe);
+   }
+}
+
+void GameEngine::generateNPC(int num) {
+   for (int i = 0; i < num; i++)
+   {
+      float radius = 505;
+
+      float theta = (float)(rand() % 360);
+      float azimuth = (float)(rand() % 360);
+      float direction = (float)(rand() % 360);
+      MoveableObject * newNPC = new NPC(BUNNY, radius, theta, azimuth, direction);
+      newNPC->loadConfiguration(configFile["bunny"]);
+      pe->registerInteraction(newNPC, DRAG | GRAVITY);
+
+      ObjectId resourceId = IdGenerator::getInstance().createId();
+      gstate->addObject(resourceId, newNPC);
    }
 }
