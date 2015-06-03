@@ -3,9 +3,9 @@
     "fps": 60,
     "ip": "127.0.0.1",
     "port": "9000",
-   "num resources": 1,
-   "num clouds": 1,
-   "num pills": 0,
+   "num resources": 500,
+   "num clouds": 100,
+   "num pills": 2,
 
     "physics engine": {
         "gravity": 100,
@@ -15,6 +15,7 @@
         }
     },
 
+	
     "player": {
         "orientation": null,
         "angle": 0,
@@ -27,8 +28,14 @@
         "jumpForce": 15000,
         "moveForce": 100,
         "mass": 10,
-        "restitution": 1
-    },
+        "restitution": 1,
+		"burp_count": 0,
+		"isJumping": false,
+		"score": 0,
+		"percent": 0,
+		"stomach": 0,
+		"status": "Pending"
+	},
 
     "moveable object": {
         "orientation": null,
@@ -52,7 +59,9 @@
         "type": "GameObject",
         "modelRadius": 1,
         "modelHeight": 1,
-        "visible":  true
+        "visible":  true,
+		"eat": false,
+		"hit": false
     }
 
 }

@@ -56,8 +56,10 @@ void GameClient::run() {
 			mstate->handleEvents();
 			mstate->update();
 			//current_state->draw();
+			std::cout << "menu " << std::endl;
 		}
 		else{
+			std::cout << "game " << std::endl;
 			this->sendEvents(InputHandler::input);
 			this->receiveUpdates();
 
@@ -236,7 +238,7 @@ void GameClient::checkGameStatus(Player * p){
 		inMenu = true;
 		MenuState::submit = false;
 		MenuState::replay_flag = true;
-
+	
 		GraphicsEngine::setMenuStatus(MenuStatus::MWINREPLAY);
 	}
 	else if (p->getStatus() == GStatus::LOSE){
@@ -247,6 +249,7 @@ void GameClient::checkGameStatus(Player * p){
 		MenuState::replay_flag = true;
 		GraphicsEngine::setMenuStatus(MenuStatus::MLOSEREPLAY);
 	}// else do nothing
+	
 }
 
 void GameClient::close() {

@@ -58,7 +58,8 @@ public:
 
 	GStatus getStatus();
 	void setStatus(GStatus s);
-
+	GStatus statusFromString(string & string);
+	
 	virtual void integrate(float dt);
 	virtual void collide(float dt, GameObject & target) override;
 	virtual void loadConfiguration(Json::Value config);

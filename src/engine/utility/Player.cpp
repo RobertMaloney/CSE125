@@ -164,6 +164,39 @@ void Player::collide(float dt, GameObject & target) {
 	}
 }
 
+/*
+"orientation": null,
+"angle": 0,
+"height": 505,
+"type": "Player",
+"modelRadius": 6,
+"modelHeight": 6,
+"visible": true,
+"angleSpeed": 2,
+"jumpForce": 15000,
+"moveForce": 100,
+"mass": 10,
+"restitution": 1,
+"burp_count": 0,
+"isJumping": false,
+"score": 0,
+"percent": 0,
+"stomach": 0,
+"status": "Pending"
+
+*/
+
+GStatus Player::statusFromString(string & string) {
+
+	transform(string.begin(), string.end(), string.begin(), ::tolower);
+	if (string == "lose") {
+		return GStatus::LOSE;
+	}
+	else if (string == "win") {
+		return GStatus::WIN;
+	}
+	return GStatus::PENDING;
+}
 
 void Player::loadConfiguration(Json::Value config) {
 	// orientation not here yet
@@ -179,13 +212,20 @@ void Player::loadConfiguration(Json::Value config) {
 	this->moveForce = config["moveForce"].asFloat();
 	this->inverseMass = 1.f / config["mass"].asFloat();
 	this->restitution = config["restitution"].asFloat();
+	this->burp_count = config["burp_count"].asInt();
+	this->isJumping = config["isJumping"].asBool();
+	this->score = config["score"].asInt();
+	this->percent = config["percent"].asInt();
+	this->stomach = config["stomach"].asInt();
+	this->status = statusFromString(config["status"].asString());
 }
 
 
 void Player::serialize(Packet & p) {
 
 	GameObject::serialize(p);
-
+	p.writeInt(this->burp_count);
+	p.writeInt(this->stomach);
 	p.writeInt(this->score);
 	p.writeInt(this->percent);
 	p.writeInt(this->status);
@@ -197,7 +237,8 @@ void Player::deserialize(Packet & p) {
 	int oldscore = this->score;
 
 	GameObject::deserialize(p);
-
+	this->burp_count = p.readInt();
+	this->stomach = p.readInt();
 	this->score = p.readInt();
 	this->percent = p.readInt();
 	this->status = static_cast<GStatus>(p.readInt());

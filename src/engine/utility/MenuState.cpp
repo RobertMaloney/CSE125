@@ -81,7 +81,7 @@ void MenuState::connectToServer()
 	Json::Value config;
 	Json::Reader reader;
 	ifstream inStream;
-	inStream.open("../server/config_server.json");
+	inStream.open("../client/config_client.json");
 
 	if (!reader.parse(inStream, config, true)) {
 		inStream.close();
@@ -89,7 +89,6 @@ void MenuState::connectToServer()
 		throw runtime_error("Problem parsing json config.");
 	}
 	inStream.close();
-
 
 	//need to use the client's TCP connection that was already created in init()
 	TCPConnection * client_connection = gameclient->connection;
@@ -245,6 +244,7 @@ void MenuState::menuEnter()
 		//check menu_select state
 
 		switch (menu_select) {
+		case REPLAY:
 		case (PLAY) :
 			menu_select = 0;
 
@@ -310,8 +310,6 @@ void MenuState::play()
 void MenuState::conti()
 {
 
-	//gameclient->inMenu = false;
-
 	GameClient::inMenu = false;
 	GraphicsEngine::setCursor(GLFW_CURSOR_DISABLED);
 }
@@ -321,8 +319,12 @@ void MenuState::replay(){
 	Packet p;
 	p.writeByte(static_cast<byte>(EventType::REPLAY));
 	gameclient->connection->send(p);
+	std::cout << " in replay " << std::endl;
 	GameClient::inMenu = false;
+
 	GraphicsEngine::setCursor(GLFW_CURSOR_DISABLED);
+	
+	GameSound::ingamebgm->play();
 }
 
 
@@ -346,6 +348,7 @@ void MenuState::checkMenu()
 	switch (menu_select) {
 	case (PLAY) :
 		if (replay_flag){
+			std::cout << "check menu" << std::endl;
 			replay();
 	//		std::cout << "REPLAY" << std::endl;
 		}

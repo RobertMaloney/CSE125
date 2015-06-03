@@ -109,12 +109,14 @@ void GameState::reset(ObjectId clientId) {
 
 	if (clients.size() == this->players.size()) {
 		for (auto it = resources.begin(); it != resources.end(); ++it){
-			(*it)->setVisible(true);
+			(*it)->loadConfiguration(configFile["game object"]);
 		}
 		for (auto it = players.begin(); it != players.begin(); ++it) {
 			(*it)->loadConfiguration(configFile["player"]);
+			(*it)->setStatus(PENDING);
 		}
 		this->resetting = true;
+		clients.clear();
 	}
 	std::cout << "Reset : " << clientId << std::endl;
 }
