@@ -28,6 +28,9 @@ public:
 	float getMass();
 	float getInverseMass();
 
+	float getMassScale();
+	void setMassScale(float);
+
 	void addForce(vec3 force);
 	void addForce(float x, float y, float z);
 
@@ -63,6 +66,7 @@ protected:
 	float jumpForce;
 	float moveForce;
 	float inverseMass;
+	float massScale;
 	float restitution;
 	vec3 forceAccum;
 	vec3 velocity;

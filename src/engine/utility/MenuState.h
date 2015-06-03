@@ -5,6 +5,7 @@
 #include "..\network\Packet.h"
 
 #define MENU_SELECTIONS_NUM 2
+#define MENU_BGM_SELECTIONS_NUM 2
 
 
 class MenuState : public IMenuState  //Only one menu state, cannot have more ><
@@ -15,6 +16,11 @@ public:
 		PLAY,
 		QUIT,
 		REPLAY
+	};
+
+	enum MenuBgmSelections {
+		BGM1,
+		BGM2
 	};
 
 	vector<Packet> updates;
@@ -38,10 +44,12 @@ public:
 
 private:
 	int menu_select;
+	int music_select;
 
 	void menuUp();
 	void menuDown();
 	void menuEnter();
+	void changeBgm();
 
 	void play();
 	void quit();

@@ -26,6 +26,7 @@ void GameClient::init() {
 
     mstate = new MenuState();
 	mstate->init(this);
+
 	//then change to that state (this also initializes the state if it's not initialized)
 	//this->addState(newstate);
 }
@@ -41,9 +42,10 @@ void GameClient::run() {
 	if (!Config::parseJson("config_client.json"))
 		std::cout << "Errors parsing config\n";
 
-	this->init();
-	//this->login();
+	//init graphics
 	GraphicsEngine::Initialize();
+
+	this->init();
 
 	while (!GraphicsEngine::Closing()) {
 
@@ -69,7 +71,7 @@ void GameClient::run() {
 	}
 
 	//stop ingame music here unfortunately
-	GameSound::ingamemusic->stop();
+	GameSound::ingamebgm->stop();
 
 	this->close();
 }
@@ -166,6 +168,10 @@ void GameClient::updateGameState() {
 		packet->reset();
 		obj = gstate.getObject(objId);
 
+		//sound purposes
+		bool oldeat = false;
+		bool oldhit = false; 
+
 		//If this game object is new 
 		if (!obj) {
 			obj = new GameObject();
@@ -183,20 +189,42 @@ void GameClient::updateGameState() {
 			GraphicsEngine::insertObject(obj->getId(), GraphicsEngine::addNode(GraphicsEngine::selectModel(obj->getModel()), obj->getVisible()));
 		}
 		else {
+			oldeat = obj->getEat();
+			oldhit = obj->getHit();
 			//Update the object in game state
-			obj->deserialize(*packet);//For now it only updates obj (pos) in game state
+			if (obj->getType() == PLAYER && obj->getId() != this->playerid){
+				Player p;
+				p.deserialize(*packet);
+				//cout << "Percent = " << (static_cast<Player*>(obj))->getPercent() << endl; 
+				GraphicsEngine::updatePercent(obj->getModel(), p.getPercent());
+				obj = &p;
+			}
+			else {
+				obj->deserialize(*packet);//For now it only updates obj (pos) in game state
+			}
 		}
 
 		//Update the object in node (in GraphicsEngine)
 		GraphicsEngine::updateObject(	obj->getId(), 
 										obj->getOrientation(), 
 										obj->getAngle(), 
-										obj->getHeight(), 
+										obj->getHeight(),
+										obj->getScale(),
 										obj->getVisible());
 
+		//play collision sounds
+		if (obj->getId() == this->playerid) {
+			if (oldeat == false && obj->getEat() == true)
+				GameSound::nom->play();
+			if (oldhit == false && obj->getHit() == true)
+				GameSound::playOuch();
+		}
 
-		if (obj->getId() == this->playerid)
-		    this->checkGameStatus(dynamic_cast<Player*>(obj));
+
+		if (obj->getId() == this->playerid) {
+			this->checkGameStatus(dynamic_cast<Player*>(obj));
+			GraphicsEngine::updatePercent(obj->getModel(), dynamic_cast<Player*>(obj)->getPercent());
+		}
 	}
 }
 

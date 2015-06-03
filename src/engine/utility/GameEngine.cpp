@@ -17,10 +17,10 @@ void GameEngine::calculatePercent(){
 	for (auto it = gstate->getPlayers().begin(); it != gstate->getPlayers().end(); ++it) {
 		int s = (*it)->getScore();
 		occupied = occupied + s;
-		int p = s / total;
+		int p = int(float(s) / total * 100.0);
 		//std::cout << (*it)->getId() << ": " << p << endl;
 		(*it)->setPercent(p);
-
+		//cout << "score = " << s << " total = " << total << " p = " << p << endl;
 		if (s > max){
 			max = s;
 			gstate->top = (*it);
@@ -48,8 +48,16 @@ void GameEngine::endGame(){
 	std::cout << "GAME END" << endl;
 }
 
+void GameEngine::generateResources(int randResources, int clouds, int pills)
+{
+   //generateRandomResources(randResources);
+   generateClouds(clouds);
+   generatePills(pills);
+   generateClusterTree(505, 10, 10, 200);
+   generateRockRing();
+}
 
-void GameEngine::generateResources(int num) {
+void GameEngine::generateRandomResources(int num) {
 	int total = 0;
 	for (int i = 0; i < num; i++)
 	{
@@ -113,41 +121,25 @@ void GameEngine::generateResources(int num) {
 }
 
 void GameEngine::generateClouds(int num) {
-   float adist = 120.f;
-   float tdist = 20.f;
-   float theta = 0;
-   float azimuth = 0;
-
-   int squareRoot = 360/adist;
    for (int i = 0; i < num; i++)
    {
-      float floor = 700, ceiling = 800, range = (ceiling - floor);
+      float floor = 600, ceiling = 700, range = (ceiling - floor);
       float radius = floor + float((range * rand()) / (RAND_MAX + 1.0));
 
-      float theta = (float)(rand() % 180);
+      float theta = (float)(rand() % 360);
       float azimuth = (float)(rand() % 360);
       float direction = (float)(0);
       Resource * newRe = new Cloud(radius, theta, azimuth, direction);
 
       ObjectId resourceId = IdGenerator::getInstance().createId();
       gstate->addResource(resourceId, newRe);
-
-      /*float floor = 700, ceiling = 800, range = (ceiling - floor);
-      float radius = floor + int((range * rand()) / (RAND_MAX + 1.0));
-
-      azimuth = int(azimuth + adist) % 360;
-      float direction = (float)(0);
-      Resource * newRe = new Cloud(radius, theta, azimuth, direction);
-
-      ObjectId resourceId = IdGenerator::getInstance().createId();
-      gstate->addResource(resourceId, newRe);*/
    }
 }
 
 void GameEngine::generateClusterTree(float radius, float theta, float azimuth, int num)
 {
-   float adist = .5f;
-   float tdist = .5f;
+   float adist = .3f;
+   float tdist = .3f;
    int total = gstate->getTotal();
    for (int i = 0; i < num; i++)
    {
@@ -208,24 +200,26 @@ void GameEngine::generateClusterTree(float radius, float theta, float azimuth, i
 void GameEngine::generateRockRing()
 {
    float adist = .2f;
-   float tdist = .5f;
-   float theta = 180.f;
-   float azimuth = 160.f;
+   float tdist = 1.f;
+   float theta = 0.f;
+   float azimuth = 5.f;
    float radius = 505;
    int num = 10;
 
    for (int i = 0; i < num; i++)
    {
-      azimuth = fmod(azimuth + adist, 360);
+      //azimuth = fmod(azimuth + adist, 360);
       float floor = azimuth - adist, ceiling = azimuth + adist, range = (ceiling - floor);
       azimuth = floor + float((range * rand()) / (RAND_MAX + 1.0));
 
       for (int j = 0; j < num; j++)
       {
-         floor = theta - tdist, ceiling = theta + tdist, range = (ceiling - floor);
-         theta = floor + float((range * rand()) / (RAND_MAX + 1.0));
+         //float floor = theta - tdist, ceiling = theta + tdist, range = (ceiling - floor);
+         //theta = floor + float((range * rand()) / (RAND_MAX + 1.0));
 
-         cout << azimuth << " " << theta << endl;
+         theta = fmod(theta + tdist, 360);
+
+         //cout << azimuth << " " << theta << endl;
          //float floor = azimuth - adist, ceiling = azimuth + adist, range = (ceiling - floor);
          //azimuth = floor + float((range * rand()) / (RAND_MAX + 1.0));
 
@@ -235,5 +229,20 @@ void GameEngine::generateRockRing()
          ObjectId resourceId = IdGenerator::getInstance().createId();
          gstate->addResource(resourceId, newRe);
       }
+   }
+}
+
+void GameEngine::generatePills(int num) {
+   for (int i = 0; i < num; i++)
+   {
+      float radius = 505;
+
+      float theta = (float)(rand() % 360);
+      float azimuth = (float)(rand() % 360);
+      float direction = (float)(0);
+      Resource * newRe = new Pill(radius, theta, azimuth, direction);
+
+      ObjectId resourceId = IdGenerator::getInstance().createId();
+      gstate->addResource(resourceId, newRe);
    }
 }

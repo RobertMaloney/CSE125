@@ -11,7 +11,6 @@
 #include "../physics/Collidable.h"
 #include "Model.h"
 
-
 using glm::mat4;
 using glm::vec2;
 using glm::vec4;
@@ -23,7 +22,8 @@ enum ObjectType {
 	PLAYER,
 	MOVEABLE,
 	GAMEOBJECT,
-	IEATABLE
+	IEATABLE,
+   POWERUP
 };
 
 class GameObject : public Serializable, public Collidable, public Configurable {
@@ -33,6 +33,7 @@ protected:
 	quat orientation;
 	float angle;
 	float height;
+	float scale;
 
 	ObjectId id;
 	ObjectType type;
@@ -46,6 +47,10 @@ protected:
 
 	// Model
 	Model rm = TREE;
+
+	//actions
+	bool eat;
+	bool hit;
 
 
 
@@ -67,12 +72,17 @@ public:
 	float getAngle();
 	float getHeight();
 	void setHeight(float h);
+	float getScale();
+	void setScale(float);
 
 	void setModelHeight(float mheight);
 	float getModelHeight();
 
 	bool getVisible();
 	void setVisible(bool v);
+
+	bool getEat();
+	bool getHit();
 
 	float getModelRadius();
 	void setModelRadius(float radius);

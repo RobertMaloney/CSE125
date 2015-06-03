@@ -16,6 +16,8 @@ enum EventType {
    CONFIRM,
    JUMP,
    STOP_JUMP,
+   SUB,
+   ADD,
 };
 
 

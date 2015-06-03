@@ -6,7 +6,7 @@ MoveableObject::MoveableObject(float radius, float theta, float azimuth, float d
 	this->restitution = .99f;
 	memset((void*) &this->verticalComponent, 0, sizeof(VerticalMovement));
 	this->verticalComponent.height = 505.f;
-	
+	this->setMassScale(1.f);
 }
 
 
@@ -30,6 +30,13 @@ float MoveableObject::getInverseMass() {
 	return this->inverseMass;
 }
 
+float MoveableObject::getMassScale() {
+	return this->massScale;
+}
+
+void MoveableObject::setMassScale(float s) {
+	this->massScale = s;
+}
 
 void MoveableObject::addForce(vec3 force) {
 	this->forceAccum += force;
@@ -139,7 +146,10 @@ void MoveableObject::integrate(float dt) {
 			return;
 		}
 		this->velocity *= .985f;
-	}		
+	}
+
+	this->eat = false;
+	this->hit = false;
 }
 
 

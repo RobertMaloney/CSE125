@@ -5,11 +5,14 @@
 GameObject::GameObject(float radius, float theta, float azimuth, float direction) {
 	//this->loc = vec4(radius, theta, azimuth, direction);
 	this->modelRadius = 1.f;
+	this->scale = 1.f;
 	this->type = GAMEOBJECT;
 	this->angle = direction;
 	this->height = radius;
 	this->orientation = glm::quat(glm::vec3(theta, azimuth, 0.f));
 	this->visible = true;
+	this->eat = false;
+	this->hit = false;
 }
 
 GameObject::~GameObject() {
@@ -20,29 +23,38 @@ GameObject::~GameObject() {
 
 void GameObject::serialize(Packet & p) {
 	p.writeUInt(id);
+
+	p.writeInt(static_cast<int>(this->type));
+
 	for (int i = 0; i < 4; ++i) {
 		//p.writeFloat(this->loc[i]);
 		p.writeFloat(this->orientation[i]);
 	}
 	p.writeFloat(this->angle);
 	p.writeFloat(this->height);
-	//p.writeFloat(this->score);
+	p.writeFloat(this->scale);
 	p.writeByte(this->visible);
     p.writeInt(static_cast<int>(this->rm));
+	p.writeByte(this->eat);
+	p.writeByte(this->hit);
 }
 
 
 void GameObject::deserialize(Packet & p) {
 	this->id = p.readUInt();
+
+	this->type = static_cast<ObjectType>(p.readInt());
 	for (int i = 0; i < 4; ++i) {
 		//this->loc[i] = p.readFloat();
 		this->orientation[i] = p.readFloat();
 	}
 	this->angle = p.readFloat();
 	this->height = p.readFloat();
-	//this->score = p.readFloat();
+	this->scale = p.readFloat();
 	this->visible = p.readBool();
     this->rm = static_cast<Model>(p.readInt());
+	this->eat = p.readBool();
+	this->hit = p.readBool();
 }
 
 quat & GameObject::getOrientation() {
@@ -65,12 +77,20 @@ void GameObject::setHeight(float height) {
 	this->height = height;
 }
 
+float GameObject::getScale() {
+	return this->scale;
+}
+
+void GameObject::setScale(float s) {
+	this->scale = s;
+}
+
 void GameObject::setModelHeight(float mheight) {
 	assert(!(mheight < 0.f));
 	this->modelHeight = mheight;
 }
 float GameObject::getModelHeight() {
-	return this->modelHeight;
+	return this->modelHeight * this->scale; // scale to maintain collisions;
 }
 
 ObjectId GameObject::getId() {
@@ -98,8 +118,16 @@ void GameObject::setVisible(bool v){
 	this->visible = v;
 }
 
+bool GameObject::getEat(){
+	return this->eat;
+}
+
+bool GameObject::getHit(){
+	return this->hit;
+}
+
 float GameObject::getModelRadius() {
-	return this->modelRadius;
+	return this->modelRadius * this->scale; // scale to maintain collisions
 }
 
 void GameObject::setModelRadius(float radius) {
