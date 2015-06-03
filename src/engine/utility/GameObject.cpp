@@ -163,11 +163,17 @@ void GameObject::collide(float dt, GameObject & target) {
 
 
 void GameObject::loadConfiguration(Json::Value config) {
+
 	//"orientation": null,
-	this->angle = config["angle"].asFloat();
-	this->height = config["height"].asFloat();
-	this->type = this->typeFromString(config["type"].asString());
-	this->modelRadius = config["modelRadius"].asFloat();
-	this->modelHeight = config["modelHeight"].asFloat();
-	this->visible = config["visible"].asBool();
+	Json::Value & obj = config["game object"];
+	this->angle = obj["angle"].asFloat();
+	this->height = obj["height"].asFloat();
+	this->type = this->typeFromString(obj["type"].asString());
+	this->scale = obj["scale"].asFloat();
+	this->modelRadius = obj["modelRadius"].asFloat();
+	this->modelHeight = obj["modelHeight"].asFloat();
+	this->visible = obj["visible"].asBool();
+	this->rm = ResourceMap::getModelFromString(obj["model"].asString());
+	this->eat = obj["eat"].asBool();
+	this->hit = obj["hit"].asBool();
 }

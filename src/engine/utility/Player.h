@@ -13,19 +13,20 @@ using namespace std;
 
 class Player : public MoveableObject {
 private:
-	const float SCORE_SCALE_RATIO = 250.f;
-	const float SCORE_MASS_RATIO = 750.f;
+	
 
 protected:
 
+	float SCORE_SCALE_RATIO;
+	float SCORE_MASS_RATIO;
 	bool moves[5];
 	bool isJumping;
 
-   int score;
-   int percent;
-   int stomach;
-   int burp_count;
-   GStatus status;
+	int score;
+	int percent;
+	int stomach;
+	int burp_count;
+	GStatus status;
 
 public:
 

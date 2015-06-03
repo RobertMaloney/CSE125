@@ -99,8 +99,9 @@ bool GameState::isResetting(){
 void GameState::setResetting(bool b) {
 	this->resetting = b;
 }
-
+/*
 void GameState::reset() {
+	//ObjectDB::getInstance().reloadObjects(configFile);
 	for (auto it = map->objects.begin(); it != map->objects.end(); ++it) {
 		switch (it->second->getType()) {
 		case PLAYER: {
@@ -115,8 +116,8 @@ void GameState::reset() {
 			it->second->setVisible(true);
 			break;
 		}
-	}
-}
+	}*/
+//}
 
 void GameState::reset(ObjectId clientId) {
 	static set<ObjectId> clients;

@@ -248,8 +248,7 @@ void GameClient::checkGameStatus(Player * p){
 		MenuState::submit = false;
 		MenuState::replay_flag = true;
 		GraphicsEngine::setMenuStatus(MenuStatus::MLOSEREPLAY);
-	}// else do nothing
-	
+	}
 }
 
 void GameClient::close() {

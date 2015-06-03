@@ -141,8 +141,9 @@ void GameServer::tick() {
 	
 	if (gameState->isResetting()) {
 		serverLock.lock();
-		gameState->reset();
-		ObjectDB::getInstance().getObjectState(updates);
+		ObjectDB & odb = ObjectDB::getInstance();
+		odb.reloadObjects(configFile);
+		odb.getObjectState(updates);
 		gameState->setResetting(false);
 		serverLock.unlock();
 	} else {

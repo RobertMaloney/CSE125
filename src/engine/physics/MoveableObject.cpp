@@ -159,5 +159,23 @@ void MoveableObject::collide(float dt, GameObject & target) {
 
 
 void MoveableObject::loadConfiguration(Json::Value config) {
+	/*
+	    "orientation": null,
+        "angle": 0,
+        "height": 505,
+        "type": "MoveableObject",
+        "modelRadius": 1,
+        "modelHeight": 1,
+        "visible":  true,
+		"eat": false,
+		"hit": false,
+		"scale": 1,
+		"model": tree,
+        "angleSpeed": 1,
+        "jumpForce": 80000,
+        "moveForce": 1000,
+        "mass": 10,
+        "restitution": 1
+	*/
 	this->verticalComponent.height = this->height;
 }

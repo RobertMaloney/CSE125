@@ -45,6 +45,10 @@
         "modelRadius": 1,
         "modelHeight": 1,
         "visible":  true,
+		"eat": false,
+		"hit": false,
+		"scale": 1,
+		"model": tree,
         "angleSpeed": 1,
         "jumpForce": 80000,
         "moveForce": 1000,
@@ -61,7 +65,9 @@
         "modelHeight": 1,
         "visible":  true,
 		"eat": false,
-		"hit": false
+		"hit": false,
+		"scale": 1,
+		"model": "tree"
     }
 
 }

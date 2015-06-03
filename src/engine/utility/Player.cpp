@@ -11,6 +11,8 @@ Player::Player(Model thebm, float radius, float theta, float azimuth, float dire
 	for (int i = 0; i < 5; ++i)
 		this->moves[i] = false;
 
+	SCORE_SCALE_RATIO = 250.f;
+	SCORE_MASS_RATIO = 750.f;
   	this->type = PLAYER;
 	this->isJumping = false;
 	this->score = 0;
@@ -164,28 +166,6 @@ void Player::collide(float dt, GameObject & target) {
 	}
 }
 
-/*
-"orientation": null,
-"angle": 0,
-"height": 505,
-"type": "Player",
-"modelRadius": 6,
-"modelHeight": 6,
-"visible": true,
-"angleSpeed": 2,
-"jumpForce": 15000,
-"moveForce": 100,
-"mass": 10,
-"restitution": 1,
-"burp_count": 0,
-"isJumping": false,
-"score": 0,
-"percent": 0,
-"stomach": 0,
-"status": "Pending"
-
-*/
-
 GStatus Player::statusFromString(string & string) {
 
 	transform(string.begin(), string.end(), string.begin(), ::tolower);
@@ -200,6 +180,9 @@ GStatus Player::statusFromString(string & string) {
 
 void Player::loadConfiguration(Json::Value config) {
 	// orientation not here yet
+	for (int i = 0; i < 5; ++i) {
+		moves[i] = false;
+	}
 	this->angle = config["angle"].asFloat();
 	this->height = config["height"].asFloat();
 	this->verticalComponent.height = this->height;
@@ -218,6 +201,16 @@ void Player::loadConfiguration(Json::Value config) {
 	this->percent = config["percent"].asInt();
 	this->stomach = config["stomach"].asInt();
 	this->status = statusFromString(config["status"].asString());
+	/*float SCORE_SCALE_RATIO;
+	float SCORE_MASS_RATIO;
+	bool moves[5];
+	bool isJumping;
+
+	int score;
+	int percent;
+	int stomach;
+	int burp_count;
+	GStatus status;*/
 }
 
 
