@@ -18,10 +18,10 @@ void GameEngine::calculatePercent(){
 	for (auto it = gstate->getPlayers().begin(); it != gstate->getPlayers().end(); ++it) {
 		int s = (*it)->getScore();
 		occupied = occupied + s;
-		int p = s / total;
+		int p = int(float(s) / total * 100.0);
 		//std::cout << (*it)->getId() << ": " << p << endl;
 		(*it)->setPercent(p);
-
+		//cout << "score = " << s << " total = " << total << " p = " << p << endl;
 		if (s > max){
 			max = s;
 			gstate->top = (*it);

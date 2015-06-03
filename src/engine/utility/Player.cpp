@@ -11,9 +11,10 @@ Player::Player(Model thebm, float radius, float theta, float azimuth, float dire
 	for (int i = 0; i < 5; ++i)
 		this->moves[i] = false;
 
-//	this->type = PLAYER;
+  	this->type = PLAYER;
 	this->isJumping = false;
 	this->score = 0;
+	this->percent = 0;
 	/*this->modelRadius = 7.f;
 	this->setMass(10.f);
 	this->height = 550.f;
@@ -128,6 +129,10 @@ void Player::collide(float dt, GameObject & target) {
                std::cout << this->getId() << " old score: " << this->getScore() << endl;
                this->setScore(this->getScore() + eatable->getPoints());
                std::cout << this->getId() << " new score: " << this->getScore() << endl;
+				float mass = this->getMass() / this->getMassScale();
+				this->setScale((this->getScore() + SCORE_SCALE_RATIO) / SCORE_SCALE_RATIO);
+				this->setMassScale((this->getScore() + SCORE_MASS_RATIO) / SCORE_MASS_RATIO);
+				this->setMass(mass * this->getMassScale());
             }
             else {
                std::cout << "Error: EATABLE is null: " << typeid(target).name() << endl;

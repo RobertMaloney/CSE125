@@ -34,6 +34,7 @@ protected:
 	quat orientation;
 	float angle;
 	float height;
+	float scale;
 
 	ObjectId id;
 	ObjectType type;
@@ -68,6 +69,8 @@ public:
 	float getAngle();
 	float getHeight();
 	void setHeight(float h);
+	float getScale();
+	void setScale(float);
 
 	void setModelHeight(float mheight);
 	float getModelHeight();
