@@ -144,6 +144,7 @@
     <ClInclude Include="graphics\HUD.h" />
     <ClInclude Include="graphics\MatrixNode.h" />
     <ClInclude Include="graphics\Node.h" />
+    <ClInclude Include="graphics\Particle2D.h" />
     <ClInclude Include="Graphics\Renderable.h" />
     <ClInclude Include="graphics\Shader.h" />
     <ClInclude Include="graphics\Skybox.h" />

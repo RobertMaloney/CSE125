@@ -2,6 +2,7 @@
 #include <iostream>
 #include <gtx\string_cast.hpp>
 #include "GameSound.h"
+#include "../graphics/GraphicsEngine.h"
 
 //TODO Config file
 Player::Player(Model thebm, float radius, float theta, float azimuth, float direction) : MoveableObject(radius, theta, azimuth, direction) {
@@ -99,7 +100,6 @@ void Player::integrate(float dt) {
 	MoveableObject::integrate(dt);
 }
 
-
 void Player::setJumping(bool b) {
 	this->isJumping = b;
 }
@@ -128,10 +128,12 @@ void Player::collide(float dt, GameObject & target) {
 				std::cout << this->getId() << " old score: " << this->getScore() << endl;
 				this->setScore(this->getScore() + eatable->getPoints());
 				std::cout << this->getId() << " new score: " << this->getScore() << endl;
-			} else {
+			}
+			else {
 				std::cout << "Error: EATABLE is null: " << typeid(target).name() << endl;
 			}
 			target.setVisible(false);
+		
 			//TODO Render needs to figure out (not) rendering dead/invisible object
 			break;
 	}

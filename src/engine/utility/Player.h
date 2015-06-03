@@ -16,7 +16,7 @@ protected:
 
 	bool moves[5];
 	bool isJumping;
-
+	bool ate;
    int score;
    int percent;
    GStatus status;
@@ -43,13 +43,17 @@ public:
 	void setMoving(int, bool);
 	void setJumping(bool b);
 	bool getJumping();
-
 	int getScore();
 	void setScore(int s);
+	bool getate(){
+		return ate;
+	}
 
+	void setate(bool b){
+		ate = b;
+	}
 	int getPercent();
 	void setPercent(int p);
-
 	GStatus getStatus();
 	void setStatus(GStatus s);
 

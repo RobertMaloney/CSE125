@@ -14,10 +14,14 @@
 #include "HUD.h"
 #include "Ground.h"
 #include "..\utility\GameSound.h"
+#include "Particle2D.h"
+#include <vector>
 
 using namespace std;
 
 // Graphics Engine Static Members
+const int MAX_PARTICLES = 200;
+static vector<Particle2D> p;
 vector<MatrixNode*> GraphicsEngine::m_objects;
 glm::mat4			GraphicsEngine::m_view, GraphicsEngine::m_projection;
 glm::vec2           GraphicsEngine::m_screen_scale;
@@ -69,11 +73,17 @@ GLuint				GraphicsEngine::m_menuId5 = 0;
 GLuint				GraphicsEngine::m_menuId6 = 0;
 GLuint				GraphicsEngine::m_menuId7 = 0;
 GLuint				GraphicsEngine::m_menuId8 = 0;
+GLuint				GraphicsEngine::m_starId = 0;
 
 int					GraphicsEngine::HUDW = 100;
 int					GraphicsEngine::HUDH = 100;
 int                 GraphicsEngine::B = 20; //used to change the size of the mini map :)
+int					GraphicsEngine::p1p = 0;
+int					GraphicsEngine::p2p = 0;
+int					GraphicsEngine::p3p = 0;
+int					GraphicsEngine::p4p = 0;
 
+Renderable			*GraphicsEngine::m_star = NULL;
 Renderable			*GraphicsEngine::m_skybox = NULL;
 Renderable			*GraphicsEngine::m_border = NULL;
 Renderable			*GraphicsEngine::m_plus = NULL;
@@ -81,6 +91,8 @@ Renderable			*GraphicsEngine::m_minus = NULL;
 Renderable			*GraphicsEngine::m_timer = NULL;
 Renderable			*GraphicsEngine::m_timer1 = NULL;
 Renderable			*GraphicsEngine::m_timer2 = NULL;
+Renderable			*GraphicsEngine::m_timer3 = NULL;
+Renderable			*GraphicsEngine::m_timer4 = NULL;
 
 Renderable			*GraphicsEngine::m_HUD1 = NULL;
 Renderable			*GraphicsEngine::m_HUD2 = NULL;
@@ -193,6 +205,7 @@ void GraphicsEngine::Initialize() {
 	m_menuId1 = HUD::makeHUD("../../media/texture/bg_start.png");//start start  
 	m_menu->setTextureId(m_menuId1);
 
+	m_star = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 
 	m_menuId2 = HUD::makeHUD("../../media/texture/bg_quit.png");//start quit   
 	m_menuId3 = HUD::makeHUD("../../media/texture/win_replay.png");//win replay  
@@ -201,7 +214,9 @@ void GraphicsEngine::Initialize() {
 	m_menuId6 = HUD::makeHUD("../../media/texture/lose_quit.png");//lose quit  TODO bug  
 	m_menuId7 = HUD::makeHUD("../../media/texture/bg_continue.png");//lose replay  
 	m_menuId8 = HUD::makeHUD("../../media/texture/bg_pausequit.png");//lose quit  TODO bug  
+	m_starId = HUD::makeHUD("../../media/texture/star1.png");//lose quit  TODO bug  
 
+	m_star->setTextureId(m_starId);
 
 	// WORLD
 	//m_textureShader->Use();
@@ -245,11 +260,14 @@ void GraphicsEngine::Initialize() {
 	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
 
 	m_initialized = true;
-
+	RenderParticle();
 	m_screen_scale = glm::vec2(2.0f, 2.0f);
 }
+
 void GraphicsEngine::RenderScore(int Player1, int Player2, int Player3, int Player4)
 {
+	//cout << Player1 << " " << Player2 << " " << Player3 << " " << Player4 << endl;
+
 	int Hud11, Hud12, Hud21, Hud22, Hud31, Hud32, Hud41, Hud42 = 0;
 
 	Hud11 = Player1 / 10;
@@ -293,6 +311,21 @@ void GraphicsEngine::RenderScore(int Player1, int Player2, int Player3, int Play
 	
 	m_HUDN41->setTextureId(FindTexuture(Hud41));
 	m_HUDN42->setTextureId(FindTexuture(Hud42));
+}
+
+void GraphicsEngine::RenderParticle()
+{
+if (p.size() < MAX_PARTICLES)
+{
+	for (int i = p.size(); i <= MAX_PARTICLES; i++)
+	{
+		Particle2D temp(800, 700);
+		p.push_back(temp);
+	}
+	printf("hereparticles");
+}
+
+
 }
 GLuint GraphicsEngine::FindTexuture(int id){
 
@@ -357,28 +390,28 @@ void GraphicsEngine::addHUD(){
 	m_HUDN11 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_HUDN11->setTextureId(m_HudIdSpa);
 	m_HUDN12 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
-	m_HUDN12->setTextureId(m_HudIdSpa);
+	m_HUDN12->setTextureId(m_HudIdN0);
 	m_HUDN13 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_HUDN13->setTextureId(m_HudIdPer);
 
 	m_HUDN21 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_HUDN21->setTextureId(m_HudIdSpa);
 	m_HUDN22 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
-	m_HUDN22->setTextureId(m_HudIdSpa);
+	m_HUDN22->setTextureId(m_HudIdN0);
 	m_HUDN23 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_HUDN23->setTextureId(m_HudIdPer);
 
 	m_HUDN31 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_HUDN31->setTextureId(m_HudIdSpa);
 	m_HUDN32 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
-	m_HUDN32->setTextureId(m_HudIdSpa);
+	m_HUDN32->setTextureId(m_HudIdN0);
 	m_HUDN33 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_HUDN33->setTextureId(m_HudIdPer);
 
 	m_HUDN41 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_HUDN41->setTextureId(m_HudIdSpa);
 	m_HUDN42 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
-	m_HUDN42->setTextureId(m_HudIdSpa);
+	m_HUDN42->setTextureId(m_HudIdN0);
 	m_HUDN43 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_HUDN43->setTextureId(m_HudIdPer);
 
@@ -407,6 +440,12 @@ void GraphicsEngine::addHUD(){
 
 	m_timer2 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_timer2->setTextureId(m_HudIdN0);
+
+	m_timer3 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
+	m_timer3->setTextureId(m_HudIdN0);
+
+	m_timer4 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
+	m_timer4->setTextureId(m_HudIdN0);
 }
 
 //TODO it is not working
@@ -488,7 +527,7 @@ void GraphicsEngine::DrawAndPoll() {
 	LightHandler::changePosition(m_sunLight, sunLightDir);
 
 	//Update HUD 
-	RenderScore(23, 9, 10, 50); 
+	RenderScore(p1p, p2p, p3p, p4p); //p,,b,g,o
 
 	// Update lights
 	LightHandler::updateLighting(m_defaultShader->Id());
@@ -498,6 +537,7 @@ void GraphicsEngine::DrawAndPoll() {
 	glUniform3fv(glGetUniformLocation(m_defaultShader->Id(), "camPos"), 1, glm::value_ptr(cameraData.second));
 
 	renderScene(m_scene, &identity);
+	
 
 
 	//Mini map
@@ -523,9 +563,8 @@ void GraphicsEngine::DrawAndPoll() {
 
 	renderScene(m_scene, &identity);
 
-
-	// HUD
 	glDepthMask(GL_FALSE);
+	// HUD
 	m_textureShader->Use();
 	renderHUD(width, height, identity);
 	glEnable(GL_DEPTH_TEST);
@@ -541,7 +580,34 @@ void GraphicsEngine::renderHUD(int width, int height, glm::mat4 & identity){
 	glOrtho(0, 0, 0, 0, 0, 1);
 	glUniform2fv(glGetUniformLocation(m_textureShader->Id(), "scale"), 1, glm::value_ptr(m_screen_scale));
 	glUniform1i(glGetUniformLocation(m_textureShader->Id(), "tex"), 0);
+	bool flag = false;
+	if (p.size() > 0)
+	{
 	
+	vector<Particle2D>::iterator i;
+	for (int i = 0 ; i <p.size();i++)
+	{
+		// If the particle time to live is more than zero...
+		if (p[i].getFramesToLive() > 0)
+		{
+			// ...update the particle position position and draw it.
+			p[i].update();
+			glViewport(p[i].getXLocation(), p[i].getYLocation(), 10, 10);
+			glClear(GL_DEPTH_BUFFER_BIT);
+			m_star->render(&identity);
+			flag = false;
+		}
+		else // // If it's time to destroy the particle...
+		{
+			flag = true;
+		}
+	}
+	if (flag == true)
+	{
+		p.clear();
+		RenderParticle();
+	}
+}
 	//HUD1
 	glViewport(0, height - HUDH, HUDW, HUDH);
 	glClear(GL_DEPTH_BUFFER_BIT);
@@ -638,12 +704,22 @@ void GraphicsEngine::renderHUD(int width, int height, glm::mat4 & identity){
 	glViewport(width - HUDW * 2 - HUDW / 2 - HUDW * 5/4, height - HUDH + HUDH / 4, HUDW * 5/4, HUDH * 3 / 4);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_timer->render(&identity);
-	glViewport(width - HUDW * 2 - HUDW / 2 - HUDW * 5 / 4, height - HUDH + HUDH / 4, (HUDW * 5 / 4 )/2, HUDH * 3 / 4);
+
+	glViewport(width - HUDW * 2 - HUDW / 2 - HUDW * 5 / 4, height - HUDH + HUDH / 4, (HUDW * 5 / 4 )/4, HUDH * 3 / 4);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_timer1->render(&identity);
-	glViewport(width - HUDW * 2 - HUDW / 2 - HUDW * 5 / 4 + ((HUDW * 5 / 4) / 2), height - HUDH + HUDH / 4, (HUDW * 5 / 4)/2, HUDH * 3 / 4);
+
+	glViewport(width - HUDW * 2 - HUDW / 2 - HUDW * 5 / 4 + ((HUDW * 5 / 4) / 4), height - HUDH + HUDH / 4, (HUDW * 5 / 4)/4, HUDH * 3 / 4);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_timer2->render(&identity);
+
+	glViewport(width - HUDW * 2 - HUDW / 2 - HUDW * 5 / 4 + (2*((HUDW * 5 / 4) / 4)), height - HUDH + HUDH / 4, (HUDW * 5 / 4) / 4, HUDH * 3 / 4);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_timer3->render(&identity);
+
+	glViewport(width - HUDW * 2 - HUDW / 2 - HUDW * 5 / 4 + (3*((HUDW * 5 / 4) / 4)), height - HUDH + HUDH / 4, (HUDW * 5 / 4) / 4, HUDH * 3 / 4);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_timer4->render(&identity);
 
 	glDisable(GL_BLEND);
 }
@@ -706,7 +782,6 @@ void GraphicsEngine::DrawAndPollMenu()
 void GraphicsEngine::renderScene(Node* node, glm::mat4* matrix) {
 	Geode *geode = node->asGeode();
 	MatrixNode *mnode = node->asMatrixNode();
-
 	if (geode) {
 		// render geode
 		m_defaultShader->Use();
@@ -827,6 +902,24 @@ void GraphicsEngine::updateObject(ObjectId objId, glm::quat & q, float angle, fl
 	//check for visible to invisible transition
 	if (old_visible != new_visible)
 		GameSound::nom->play(); //I play sound here because I want it to be client side only
+}
+
+void GraphicsEngine::updatePercent(Model m, int p) {
+	//cout << "p= " << p << endl;
+	switch (m){
+	case PB_TYPE:
+		p1p = p;
+		break;
+	case BB_TYPE:
+		p2p = p;
+		break;
+	case GB_TYPE:
+		p3p = p;
+		break;
+	case OB_TYPE:
+		p4p = p;
+		break;
+	}
 }
 
 //A mapping from ObjectId to node in scene graph
