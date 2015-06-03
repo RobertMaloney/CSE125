@@ -113,7 +113,7 @@ void GameServer::acceptWaitingClient() {
 	//Note: default position foor player is 505,0,0,0
 	ObjectId playerId = idGen->createId();
 
-	float radius = 505;
+	float radius = 500;
 	float theta = (float)(rand() % 180);
 	float azimuth = (float)(rand() % 360);
 	float direction = (float)(rand() % 360);

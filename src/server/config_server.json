@@ -18,7 +18,7 @@
    "player": {
       "orientation": null,
       "angle": 0,
-      "height": 505,
+      "height": 500,
       "type": "Player",
       "modelRadius": 6,
       "modelHeight": 6,
@@ -42,7 +42,8 @@
         "jumpForce": 5000,
         "moveForce": 75,
         "mass": 10,
-        "restitution": 1
+        "restitution": 1,
+        "points": 50
     },
 
     "moveable object": {
