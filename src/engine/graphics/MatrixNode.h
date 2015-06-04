@@ -23,6 +23,7 @@ private:
 	glm::mat4 m_matrix;
 	std::vector<Node*> m_children;
 	bool visible;
+	bool particle;
 
 public:
 	MatrixNode(){
@@ -72,6 +73,13 @@ public:
 	}
 	void setVisible(bool f){
 		visible = f;
+	}
+
+	bool getParticle(){
+		return particle;
+	}
+	void setParticle(bool f){
+		particle = f;
 	}
 
 	static glm::mat4 quatAngle(glm::quat & q, float angle, float height, float scale) {

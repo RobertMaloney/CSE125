@@ -1081,17 +1081,20 @@ Renderable * GraphicsEngine::selectModel(Model model){
 }
 
 // Translate from vec4 postion to matrix in the node of scene graph??
-void GraphicsEngine::updateObject(ObjectId objId, glm::quat & q, float angle, float height, float scale, bool f) {
-	bool old_visible = objNodeMap[objId]->getVisible();
+void GraphicsEngine::updateObject(ObjectId objId, glm::quat & q, float angle, float height, float scale, bool vf, bool pf) {
+	bool old_particle = objNodeMap[objId]->getParticle();
 	
 	objNodeMap[objId]->getMatrix() = MatrixNode::quatAngle(q, angle, height, scale);
-	objNodeMap[objId]->setVisible(f);
+	objNodeMap[objId]->setVisible(vf);
+	objNodeMap[objId]->setParticle(pf);
 
-	bool new_visible = objNodeMap[objId]->getVisible();
 
-	//check for visible to invisible transition
-	//if (old_visible != new_visible)
-		//GameSound::nom->play(); //I play sound here because I want it to be client side only
+	bool new_particle = objNodeMap[objId]->getParticle();
+
+	//check for particle transition
+	if (old_particle != new_particle)
+		spawnPSystem(objNodeMap[objId]->getMatrix());
+
 }
 
 void GraphicsEngine::updatePercent(Model m, int p) {
