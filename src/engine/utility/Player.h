@@ -8,8 +8,7 @@
 #include "../physics/MoveableObject.h"
 
 using namespace std;
-#define MAX_STOMACH_SIZE 100
-#define MAX_BURP_COUNT 5
+
 
 class Player : public MoveableObject {
 private:
@@ -19,6 +18,9 @@ protected:
 
 	float SCORE_SCALE_RATIO;
 	float SCORE_MASS_RATIO;
+	int MAX_BURP_COUNT;
+	int MAX_STOMACH_SIZE;
+
 	bool moves[5];
 	bool isJumping;
 

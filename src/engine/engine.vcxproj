@@ -106,6 +106,7 @@
     <ClCompile Include="GameServer.cpp" />
     <ClCompile Include="Graphics\GraphicsEngine.cpp" />
     <ClCompile Include="graphics\LightHandler.cpp" />
+    <ClCompile Include="graphics\Random.cpp" />
     <ClCompile Include="graphics\Shader.cpp" />
     <ClCompile Include="network\Packet.cpp" />
     <ClCompile Include="network\PacketHandler.cpp" />
@@ -146,6 +147,9 @@
     <ClInclude Include="graphics\HUD.h" />
     <ClInclude Include="graphics\MatrixNode.h" />
     <ClInclude Include="graphics\Node.h" />
+    <ClInclude Include="graphics\Particle3D.h" />
+    <ClInclude Include="graphics\Quad.h" />
+    <ClInclude Include="graphics\Random.h" />
     <ClInclude Include="Graphics\Renderable.h" />
     <ClInclude Include="graphics\Shader.h" />
     <ClInclude Include="graphics\Skybox.h" />

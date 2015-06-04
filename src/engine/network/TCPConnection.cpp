@@ -142,8 +142,9 @@ SocketError TCPConnection::receive() {
     }
     // Caclulate how much buffer space we have. If the buffer is small try to make it bigger
     int bytesAvail = receiveBuffer.capacity() - receiveBuffer.size();
-    if (bytesAvail < FREE_THRESHOLD && receiveBuffer.capacity() < MAX_SOCKET_BUFSIZ) {
+    while (bytesAvail < FREE_THRESHOLD && receiveBuffer.capacity() < MAX_SOCKET_BUFSIZ) {
         receiveBuffer.reserve(receiveBuffer.capacity() * 2);
+		bytesAvail = receiveBuffer.capacity() - receiveBuffer.size();
     }
     // save the old size since it's where we will append the first byte of new data
     uint32_t buffPosition = receiveBuffer.size();

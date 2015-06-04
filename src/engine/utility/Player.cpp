@@ -68,13 +68,13 @@ void Player::integrate(float dt) {
 	float forceScaleByMass = (log(this->getMass()) == 0) ? 1 : log(this->getMass());
 	float forceConst = this->moveForce * forceScaleByMass;
 
-	if (moves[RIGHT]) {
+	if (moves[RIGHT] && !(verticalComponent.height > 505.f)) {
 		float cosa = glm::cos(glm::radians(angle - 90.f));
 		float sina = glm::sin(glm::radians(angle - 90.f));
 		this->addForce(cosa * forceConst, sina * forceConst, 0.f);
 	}
 
-	if (moves[LEFT]) {
+	if (moves[LEFT] && !(verticalComponent.height > 505.f)) {
 		float cosa = glm::cos(glm::radians(angle + 90.f));
 		float sina = glm::sin(glm::radians(angle + 90.f));
 		this->addForce(cosa * forceConst, sina * forceConst, 0.f);
@@ -84,11 +84,11 @@ void Player::integrate(float dt) {
 	float cosa = glm::cos(glm::radians(angle));
 	float sina = glm::sin(glm::radians(angle));
 
-	if (moves[UP]) {
+	if (moves[UP] && !(verticalComponent.height > 505.f)) {
 		this->addForce(cosa * forceConst, sina * forceConst, 0.f);
 	}
 
-	if (moves[DOWN]) {
+	if (moves[DOWN] && !(verticalComponent.height > 505.f)) {
 		this->addForce(cosa * -forceConst, sina * -forceConst, 0.f);
 	}
 
@@ -122,17 +122,37 @@ void Player::collide(float dt, GameObject & target) {
 	  this->hit = true;
       break;
    case GAMEOBJECT:
-	   if (target.getType() != CLOUD) {
-		   this->velocity *= -1;
+	   if ((target.getModel() == ROCK_1 ||
+		   target.getModel() == ROCK_2 ||
+		   target.getModel() == ROCK_3 ||
+		   target.getModel() == ROCK_4 ||
+		   target.getModel() == TALL_ROCK_1 ||
+		   target.getModel() == TALL_ROCK_2 ||
+		   target.getModel() == TALL_ROCK_3) && this->getMass() < 20.f) {
+		   this->velocity *= -1.f;
 	   }
-      this->hit = true;
+	  
+      else
+      {
+         this->hit = true;
+      }
       break;
-   case IEATABLE:
-         {
+   case IEATABLE: {
+			if ((target.getModel() == ROCK_1 ||
+				 target.getModel() == ROCK_2 ||
+				 target.getModel() == ROCK_3 ||
+				 target.getModel() == ROCK_4 ||
+				 target.getModel() == TALL_ROCK_1 ||
+				 target.getModel() == TALL_ROCK_2 ||
+				 target.getModel() == TALL_ROCK_3) && this->getMass() < 20.f) {
+					this->velocity *= -1.f;
+					break;
+			}
 			this->eat = true;
            // std::cout << "EAT " << endl;
             IEatable* eatable = dynamic_cast<IEatable*>(&target);
             if (eatable) {
+				std::cout << " mass : " << this->getMass();
              //  std::cout << this->getId() << " old score: " << this->getScore() << endl;
                this->setScore(this->getScore() + eatable->getPoints());
             //   std::cout << this->getId() << " new score: " << this->getScore() << endl;
@@ -153,9 +173,9 @@ void Player::collide(float dt, GameObject & target) {
          this->eat = true;
          IEatable* eatable = dynamic_cast<IEatable*>(&target);
          if (eatable) {
-            std::cout << this->getId() << " old score: " << this->getScore() << endl;
+         //   std::cout << this->getId() << " old score: " << this->getScore() << endl;
             this->setScore(this->getScore() + eatable->getPoints());
-            std::cout << this->getId() << " new score: " << this->getScore() << endl;
+        //    std::cout << this->getId() << " new score: " << this->getScore() << endl;
             float mass = this->getMass() / this->getMassScale();
             this->setScale((this->getScore() + SCORE_SCALE_RATIO) / SCORE_SCALE_RATIO);
             this->setMassScale((this->getScore() + SCORE_MASS_RATIO) / SCORE_MASS_RATIO);
@@ -176,7 +196,7 @@ void Player::collide(float dt, GameObject & target) {
                this->setJumpForce(this->getJumpForce() + powerUp->getJumpForce());
                this->setMoveForce(this->getMoveForce() + powerUp->getMoveForce());
 
-               float newMass = this->getMass() + powerUp->getMass();
+               float newMass = this->getMass() * powerUp->getMass();
                if (newMass > 10.f) this->setMass(newMass);
             }
             target.setVisible(false);
@@ -204,6 +224,11 @@ void Player::loadConfiguration(Json::Value config) {
 	for (int i = 0; i < 5; ++i) {
 		moves[i] = false;
 	}
+
+	this->velocity *= 0.f;
+	this->velocity += 0.0001f;
+	this->acceleration *= 0.f;
+	this->forceAccum *= 0.f;
 	this->angle = obj["angle"].asFloat();
 	this->height = obj["height"].asFloat();
 	this->verticalComponent.height = this->height;
@@ -216,12 +241,20 @@ void Player::loadConfiguration(Json::Value config) {
 	this->moveForce = obj["moveForce"].asFloat();
 	this->inverseMass = 1.f / obj["mass"].asFloat();
 	this->restitution = obj["restitution"].asFloat();
-	this->burp_count = obj["burp_count"].asInt();
+	this->burp_count = obj["burp count"].asInt();
 	this->isJumping = obj["isJumping"].asBool();
 	this->score = obj["score"].asInt();
 	this->percent = obj["percent"].asInt();
 	this->stomach = obj["stomach"].asInt();
 	this->status = statusFromString(obj["status"].asString());
+	this->scale = obj["scale"].asFloat();
+	this->coefficientFriction = obj["coefficientFriction"].asFloat();
+
+	// Loading of "constants"
+	this->SCORE_SCALE_RATIO = obj["score scale ratio"].asFloat();
+	this->SCORE_MASS_RATIO = obj["score mass ratio"].asFloat();
+	this->MAX_BURP_COUNT = obj["max burp count"].asInt();
+	this->MAX_STOMACH_SIZE = obj["max stomach size"].asInt();
 
 }
 
@@ -253,14 +286,14 @@ void Player::deserialize(Packet & p) {
 		//std::cout << "newscore: " << newscore << "oldscore:" << oldscore << std::endl;
 		//std::cout << "stomach:" << stomach << std::endl;
 		stomach = stomach + newscore - oldscore;
-		std::cout << "stomach:" << stomach << std::endl;
+	//	std::cout << "stomach:" << stomach << std::endl;
 	}
 	//check if need to burp
 	//stomach = stomach + newscore - oldscore;
 	//std::cout << "stomach:" << stomach << std::endl;
 	if (stomach >= MAX_STOMACH_SIZE) {
 		burp_count += 1;
-		std::cout << "should burp" << std::endl;
+		//std::cout << "should burp" << std::endl;
 		if (burp_count < MAX_BURP_COUNT) {
 		GameSound::regburp->play();
 		}

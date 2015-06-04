@@ -10,6 +10,11 @@
 	"graphics": {
 		"width": 1200,
 		"height": 900
+	},
+	"particles": {
+		"velocity": [2, 15],
+		"acceleration": [2, 15],
+		"life": [1, 2],
+		"size": [0.5, 2.5]
 	}
-
 }

@@ -113,5 +113,5 @@ void GameState::reset(ObjectId clientId) {
 		this->resetting = true;
 		clients.clear();
 	}
-	std::cout << "Reset : " << clientId << std::endl;
+//	std::cout << "Reset : " << clientId << std::endl;
 }

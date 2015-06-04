@@ -3,37 +3,44 @@
     "fps": 60,
     "ip": "127.0.0.1",
     "port": "9000",
-   "num resources": 500,
-    "num clouds": 100,
+    "num resources": 1000,
+    "num clouds": 10,
     "num pills": 2,
 
     "physics engine": {
         "gravity": 100,
         "drag": {
-            "k1": 1,
-            "k2": 1
+            "k1": 10,
+            "k2": 10
         }
     },
 
     "player": {
         "orientation": null,
         "angle": 0,
-      "height": 500,
+		"height": 500,
         "type": "Player",
         "modelRadius": 6,
         "modelHeight": 6,
         "visible": true,
         "angleSpeed": 2,
-        "jumpForce": 30000,
-        "moveForce": 50,
+        "jumpForce": 25000,
+        "moveForce": 200,
         "mass": 10,
         "restitution": 1,
-        "burp_count": 0,
+        "burp count": 0,
         "isJumping": false,
         "score": 0,
         "percent": 0,
+		"scale": 1,
         "stomach": 0,
-        "status": "Pending"
+        "status": "Pending",
+		"coefficientFriction": 0.2,
+		
+		"score scale ratio": 250,
+		"score mass ratio": 750,
+		"max burp count": 1000,
+		"max stomach size": 100
     },
 
    "bird": {

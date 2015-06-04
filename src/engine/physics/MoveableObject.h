@@ -52,6 +52,9 @@ public:
 	void setAngleSpeed(float speed);
 	float getAngleSpeed();
 
+	float getFrictionCoefficient();
+	void setFrictionCoefficient(float coeff);
+
 	VerticalMovement & getVerticalComponent();
 
 	vec3 rotateInXYPlane(vec3 original, float radians);
@@ -62,6 +65,7 @@ public:
 
 protected:
 
+	float coefficientFriction;
 	float angleSpeed;
 	float jumpForce;
 	float moveForce;
