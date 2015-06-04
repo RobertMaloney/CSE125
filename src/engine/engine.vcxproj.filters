@@ -83,6 +83,8 @@
     <ClInclude Include="physics\Collidable.h" />
     <ClInclude Include="utility\Configurable.h" />
     <ClInclude Include="utility\GameSound.h" />
+    <ClInclude Include="graphics\Particle3D.h" />
+    <ClInclude Include="graphics\Quad.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

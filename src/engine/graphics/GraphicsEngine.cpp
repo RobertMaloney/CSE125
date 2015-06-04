@@ -14,11 +14,14 @@
 #include "HUD.h"
 #include "Ground.h"
 #include "..\utility\GameSound.h"
+#include "Particle3D.h"
+#include "Quad.h"
 
 using namespace std;
 
 // Graphics Engine Static Members
 vector<MatrixNode*> GraphicsEngine::m_objects;
+std::vector<ParticleSystem*> GraphicsEngine::m_psystems;
 glm::mat4			GraphicsEngine::m_view, GraphicsEngine::m_projection;
 glm::vec2           GraphicsEngine::m_screen_scale;
 bool				GraphicsEngine::m_initialized = false;
@@ -31,6 +34,7 @@ KeyCallback			GraphicsEngine::m_keyCallback = NULL;
 MatrixNode			*GraphicsEngine::m_player = NULL,
 
 *GraphicsEngine::m_scene = NULL;
+Renderable			*GraphicsEngine::m_quad = NULL;
 
 CameraNode			*GraphicsEngine::m_mainCamera = NULL;
 CameraNode			*GraphicsEngine::m_minimapCamera = NULL;
@@ -219,6 +223,8 @@ void GraphicsEngine::Initialize() {
 	worldGeode->setTex(true);
 	m_scene->addChild(worldGeode);
 
+	// Particle quad
+	m_quad = new Quad(0.5f, glm::vec3(1));
 
 	// CAMERA
 	glm::mat4 camview = glm::lookAt(
@@ -467,6 +473,11 @@ void GraphicsEngine::DrawAndPoll() {
 		((float)width) / height,
 		0.1f, 1000.f);
 
+	for (auto it = m_psystems.begin(); it != m_psystems.end(); ++it) {
+		(*it)->simulate(glfwGetTime());
+	}
+	glfwSetTime(0.0); // reset for next frame
+
 	MatrixData cameraData = m_mainCamera->getFlatViewMatrix();
 	glm::mat4 view = cameraData.flattened;
 	glm::mat4 skybox_view = glm::scale(glm::mat4(glm::mat3(cameraData.flattened)), glm::vec3(1) / cameraData.scale); // try optimizing later
@@ -711,6 +722,7 @@ void GraphicsEngine::DrawAndPollMenu()
 void GraphicsEngine::renderScene(Node* node, glm::mat4* matrix) {
 	Geode *geode = node->asGeode();
 	MatrixNode *mnode = node->asMatrixNode();
+	ParticleSystem *psystem = node->asPSystem();
 
 	if (geode) {
 		// render geode
@@ -724,6 +736,13 @@ void GraphicsEngine::renderScene(Node* node, glm::mat4* matrix) {
 
 		}
 		geode->getRenderable()->render(matrix);
+	}
+	else if (psystem) {
+		// render particles
+		m_defaultShader->Use();
+		glUniform1f(glGetUniformLocation(m_defaultShader->Id(), "hasTex"), 1);
+		glUniform1i(glGetUniformLocation(m_defaultShader->Id(), "tex"), 0);
+		psystem->render(*matrix);
 	}
 	else if (mnode && mnode->getVisible()) {
 		int numChildren = mnode->getNumChildren();
@@ -871,4 +890,13 @@ void GraphicsEngine::removeObject(ObjectId objId) {
 
 void GraphicsEngine::setCursor(int state) {
 	glfwSetInputMode(m_window, GLFW_CURSOR, state);
+}
+
+void GraphicsEngine::spawnPSystem(glm::mat4 &matrix) {
+	ParticleSystem* ps = new ParticleSystem(20, m_quad, m_HudIdPer);
+	MatrixNode* pm = new MatrixNode();
+	pm->setMatrix(matrix);
+	pm->addChild(ps);
+	m_scene->addChild(pm);
+	m_psystems.push_back(ps);
 }

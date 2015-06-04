@@ -166,5 +166,9 @@ public:
 	void setIsSkybox(bool v){
 		isSkybox = v;
 	}
+
+	static Renderable* makeRenderable(GLfloat* vdata) {
+
+	}
 };
 #endif
