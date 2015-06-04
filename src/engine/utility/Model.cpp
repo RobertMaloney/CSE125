@@ -19,7 +19,8 @@ std::map<Model, std::string> ResourceMap::map = {
       { ROCK_4, "rock4" },
       { TALL_ROCK_1, "rock5" },
       { TALL_ROCK_2, "rock6" },
-      { TALL_ROCK_3, "rock7" }
+      { TALL_ROCK_3, "rock7" },
+      { BUNNY, "bunny" }
 };
 
 std::string ResourceMap::getObjFile(Model rm)
@@ -30,4 +31,14 @@ std::string ResourceMap::getObjFile(Model rm)
 std::string ResourceMap::getMatlFile(Model rm)
 {
    return std::string(map[rm]) + ".matl";
+}
+
+
+Model ResourceMap::getModelFromString(std::string m) {
+	transform(m.begin(), m.end(), m.begin(), ::tolower);
+	for (auto it = map.begin(); it != map.end(); ++it) {
+		if (m == it->second){
+			return it->first;
+		}
+	}
 }

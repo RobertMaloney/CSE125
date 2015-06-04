@@ -4,8 +4,8 @@
     "ip": "127.0.0.1",
     "port": "9000",
    "num resources": 500,
-   "num clouds": 40,
-   "num pills": 30,
+    "num clouds": 100,
+    "num pills": 2,
 
     "physics engine": {
         "gravity": 100,
@@ -18,16 +18,38 @@
     "player": {
         "orientation": null,
         "angle": 0,
-        "height": 505,
+      "height": 500,
         "type": "Player",
         "modelRadius": 6,
         "modelHeight": 6,
         "visible": true,
         "angleSpeed": 2,
-        "jumpForce": 15000,
-        "moveForce": 100,
+        "jumpForce": 30000,
+        "moveForce": 50,
         "mass": 10,
-        "restitution": 1
+        "restitution": 1,
+        "burp_count": 0,
+        "isJumping": false,
+        "score": 0,
+        "percent": 0,
+        "stomach": 0,
+        "status": "Pending"
+    },
+
+   "bunny": {
+        "orientation": null,
+        "angle": 0,
+        "height": 505,
+        "type": "NPC",
+        "modelRadius": 3,
+        "modelHeight": 3,
+        "visible": true,
+        "angleSpeed": 2,
+        "jumpForce": 5000,
+        "moveForce": 75,
+        "mass": 10,
+        "restitution": 1,
+        "points": 50
     },
 
     "moveable object": {
@@ -37,7 +59,11 @@
         "type": "MoveableObject",
         "modelRadius": 1,
         "modelHeight": 1,
-        "visible":  true,
+        "visible": true,
+        "eat": false,
+        "hit": false,
+        "scale": 1,
+        "model": "tree",
         "angleSpeed": 1,
         "jumpForce": 80000,
         "moveForce": 1000,
@@ -52,7 +78,10 @@
         "type": "GameObject",
         "modelRadius": 1,
         "modelHeight": 1,
-        "visible":  true
+        "visible": true,
+        "eat": false,
+        "hit": false,
+        "scale": 1,
+        "model": "tree"
     }
-
 }

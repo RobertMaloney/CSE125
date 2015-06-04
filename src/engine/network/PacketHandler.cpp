@@ -66,6 +66,11 @@ void stopJumpHandler(ObjectId id, Packet & p) {
 }
 
 
+void replayHandler(ObjectId id, Packet & p) {
+	GameState::getInstance().reset(id);
+}
+
+
 PacketHandler::PacketHandler(){
 	eventHandlers[EventType::MOVE_FORWARD] = EventHandler(forwardHandler);
 	eventHandlers[EventType::MOVE_BACKWARD] = EventHandler(backwardHandler);
@@ -80,6 +85,7 @@ PacketHandler::PacketHandler(){
 	eventHandlers[EventType::STOP_JUMP] = EventHandler(stopJumpHandler);
 
 	eventHandlers[EventType::LOOK] = EventHandler(lookHandler);
+	eventHandlers[EventType::REPLAY] = EventHandler(replayHandler);
 }
 
 

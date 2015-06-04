@@ -10,3 +10,7 @@ Resource::Resource(Model rm, float radius, float theta, float azimuth, float dir
    this->rm = rm;
 }
 
+
+void Resource::loadConfiguration(Json::Value config) {
+	
+}

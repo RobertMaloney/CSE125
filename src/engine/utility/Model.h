@@ -3,6 +3,9 @@
 
 #include <map>
 #include <string>
+#include <algorithm>
+
+using std::transform;
 
 enum Model {
    OB_TYPE,
@@ -22,14 +25,17 @@ enum Model {
    ROCK_4,
    TALL_ROCK_1,
    TALL_ROCK_2,
-   TALL_ROCK_3
+   TALL_ROCK_3,
+   BUNNY
 };
 
 class ResourceMap {
 private:
-   static std::map<Model, std::string> map;
+	static std::map<Model, std::string> map;
 
 public:
+
+	static Model getModelFromString(std::string  m);
    static std::string getObjFile(Model rm);
    static std::string getMatlFile(Model rm);
 };

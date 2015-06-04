@@ -17,7 +17,14 @@ class EatableResource : public Resource, public IEatable {
 
 		virtual ~EatableResource() { };
 
+
+
 	public:
+
+		void loadConfiguration(Json::Value config) {
+			
+		}
+
 		int getPoints(){
 			return this->points;
 		}
@@ -212,9 +219,9 @@ public:
 
 class Pill : public PowerUpResource {
 public:
-   Pill() : PowerUpResource(5000, 20, -10, PILL) {};
+   Pill() : PowerUpResource(0, 0, -100, PILL) {};
    Pill(float radius, float theta, float azimuth, float direction) :
-      PowerUpResource(5000, 20, -10, PILL, radius, theta, azimuth, direction){};
+      PowerUpResource(0, 0, -100, PILL, radius, theta, azimuth, direction){};
 
    virtual ~Pill() { };
 };

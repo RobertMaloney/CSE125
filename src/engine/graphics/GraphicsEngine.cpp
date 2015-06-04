@@ -1,8 +1,6 @@
-//#include <Windows.h>
 
 #include "GraphicsEngine.h"
 
-//#include "..\utility\ObjectDB.h"
 #include "..\graphics\Cube.h"
 #include "..\graphics\Geometry.h"
 #include "..\utility\System.h"
@@ -228,7 +226,7 @@ void GraphicsEngine::Initialize() {
 
 	// CAMERA
 	glm::mat4 camview = glm::lookAt(
-		glm::vec3(0.f, 24.f, 16.f),
+      glm::vec3(0.f, 25.f, 16.f),
 		glm::vec3(0.f, 0.f, 0.f),
 		glm::vec3(0.f, 0.f, 1.f));
 	m_mainCamera = new CameraNode();
@@ -396,7 +394,7 @@ void GraphicsEngine::addHUD(){
 	m_HUDN43 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_HUDN43->setTextureId(m_HudIdPer);
 
-
+	/*
 	//Mini map border
 	m_border = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_borderId = HUD::makeHUD("../../media/texture/border.png");
@@ -410,7 +408,7 @@ void GraphicsEngine::addHUD(){
 	m_minus = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_minusId = HUD::makeHUD("../../media/texture/minus.png");
 	m_minus->setTextureId(m_minusId);
-
+	*/
 	// Timer
 	m_timer = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_timerId = HUD::makeHUD("../../media/texture/timer.png");
@@ -634,7 +632,7 @@ void GraphicsEngine::renderHUD(int width, int height, glm::mat4 & identity){
 	glViewport(0 + HUDW + second, height - HUDH - HUDH - HUDH - HUDH, HUDW / 3, HUDH);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN43->render(&identity);
-
+	/*
 	//HUD on top of minimap
 	glViewport(width - HUDW * 2, height - HUDH * 2, HUDW * 2, HUDH * 2);
 	glClear(GL_DEPTH_BUFFER_BIT);
@@ -649,18 +647,18 @@ void GraphicsEngine::renderHUD(int width, int height, glm::mat4 & identity){
 	glViewport(width - HUDW * 2 - HUDW / 2, height - HUDH , HUDW / 2, HUDH / 2);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_minus->render(&identity);
-
+*/
 	// Timer
-	glViewport(width - HUDW * 2 - HUDW / 2 - HUDW * 5/4, height - HUDH + HUDH / 4, HUDW * 5/4, HUDH * 3 / 4);
+	/*glViewport(width - HUDW * 2 - HUDW / 2 - HUDW * 5/4, height - HUDH + HUDH / 4, HUDW * 5/4, HUDH * 3 / 4);
 	glClear(GL_DEPTH_BUFFER_BIT);
-	m_timer->render(&identity);
+	m_timer->render(&identity);*/
 	glViewport(width - HUDW * 2 - HUDW / 2 - HUDW * 5 / 4, height - HUDH + HUDH / 4, (HUDW * 5 / 4 )/2, HUDH * 3 / 4);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_timer1->render(&identity);
 	glViewport(width - HUDW * 2 - HUDW / 2 - HUDW * 5 / 4 + ((HUDW * 5 / 4) / 2), height - HUDH + HUDH / 4, (HUDW * 5 / 4)/2, HUDH * 3 / 4);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_timer2->render(&identity);
-
+	
 	glDisable(GL_BLEND);
 }
 
