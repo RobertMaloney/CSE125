@@ -36,11 +36,20 @@ public:
 	ParticleSystem(int numParticles, Renderable* geo, GLuint tex) {
 		assert(numParticles > 0);
 
+		glm::vec3 colors[] = {
+			glm::vec3(1.f, 0.f, 0.f),
+			glm::vec3(1.f, 0.5f, 0.f),
+			glm::vec3(1.f, 1.f, 0.f),
+			glm::vec3(0.f, 1.f, 0.f),
+			glm::vec3(0.f, 0.f, 1.f),
+			glm::vec3(0.29f, 0.f, 0.51f),
+			glm::vec3(0.56f, 0.f, 1.f), };
+
 		for (int i = 0; i < numParticles; ++i) { // random on unit circle for now
 			Particle3D p;
 			p.position = Random::ballRand(Random::linearRand(0.5f, 0.5f));
 			p.velocity = Random::ballRand(Random::linearRand(Config::settings["particles"]["velocity"][0].asFloat(), Config::settings["particles"]["velocity"][1].asFloat()));
-			p.color = glm::vec3(1);
+			p.color = colors[i % 7];
 			p.life = Random::linearRand(Config::settings["particles"]["life"][0].asFloat(), Config::settings["particles"]["life"][1].asFloat());
 			p.size = Random::linearRand(Config::settings["particles"]["size"][0].asFloat(), Config::settings["particles"]["size"][1].asFloat());
 			m_particles.push_back(p);
@@ -97,8 +106,12 @@ public:
 		particleGraphic->setTextureId(texId);
 		particleGraphic->setIsSkybox(false);
 
+
 		glm::mat4 tmp;
+		int colorIndex = 0;
 		for (auto it = m_particles.begin(); it != m_particles.end(); ++it) {
+			glUniform3fv(glGetUniformLocation(shaderId, "colorOverride"), 1, glm::value_ptr(it->color));
+			colorIndex = (colorIndex + 1) % 4;
 			glUniform1f(glGetUniformLocation(shaderId, "billboardScale"), it->size);
 			tmp = glm::translate(transform, it->position);
 			particleGraphic->render(&tmp);
