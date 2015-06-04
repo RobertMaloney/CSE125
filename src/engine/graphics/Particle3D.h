@@ -17,6 +17,7 @@
 struct Particle3D {
 	glm::vec3 position;
 	glm::vec3 velocity;
+	glm::vec3 acceleration;
 	glm::vec3 color;
 	float size;
 	float life;
@@ -49,6 +50,7 @@ public:
 			Particle3D p;
 			p.position = Random::ballRand(Random::linearRand(0.5f, 0.5f));
 			p.velocity = Random::ballRand(Random::linearRand(Config::settings["particles"]["velocity"][0].asFloat(), Config::settings["particles"]["velocity"][1].asFloat()));
+			p.acceleration = glm::vec3(0, 0, Random::linearRand(Config::settings["particles"]["acceleration"][0].asFloat(), Config::settings["particles"]["acceleration"][1].asFloat()));
 			p.color = colors[i % 7];
 			p.life = Random::linearRand(Config::settings["particles"]["life"][0].asFloat(), Config::settings["particles"]["life"][1].asFloat());
 			p.size = Random::linearRand(Config::settings["particles"]["size"][0].asFloat(), Config::settings["particles"]["size"][1].asFloat());
@@ -79,7 +81,8 @@ public:
 			p.life -= timeElapsed;
 			if (p.life < 0) it = m_particles.erase(it);
 			else {
-				p.position += p.velocity * timeElapsed;
+				p.velocity += p.acceleration * timeElapsed;
+				p.position += p.velocity * timeElapsed + 0.5f * p.acceleration * timeElapsed * timeElapsed;
 				++it;
 			}
 		}
