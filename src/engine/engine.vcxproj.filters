@@ -31,6 +31,7 @@
     <ClCompile Include="utility\jsoncpp.cpp" />
     <ClCompile Include="utility\Config.cpp" />
     <ClCompile Include="utility\GameSound.cpp" />
+    <ClCompile Include="graphics\Random.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameClient.h" />
@@ -85,6 +86,7 @@
     <ClInclude Include="utility\GameSound.h" />
     <ClInclude Include="graphics\Particle3D.h" />
     <ClInclude Include="graphics\Quad.h" />
+    <ClInclude Include="graphics\Random.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

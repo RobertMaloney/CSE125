@@ -11,6 +11,7 @@
 #include "Node.h"
 #include "HUD.h"
 #include "Quad.h"
+#include "Random.h"
 
 struct Particle3D {
 	glm::vec3 position;
@@ -26,17 +27,6 @@ private:
 	Renderable* particleGraphic;
 	GLuint texId;
 
-	glm::vec3 ballRand(float r, float angle0, float angle1) { // because glm random is being a bitch
-		glm::vec3 result(r, 0, 0);
-		return glm::quat(glm::vec3(0, angle0, angle1)) * result;
-	}
-
-	float linearRand(float min, float max) { // because glm random is being a bitch
-		std::default_random_engine gen;
-		std::uniform_real_distribution<float> distribution(min, max);
-		return distribution(gen);
-	}
-
 public:
 	ParticleSystem(int numParticles, Renderable* geo, GLuint tex) {
 		assert(numParticles > 0);
@@ -47,9 +37,9 @@ public:
 		for (int i = 0; i < numParticles; ++i) { // random on unit circle for now
 			Particle3D p;
 			p.position = glm::vec3(0);
-			p.velocity = ballRand(dist1(gen), dist0(gen), dist0(gen));
+			p.velocity = Random::ballRand(Random::linearRand(2.f, 5.f));
 			p.color = glm::vec3(1);
-			p.life = dist1(gen);
+			p.life = Random::linearRand(1.f, 3.f);
 			p.size = 1.f;
 			m_particles.push_back(p);
 		}
