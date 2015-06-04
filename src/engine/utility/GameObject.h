@@ -46,6 +46,7 @@ protected:
 	ObjectType typeFromString(string typeName);
 
 	bool visible;
+	bool particle;
 
 	// Model
 	Model rm = TREE;
@@ -82,6 +83,9 @@ public:
 
 	bool getVisible();
 	void setVisible(bool v);
+
+	bool getParticle();
+	void setParticle(bool v);
 
 	bool getEat();
 	bool getHit();

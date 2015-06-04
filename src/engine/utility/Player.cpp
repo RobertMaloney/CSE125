@@ -165,6 +165,7 @@ void Player::collide(float dt, GameObject & target) {
               // std::cout << "Error: EATABLE is null: " << typeid(target).name() << endl;
             }
             target.setVisible(false);
+			target.setParticle(true);
             //TODO Render needs to figure out (not) rendering dead/invisible object
          }
 			break;
@@ -185,6 +186,7 @@ void Player::collide(float dt, GameObject & target) {
             std::cout << "Error: EATABLE is null: " << typeid(target).name() << endl;
          }
          target.setVisible(false);
+		 target.setParticle(true);
       }
       break;
    case POWERUP:
@@ -200,6 +202,7 @@ void Player::collide(float dt, GameObject & target) {
                if (newMass > 10.f) this->setMass(newMass);
             }
             target.setVisible(false);
+			target.setParticle(true);
          }
          break;
 	}
@@ -236,6 +239,8 @@ void Player::loadConfiguration(Json::Value config) {
 	this->modelRadius = obj["modelRadius"].asFloat();
 	this->modelHeight = obj["modelHeight"].asFloat();
 	this->visible = obj["visible"].asBool();
+	this->particle = obj["particle"].asBool();
+
 	this->angleSpeed = obj["angleSpeed"].asFloat();
 	this->jumpForce = obj["jumpForce"].asFloat();
 	this->moveForce = obj["moveForce"].asFloat();
