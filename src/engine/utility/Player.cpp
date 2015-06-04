@@ -202,7 +202,6 @@ void Player::loadConfiguration(Json::Value config) {
 	this->score = obj["score"].asInt();
 	this->percent = obj["percent"].asInt();
 	this->stomach = obj["stomach"].asInt();
-	std::cout << obj["status"].asString() << std::endl;
 	this->status = statusFromString(obj["status"].asString());
 
 }

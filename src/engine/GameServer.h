@@ -51,6 +51,7 @@ public:
 	void stop();
 	void reset();
     void initialize();
+	void loadConfiguration(Json::Value & values);
 
     void tick();
 	void getUpdates(vector<Packet> & updates);

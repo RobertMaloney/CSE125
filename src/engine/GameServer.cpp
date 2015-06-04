@@ -28,33 +28,38 @@ GameServer::~GameServer() {
 }
 
 
-void GameServer::initialize() {
-	Socket::initialize();
+void GameServer::loadConfiguration(Json::Value & values) {
 	Json::Reader reader;
 	ifstream inStream;
 	inStream.open("../server/config_server.json");
 
-	if (!reader.parse(inStream, configFile, true)) {
+	if (!reader.parse(inStream, values, true)) {
 		inStream.close();
 		cerr << "Problem parsing json config file" << endl;
 		throw runtime_error("Problem parsing json config.");
 	}
 	inStream.close();
-
 	maxConnections = configFile["max players"].asInt();
-	TIME_PER_FRAME = (long long) (1000000.f / configFile["fps"].asFloat());
-	PHYSICS_DT = (float) (TIME_PER_FRAME / 1000000.f);
+	TIME_PER_FRAME = (long long)(1000000.f / configFile["fps"].asFloat());
+	PHYSICS_DT = (float)(TIME_PER_FRAME / 1000000.f);
+}
+
+
+void GameServer::initialize() {
+	Socket::initialize();
+
+	this->loadConfiguration(configFile);
 
 	this->listener = new TCPListener();
 	this->listener->bind(configFile["ip"].asString(), configFile["port"].asString());
 	this->listener->listen(maxConnections);
 	this->listener->setNonBlocking(true);
 
-	physics->loadConfiguration(configFile["physics engine"]);
+	physics->loadConfiguration(configFile);
 	
 	gameState->initWithServer(configFile);
-   engine->generateResources(configFile["num resources"].asInt(),
-      configFile["num clouds"].asInt(), configFile["num pills"].asInt());
+	engine->generateResources(configFile["num resources"].asInt(),
+		configFile["num clouds"].asInt(), configFile["num pills"].asInt());
 }
 
 
@@ -65,7 +70,6 @@ void GameServer::run() {
 
 	while (running) {
 		start = high_resolution_clock::now();
-		// try to allow a new player to join
 
 		if (clients->size() < maxConnections) {
 			this->acceptWaitingClient();
@@ -79,23 +83,27 @@ void GameServer::run() {
 		//calculates the ms from start until here.
 		elapsedTime = chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count();
 		if (elapsedTime > TIME_PER_FRAME) {  // this is so know if we need to slow down the loop
-		//	cerr << "Server loop took long than a frame." << endl;
+			cerr << "Server loop took long than a frame." << endl;
+			cout << "dustyplanet:-$ ";
 		}
 
 		sleep_for(microseconds(TIME_PER_FRAME - elapsedTime));
-
 	}
 }
+
 
 void GameServer::stop() {
 	running = false;
 }
 
+
 void GameServer::reset() {
 	serverLock.lock();
+	this->loadConfiguration(configFile);
 	gameState->setResetting(true);
 	serverLock.unlock();
 }
+
 
 void GameServer::acceptWaitingClient() {
 	Packet response;
@@ -126,6 +134,7 @@ void GameServer::acceptWaitingClient() {
 	connection->send(initial);
 }
 
+
 void GameServer::getUpdates(vector<Packet> & updates) {
 	Packet p;
 	vector<GameObject*> & changed = physics->getChangedObjects();
@@ -135,6 +144,7 @@ void GameServer::getUpdates(vector<Packet> & updates) {
 		p.clear();
 	}
 }
+
 
 void GameServer::tick() {
 	vector<Packet> updates;

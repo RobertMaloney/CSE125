@@ -17,7 +17,7 @@ class GameState
 {
 protected:
 
-	Json::Value configFile;
+
 	ObjectDB * map;
 	vector<Player*> players;
     vector<Resource *> resources;
@@ -41,6 +41,7 @@ public:
 	int getTotal();
 	void setTotal(int t);
 	
+	void setConfiguration(Json::Value & values);
 	void reset(ObjectId clientId);
 	bool isResetting();
 	void setResetting(bool b);
