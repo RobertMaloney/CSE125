@@ -96,7 +96,7 @@ private:
 	static CameraNode				*m_mainCamera;
 	static CameraNode				*m_minimapCamera;
 	static MatrixNode				*m_scene;
-	static Renderable				*m_quad;
+	static Renderable				*m_quad, *m_cube;
 	static int						HUDW;
 	static int                      HUDH;
 	static int                      B;

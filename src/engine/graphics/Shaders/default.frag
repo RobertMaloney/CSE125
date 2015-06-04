@@ -7,6 +7,7 @@ out vec4 outColor;
 
 uniform sampler2D tex;
 uniform float hasTex;
+uniform int billboard;
 
 uniform vec3 camPos;
 
@@ -34,9 +35,12 @@ void main()
 {
 
 	vec3 inColor = Color;
+	float transparency = 1;
 
 	if(hasTex != 0){
-		inColor = vec3(texture(tex, TexCoord));
+		vec4 t = texture(tex, TexCoord);
+		inColor = vec3(t);
+		transparency = t.a;
 	}
 
 	vec3 color = vec3(0);
@@ -74,7 +78,7 @@ void main()
 		color += inColor * (diffuse + ambient + specular);
 	}
 
-	outColor = vec4(color,1.0);
+	outColor = vec4(color,transparency);
 
 
 }

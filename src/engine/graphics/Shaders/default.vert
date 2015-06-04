@@ -14,6 +14,8 @@ uniform mat4 view;
 uniform mat4 projection;
 
 uniform float hasTex;
+uniform int billboard;
+uniform float billboardScale;
 
 void main()
 {
@@ -22,10 +24,17 @@ void main()
 	Color = color;
 	TexCoord = texcoord;
 
-	gl_Position = projection * view * vec4(Position,1.0);
+	mat4 bb_mat = view * model;
+	for (int i = 0; i < 3; ++i) {
+		for (int j = 0; j < 3; ++j) {
+			if (i == j) bb_mat[i][j] = billboardScale;
+			else bb_mat[i][j] = 0.0;
+		}
+	}
 
-	
-
-	
+	if (billboard == 0)
+		gl_Position = projection * view * vec4(Position,1.0);
+	else
+		gl_Position = projection * bb_mat * vec4(position, 1.0);
 }
 

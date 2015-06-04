@@ -71,17 +71,28 @@ public:
 			}
 		}
 	}
-	void render(glm::mat4& transform) {
+	void render(glm::mat4& transform, GLuint shaderId) {
 		if (m_particles.size() < 1) return;
+
+		glUniform1f(glGetUniformLocation(shaderId, "hasTex"), 1);
+		glUniform1i(glGetUniformLocation(shaderId, "billboard"), 1);
+		glUniform1i(glGetUniformLocation(shaderId, "tex"), 0);
+
+		// Alpha blending (particles)
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		particleGraphic->setTextureId(texId);
 		particleGraphic->setIsSkybox(false);
 
 		glm::mat4 tmp;
 		for (auto it = m_particles.begin(); it != m_particles.end(); ++it) {
-			tmp = glm::scale(glm::translate(transform, it->position), glm::vec3(it->size));
+			glUniform1f(glGetUniformLocation(shaderId, "billboardScale"), it->size);
+			tmp = glm::translate(transform, it->position);
 			particleGraphic->render(&tmp);
 		}
+		glUniform1i(glGetUniformLocation(shaderId, "billboard"), 0);
+		glDisable(GL_BLEND);
 	}
 };
 #endif

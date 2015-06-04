@@ -32,7 +32,8 @@ KeyCallback			GraphicsEngine::m_keyCallback = NULL;
 MatrixNode			*GraphicsEngine::m_player = NULL,
 
 *GraphicsEngine::m_scene = NULL;
-Renderable			*GraphicsEngine::m_quad = NULL;
+Renderable			*GraphicsEngine::m_quad = NULL,
+					*GraphicsEngine::m_cube = NULL;
 
 CameraNode			*GraphicsEngine::m_mainCamera = NULL;
 CameraNode			*GraphicsEngine::m_minimapCamera = NULL;
@@ -178,7 +179,6 @@ void GraphicsEngine::Initialize() {
 	// Turn on z-buffering
 	glEnable(GL_DEPTH_TEST);
 
-
 	// SKYBOX
 	m_skyboxShader->Use();
 	m_skybox = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.f);
@@ -223,6 +223,7 @@ void GraphicsEngine::Initialize() {
 
 	// Particle quad
 	m_quad = new Quad(0.5f, glm::vec3(1));
+	m_cube = new Cube(glm::vec3(), glm::quat(), glm::vec3(1), 0.5f);
 
 	// CAMERA
 	glm::mat4 camview = glm::lookAt(
@@ -725,6 +726,7 @@ void GraphicsEngine::renderScene(Node* node, glm::mat4* matrix) {
 	if (geode) {
 		// render geode
 		m_defaultShader->Use();
+		glUniform1i(glGetUniformLocation(m_defaultShader->Id(), "billboard"), 0);
 		if (geode->getTex()){
 			glUniform1f(glGetUniformLocation(m_defaultShader->Id(), "hasTex"), 1);
 			glUniform1i(glGetUniformLocation(m_defaultShader->Id(), "tex"), 0);
@@ -738,9 +740,7 @@ void GraphicsEngine::renderScene(Node* node, glm::mat4* matrix) {
 	else if (psystem) {
 		// render particles
 		m_defaultShader->Use();
-		glUniform1f(glGetUniformLocation(m_defaultShader->Id(), "hasTex"), 1);
-		glUniform1i(glGetUniformLocation(m_defaultShader->Id(), "tex"), 0);
-		psystem->render(*matrix);
+		psystem->render(*matrix, m_defaultShader->Id());
 	}
 	else if (mnode && mnode->getVisible()) {
 		int numChildren = mnode->getNumChildren();
