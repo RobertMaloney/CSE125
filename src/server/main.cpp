@@ -46,6 +46,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		execute(command, &server);
+		command.clear();
 	}
 
 	gameThread.join();
