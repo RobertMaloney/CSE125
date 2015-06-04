@@ -5,6 +5,7 @@ bool GameClient::inMenu = true;
 
 GameClient::GameClient() 
 {
+	loading = false;
     connection = new TCPConnection();
 }
 
@@ -99,6 +100,13 @@ void GameClient::receiveUpdates()
 	clientUpdates = vector<Packet>(InputHandler::clientInput);
 	InputHandler::clientInput.clear();
 }*/
+
+bool GameClient::isLoading() {
+	return this->loading;
+}
+void GameClient::setLoading(bool b) {
+	this->loading = b;
+}
 
 void GameClient::updateGameState() {
 	if (updates.size() <= 0 && clientonly_updates.size() <= 0) {
@@ -231,7 +239,7 @@ void GameClient::updateGameState() {
 }
 
 void GameClient::checkGameStatus(Player * p){
-	if (p->getStatus() == GStatus::WIN){
+	if (p->getStatus() == GStatus::WIN && !this->isLoading()){
 		std::cout << "I win. yayyyyy" << endl;
 
         //Another menu status or leaderboard or whatever thing should happen here : ask player to replay or end the game....
@@ -241,7 +249,7 @@ void GameClient::checkGameStatus(Player * p){
 	
 		GraphicsEngine::setMenuStatus(MenuStatus::MWINREPLAY);
 	}
-	else if (p->getStatus() == GStatus::LOSE){
+	else if (p->getStatus() == GStatus::LOSE && !this->isLoading()){
 		std::cout << "I lose :(" << endl;
 
 		inMenu = true;
@@ -249,6 +257,11 @@ void GameClient::checkGameStatus(Player * p){
 		MenuState::replay_flag = true;
 		GraphicsEngine::setMenuStatus(MenuStatus::MLOSEREPLAY);
 	}
+
+	if (p->getStatus() == GStatus::PENDING) {
+		this->setLoading(false);
+	}
+
 }
 
 void GameClient::close() {

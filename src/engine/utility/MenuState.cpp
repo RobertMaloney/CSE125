@@ -298,6 +298,7 @@ void MenuState::play()
 	this->login();
 	//gameclient->inMenu = false;
 	GameClient::inMenu = false;
+	
 	GraphicsEngine::setCursor(GLFW_CURSOR_DISABLED);
 
 	//cleanupmenu
@@ -321,7 +322,7 @@ void MenuState::replay(){
 	gameclient->connection->send(p);
 	std::cout << " in replay " << std::endl;
 	GameClient::inMenu = false;
-
+	gameclient->setLoading(true);
 	GraphicsEngine::setCursor(GLFW_CURSOR_DISABLED);
 	
 	GameSound::ingamebgm->play();

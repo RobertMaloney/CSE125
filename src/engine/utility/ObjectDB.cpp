@@ -1,6 +1,6 @@
 #include "ObjectDB.h"
 
-
+#include "Player.h"
 
 ObjectDB::ObjectDB() {
 }
@@ -17,7 +17,6 @@ ObjectDB::~ObjectDB() {
 
 void ObjectDB::reloadObjects(Json::Value & config) {
 	for (auto it = objects.begin(); it != objects.end(); ++it) {
-		std::cout << " type : " << it->second->typeAsString();
 		it->second->loadConfiguration(config);
 	}
 }
