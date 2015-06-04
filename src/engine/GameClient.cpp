@@ -220,12 +220,10 @@ void GameClient::updateGameState() {
 				GameSound::playOuch();
 		}
 
-
-		if (obj->getId() == this->playerid) {
-			this->checkGameStatus(dynamic_cast<Player*>(obj));
-			GraphicsEngine::updatePercent(obj->getModel(), dynamic_cast<Player*>(obj)->getPercent());
-		}
 	}
+
+
+	this->checkGameStatus(dynamic_cast<Player*>(gstate.getObject(this->playerid)));
 }
 
 void GameClient::checkGameStatus(Player * p){

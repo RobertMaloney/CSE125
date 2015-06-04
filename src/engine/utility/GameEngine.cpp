@@ -50,10 +50,10 @@ void GameEngine::endGame(){
 
 void GameEngine::generateResources(int randResources, int clouds, int pills)
 {
-   //generateRandomResources(randResources);
+   generateRandomResources(randResources);
    generateClouds(clouds);
    generatePills(pills);
-   generateClusterTree(505, 10, 10, 200);
+   //generateClusterTree(505, 10, 10, 200);
    generateRockRing();
 }
 

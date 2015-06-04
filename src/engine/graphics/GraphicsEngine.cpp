@@ -745,6 +745,112 @@ void GraphicsEngine::renderHUD(int width, int height, glm::mat4 & identity){
 	glDisable(GL_BLEND);
 }
 
+
+void GraphicsEngine::renderBoard(int width, int height, glm::mat4 & identity){
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	glOrtho(0, 0, 0, 0, 0, 1);
+	glUniform2fv(glGetUniformLocation(m_textureShader->Id(), "scale"), 1, glm::value_ptr(m_screen_scale));
+	glUniform1i(glGetUniformLocation(m_textureShader->Id(), "tex"), 0);
+
+	//HUD1
+	glViewport(0, height - HUDH, HUDW, HUDH);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_HUD1->render(&identity);
+
+	// HUD2
+	glViewport(0, height - HUDH - HUDH, HUDW, HUDH);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_HUD2->render(&identity);
+
+	//HUD3
+	glViewport(0, height - HUDH - HUDH - HUDH, HUDW, HUDH);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_HUD3->render(&identity);
+
+	// HUD4
+	glViewport(0, height - HUDH - HUDH - HUDH - HUDH, HUDW, HUDH);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_HUD4->render(&identity);
+
+	//TODO: replace with numbers...
+	//HUDN1
+	float first = HUDW / 3;
+	float second = HUDW / 3 + (HUDW / 3);
+	float third = HUDW / 3 + (HUDW / 3) + (HUDW / 3);
+
+
+	glViewport(0 + HUDW, height - HUDH, HUDW / 3, HUDH);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_HUDN10->render(&identity);
+
+	glViewport(0 + HUDW + first, height - HUDH, HUDW / 3, HUDH);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_HUDN11->render(&identity);
+
+	glViewport(0 + HUDW + second, height - HUDH, HUDW / 3, HUDH);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_HUDN12->render(&identity);
+
+	glViewport(0 + HUDW + third, height - HUDH, HUDW / 3, HUDH);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_HUDN13->render(&identity);
+
+	// HUDN2
+	glViewport(0 + HUDW, height - HUDH - HUDH, HUDW / 3, HUDH);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_HUDN20->render(&identity);
+
+	glViewport(0 + HUDW + first, height - HUDH - HUDH, HUDW / 3, HUDH);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_HUDN21->render(&identity);
+
+	glViewport(0 + HUDW + second, height - HUDH - HUDH, HUDW / 3, HUDH);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_HUDN22->render(&identity);
+
+	glViewport(0 + HUDW + third, height - HUDH - HUDH, HUDW / 3, HUDH);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_HUDN23->render(&identity);
+
+	//HUDN3
+	glViewport(0 + HUDW, height - HUDH - HUDH - HUDH, HUDW / 3, HUDH);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_HUDN30->render(&identity);
+
+	glViewport(0 + HUDW + first, height - HUDH - HUDH - HUDH, HUDW / 3, HUDH);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_HUDN31->render(&identity);
+
+	glViewport(0 + HUDW + second, height - HUDH - HUDH - HUDH, HUDW / 3, HUDH);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_HUDN32->render(&identity);
+
+	glViewport(0 + HUDW + third, height - HUDH - HUDH - HUDH, HUDW / 3, HUDH);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_HUDN33->render(&identity);
+
+	// HUDN4
+	glViewport(0 + HUDW, height - HUDH - HUDH - HUDH - HUDH, HUDW / 3, HUDH);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_HUDN40->render(&identity);
+
+	glViewport(0 + HUDW + first, height - HUDH - HUDH - HUDH - HUDH, HUDW / 3, HUDH);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_HUDN41->render(&identity);
+
+	glViewport(0 + HUDW + second, height - HUDH - HUDH - HUDH - HUDH, HUDW / 3, HUDH);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_HUDN42->render(&identity);
+
+	glViewport(0 + HUDW + third, height - HUDH - HUDH - HUDH - HUDH, HUDW / 3, HUDH);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_HUDN43->render(&identity);
+
+	glDisable(GL_BLEND);
+}
+
 void GraphicsEngine::DrawAndPollMenu()
 {
 	int height, width;
@@ -789,6 +895,12 @@ void GraphicsEngine::DrawAndPollMenu()
 	
 	glUniform1i(glGetUniformLocation(m_textureShader->Id(), "tex"), 0);// m_menu->getTextureUnit());
 	m_menu->render(&identity);
+
+	if (ms == MWINREPLAY || ms == MWINQUIT || ms == MLOSEREPLAY || ms == MLOSEQUIT){
+		renderBoard(width, height, identity);
+	}
+
+
 	glDepthMask(GL_TRUE);
 
 	glfwSwapBuffers(m_window);

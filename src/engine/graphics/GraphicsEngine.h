@@ -123,6 +123,7 @@ private:
 	static void RenderScore(int Player1, int player2, int player3, int player4);
 	static GLuint FindTexuture(int id);
 	static void renderHUD(int width, int height, glm::mat4 & identity);
+	static void renderBoard(int width, int height, glm::mat4 & identity);
 
 };
 
