@@ -893,7 +893,7 @@ void GraphicsEngine::setCursor(int state) {
 }
 
 void GraphicsEngine::spawnPSystem(glm::mat4 &matrix) {
-	ParticleSystem* ps = new ParticleSystem(100, m_quad, m_HudIdPer);
+	ParticleSystem* ps = new ParticleSystem((int) Random::linearRand(50.f, 100.f), m_quad, m_groundId);
 	MatrixNode* pm = new MatrixNode();
 	pm->setMatrix(matrix);
 	pm->addChild(ps);

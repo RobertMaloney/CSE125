@@ -8,7 +8,12 @@
 class HUD {
 public:  //Texture loader ......
 	static GLuint makeHUD(std::string file) {
-	    return SOIL_load_OGL_texture(file.c_str(), SOIL_LOAD_RGBA, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+		GLuint tex_2d = SOIL_load_OGL_texture(file.c_str(), SOIL_LOAD_RGBA, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+		if (0 == tex_2d)
+		{
+			printf("SOIL loading error: '%s'\n", SOIL_last_result());
+		}
+		return tex_2d;
 	}
 };
 #endif

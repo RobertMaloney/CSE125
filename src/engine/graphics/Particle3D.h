@@ -30,17 +30,14 @@ private:
 public:
 	ParticleSystem(int numParticles, Renderable* geo, GLuint tex) {
 		assert(numParticles > 0);
-		std::default_random_engine gen;
-		std::uniform_real_distribution<float> dist0(0.f, 360.f);
-		std::uniform_real_distribution<float> dist1(2.f, 5.f);
 
 		for (int i = 0; i < numParticles; ++i) { // random on unit circle for now
 			Particle3D p;
-			p.position = glm::vec3(0);
+			p.position = Random::ballRand(Random::linearRand(0.f, 0.5f));
 			p.velocity = Random::ballRand(Random::linearRand(2.f, 5.f));
 			p.color = glm::vec3(1);
 			p.life = Random::linearRand(1.f, 3.f);
-			p.size = 1.f;
+			p.size = Random::linearRand(0.5f, 2.5f);
 			m_particles.push_back(p);
 		}
 
@@ -81,7 +78,7 @@ public:
 
 		glm::mat4 tmp;
 		for (auto it = m_particles.begin(); it != m_particles.end(); ++it) {
-			tmp = glm::translate(transform, it->position);
+			tmp = glm::scale(glm::translate(transform, it->position), glm::vec3(it->size));
 			particleGraphic->render(&tmp);
 		}
 	}
