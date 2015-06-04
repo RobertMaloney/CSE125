@@ -9,6 +9,7 @@ uniform sampler2D tex;
 uniform float hasTex;
 uniform int billboard;
 uniform vec3 colorOverride;
+uniform float transparencyOverride;
 
 uniform vec3 camPos;
 
@@ -44,8 +45,10 @@ void main()
 		transparency = t.a;
 	}
 
-	if (billboard != 0)
+	if (billboard != 0) {
 		inColor = inColor * colorOverride;
+		transparency *= transparencyOverride;
+	}
 
 	vec3 color = vec3(0);
 	for (int i = 0; i < numLights; ++i) {

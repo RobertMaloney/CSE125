@@ -20,7 +20,7 @@ struct Particle3D {
 	glm::vec3 acceleration;
 	glm::vec3 color;
 	float size;
-	float life;
+	float life, totalLife;
 };
 
 static int __cdecl particleSort(const void* a, const void* b) {
@@ -32,6 +32,14 @@ private:
 	std::vector<Particle3D> m_particles;
 	Renderable* particleGraphic;
 	GLuint texId;
+
+	// https://github.com/jesusgollonet/ofpennereasing/blob/master/PennerEasing/Expo.cpp
+	float easeInOut(float t, float b, float c, float d) {
+		if (t == 0) return b;
+		if (t == d) return b + c;
+		if ((t /= d / 2) < 1) return c / 2 * pow(2, 10 * (t - 1)) + b;
+		return c / 2 * (-pow(2, -10 * --t) + 2) + b;
+	}
 
 public:
 	ParticleSystem(int numParticles, Renderable* geo, GLuint tex) {
@@ -53,6 +61,7 @@ public:
 			p.acceleration = glm::vec3(0, 0, Random::linearRand(Config::settings["particles"]["acceleration"][0].asFloat(), Config::settings["particles"]["acceleration"][1].asFloat()));
 			p.color = colors[i % 7];
 			p.life = Random::linearRand(Config::settings["particles"]["life"][0].asFloat(), Config::settings["particles"]["life"][1].asFloat());
+			p.totalLife = p.life;
 			p.size = Random::linearRand(Config::settings["particles"]["size"][0].asFloat(), Config::settings["particles"]["size"][1].asFloat());
 			m_particles.push_back(p);
 		}
@@ -109,12 +118,11 @@ public:
 		particleGraphic->setTextureId(texId);
 		particleGraphic->setIsSkybox(false);
 
-
 		glm::mat4 tmp;
-		int colorIndex = 0;
 		for (auto it = m_particles.begin(); it != m_particles.end(); ++it) {
 			glUniform3fv(glGetUniformLocation(shaderId, "colorOverride"), 1, glm::value_ptr(it->color));
-			colorIndex = (colorIndex + 1) % 4;
+			float opacity = easeInOut(it->life, 0.f, 1.0f, it->totalLife);
+			glUniform1f(glGetUniformLocation(shaderId, "transparencyOverride"), opacity);
 			glUniform1f(glGetUniformLocation(shaderId, "billboardScale"), it->size);
 			tmp = glm::translate(transform, it->position);
 			particleGraphic->render(&tmp);
