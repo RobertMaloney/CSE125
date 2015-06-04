@@ -320,9 +320,8 @@ void MenuState::replay(){
 	Packet p;
 	p.writeByte(static_cast<byte>(EventType::REPLAY));
 	gameclient->connection->send(p);
-	std::cout << " in replay " << std::endl;
 	GameClient::inMenu = false;
-	gameclient->setLoading(true);
+	gameclient->setResetting(true);
 	GraphicsEngine::setCursor(GLFW_CURSOR_DISABLED);
 	
 	GameSound::ingamebgm->play();

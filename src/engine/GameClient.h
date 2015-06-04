@@ -48,8 +48,8 @@ public:
 	void run();
 	void close();
 
-	bool isLoading();
-	void setLoading(bool b);
+	bool isResetting();
+	void setResetting(bool b);
 
 	//managing states
 	void addState(IMenuState *state);
@@ -68,7 +68,7 @@ public:
 	//void receiveClientInput();
 
 private:
-	bool loading;
+	bool resetting;
 	//stack of states
 	vector<IMenuState *> states;
 	vector<Packet> updates;
