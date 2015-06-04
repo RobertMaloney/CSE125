@@ -19,8 +19,9 @@ void GameEngine::calculatePercent(){
 		int s = (*it)->getScore();
 		occupied = occupied + s;
 		int p = int(float(s) / total * 100.0);
-		//std::cout << (*it)->getId() << ": " << p << endl;
+		std::cout << (*it)->getId() << ": " << p << endl;
 		(*it)->setPercent(p);
+		std::cout << (*it)->getId()  << (*it)->getPercent() << endl;
 		//cout << "score = " << s << " total = " << total << " p = " << p << endl;
 		if (s > max){
 			max = s;
@@ -86,9 +87,9 @@ void GameEngine::generateRandomResources(int num) {
          float floor = 1.0, ceiling = 2.0, range = (ceiling - floor);
          float scale = floor + float((range * rand()) / (RAND_MAX + 1.0));
          newRe->setScale(scale);
-         newRe->setModelRadius(3.f);
-         newRe->setModelHeight(17.f);
-         total = total + 30;
+			newRe->setModelRadius(3.f);
+			newRe->setModelHeight(17.f);
+			total = total + 30;
 		}
 		else if (pick == 1) {
 			newRe = new Rock(0,radius, theta, azimuth, direction);
