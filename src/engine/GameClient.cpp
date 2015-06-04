@@ -220,7 +220,8 @@ void GameClient::updateGameState() {
 										obj->getAngle(), 
 										obj->getHeight(),
 										obj->getScale(),
-										obj->getVisible());
+										obj->getVisible(),
+										obj->getParticle());
 
 		//play collision sounds
 		if (obj->getId() == this->playerid) {
