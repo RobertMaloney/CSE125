@@ -273,33 +273,45 @@ void GraphicsEngine::RenderScore(int Player1, int Player2, int Player3, int Play
 	Hud11 = Player1 / 10;
 	Hud12 = Player1 % 10;
 
-	Hud10 = Player1 / 100;
+	Hud20 = Player2 / 100;
 	Hud21 = Player2 / 10;
 	Hud22 = Player2 % 10;
 
-	Hud10 = Player1 / 100;
+	Hud30 = Player3 / 100;
 	Hud31 = Player3 / 10;
 	Hud32 = Player3 % 10;
 
-	Hud10 = Player1 / 100;
+	Hud40 = Player4 / 100;
 	Hud41 = Player4 / 10;
 	Hud42 = Player4 % 10;
 	
-	if (Hud41 == 0)
+	if (Hud41 == 0 && Hud40 == 0)
 	{ 
 		Hud41 = 10;
 	}
-	if (Hud21 == 0)
+	else if (Hud41 == 0 && Hud40 == 1){
+		Hud41 = 0;
+	}
+	if (Hud21 == 0 && Hud20 == 0)
 	{
 		Hud21 = 10;
 	}
-	if (Hud31 == 0)
+	else if (Hud21 == 0 && Hud20 == 1){
+		Hud21 = 0;
+	}
+	if (Hud31 == 0 && Hud30 == 0)
 	{
 		Hud31 = 10;
 	}
-	if (Hud11 == 0)
+	else if (Hud31 == 0 && Hud30 == 1){
+		Hud31 = 0;
+	}
+	if (Hud11 == 0 && Hud10 == 0)
 	{
 		Hud11 = 10;
+	}
+	else if (Hud11 == 0 && Hud10 == 1){
+		Hud11 = 0;
 	}
 
 	if (Hud40 == 0)
@@ -319,6 +331,7 @@ void GraphicsEngine::RenderScore(int Player1, int Player2, int Player3, int Play
 		Hud10 = 10;
 	}
 	
+
 	m_HUDN10->setTextureId(FindTexuture(Hud10));
 	m_HUDN11->setTextureId(FindTexuture(Hud11));
 	m_HUDN12->setTextureId(FindTexuture(Hud12));
