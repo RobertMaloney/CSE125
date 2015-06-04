@@ -100,9 +100,15 @@ private:
 	static int                      B;
 	static int                      p1p, p2p, p3p, p4p;
 
-	static GLuint					m_timerId, m_plusId, m_minusId, m_borderId, m_skyboxId, m_HudIdPer, m_HudIdSpa, m_HudId1, m_HudId2, m_HudId3, m_HudId4, m_HudIdN0, m_HudIdN1, m_HudIdN2, m_HudIdN3, m_HudIdN4, m_HudIdN5, m_HudIdN6, m_HudIdN7, m_HudIdN8, m_HudIdN9, m_groundId, m_menuId1, m_menuId2, m_menuId3, m_menuId4, m_menuId5, m_menuId6, m_menuId7, m_menuId8;// , m_tId;
-	static Renderable				*m_timer, *m_timer1, *m_timer2, *m_plus, *m_minus, *m_border, *m_skybox, *m_HUD1, *m_HUD2, *m_HUD3, *m_HUD4, *m_HUDN11, *m_HUDN12, *m_HUDN13, *m_HUDN21, *m_HUDN22, *m_HUDN23, *m_HUDN31, *m_HUDN32, *m_HUDN33, *m_HUDN41, *m_HUDN42, *m_HUDN43, *worldModel, *m_menu;
-	static Shader					*m_defaultShader, *m_skyboxShader, *m_textureShader;// , *m_tShader;
+	static GLuint					m_timerId, m_plusId, m_minusId, m_borderId, m_skyboxId, m_groundId, m_HudIdPer, m_HudIdSpa;
+	static GLuint                   m_HudId1, m_HudId2, m_HudId3, m_HudId4, m_HudIdN0, m_HudIdN1, m_HudIdN2, m_HudIdN3, m_HudIdN4, m_HudIdN5, m_HudIdN6, m_HudIdN7, m_HudIdN8, m_HudIdN9;
+	static GLuint                   m_menuId1, m_menuId2, m_menuId3, m_menuId4, m_menuId5, m_menuId6, m_menuId7, m_menuId8;
+	
+	static Renderable				*m_timer, *m_timer1, *m_timer2, *m_plus, *m_minus, *m_border, *m_skybox, *worldModel, *m_menu;
+	static Renderable               *m_HUD1, *m_HUD2, *m_HUD3, *m_HUD4;
+	static Renderable               *m_HUDN10, *m_HUDN11, *m_HUDN12, *m_HUDN13, *m_HUDN20, *m_HUDN21, *m_HUDN22, *m_HUDN23, *m_HUDN30, *m_HUDN31, *m_HUDN32, *m_HUDN33, *m_HUDN40, *m_HUDN41, *m_HUDN42, *m_HUDN43;
+
+	static Shader					*m_defaultShader, *m_skyboxShader, *m_textureShader;
 
 
 	static int						m_sunLight;

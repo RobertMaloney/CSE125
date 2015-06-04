@@ -12,7 +12,6 @@
 #include "Skybox.h"
 #include "LightHandler.h"
 #include "HUD.h"
-#include "Ground.h"
 #include "..\utility\GameSound.h"
 
 using namespace std;
@@ -73,6 +72,8 @@ GLuint				GraphicsEngine::m_menuId8 = 0;
 int					GraphicsEngine::HUDW = 100;
 int					GraphicsEngine::HUDH = 100;
 int                 GraphicsEngine::B = 20; //used to change the size of the mini map :)
+
+//Percentage
 int					GraphicsEngine::p1p = 0;
 int					GraphicsEngine::p2p = 0;
 int					GraphicsEngine::p3p = 0;
@@ -90,15 +91,23 @@ Renderable			*GraphicsEngine::m_HUD1 = NULL;
 Renderable			*GraphicsEngine::m_HUD2 = NULL;
 Renderable			*GraphicsEngine::m_HUD3 = NULL;
 Renderable			*GraphicsEngine::m_HUD4 = NULL;
+
+Renderable			*GraphicsEngine::m_HUDN10 = NULL;
 Renderable			*GraphicsEngine::m_HUDN11 = NULL;
 Renderable			*GraphicsEngine::m_HUDN12 = NULL;
 Renderable			*GraphicsEngine::m_HUDN13 = NULL;
+
+Renderable			*GraphicsEngine::m_HUDN20 = NULL;
 Renderable			*GraphicsEngine::m_HUDN21 = NULL;
 Renderable			*GraphicsEngine::m_HUDN22 = NULL;
 Renderable			*GraphicsEngine::m_HUDN23 = NULL;
+
+Renderable			*GraphicsEngine::m_HUDN30 = NULL;
 Renderable			*GraphicsEngine::m_HUDN31 = NULL;
 Renderable			*GraphicsEngine::m_HUDN32 = NULL;
 Renderable			*GraphicsEngine::m_HUDN33 = NULL;
+
+Renderable			*GraphicsEngine::m_HUDN40 = NULL;
 Renderable			*GraphicsEngine::m_HUDN41 = NULL;
 Renderable			*GraphicsEngine::m_HUDN42 = NULL;
 Renderable			*GraphicsEngine::m_HUDN43 = NULL;
@@ -106,7 +115,7 @@ Renderable			*GraphicsEngine::m_HUDN43 = NULL;
 Renderable			*GraphicsEngine::worldModel = NULL;
 Renderable			*GraphicsEngine::m_menu = NULL;
 
-Shader				*GraphicsEngine::m_defaultShader, *GraphicsEngine::m_skyboxShader, *GraphicsEngine::m_textureShader;// , *GraphicsEngine::m_tShader;
+Shader				*GraphicsEngine::m_defaultShader, *GraphicsEngine::m_skyboxShader, *GraphicsEngine::m_textureShader;
 
 int					GraphicsEngine::m_sunLight;
 
@@ -171,7 +180,6 @@ void GraphicsEngine::Initialize() {
 	m_defaultShader = new Shader("../engine/graphics/Shaders/default.vert", "../engine/graphics/Shaders/default.frag");
 	m_skyboxShader = new Shader("../engine/graphics/Shaders/skybox.vert", "../engine/graphics/Shaders/skybox.frag");
 	m_textureShader = new Shader("../engine/graphics/Shaders/texture2D.vert", "../engine/graphics/Shaders/texture2D.frag");
-	//m_tShader = new Shader("../engine/graphics/Shaders/t.vert", "../engine/graphics/Shaders/t.frag");
 
 	// Turn on z-buffering
 	glEnable(GL_DEPTH_TEST);
@@ -234,12 +242,6 @@ void GraphicsEngine::Initialize() {
 	m_minimapCamera->setViewMatrix(minimapview);
 	m_minimapCamera->setAllowScaling(false);
 
-	// PLAYER  (Player node is created by default
-	/*Renderable * model = GraphicsEngine::selectModel(playerId);
-	m_player = GraphicsEngine::addNode(model);
-	m_player->addChild(m_mainCamera);
-	m_player->addChild(m_minimapCamera);*/
-	
 	// LIGHTS
 	m_sunLight = LightHandler::addLight(0, glm::vec3(-1, -1, -1), 1.f, glm::vec3(1, 1, 1), 0.f, glm::vec3(1, 1, 1), 0.5f, glm::vec3(1, 1, 1)); // direct light
 	LightHandler::addLight(1, glm::vec3(0, 0, -505), 1.f, glm::vec3(1, 1, 1), 0.f, glm::vec3(0), 0.f, glm::vec3(0)); // point light
@@ -258,16 +260,24 @@ void GraphicsEngine::RenderScore(int Player1, int Player2, int Player3, int Play
 	//cout << Player1 << " " << Player2 << " " << Player3 << " " << Player4 << endl;
 
 	int Hud11, Hud12, Hud21, Hud22, Hud31, Hud32, Hud41, Hud42 = 0;
+	int Hud10 = 0;
+	int Hud20 = 0;
+	int Hud30 = 0;
+	int Hud40 = 0;
 
+	Hud10 = Player1 / 100;
 	Hud11 = Player1 / 10;
 	Hud12 = Player1 % 10;
 
+	Hud10 = Player1 / 100;
 	Hud21 = Player2 / 10;
 	Hud22 = Player2 % 10;
 
+	Hud10 = Player1 / 100;
 	Hud31 = Player3 / 10;
 	Hud32 = Player3 % 10;
 
+	Hud10 = Player1 / 100;
 	Hud41 = Player4 / 10;
 	Hud42 = Player4 % 10;
 	
@@ -287,17 +297,37 @@ void GraphicsEngine::RenderScore(int Player1, int Player2, int Player3, int Play
 	{
 		Hud11 = 10;
 	}
+
+	if (Hud40 == 0)
+	{
+		Hud40 = 10;
+	}
+	if (Hud20 == 0)
+	{
+		Hud20 = 10;
+	}
+	if (Hud30 == 0)
+	{
+		Hud30 = 10;
+	}
+	if (Hud10 == 0)
+	{
+		Hud10 = 10;
+	}
 	
-	
+	m_HUDN10->setTextureId(FindTexuture(Hud10));
 	m_HUDN11->setTextureId(FindTexuture(Hud11));
 	m_HUDN12->setTextureId(FindTexuture(Hud12));
 
+	m_HUDN20->setTextureId(FindTexuture(Hud20));
 	m_HUDN21->setTextureId(FindTexuture(Hud21));
 	m_HUDN22->setTextureId(FindTexuture(Hud22));
 
+	m_HUDN30->setTextureId(FindTexuture(Hud30));
 	m_HUDN31->setTextureId(FindTexuture(Hud31));
 	m_HUDN32->setTextureId(FindTexuture(Hud32));
 	
+	m_HUDN40->setTextureId(FindTexuture(Hud40));
 	m_HUDN41->setTextureId(FindTexuture(Hud41));
 	m_HUDN42->setTextureId(FindTexuture(Hud42));
 }
@@ -362,6 +392,8 @@ void GraphicsEngine::addHUD(){
 	m_HudIdPer = HUD::makeHUD("../../media/texture/%.png");
 	m_HudIdSpa = HUD::makeHUD("../../media/texture/space.png");
 
+	m_HUDN10 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
+	m_HUDN10->setTextureId(m_HudIdSpa);
 	m_HUDN11 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_HUDN11->setTextureId(m_HudIdSpa);
 	m_HUDN12 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
@@ -369,6 +401,8 @@ void GraphicsEngine::addHUD(){
 	m_HUDN13 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_HUDN13->setTextureId(m_HudIdPer);
 
+	m_HUDN20 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
+	m_HUDN20->setTextureId(m_HudIdSpa);
 	m_HUDN21 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_HUDN21->setTextureId(m_HudIdSpa);
 	m_HUDN22 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
@@ -376,6 +410,8 @@ void GraphicsEngine::addHUD(){
 	m_HUDN23 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_HUDN23->setTextureId(m_HudIdPer);
 
+	m_HUDN30 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
+	m_HUDN30->setTextureId(m_HudIdSpa);
 	m_HUDN31 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_HUDN31->setTextureId(m_HudIdSpa);
 	m_HUDN32 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
@@ -383,6 +419,8 @@ void GraphicsEngine::addHUD(){
 	m_HUDN33 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_HUDN33->setTextureId(m_HudIdPer);
 
+	m_HUDN40 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
+	m_HUDN40->setTextureId(m_HudIdSpa);
 	m_HUDN41 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_HUDN41->setTextureId(m_HudIdSpa);
 	m_HUDN42 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
@@ -571,58 +609,76 @@ void GraphicsEngine::renderHUD(int width, int height, glm::mat4 & identity){
 	//HUDN1
 	float first = HUDW / 3;
 	float second = HUDW / 3 + (HUDW / 3);
+	float third = HUDW / 3 + (HUDW / 3) + (HUDW / 3);
 
 
 	glViewport(0 + HUDW, height - HUDH, HUDW/3, HUDH);
 	glClear(GL_DEPTH_BUFFER_BIT);
-	m_HUDN11->render(&identity);
+	m_HUDN10->render(&identity);
 
 	glViewport(0 + HUDW + first, height - HUDH, HUDW/3, HUDH);
 	glClear(GL_DEPTH_BUFFER_BIT);
+	m_HUDN11->render(&identity);
+
+	glViewport(0 + HUDW + second, height - HUDH, HUDW/3, HUDH);
+	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN12->render(&identity);
 
-	glViewport(0 + HUDW+second, height - HUDH, HUDW/3, HUDH);
+	glViewport(0 + HUDW + third, height - HUDH, HUDW/3, HUDH);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN13->render(&identity);
 
 	// HUDN2
 	glViewport(0 + HUDW, height - HUDH - HUDH, HUDW / 3, HUDH);
 	glClear(GL_DEPTH_BUFFER_BIT);
-	m_HUDN21->render(&identity);
+	m_HUDN20->render(&identity);
 
 	glViewport(0 + HUDW + first, height - HUDH - HUDH, HUDW / 3, HUDH);
 	glClear(GL_DEPTH_BUFFER_BIT);
-	m_HUDN22->render(&identity);
+	m_HUDN21->render(&identity);
 
 	glViewport(0 + HUDW + second, height - HUDH - HUDH, HUDW / 3, HUDH);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_HUDN22->render(&identity);
+
+	glViewport(0 + HUDW + third, height - HUDH - HUDH, HUDW / 3, HUDH);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN23->render(&identity);
 
 	//HUDN3
 	glViewport(0 + HUDW, height - HUDH - HUDH - HUDH, HUDW / 3, HUDH);
 	glClear(GL_DEPTH_BUFFER_BIT);
-	m_HUDN31->render(&identity);
+	m_HUDN30->render(&identity);
 
 	glViewport(0 + HUDW + first, height - HUDH - HUDH - HUDH, HUDW / 3, HUDH);
 	glClear(GL_DEPTH_BUFFER_BIT);
-	m_HUDN32->render(&identity);
+	m_HUDN31->render(&identity);
 
 	glViewport(0 + HUDW + second, height - HUDH - HUDH - HUDH, HUDW / 3, HUDH);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_HUDN32->render(&identity);
+
+	glViewport(0 + HUDW + third, height - HUDH - HUDH - HUDH, HUDW / 3, HUDH);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN33->render(&identity);
 
 	// HUDN4
 	glViewport(0 + HUDW, height - HUDH - HUDH - HUDH - HUDH, HUDW / 3, HUDH);
 	glClear(GL_DEPTH_BUFFER_BIT);
-	m_HUDN41->render(&identity);
+	m_HUDN40->render(&identity);
 
 	glViewport(0 + HUDW + first, height - HUDH - HUDH - HUDH - HUDH, HUDW / 3, HUDH);
 	glClear(GL_DEPTH_BUFFER_BIT);
-	m_HUDN42->render(&identity);
+	m_HUDN41->render(&identity);
 
 	glViewport(0 + HUDW + second, height - HUDH - HUDH - HUDH - HUDH, HUDW / 3, HUDH);
 	glClear(GL_DEPTH_BUFFER_BIT);
+	m_HUDN42->render(&identity);
+
+	glViewport(0 + HUDW + third, height - HUDH - HUDH - HUDH - HUDH, HUDW / 3, HUDH);
+	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN43->render(&identity);
+
 
 	//HUD on top of minimap
 	glViewport(width - HUDW * 2, height - HUDH * 2, HUDW * 2, HUDH * 2);
