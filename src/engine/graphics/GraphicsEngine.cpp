@@ -284,35 +284,54 @@ void GraphicsEngine::RenderScore(int Player1, int Player2, int Player3, int Play
 	Hud40 = Player4 / 100;
 	Hud41 = Player4 / 10;
 	Hud42 = Player4 % 10;
+
+	/*cout << "before" << endl;
+	cout << Hud10 << Hud11 << Hud12 << endl;
+	cout << Hud20 << Hud21 << Hud22 << endl;
+	cout << Hud30 << Hud31 << Hud32 << endl;
+	cout << Hud40 << Hud41 << Hud42 << endl;*/
 	
 	if (Hud41 == 0 && Hud40 == 0)
 	{ 
 		Hud41 = 10;
 	}
-	else if (Hud41 == 0 && Hud40 == 1){
+	else if (Hud41 == 10 && Hud40 == 1){
 		Hud41 = 0;
+		cout << "HUD41" << Hud41 << endl;
 	}
+
 	if (Hud21 == 0 && Hud20 == 0)
 	{
 		Hud21 = 10;
 	}
-	else if (Hud21 == 0 && Hud20 == 1){
+	else if (Hud21 == 10 && Hud20 == 1){
 		Hud21 = 0;
+		cout << "HUD21" << Hud21 << endl;
 	}
+
 	if (Hud31 == 0 && Hud30 == 0)
 	{
 		Hud31 = 10;
 	}
-	else if (Hud31 == 0 && Hud30 == 1){
+	else if (Hud31 == 10 && Hud30 == 1){
 		Hud31 = 0;
+		cout << "HUD31" << Hud31 << endl;
 	}
+
 	if (Hud11 == 0 && Hud10 == 0)
 	{
 		Hud11 = 10;
 	}
-	else if (Hud11 == 0 && Hud10 == 1){
+	else if (Hud11 == 10 && Hud10 == 1){
 		Hud11 = 0;
+		cout << "HUD11" << Hud11 << endl;
 	}
+
+	/*cout << "after" << endl;
+	cout << Hud10 << Hud11 << Hud12 << endl;
+	cout << Hud20 << Hud21 << Hud22 << endl;
+	cout << Hud30 << Hud31 << Hud32 << endl;
+	cout << Hud40 << Hud41 << Hud42 << endl;*/
 
 	if (Hud40 == 0)
 	{
@@ -331,6 +350,11 @@ void GraphicsEngine::RenderScore(int Player1, int Player2, int Player3, int Play
 		Hud10 = 10;
 	}
 	
+	/*cout << "end" << endl;
+	cout << Hud10 << Hud11 << Hud12 << endl;
+	cout << Hud20 << Hud21 << Hud22 << endl;
+	cout << Hud30 << Hud31 << Hud32 << endl;
+	cout << Hud40 << Hud41 << Hud42 << endl;*/
 
 	m_HUDN10->setTextureId(FindTexuture(Hud10));
 	m_HUDN11->setTextureId(FindTexuture(Hud11));
