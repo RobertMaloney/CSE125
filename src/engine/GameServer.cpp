@@ -68,6 +68,7 @@ void GameServer::run() {
 	running = true;
 
 	while (running) {
+		serverLock.lock();
 		start = high_resolution_clock::now();
 
 		if (clients->size() < maxConnections) {
@@ -85,14 +86,16 @@ void GameServer::run() {
 			cerr << "Server loop took long than a frame." << endl;
 			cout << "dustyplanet:-$ ";
 		}
-
+		serverLock.unlock();
 		sleep_for(microseconds(TIME_PER_FRAME - elapsedTime));
 	}
 }
 
 
 void GameServer::stop() {
+	serverLock.lock();
 	running = false;
+	serverLock.unlock();
 }
 
 
@@ -149,12 +152,10 @@ void GameServer::tick() {
 	vector<Packet> updates;
 	
 	if (gameState->isResetting()) {
-		serverLock.lock();
 		ObjectDB & odb = ObjectDB::getInstance();
 		odb.reloadObjects(configFile);
 		odb.getObjectState(updates);
 		gameState->setResetting(false);
-		serverLock.unlock();
 	} else {
 		this->getUpdates(updates);
 	}

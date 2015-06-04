@@ -24,7 +24,7 @@
         "modelHeight": 6,
         "visible": true,
         "angleSpeed": 2,
-        "jumpForce": 50000,
+        "jumpForce": 30000,
         "moveForce": 50,
         "mass": 10,
         "restitution": 1,
