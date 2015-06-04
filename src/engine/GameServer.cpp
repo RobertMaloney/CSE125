@@ -52,7 +52,7 @@ void GameServer::initialize() {
 
 	physics->loadConfiguration(configFile["physics engine"]);
 	
-	gameState->initWithServer();
+   gameState->initWithServer(configFile);
    engine->generateResources(configFile);
 }
 
