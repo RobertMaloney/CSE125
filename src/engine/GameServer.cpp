@@ -107,7 +107,7 @@ void GameServer::acceptWaitingClient() {
 	ObjectId playerId = idGen->createId();
 
 	Player* newPlayer = new Player(TREE, 505.f, 0.f, 0.f, 0.f);
-	newPlayer->loadConfiguration(configFile["player"]);
+	newPlayer->loadConfiguration(configFile);
 
 	if (!gameState->addPlayer(playerId, newPlayer)){
 		delete newPlayer;

@@ -157,13 +157,26 @@ ObjectType GameObject::typeFromString(string typeName) {
 	return ObjectType::GAMEOBJECT;
 }
 
+string GameObject::typeAsString() {
+	switch (this->type) {
+	case PLAYER:
+		return "player";
+	case MOVEABLE:
+		return "moveable";
+	case IEATABLE:
+		return "ieatable";
+	default:
+		return "gameobject";
+	}
+}
+
 void GameObject::collide(float dt, GameObject & target) {
 
 }
 
 
 void GameObject::loadConfiguration(Json::Value config) {
-
+	
 	//"orientation": null,
 	Json::Value & obj = config["game object"];
 	this->angle = obj["angle"].asFloat();

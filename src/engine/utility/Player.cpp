@@ -180,37 +180,30 @@ GStatus Player::statusFromString(string & string) {
 
 void Player::loadConfiguration(Json::Value config) {
 	// orientation not here yet
+
+	Json::Value obj = config["player"];
 	for (int i = 0; i < 5; ++i) {
 		moves[i] = false;
 	}
-	this->angle = config["angle"].asFloat();
-	this->height = config["height"].asFloat();
+	this->angle = obj["angle"].asFloat();
+	this->height = obj["height"].asFloat();
 	this->verticalComponent.height = this->height;
-	this->type = this->typeFromString(config["type"].asString());
-	this->modelRadius = config["modelRadius"].asFloat();
-	this->modelHeight = config["modelHeight"].asFloat();
-	this->visible = config["visible"].asBool();
-	this->angleSpeed = config["angleSpeed"].asFloat();
-	this->jumpForce = config["jumpForce"].asFloat();
-	this->moveForce = config["moveForce"].asFloat();
-	this->inverseMass = 1.f / config["mass"].asFloat();
-	this->restitution = config["restitution"].asFloat();
-	this->burp_count = config["burp_count"].asInt();
-	this->isJumping = config["isJumping"].asBool();
-	this->score = config["score"].asInt();
-	this->percent = config["percent"].asInt();
-	this->stomach = config["stomach"].asInt();
-	this->status = statusFromString(config["status"].asString());
-	/*float SCORE_SCALE_RATIO;
-	float SCORE_MASS_RATIO;
-	bool moves[5];
-	bool isJumping;
+	this->type = this->typeFromString(obj["type"].asString());
+	this->modelRadius = obj["modelRadius"].asFloat();
+	this->modelHeight = obj["modelHeight"].asFloat();
+	this->visible = obj["visible"].asBool();
+	this->angleSpeed = obj["angleSpeed"].asFloat();
+	this->jumpForce = obj["jumpForce"].asFloat();
+	this->moveForce = obj["moveForce"].asFloat();
+	this->inverseMass = 1.f / obj["mass"].asFloat();
+	this->restitution = obj["restitution"].asFloat();
+	this->burp_count = obj["burp_count"].asInt();
+	this->isJumping = obj["isJumping"].asBool();
+	this->score = obj["score"].asInt();
+	this->percent = obj["percent"].asInt();
+	this->stomach = obj["stomach"].asInt();
+	this->status = statusFromString(obj["status"].asString());
 
-	int score;
-	int percent;
-	int stomach;
-	int burp_count;
-	GStatus status;*/
 }
 
 

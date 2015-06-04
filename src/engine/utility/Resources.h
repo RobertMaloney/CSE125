@@ -17,7 +17,14 @@ class EatableResource : public Resource, public IEatable {
 
 		virtual ~EatableResource() { };
 
+
+
 	public:
+
+		void loadConfiguration(Json::Value config) {
+			
+		}
+
 		int getPoints(){
 			return this->points;
 		}

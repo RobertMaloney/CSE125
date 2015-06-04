@@ -159,6 +159,7 @@ void MoveableObject::collide(float dt, GameObject & target) {
 
 
 void MoveableObject::loadConfiguration(Json::Value config) {
+	std::cout << " moveableConfig ";
 	/*
 	    "orientation": null,
         "angle": 0,
