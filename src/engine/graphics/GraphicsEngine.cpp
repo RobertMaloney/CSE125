@@ -1086,13 +1086,15 @@ void GraphicsEngine::updateObject(ObjectId objId, glm::quat & q, float angle, fl
 	
 	objNodeMap[objId]->getMatrix() = MatrixNode::quatAngle(q, angle, height, scale);
 	objNodeMap[objId]->setVisible(vf);
-	objNodeMap[objId]->setParticle(pf);
+	//objNodeMap[objId]->setParticle(pf);
 
-	//bool new_visible = objNodeMap[objId]->getVisible();
+
+	bool new_visible = objNodeMap[objId]->getVisible();
 
 	//check for visible to invisible transition
-	//if (old_visible != new_visible)
-		//GameSound::nom->play(); //I play sound here because I want it to be client side only
+	if (old_visible != new_visible)
+		spawnPSystem(objNodeMap[objId]->getMatrix());
+
 }
 
 void GraphicsEngine::updatePercent(Model m, int p) {
