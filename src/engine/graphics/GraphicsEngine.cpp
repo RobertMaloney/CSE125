@@ -242,7 +242,7 @@ void GraphicsEngine::Initialize() {
 	// CAMERA
 	glm::mat4 camview = glm::lookAt(
       glm::vec3(0.f, 25.f, 16.f),
-		glm::vec3(0.f, 0.f, 0.f),
+		glm::vec3(0.f, 0.f, 7.f),
 		glm::vec3(0.f, 0.f, 1.f));
 	m_mainCamera = new CameraNode();
 	m_mainCamera->setViewMatrix(camview);
@@ -1140,4 +1140,21 @@ void GraphicsEngine::spawnPSystem(glm::mat4 &matrix) {
 	pm->addChild(ps);
 	m_scene->addChild(pm);
 	m_psystems.push_back(ps);
+}
+
+void GraphicsEngine::reverseCam(bool on) {
+	if (on) {
+		glm::mat4 camview = glm::lookAt(
+			glm::vec3(0.f, -25.f, 16.f),
+			glm::vec3(0.f, 0.f, 7.f),
+			glm::vec3(0.f, 0.f, 1.f));
+		m_mainCamera->setViewMatrix(camview);
+	}
+	else {
+		glm::mat4 camview = glm::lookAt(
+			glm::vec3(0.f, 25.f, 16.f),
+			glm::vec3(0.f, 0.f, 7.f),
+			glm::vec3(0.f, 0.f, 1.f));
+		m_mainCamera->setViewMatrix(camview);
+	}
 }
