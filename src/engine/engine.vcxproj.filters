@@ -31,6 +31,7 @@
     <ClCompile Include="utility\jsoncpp.cpp" />
     <ClCompile Include="utility\Config.cpp" />
     <ClCompile Include="utility\GameSound.cpp" />
+    <ClCompile Include="graphics\Random.cpp" />
     <ClCompile Include="utility\NPC.cpp" />
     <ClCompile Include="utility\Timer.cpp" />
   </ItemGroup>
@@ -85,6 +86,9 @@
     <ClInclude Include="physics\Collidable.h" />
     <ClInclude Include="utility\Configurable.h" />
     <ClInclude Include="utility\GameSound.h" />
+    <ClInclude Include="graphics\Particle3D.h" />
+    <ClInclude Include="graphics\Quad.h" />
+    <ClInclude Include="graphics\Random.h" />
     <ClInclude Include="utility\NPC.h" />
     <ClInclude Include="utility\Timer.h" />
   </ItemGroup>

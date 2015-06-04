@@ -19,6 +19,9 @@ public:
 	virtual CameraNode* asCamera() {
 		return 0;
 	}
+	virtual ParticleSystem* asPSystem() {
+		return 0;
+	}
 	virtual std::string getName() {
 		return "Geode";
 	}

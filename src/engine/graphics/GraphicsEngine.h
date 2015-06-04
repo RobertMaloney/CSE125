@@ -81,7 +81,7 @@ public:
 	static MatrixNode* addNode(Renderable*, bool);
    static Renderable* selectModel(Model model);
     static void updatePercent(Model m, int p);
-
+	static void spawnPSystem(glm::mat4&);
 
 private:
 	static glm::mat4				m_view, m_projection;
@@ -90,11 +90,13 @@ private:
 	static GLFWwindow				*m_window;
 	static GLint					m_uniView, m_uniProjection;
 	static std::vector<MatrixNode*> m_objects;
+	static std::vector<ParticleSystem*> m_psystems;
 	static KeyCallback				m_keyCallback;
 	static MatrixNode				*m_player;
 	static CameraNode				*m_mainCamera;
 	static CameraNode				*m_minimapCamera;
 	static MatrixNode				*m_scene;
+	static Renderable				*m_quad;
 	static int						HUDW;
 	static int                      HUDH;
 	static int                      B;
