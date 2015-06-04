@@ -7,7 +7,7 @@ GameServer::GameServer() {
 	this->idGen = &IdGenerator::getInstance();
 	this->gameState = &GameState::getInstance();
 	this->physics = new PhysicsEngine();
-	this->engine = new GameEngine();
+	this->engine = new GameEngine(this->physics);
 }
 
 
@@ -61,8 +61,7 @@ void GameServer::initialize() {
 	physics->loadConfiguration(configFile);
 	
 	gameState->initWithServer(configFile);
-	engine->generateResources(configFile["num resources"].asInt(),
-		configFile["num clouds"].asInt(), configFile["num pills"].asInt());
+   engine->generateResources(configFile);
 }
 
 
@@ -120,7 +119,7 @@ void GameServer::acceptWaitingClient() {
 
 	ObjectId playerId = idGen->createId();
 
-	Player* newPlayer = new Player(TREE, 505.f, 0.f, 0.f, 0.f);
+	Player* newPlayer = new Player(TREE, 500.f, 0.f, 0.f, 0.f);
 	newPlayer->loadConfiguration(configFile);
 
 	if (!gameState->addPlayer(playerId, newPlayer)){

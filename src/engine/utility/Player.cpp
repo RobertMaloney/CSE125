@@ -122,10 +122,13 @@ void Player::collide(float dt, GameObject & target) {
 	  this->hit = true;
       break;
    case GAMEOBJECT:
-	   if (target.getType() != CLOUD) {
+	   if (target.getModel() != CLOUD) {
 		   this->velocity *= -1;
 	   }
-      this->hit = true;
+      else
+      {
+         this->hit = true;
+      }
       break;
    case IEATABLE:
          {
@@ -148,6 +151,25 @@ void Player::collide(float dt, GameObject & target) {
             //TODO Render needs to figure out (not) rendering dead/invisible object
          }
 			break;
+   case NPCOBJ:
+      {
+         this->eat = true;
+         IEatable* eatable = dynamic_cast<IEatable*>(&target);
+         if (eatable) {
+            std::cout << this->getId() << " old score: " << this->getScore() << endl;
+            this->setScore(this->getScore() + eatable->getPoints());
+            std::cout << this->getId() << " new score: " << this->getScore() << endl;
+            float mass = this->getMass() / this->getMassScale();
+            this->setScale((this->getScore() + SCORE_SCALE_RATIO) / SCORE_SCALE_RATIO);
+            this->setMassScale((this->getScore() + SCORE_MASS_RATIO) / SCORE_MASS_RATIO);
+            this->setMass(mass * this->getMassScale());
+         }
+         else {
+            std::cout << "Error: EATABLE is null: " << typeid(target).name() << endl;
+         }
+         target.setVisible(false);
+      }
+      break;
    case POWERUP:
          {
 			 this->eat = true;
@@ -158,7 +180,7 @@ void Player::collide(float dt, GameObject & target) {
                this->setMoveForce(this->getMoveForce() + powerUp->getMoveForce());
 
                float newMass = this->getMass() + powerUp->getMass();
-               if (newMass > 0.f) this->setMass(newMass);
+               if (newMass > 10.f) this->setMass(newMass);
             }
             target.setVisible(false);
          }
@@ -243,10 +265,10 @@ void Player::deserialize(Packet & p) {
 		burp_count += 1;
 		std::cout << "should burp" << std::endl;
 		if (burp_count < MAX_BURP_COUNT) {
-			GameSound::regburp->play();
+		GameSound::regburp->play();
 		}
 		else {
-			GameSound::bigburp->play();
+		GameSound::bigburp->play();
 			burp_count = 0;
 		}
 		stomach = 0;

@@ -25,7 +25,8 @@ enum Model {
    ROCK_4,
    TALL_ROCK_1,
    TALL_ROCK_2,
-   TALL_ROCK_3
+   TALL_ROCK_3,
+   BUNNY
 };
 
 class ResourceMap {

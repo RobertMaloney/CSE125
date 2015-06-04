@@ -5,7 +5,7 @@ MoveableObject::MoveableObject(float radius, float theta, float azimuth, float d
 	this->setMass(10.f);
 	this->restitution = .99f;
 	memset((void*) &this->verticalComponent, 0, sizeof(VerticalMovement));
-	this->verticalComponent.height = 505.f;
+	this->verticalComponent.height = 500.f;
 	this->setMassScale(1.f);
 }
 
@@ -115,7 +115,7 @@ float MoveableObject::getAngleSpeed() {
 }
 
 vec3 MoveableObject::rotateInXYPlane(vec3 original, float radians) {
-	std::cout << "rotating velocity : " << radians << std::endl;
+	//std::cout << "rotating velocity : " << radians << std::endl;
 	original.x = original.x * glm::cos(glm::radians(radians)) - original.y * glm::sin(glm::radians(radians));
 	original.y = original.x * glm::sin(glm::radians(radians)) + original.y * glm::cos(glm::radians(radians));
 	return original;

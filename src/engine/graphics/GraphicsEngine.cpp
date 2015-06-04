@@ -220,7 +220,7 @@ void GraphicsEngine::Initialize() {
 
 	// CAMERA
 	glm::mat4 camview = glm::lookAt(
-		glm::vec3(0.f, 24.f, 16.f),
+      glm::vec3(0.f, 25.f, 16.f),
 		glm::vec3(0.f, 0.f, 0.f),
 		glm::vec3(0.f, 0.f, 1.f));
 	m_mainCamera = new CameraNode();
