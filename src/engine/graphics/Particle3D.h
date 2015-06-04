@@ -7,7 +7,7 @@
 #include <vector>
 #include <ctime>
 #include <string>
-#include <random>
+#include <algorithm>
 #include "Node.h"
 #include "HUD.h"
 #include "Quad.h"
@@ -21,6 +21,10 @@ struct Particle3D {
 	float size;
 	float life;
 };
+
+static int __cdecl particleSort(const void* a, const void* b) {
+	return 0;
+}
 
 class ParticleSystem : public Node {
 private:
@@ -71,12 +75,20 @@ public:
 			}
 		}
 	}
-	void render(glm::mat4& transform, GLuint shaderId) {
+	void render(glm::mat4& transform, glm::mat4& cam, GLuint shaderId) {
 		if (m_particles.size() < 1) return;
 
 		glUniform1f(glGetUniformLocation(shaderId, "hasTex"), 1);
 		glUniform1i(glGetUniformLocation(shaderId, "billboard"), 1);
 		glUniform1i(glGetUniformLocation(shaderId, "tex"), 0);
+
+		// Z sorting for particles
+		glm::mat4 modelview = cam * transform;
+		std::sort(m_particles.begin(), m_particles.end(), [&modelview](Particle3D a, Particle3D b) -> bool {
+			float deptha = glm::translate(modelview, a.position)[3].z;
+			float depthb = glm::translate(modelview, b.position)[3].z;
+			return deptha < depthb;
+		});
 
 		// Alpha blending (particles)
 		glEnable(GL_BLEND);
