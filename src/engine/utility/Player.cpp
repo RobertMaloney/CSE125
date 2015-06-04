@@ -122,7 +122,7 @@ void Player::collide(float dt, GameObject & target) {
 	  this->hit = true;
       break;
    case GAMEOBJECT:
-	   if (target.getType() != CLOUD) {
+	   if (target.getModel() != CLOUD) {
 		   this->velocity *= -1;
 	   }
       this->hit = true;
