@@ -1,10 +1,13 @@
 #ifndef PARTICLE_NODE_H
 #define PARTICLE_NODE_H
 
+#include <iostream>
 #include <glm.hpp>
+#include <vec3.hpp>
 #include <vector>
 #include <ctime>
 #include <string>
+#include <random>
 #include "Node.h"
 #include "HUD.h"
 #include "Quad.h"
@@ -23,18 +26,30 @@ private:
 	Renderable* particleGraphic;
 	GLuint texId;
 
+	glm::vec3 ballRand(float r, float angle0, float angle1) { // because glm random is being a bitch
+		glm::vec3 result(r, 0, 0);
+		return glm::quat(glm::vec3(0, angle0, angle1)) * result;
+	}
+
+	float linearRand(float min, float max) { // because glm random is being a bitch
+		std::default_random_engine gen;
+		std::uniform_real_distribution<float> distribution(min, max);
+		return distribution(gen);
+	}
+
 public:
 	ParticleSystem(int numParticles, Renderable* geo, GLuint tex) {
 		assert(numParticles > 0);
+		std::default_random_engine gen;
+		std::uniform_real_distribution<float> dist0(0.f, 360.f);
+		std::uniform_real_distribution<float> dist1(2.f, 5.f);
 
-		srand(time(0));
 		for (int i = 0; i < numParticles; ++i) { // random on unit circle for now
-			float randAngle = glm::radians((float) (rand() % 360));
 			Particle3D p;
 			p.position = glm::vec3(0);
-			p.velocity = glm::vec3(glm::cos(randAngle), glm::sin(randAngle), 0);
+			p.velocity = ballRand(dist1(gen), dist0(gen), dist0(gen));
 			p.color = glm::vec3(1);
-			p.life = 3.f;
+			p.life = dist1(gen);
 			p.size = 1.f;
 			m_particles.push_back(p);
 		}
