@@ -5,7 +5,7 @@ MoveableObject::MoveableObject(float radius, float theta, float azimuth, float d
 	this->setMass(10.f);
 	this->restitution = .99f;
 	memset((void*) &this->verticalComponent, 0, sizeof(VerticalMovement));
-	this->verticalComponent.height = 500.f;
+	this->verticalComponent.height = radius;
 	this->setMassScale(1.f);
 }
 

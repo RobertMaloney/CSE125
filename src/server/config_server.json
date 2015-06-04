@@ -36,21 +36,38 @@
         "status": "Pending"
     },
 
+   "bird": {
+      "orientation": null,
+      "angle": 0,
+      "height": 505,
+      "type": "NPC",
+      "modelRadius": 3,
+      "modelHeight": 3,
+      "visible": true,
+      "angleSpeed": 2,
+      "jumpForce": 5000,
+      "moveForce": 50,
+      "mass": 10,
+      "restitution": 1,
+      "points": 100
+   },
+
    "bunny": {
-        "orientation": null,
-        "angle": 0,
-        "height": 505,
-        "type": "NPC",
-        "modelRadius": 3,
-        "modelHeight": 3,
-        "visible": true,
-        "angleSpeed": 2,
-        "jumpForce": 5000,
-        "moveForce": 75,
-        "mass": 10,
-        "restitution": 1,
-        "points": 50
-    },
+      "orientation": null,
+      "angle": 0,
+      "height": 505,
+      "type": "NPC",
+      "modelRadius": 3,
+      "modelHeight": 3,
+      "visible": true,
+      "angleSpeed": 2,
+      "jumpForce": 5000,
+      "moveForce": 75,
+      "mass": 10,
+      "restitution": 1,
+      "points": 50
+   },
+
 
     "moveable object": {
         "orientation": null,
