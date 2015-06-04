@@ -211,7 +211,7 @@ void GraphicsEngine::Initialize() {
 	m_defaultShader->Use();
 	worldModel = new Geometry("../../media/models/sphere_t2.obj");
 
-	m_groundId = HUD::makeHUD("../../media/texture/grass.png");  
+	m_groundId = HUD::makeHUD("../../media/texture/ground12002.png");  
 	worldModel->setTextureId(m_groundId);
 
 	Geode* worldGeode = new Geode();
