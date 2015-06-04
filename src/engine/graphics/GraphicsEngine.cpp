@@ -53,6 +53,7 @@ GLuint				GraphicsEngine::m_HudIdN9 = 0;
 GLuint				GraphicsEngine::m_HudIdN0 = 0;
 GLuint				GraphicsEngine::m_HudIdPer = 0;
 GLuint				GraphicsEngine::m_HudIdSpa = 0;
+GLuint			    GraphicsEngine::m_HudIdCol = 0;
 
 GLuint				GraphicsEngine::m_groundId = 0;
 GLuint				GraphicsEngine::m_borderId = 0;
@@ -86,6 +87,9 @@ Renderable			*GraphicsEngine::m_minus = NULL;
 Renderable			*GraphicsEngine::m_timer = NULL;
 Renderable			*GraphicsEngine::m_timer1 = NULL;
 Renderable			*GraphicsEngine::m_timer2 = NULL;
+Renderable			*GraphicsEngine::m_timer3 = NULL;
+Renderable			*GraphicsEngine::m_timer4 = NULL;
+Renderable			*GraphicsEngine::m_timer5 = NULL;
 
 Renderable			*GraphicsEngine::m_HUD1 = NULL;
 Renderable			*GraphicsEngine::m_HUD2 = NULL;
@@ -357,6 +361,8 @@ GLuint GraphicsEngine::FindTexuture(int id){
 		break;
 	case 10: return m_HudIdSpa;
 		break;
+	case 11: return m_HudIdCol;
+		break;
 
 	}
 }
@@ -391,6 +397,7 @@ void GraphicsEngine::addHUD(){
 	m_HudIdN0 = HUD::makeHUD("../../media/texture/0.png");
 	m_HudIdPer = HUD::makeHUD("../../media/texture/%.png");
 	m_HudIdSpa = HUD::makeHUD("../../media/texture/space.png");
+	m_HudIdCol = HUD::makeHUD("../../media/texture/col.png");
 
 	m_HUDN10 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_HUDN10->setTextureId(m_HudIdSpa);
@@ -453,6 +460,15 @@ void GraphicsEngine::addHUD(){
 
 	m_timer2 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_timer2->setTextureId(m_HudIdN0);
+
+	m_timer3 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
+	m_timer3->setTextureId(m_HudIdCol);
+
+	m_timer4 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
+	m_timer4->setTextureId(m_HudIdN0);
+
+	m_timer5 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
+	m_timer5->setTextureId(m_HudIdN0);
 }
 
 //TODO it is not working
@@ -696,15 +712,29 @@ void GraphicsEngine::renderHUD(int width, int height, glm::mat4 & identity){
 	m_minus->render(&identity);
 
 	// Timer
-	glViewport(width - HUDW * 2 - HUDW / 2 - HUDW * 5/4, height - HUDH + HUDH / 4, HUDW * 5/4, HUDH * 3 / 4);
-	glClear(GL_DEPTH_BUFFER_BIT);
-	m_timer->render(&identity);
-	glViewport(width - HUDW * 2 - HUDW / 2 - HUDW * 5 / 4, height - HUDH + HUDH / 4, (HUDW * 5 / 4 )/2, HUDH * 3 / 4);
+	//glViewport(width - HUDW * 2 - HUDW / 2 - HUDW * 5/4, height - HUDH + HUDH / 4, HUDW * 5/4, HUDH * 3 / 4);
+	//glClear(GL_DEPTH_BUFFER_BIT);
+	//m_timer->render(&identity);
+
+	glViewport(width - HUDW * 2 - HUDW / 2 - first, height - HUDH , HUDW / 3, HUDH);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_timer1->render(&identity);
-	glViewport(width - HUDW * 2 - HUDW / 2 - HUDW * 5 / 4 + ((HUDW * 5 / 4) / 2), height - HUDH + HUDH / 4, (HUDW * 5 / 4)/2, HUDH * 3 / 4);
+
+	glViewport(width - HUDW * 2 - HUDW / 2 - second, height - HUDH , HUDW / 3, HUDH);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_timer2->render(&identity);
+
+	glViewport(width - HUDW * 2 - HUDW / 2 - third, height - HUDH , HUDW / 3, HUDH);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_timer3->render(&identity);
+
+	glViewport(width - HUDW * 2 - HUDW / 2 - third-first, height - HUDH , HUDW / 3, HUDH);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_timer4->render(&identity);
+
+	glViewport(width - HUDW * 2 - HUDW / 2 - third-second, height - HUDH, HUDW / 3, HUDH);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_timer4->render(&identity);
 
 	glDisable(GL_BLEND);
 }
