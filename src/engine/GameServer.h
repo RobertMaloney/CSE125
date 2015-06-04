@@ -4,10 +4,12 @@
 #include <cassert>
 #include <chrono>
 #include <thread>
+#include <mutex>
 #include <string>
 #include <fstream>
 #include <iostream>
 #include <unordered_map>
+#include <condition_variable>
 
 #include "json/json.h"
 #include "physics/PhysicsEngine.h"
@@ -33,7 +35,8 @@ using std::unordered_map;
 using std::make_pair;
 using std::pair;
 using std::cout;
-
+using std::mutex;
+using std::condition_variable;
 
 class PacketHandler;
 
@@ -45,9 +48,12 @@ public:
     ~GameServer();
 
 	void run();
+	void stop();
+	void reset();
     void initialize();
 
     void tick();
+	void getUpdates(vector<Packet> & updates);
     void processClientEvents();
 
 private:
@@ -61,6 +67,10 @@ private:
 	long long TIME_PER_FRAME;
 	float PHYSICS_DT;
 
+	
+	bool running;
+	mutex serverLock;
+	condition_variable serverCV;
 	Json::Value configFile;
 	IdGenerator * idGen;
 	PhysicsEngine* physics;

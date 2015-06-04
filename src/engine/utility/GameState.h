@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <deque>
+#include <set>
 #include "ObjectDB.h"
 #include "Player.h"
 #include "Resource.h"
@@ -16,11 +17,12 @@ class GameState
 {
 protected:
 
+	Json::Value configFile;
 	ObjectDB * map;
 	vector<Player*> players;
     vector<Resource *> resources;
 	int total;
-
+	bool resetting;
 
 public:
 	Player* top;
@@ -29,7 +31,7 @@ public:
 	~GameState();
 
 	void init();
-	void initWithServer();
+	void initWithServer(Json::Value & config);
 
 	bool addPlayer(ObjectId theId, Player* p);
 	bool addObject(ObjectId id, GameObject* o);
@@ -39,6 +41,11 @@ public:
 	int getTotal();
 	void setTotal(int t);
 	
+	void reset(ObjectId clientId);
+	bool isResetting();
+	void setResetting(bool b);
+	void reset();
+
 	static GameState & getInstance();
 
     Model selectPlayerModel(ObjectId playerId);

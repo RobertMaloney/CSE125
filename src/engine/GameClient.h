@@ -31,6 +31,7 @@ using std::cout;
 class GameClient {
 
 public:
+
 	GameState gstate;
 	ObjectId playerid;
 
@@ -46,6 +47,9 @@ public:
 
 	void run();
 	void close();
+
+	bool isLoading();
+	void setLoading(bool b);
 
 	//managing states
 	void addState(IMenuState *state);
@@ -64,6 +68,7 @@ public:
 	//void receiveClientInput();
 
 private:
+	bool loading;
 	//stack of states
 	vector<IMenuState *> states;
 	vector<Packet> updates;
