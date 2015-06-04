@@ -19,9 +19,9 @@ void GameEngine::calculatePercent(){
 		int s = (*it)->getScore();
 		occupied = occupied + s;
 		int p = int(float(s) / total * 100.0);
-		std::cout << (*it)->getId() << ": " << p << endl;
+		//std::cout << (*it)->getId() << ": " << p << endl;
 		(*it)->setPercent(p);
-		std::cout << (*it)->getId()  << (*it)->getPercent() << endl;
+		//std::cout << (*it)->getId()  << (*it)->getPercent() << endl;
 		//cout << "score = " << s << " total = " << total << " p = " << p << endl;
 		if (s > max){
 			max = s;
