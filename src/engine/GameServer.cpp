@@ -60,48 +60,41 @@ void GameServer::initialize() {
 void GameServer::run() {
 	long long elapsedTime;
 	high_resolution_clock::time_point start;
+	running = true;
 
-	while (true) {
+	while (running) {
 		start = high_resolution_clock::now();
 		// try to allow a new player to join
 
 		if (clients->size() < maxConnections) {
 			this->acceptWaitingClient();
 		}
-	//	std::cout << " accept : " << chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count() << std::endl;
 
-	//	start = high_resolution_clock::now();
 		this->processClientEvents(); 		// process the client input events
-
-	//	std::cout << " accept : " << chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count() << std::endl;
-	//	start = high_resolution_clock::now();
 		physics->update(PHYSICS_DT);      // do a physics step
-	//	std::cout << " physics : " << chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count() << std::endl;
-	//	start = high_resolution_clock::now();
 		engine->calculatePercent();
-	//	std::cout << " calculate percent : " << chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count() << std::endl;
-	//	start = high_resolution_clock::now();
 		this->tick();                       // send state back to client
-	//	std::cout << " tick : " << chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count() << std::endl;
 
 		//calculates the ms from start until here.
 		elapsedTime = chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count();
 		if (elapsedTime > TIME_PER_FRAME) {  // this is so know if we need to slow down the loop
-			cerr << "Server loop took long than a frame." << endl;
+		//	cerr << "Server loop took long than a frame." << endl;
 		}
 
-		
-		// sleep for unused time
-	//	start = high_resolution_clock::now();
 		sleep_for(microseconds(TIME_PER_FRAME - elapsedTime));
-		//std::cout << " sleep for : " << chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count() << std::endl;
-
-		//sleep_for(milliseconds(2000));
 
 	}
 }
 
+void GameServer::stop() {
+	running = false;
+}
 
+void GameServer::reset() {
+	serverLock.lock();
+	gameState->setResetting(true);
+	serverLock.unlock();
+}
 
 void GameServer::acceptWaitingClient() {
 	Packet response;
@@ -109,17 +102,11 @@ void GameServer::acceptWaitingClient() {
 	if (!connection) {
 		return;
 	}
-	//Note: Server generates id for client/player, and addes the player to gamestate
-	//Note: default position foor player is 505,0,0,0
+
 	ObjectId playerId = idGen->createId();
 
-	float radius = 500;
-	float theta = (float)(rand() % 180);
-	float azimuth = (float)(rand() % 360);
-	float direction = (float)(rand() % 360);
-
-	Player* newPlayer = new Player(TREE, radius, theta, azimuth, direction);
-	newPlayer->loadConfiguration(configFile["player"]);
+	Player* newPlayer = new Player(TREE, 500.f, 0.f, 0.f, 0.f);
+	newPlayer->loadConfiguration(configFile);
 
 	if (!gameState->addPlayer(playerId, newPlayer)){
 		delete newPlayer;
@@ -138,18 +125,30 @@ void GameServer::acceptWaitingClient() {
 	connection->send(initial);
 }
 
-
-
-void GameServer::tick() {
+void GameServer::getUpdates(vector<Packet> & updates) {
 	Packet p;
-	vector<Packet> updates;
 	vector<GameObject*> & changed = physics->getChangedObjects();
 	for (GameObject* object : changed) {
 		object->serialize(p);
 		updates.push_back(p);
 		p.clear();
 	}
-	changed.clear();
+}
+
+void GameServer::tick() {
+	vector<Packet> updates;
+	
+	if (gameState->isResetting()) {
+		serverLock.lock();
+		ObjectDB & odb = ObjectDB::getInstance();
+		odb.reloadObjects(configFile);
+		odb.getObjectState(updates);
+		gameState->setResetting(false);
+		serverLock.unlock();
+	} else {
+		this->getUpdates(updates);
+	}
+
 	for (auto it = clients->begin(); it != clients->end(); ) {
 		SocketError err = it->first->send(updates);
 		if (this->shouldTerminate(err)){

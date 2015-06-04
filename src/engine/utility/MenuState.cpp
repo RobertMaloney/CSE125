@@ -81,7 +81,7 @@ void MenuState::connectToServer()
 	Json::Value config;
 	Json::Reader reader;
 	ifstream inStream;
-	inStream.open("../server/config_server.json");
+	inStream.open("../client/config_client.json");
 
 	if (!reader.parse(inStream, config, true)) {
 		inStream.close();
@@ -89,7 +89,6 @@ void MenuState::connectToServer()
 		throw runtime_error("Problem parsing json config.");
 	}
 	inStream.close();
-
 
 	//need to use the client's TCP connection that was already created in init()
 	TCPConnection * client_connection = gameclient->connection;
@@ -245,6 +244,7 @@ void MenuState::menuEnter()
 		//check menu_select state
 
 		switch (menu_select) {
+		case REPLAY:
 		case (PLAY) :
 			menu_select = 0;
 
@@ -298,6 +298,7 @@ void MenuState::play()
 	this->login();
 	//gameclient->inMenu = false;
 	GameClient::inMenu = false;
+	
 	GraphicsEngine::setCursor(GLFW_CURSOR_DISABLED);
 
 	//cleanupmenu
@@ -310,24 +311,20 @@ void MenuState::play()
 void MenuState::conti()
 {
 
-	//gameclient->inMenu = false;
-
 	GameClient::inMenu = false;
 	GraphicsEngine::setCursor(GLFW_CURSOR_DISABLED);
 }
 
 void MenuState::replay(){
 
-	//TODO: Do clean up? restart here.....
-
-	//make new TCPconnection and connect to server
-	//this->connectToServer();
-	//if success (no exceptions) login to server
-	//this->login();
-
-	//gameclient->inMenu = false;
+	Packet p;
+	p.writeByte(static_cast<byte>(EventType::REPLAY));
+	gameclient->connection->send(p);
 	GameClient::inMenu = false;
+	gameclient->setResetting(true);
 	GraphicsEngine::setCursor(GLFW_CURSOR_DISABLED);
+	
+	GameSound::ingamebgm->play();
 }
 
 
@@ -351,20 +348,22 @@ void MenuState::checkMenu()
 	switch (menu_select) {
 	case (PLAY) :
 		if (replay_flag){
-			std::cout << "REPLAY" << std::endl;
+			std::cout << "check menu" << std::endl;
+			replay();
+	//		std::cout << "REPLAY" << std::endl;
 		}
 		else if (pause_flag){
-			std::cout << "PAUSE" << std::endl;
+	//		std::cout << "PAUSE" << std::endl;
 		}
 		else{
-		    std::cout << "PLAY" << std::endl;
+//		    std::cout << "PLAY" << std::endl;
 		}
 		break;
 	case (QUIT) :
-		std::cout << "QUIT" << std::endl;
+	//	std::cout << "QUIT" << std::endl;
 		break;
 	default:
-		std::cout << "UNKNOWN MENU SELECTION" << std::endl;
+	//	std::cout << "UNKNOWN MENU SELECTION" << std::endl;
 		break;
 	}
 }

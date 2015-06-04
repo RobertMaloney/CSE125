@@ -32,3 +32,13 @@ std::string ResourceMap::getMatlFile(Model rm)
 {
    return std::string(map[rm]) + ".matl";
 }
+
+
+Model ResourceMap::getModelFromString(std::string m) {
+	transform(m.begin(), m.end(), m.begin(), ::tolower);
+	for (auto it = map.begin(); it != map.end(); ++it) {
+		if (m == it->second){
+			return it->first;
+		}
+	}
+}

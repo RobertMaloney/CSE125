@@ -1,6 +1,6 @@
 #include "ObjectDB.h"
 
-
+#include "Player.h"
 
 ObjectDB::ObjectDB() {
 }
@@ -11,6 +11,13 @@ ObjectDB::~ObjectDB() {
 		if (it->second) {
 			delete it->second;
 		}
+	}
+}
+
+
+void ObjectDB::reloadObjects(Json::Value & config) {
+	for (auto it = objects.begin(); it != objects.end(); ++it) {
+		it->second->loadConfiguration(config);
 	}
 }
 
