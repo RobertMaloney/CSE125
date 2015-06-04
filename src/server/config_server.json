@@ -25,7 +25,7 @@
         "visible": true,
         "angleSpeed": 2,
         "jumpForce": 25000,
-        "moveForce": 250,
+        "moveForce": 200,
         "mass": 10,
         "restitution": 1,
         "burp count": 0,
