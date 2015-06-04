@@ -131,6 +131,7 @@
     <ClCompile Include="utility\Model.cpp" />
     <ClCompile Include="physics\PhysicsEngine.cpp" />
     <ClCompile Include="utility\jsoncpp.cpp" />
+    <ClCompile Include="utility\Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameClient.h" />
@@ -184,6 +185,7 @@
     <ClInclude Include="utility\Status.h" />
     <ClInclude Include="utility\System.h" />
     <ClInclude Include="physics\PhysicsEngine.h" />
+    <ClInclude Include="utility\Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
