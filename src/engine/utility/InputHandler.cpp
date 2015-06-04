@@ -38,10 +38,12 @@ void InputHandler::handleKey(int key, int action, int mods) {
 			p.writeByte(EventType::MOVE_BACKWARD);
 			input.push_back(p);
 			clientInput.push_back(p);
+			GraphicsEngine::reverseCam(true);
 		} else if (action == GLFW_RELEASE) {
 			p.writeByte(EventType::STOP_BACKWARD);
 			input.push_back(p);
 			clientInput.push_back(p);
+			GraphicsEngine::reverseCam(false);
 		}
 	} else if (key == GLFW_KEY_D) {
 		if (action == GLFW_PRESS) {

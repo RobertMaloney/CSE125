@@ -82,6 +82,7 @@ public:
    static Renderable* selectModel(Model model);
     static void updatePercent(Model m, int p);
 	static void spawnPSystem(glm::mat4&);
+	static void reverseCam(bool);
 
 private:
 	static glm::mat4				m_view, m_projection;
