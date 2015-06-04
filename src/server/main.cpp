@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
 	thread gameThread(&GameServer::run, &server);
 	
 	while (true) { 
-		cout << "\ndustyplanet:-$ ";
+		cout << "dustyplanet:-$ ";
 		cin >> command;
 		stringToLowerCase(command);
 		trimNewLine(command);

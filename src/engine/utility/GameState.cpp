@@ -23,9 +23,10 @@ void GameState::init()
 void GameState::initWithServer(Json::Value & config)
 {
 	//get db
-	this->configFile = config;
+
 	map = &ObjectDB::getInstance();
 }
+
 
 
 bool GameState::addPlayer(ObjectId theId, Player* p) {
@@ -99,25 +100,7 @@ bool GameState::isResetting(){
 void GameState::setResetting(bool b) {
 	this->resetting = b;
 }
-/*
-void GameState::reset() {
-	//ObjectDB::getInstance().reloadObjects(configFile);
-	for (auto it = map->objects.begin(); it != map->objects.end(); ++it) {
-		switch (it->second->getType()) {
-		case PLAYER: {
-				Player* p = dynamic_cast<Player*>(it->second);
-				p->loadConfiguration(configFile["player"]);
-				//	p->setScore(0);
-			//	p->setStatus(GStatus::PENDING);
-			//	p->setPercent(0);					
-			}
-			break;
-		default:
-			it->second->setVisible(true);
-			break;
-		}
-	}*/
-//}
+
 
 void GameState::reset(ObjectId clientId) {
 	static set<ObjectId> clients;

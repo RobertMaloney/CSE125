@@ -110,11 +110,12 @@ void PhysicsEngine::integrateObjects(float dt) {
 
 
 void PhysicsEngine::loadConfiguration(Json::Value config) {
+	Json::Value & physics = config["physics engine"];
 	GravityGenerator* gGenerator = (GravityGenerator*) forces.find(GRAVITY)->second;
-	gGenerator->gravity = -1.f * config["gravity"].asFloat();
+	gGenerator->gravity = -1.f * physics["gravity"].asFloat();
 
 	DragGenerator* dGenerator = (DragGenerator*) forces.find(DRAG)->second;
-	dGenerator->k1 = config["k1"].asFloat();
-	dGenerator->k2 = config["k2"].asFloat();
+	dGenerator->k1 = physics["k1"].asFloat();
+	dGenerator->k2 = physics["k2"].asFloat();
 }
 
