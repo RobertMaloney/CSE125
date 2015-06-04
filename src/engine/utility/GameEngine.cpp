@@ -28,7 +28,7 @@ void GameEngine::calculatePercent(){
 		}
 	}	
 	//std::cout << occupied << "  " << total << endl;
-	if (occupied >= total * .10){
+	if (occupied >= total ){
 		//Win or lose
 		for (auto it = gstate->getPlayers().begin(); it != gstate->getPlayers().end(); ++it) {
 			if ((*it) == gstate->top){//win
@@ -91,7 +91,7 @@ void GameEngine::generateRandomResources(int num) {
          total = total + 30;
 		}
 		else if (pick == 1) {
-			newRe = new Rock(radius, theta, azimuth, direction);
+			newRe = new Rock(0,radius, theta, azimuth, direction);
 			newRe->setModelRadius(2.f);
 			newRe->setModelHeight(4.5f);
 		}
@@ -134,7 +134,7 @@ void GameEngine::generateClouds(int num) {
       float theta = (float)(rand() % 360);
       float azimuth = (float)(rand() % 360);
       float direction = (float)(0);
-      Resource * newRe = new Cloud(radius, theta, azimuth, direction);
+      Resource * newRe = new Cloud(15.f, radius, theta, azimuth, direction);
 
       ObjectId resourceId = IdGenerator::getInstance().createId();
       gstate->addResource(resourceId, newRe);
@@ -175,7 +175,7 @@ void GameEngine::generateClusterTree(float radius, float theta, float azimuth, i
          total = total + 30;
       }
       else if (pick >= 60 && pick < 70) {
-         newRe = new Rock(radius, theta, azimuth, direction);
+         newRe = new Rock(0,radius, theta, azimuth, direction);
          newRe->setModelRadius(2.f);
          newRe->setModelHeight(4.5f);
       }
@@ -232,7 +232,7 @@ void GameEngine::generateRockRing()
          //azimuth = floor + float((range * rand()) / (RAND_MAX + 1.0));
 
          float direction = (float)(0);
-         Resource * newRe = new Rock(radius, theta, azimuth, direction);
+         Resource * newRe = new Rock(0,radius, theta, azimuth, direction);
 
          ObjectId resourceId = IdGenerator::getInstance().createId();
          gstate->addResource(resourceId, newRe);

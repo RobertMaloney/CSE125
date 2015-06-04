@@ -13,6 +13,12 @@ GravityGenerator::~GravityGenerator() {
 #include "../utility/NPC.h"
 void GravityGenerator::updateForce(MoveableObject* target, float dt) {
 	VerticalMovement & verticalComponent = target->getVerticalComponent();
+	
+	if (verticalComponent.height < 506.f) {
+		vec3 unitVelocity = glm::normalize(target->getVelocity());
+		target->addForce(target->getMass() * gravity * unitVelocity * 1.f * target->getFrictionCoefficient());
+	}
+
 	if (verticalComponent.height < 500.f) {
 		verticalComponent.height = 500.f;
 		verticalComponent.velocity *= -.5f;
@@ -20,11 +26,10 @@ void GravityGenerator::updateForce(MoveableObject* target, float dt) {
 		if (target->getType() == PLAYER) {
 			Player* p = dynamic_cast<Player*>(target);
 			p->setJumping(false);
-      }
-      else if (target->getType() == NPCOBJ) {
-         NPC * npc = dynamic_cast<NPC*>(target);
-         npc->setJumping(false);
-      }
+        } else if (target->getType() == NPCOBJ) {
+           NPC * npc = dynamic_cast<NPC*>(target);
+           npc->setJumping(false);
+        }
 		return;
 	}
 	

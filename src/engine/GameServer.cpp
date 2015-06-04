@@ -59,9 +59,8 @@ void GameServer::initialize() {
 	this->listener->setNonBlocking(true);
 
 	physics->loadConfiguration(configFile);
-	
 	gameState->initWithServer(configFile);
-   engine->generateResources(configFile);
+    engine->generateResources(configFile);
 }
 
 
