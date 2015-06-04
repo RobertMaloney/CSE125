@@ -213,7 +213,7 @@ void GraphicsEngine::Initialize() {
 	m_defaultShader->Use();
 	worldModel = new Geometry("../../media/models/sphere_t2.obj");
 
-	m_groundId = HUD::makeHUD("../../media/texture/ground12002.png");  
+	m_groundId = HUD::makeHUD("../../media/texture/ground32.png");  
 	worldModel->setTextureId(m_groundId);
 
 	Geode* worldGeode = new Geode();
@@ -891,7 +891,7 @@ void GraphicsEngine::setCursor(int state) {
 }
 
 void GraphicsEngine::spawnPSystem(glm::mat4 &matrix) {
-	ParticleSystem* ps = new ParticleSystem((int) Random::linearRand(50.f, 100.f), m_quad, m_groundId);
+	ParticleSystem* ps = new ParticleSystem((int) Random::linearRand(50.f, 100.f), m_quad, m_HudIdPer);
 	MatrixNode* pm = new MatrixNode();
 	pm->setMatrix(matrix);
 	pm->addChild(ps);

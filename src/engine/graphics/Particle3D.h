@@ -12,6 +12,7 @@
 #include "HUD.h"
 #include "Quad.h"
 #include "Random.h"
+#include "..\utility\Config.h"
 
 struct Particle3D {
 	glm::vec3 position;
@@ -33,11 +34,11 @@ public:
 
 		for (int i = 0; i < numParticles; ++i) { // random on unit circle for now
 			Particle3D p;
-			p.position = Random::ballRand(Random::linearRand(0.f, 0.5f));
-			p.velocity = Random::ballRand(Random::linearRand(2.f, 5.f));
+			p.position = Random::ballRand(Random::linearRand(0.5f, 0.5f));
+			p.velocity = Random::ballRand(Random::linearRand(Config::settings["particles"]["velocity"][0].asFloat(), Config::settings["particles"]["velocity"][1].asFloat()));
 			p.color = glm::vec3(1);
-			p.life = Random::linearRand(1.f, 3.f);
-			p.size = Random::linearRand(0.5f, 2.5f);
+			p.life = Random::linearRand(Config::settings["particles"]["life"][0].asFloat(), Config::settings["particles"]["life"][1].asFloat());
+			p.size = Random::linearRand(Config::settings["particles"]["size"][0].asFloat(), Config::settings["particles"]["size"][1].asFloat());
 			m_particles.push_back(p);
 		}
 
