@@ -65,13 +65,11 @@ void GameEngine::generateRandomResources(int num) {
 	int total = 0;
 	for (int i = 0; i < num; i++)
 	{
-		float radius = 495;
+		float radius = 505;
 		float theta = (float)(rand() % 180);
 		float azimuth = (float)(rand() % 360);
 		float direction = (float)(rand() % 360);
-		Resource * newRe = new Tree(30, radius, theta, azimuth, direction);
-		newRe->setModelRadius(3.f);
-		newRe->setModelHeight(17.f);
+      Resource * newRe;
 
 
 		int pick = rand() % 5;
