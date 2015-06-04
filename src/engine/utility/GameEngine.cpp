@@ -52,11 +52,11 @@ void GameEngine::endGame(){
 void GameEngine::generateResources(Json::Value configFile)
 {
    this->configFile = configFile;
-   //generateRandomResources(configFile["num resources"].asInt());
+   generateRandomResources(configFile["num resources"].asInt());
    //generateRandomResources(1);
    generateClouds( configFile["num clouds"].asInt());
    generatePills(configFile["num pills"].asInt());
-   generateClusterTree(505, 10, 10, 200);
+   //generateClusterTree(505, 10, 10, 200);
    //generateRockRing();
    generateNPC(15);
 }
@@ -84,10 +84,13 @@ void GameEngine::generateRandomResources(int num) {
 		// flower    xy 2.f z 1.5f
 		//Scores are placeholder, need to handle them differently...
 		if (pick == 0){
-			newRe = new Tree(30, radius, theta, azimuth, direction);
-			newRe->setModelRadius(3.f);
-			newRe->setModelHeight(17.f);
-			total = total + 30;
+         newRe = new Tree(30, 500, theta, azimuth, direction);
+         float floor = 1.0, ceiling = 2.0, range = (ceiling - floor);
+         float scale = floor + float((range * rand()) / (RAND_MAX + 1.0));
+         newRe->setScale(scale);
+         newRe->setModelRadius(3.f);
+         newRe->setModelHeight(17.f);
+         total = total + 30;
 		}
 		else if (pick == 1) {
 			newRe = new Rock(radius, theta, azimuth, direction);
