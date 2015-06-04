@@ -65,21 +65,21 @@ public:
 	static void ScaleDown();
 	static KeyCallback GetKeyCallback();
 	//static void UpdatePlayer(deque<Packet> &, GameState &);
-   static int getKeyState(int);
+    static int getKeyState(int);
 
-   static void bindPlayerNode(GameObject* player);
-	static void updateObject(ObjectId objId, glm::quat &, float, float, float, bool);
+    static void bindPlayerNode(GameObject* player);
+	static void updateObject(ObjectId objId, glm::quat &, float, float, float, bool, bool);
 	static void insertObject(ObjectId objId, MatrixNode*);
-   static void removeObject(ObjectId objId);
+    static void removeObject(ObjectId objId);
     static void ZoomIn();
     static void ZoomOut();
 	static void setMenuStatus(MenuStatus ms);
 	static MenuStatus getMenuStatus();
 
-   static void setCursor(int);
+    static void setCursor(int);
 
 	static MatrixNode* addNode(Renderable*, bool);
-   static Renderable* selectModel(Model model);
+    static Renderable* selectModel(Model model);
     static void updatePercent(Model m, int p);
 	static void spawnPSystem(glm::mat4&);
 
