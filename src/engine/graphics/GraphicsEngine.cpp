@@ -32,7 +32,9 @@ KeyCallback			GraphicsEngine::m_keyCallback = NULL;
 MatrixNode			*GraphicsEngine::m_player = NULL,
 
 *GraphicsEngine::m_scene = NULL;
-Renderable			*GraphicsEngine::m_quad = NULL;
+Renderable			*GraphicsEngine::m_quad = NULL,
+*GraphicsEngine::m_cube = NULL;
+GLuint				GraphicsEngine::m_particleTex = 0;
 
 CameraNode			*GraphicsEngine::m_mainCamera = NULL;
 CameraNode			*GraphicsEngine::m_minimapCamera = NULL;
@@ -178,7 +180,6 @@ void GraphicsEngine::Initialize() {
 	// Turn on z-buffering
 	glEnable(GL_DEPTH_TEST);
 
-
 	// SKYBOX
 	m_skyboxShader->Use();
 	m_skybox = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.f);
@@ -213,7 +214,7 @@ void GraphicsEngine::Initialize() {
 	m_defaultShader->Use();
 	worldModel = new Geometry("../../media/models/sphere_t2.obj");
 
-	m_groundId = HUD::makeHUD("../../media/texture/ground12002.png");  
+	m_groundId = HUD::makeHUD("../../media/texture/ground32.png");  
 	worldModel->setTextureId(m_groundId);
 
 	Geode* worldGeode = new Geode();
@@ -223,6 +224,8 @@ void GraphicsEngine::Initialize() {
 
 	// Particle quad
 	m_quad = new Quad(0.5f, glm::vec3(1));
+	m_cube = new Cube(glm::vec3(), glm::quat(), glm::vec3(1), 0.5f);
+	m_particleTex = HUD::makeHUD("../../media/texture/particle0.png");
 
 	// CAMERA
 	glm::mat4 camview = glm::lookAt(
@@ -477,7 +480,7 @@ void GraphicsEngine::DrawAndPoll() {
 	glfwSetTime(0.0); // reset for next frame
 
 	MatrixData cameraData = m_mainCamera->getFlatViewMatrix();
-	glm::mat4 view = cameraData.flattened;
+	m_view = cameraData.flattened;
 	glm::mat4 skybox_view = glm::scale(glm::mat4(glm::mat3(cameraData.flattened)), glm::vec3(1) / cameraData.scale); // try optimizing later
 
 	//glm::vec4 glPos = m_projection * skybox_view * glm::vec4(1.f, 1.f, 1.f, 1.f);
@@ -511,7 +514,7 @@ void GraphicsEngine::DrawAndPoll() {
 	LightHandler::updateLighting(m_defaultShader->Id());
 	glUniform1f(glGetUniformLocation(m_defaultShader->Id(), "hasTex"), 0);
 	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "projection"), 1, GL_FALSE, glm::value_ptr(m_projection));
-	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "view"), 1, GL_FALSE, glm::value_ptr(view));
+	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "view"), 1, GL_FALSE, glm::value_ptr(m_view));
 	glUniform3fv(glGetUniformLocation(m_defaultShader->Id(), "camPos"), 1, glm::value_ptr(cameraData.translation));
 
 	renderScene(m_scene, &identity);
@@ -725,6 +728,7 @@ void GraphicsEngine::renderScene(Node* node, glm::mat4* matrix) {
 	if (geode) {
 		// render geode
 		m_defaultShader->Use();
+		glUniform1i(glGetUniformLocation(m_defaultShader->Id(), "billboard"), 0);
 		if (geode->getTex()){
 			glUniform1f(glGetUniformLocation(m_defaultShader->Id(), "hasTex"), 1);
 			glUniform1i(glGetUniformLocation(m_defaultShader->Id(), "tex"), 0);
@@ -738,9 +742,7 @@ void GraphicsEngine::renderScene(Node* node, glm::mat4* matrix) {
 	else if (psystem) {
 		// render particles
 		m_defaultShader->Use();
-		glUniform1f(glGetUniformLocation(m_defaultShader->Id(), "hasTex"), 1);
-		glUniform1i(glGetUniformLocation(m_defaultShader->Id(), "tex"), 0);
-		psystem->render(*matrix);
+		psystem->render(*matrix, m_view, m_defaultShader->Id());
 	}
 	else if (mnode && mnode->getVisible()) {
 		int numChildren = mnode->getNumChildren();
@@ -891,7 +893,7 @@ void GraphicsEngine::setCursor(int state) {
 }
 
 void GraphicsEngine::spawnPSystem(glm::mat4 &matrix) {
-	ParticleSystem* ps = new ParticleSystem((int) Random::linearRand(50.f, 100.f), m_quad, m_groundId);
+	ParticleSystem* ps = new ParticleSystem((int) Random::linearRand(50.f, 100.f), m_quad, m_particleTex);
 	MatrixNode* pm = new MatrixNode();
 	pm->setMatrix(matrix);
 	pm->addChild(ps);
