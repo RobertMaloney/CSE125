@@ -499,7 +499,7 @@ void GraphicsEngine::addHUD(){
 	m_minus->setTextureId(m_minusId);
 	*/
 	// Timer
-	m_timer = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
+	/*m_timer = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_timerId = HUD::makeHUD("../../media/texture/timer.png");
 	m_timer->setTextureId(m_timerId);*/
 
