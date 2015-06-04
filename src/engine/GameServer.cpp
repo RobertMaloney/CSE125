@@ -17,14 +17,17 @@ GameServer::~GameServer() {
 		delete listener;
 		listener = nullptr;
 	}
+
 	for (auto it = clients->begin(); it != clients->end(); ++it) {
 		if (it->first) {
 			delete it->first;
 		}
 	}
+
 	delete clients;
-	clients = nullptr;
 	delete physics;
+	delete handler;
+	delete engine;
 }
 
 
@@ -124,6 +127,7 @@ void GameServer::acceptWaitingClient() {
 		delete newPlayer;
 		return;
 	}
+
 	physics->registerInteraction(newPlayer, DRAG | GRAVITY);
 	connection->setNoDelay(true);
 	connection->setNonBlocking(true);
