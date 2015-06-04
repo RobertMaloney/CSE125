@@ -336,6 +336,10 @@ void GraphicsEngine::RenderScore(int Player1, int Player2, int Player3, int Play
 	m_HUDN42->setTextureId(FindTexuture(Hud42));
 }
 
+//void GraphicsEngine::RenderTimer(){
+
+//}
+
 GLuint GraphicsEngine::FindTexuture(int id){
 
 	switch (id){
@@ -437,7 +441,7 @@ void GraphicsEngine::addHUD(){
 
 
 	//Mini map border
-	m_border = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
+	/*m_border = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_borderId = HUD::makeHUD("../../media/texture/border.png");
 	m_border->setTextureId(m_borderId);
 
@@ -453,8 +457,9 @@ void GraphicsEngine::addHUD(){
 	// Timer
 	m_timer = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_timerId = HUD::makeHUD("../../media/texture/timer.png");
-	m_timer->setTextureId(m_timerId);
+	m_timer->setTextureId(m_timerId);*/
 
+	//Timer digits
 	m_timer1 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
 	m_timer1->setTextureId(m_HudIdN0);
 
@@ -551,6 +556,7 @@ void GraphicsEngine::DrawAndPoll() {
 
 	//Update HUD 
 	RenderScore(p1p, p2p, p3p, p4p); //p,,b,g,o
+	//RenderTimer();
 
 	// Update lights
 	LightHandler::updateLighting(m_defaultShader->Id());
@@ -697,19 +703,19 @@ void GraphicsEngine::renderHUD(int width, int height, glm::mat4 & identity){
 
 
 	//HUD on top of minimap
-	glViewport(width - HUDW * 2, height - HUDH * 2, HUDW * 2, HUDH * 2);
+	/*glViewport(width - HUDW * 2, height - HUDH * 2, HUDW * 2, HUDH * 2);
 	glClear(GL_DEPTH_BUFFER_BIT);
-	m_border->render(&identity);
+	m_border->render(&identity);*/
 
 	// Zoom in 
-	glViewport(width - HUDW * 2 - HUDW/2, height - HUDH + HUDW/2, HUDW/2, HUDH/2);
+	/*glViewport(width - HUDW * 2 - HUDW/2, height - HUDH + HUDW/2, HUDW/2, HUDH/2);
 	glClear(GL_DEPTH_BUFFER_BIT);
-	m_plus->render(&identity);
+	m_plus->render(&identity);*/
 
 	// Zoom out
-	glViewport(width - HUDW * 2 - HUDW / 2, height - HUDH , HUDW / 2, HUDH / 2);
+	/*glViewport(width - HUDW * 2 - HUDW / 2, height - HUDH , HUDW / 2, HUDH / 2);
 	glClear(GL_DEPTH_BUFFER_BIT);
-	m_minus->render(&identity);
+	m_minus->render(&identity);*/
 
 	// Timer
 	//glViewport(width - HUDW * 2 - HUDW / 2 - HUDW * 5/4, height - HUDH + HUDH / 4, HUDW * 5/4, HUDH * 3 / 4);
@@ -734,7 +740,7 @@ void GraphicsEngine::renderHUD(int width, int height, glm::mat4 & identity){
 
 	glViewport(width - HUDW * 2 - HUDW / 2 - third-second, height - HUDH, HUDW / 3, HUDH);
 	glClear(GL_DEPTH_BUFFER_BIT);
-	m_timer4->render(&identity);
+	m_timer5->render(&identity);
 
 	glDisable(GL_BLEND);
 }
