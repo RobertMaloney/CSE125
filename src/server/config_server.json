@@ -3,7 +3,7 @@
     "fps": 60,
     "ip": "127.0.0.1",
     "port": "9000",
-    "num resources": 1000,
+    "num resources": 100,
     "num clouds": 100,
     "num pills": 10,
 	"num npcs": 15,
