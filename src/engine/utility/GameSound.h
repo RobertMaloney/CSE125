@@ -7,6 +7,7 @@
 #pragma comment(lib, "winmm.lib") // SO weird I need this for music
 
 #define SOUND_OUCH_NUM 10
+const bool SOUND_ENABLE = true;
 
 class GameSound 
 {
@@ -19,17 +20,21 @@ public:
 						*regburp,
 						*bigburp,
 						*jump,
+						*spaceship,
+						*loadingnow,
 						*ouch_arr[SOUND_OUCH_NUM]
 						;
 
 	static sf::Music	*menubgm,
 						*menubgm2,
 						*ingamebgm,
-						*ingamebgm2;
+						*ingamebgm2,
+						*loadingloop;
 
 	static void init();
 
 	static void playOuch();
+	static void playLoading();
 
 private:
 	//music doesn't need buffer
@@ -41,6 +46,8 @@ private:
 							*regburp_buf, 
 							*bigburp_buf, 
 							*jump_buf,
+							*spaceship_buf,
+							*loadingnow_buf,
 							*ouch_buf_arr[SOUND_OUCH_NUM]
 							;
 

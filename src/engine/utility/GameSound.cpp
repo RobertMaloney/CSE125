@@ -3,67 +3,76 @@
 #include <string>
 #include <cstdlib>
 
-sf::Sound	*GameSound::menumove		= NULL,
-			*GameSound::menuconfirm		= NULL,
-			*GameSound::menuback		= NULL,
-			*GameSound::blobmove		= NULL,
-			*GameSound::nom				= NULL,
-			*GameSound::regburp			= NULL,
-			*GameSound::bigburp			= NULL,
-			*GameSound::jump			= NULL,
+sf::Sound	*GameSound::menumove	= NULL,
+			*GameSound::menuconfirm = NULL,
+			*GameSound::menuback	= NULL,
+			*GameSound::blobmove	= NULL,
+			*GameSound::nom			= NULL,
+			*GameSound::regburp		= NULL,
+			*GameSound::bigburp		= NULL,
+			*GameSound::jump		= NULL,
+			*GameSound::spaceship	= NULL,
+			*GameSound::loadingnow	= NULL,
 
 			*GameSound::ouch_arr[SOUND_OUCH_NUM] = {}
-			;
+;
 
-sf::Music	*GameSound::menubgm			= NULL,
-			*GameSound::menubgm2		= NULL,
-			*GameSound::ingamebgm		= NULL,
-			*GameSound::ingamebgm2		= NULL
-			;
+sf::Music	*GameSound::menubgm = NULL,
+			*GameSound::menubgm2 = NULL,
+			*GameSound::ingamebgm = NULL,
+			*GameSound::ingamebgm2 = NULL,
+			*GameSound::loadingloop = NULL
+;
 
-sf::SoundBuffer	*GameSound::menumove_buf		= NULL,
-				*GameSound::menuconfirm_buf		= NULL,
-				*GameSound::menuback_buf		= NULL,
-				*GameSound::blobmove_buf		= NULL,
-				*GameSound::nom_buf				= NULL,
-				*GameSound::regburp_buf			= NULL,
-				*GameSound::bigburp_buf			= NULL,
-				*GameSound::jump_buf			= NULL,
+sf::SoundBuffer	*GameSound::menumove_buf = NULL,
+*GameSound::menuconfirm_buf = NULL,
+*GameSound::menuback_buf = NULL,
+*GameSound::blobmove_buf = NULL,
+*GameSound::nom_buf = NULL,
+*GameSound::regburp_buf = NULL,
+*GameSound::bigburp_buf = NULL,
+*GameSound::jump_buf = NULL,
+*GameSound::spaceship_buf = NULL,
+*GameSound::loadingnow_buf = NULL,
 
-				*GameSound::ouch_buf_arr[SOUND_OUCH_NUM] = {}
-				;
+*GameSound::ouch_buf_arr[SOUND_OUCH_NUM] = {}
+;
 
 void GameSound::init()
 {
-	menumove_buf	= new sf::SoundBuffer();
+	menumove_buf = new sf::SoundBuffer();
 	menuconfirm_buf = new sf::SoundBuffer();
-	menuback_buf	= new sf::SoundBuffer();
-	blobmove_buf	= new sf::SoundBuffer();
-	nom_buf			= new sf::SoundBuffer();
-	regburp_buf		= new sf::SoundBuffer();
-	bigburp_buf		= new sf::SoundBuffer();
-	jump_buf		= new sf::SoundBuffer();
+	menuback_buf = new sf::SoundBuffer();
+	blobmove_buf = new sf::SoundBuffer();
+	nom_buf = new sf::SoundBuffer();
+	regburp_buf = new sf::SoundBuffer();
+	bigburp_buf = new sf::SoundBuffer();
+	jump_buf = new sf::SoundBuffer();
+	spaceship_buf = new sf::SoundBuffer();
+	loadingnow_buf = new sf::SoundBuffer();
 	for (int i = 0; i < SOUND_OUCH_NUM; i++) {
 		ouch_buf_arr[i] = new sf::SoundBuffer();
 	}
 
-	menuconfirm		= new sf::Sound();
-	menumove		= new sf::Sound();
-	menuback		= new sf::Sound();
-	blobmove		= new sf::Sound();
-	nom				= new sf::Sound();
-	regburp			= new sf::Sound();
-	bigburp			= new sf::Sound();
-	jump			= new sf::Sound();
+	menuconfirm = new sf::Sound();
+	menumove = new sf::Sound();
+	menuback = new sf::Sound();
+	blobmove = new sf::Sound();
+	nom = new sf::Sound();
+	regburp = new sf::Sound();
+	bigburp = new sf::Sound();
+	jump = new sf::Sound();
+	spaceship = new sf::Sound();
+	loadingnow = new sf::Sound();
 	for (int i = 0; i < SOUND_OUCH_NUM; i++) {
 		ouch_arr[i] = new sf::Sound();
 	}
 
-	menubgm			= new sf::Music();
-	menubgm2		= new sf::Music();
-	ingamebgm		= new sf::Music();
-	ingamebgm2		= new sf::Music();
-	
+	menubgm = new sf::Music();
+	menubgm2 = new sf::Music();
+	ingamebgm = new sf::Music();
+	ingamebgm2 = new sf::Music();
+
 	//menumove
 	loadSound(menumove, menumove_buf, "../../media/sound/menumove.wav");
 
@@ -89,6 +98,12 @@ void GameSound::init()
 	//jump
 	loadSound(jump, jump_buf, "../../media/sound/jump.wav");
 
+	//spaceship
+	loadSound(spaceship, spaceship_buf, "../../media/sound/spaceship.wav");
+
+	//loadingnow
+	loadSound(loadingnow, loadingnow_buf, "../../media/sound/loadingnow.wav");
+
 	//ouch
 	loadSoundColl(ouch_arr, ouch_buf_arr, "../../media/sound/ouch", SOUND_OUCH_NUM);
 
@@ -110,6 +125,9 @@ void GameSound::init()
 
 void GameSound::loadSound(sf::Sound *sound, sf::SoundBuffer *buffer, std::string path)
 {
+	if (!SOUND_ENABLE) {
+		return;
+	}
 	if (!buffer->loadFromFile(path))
 		return;
 	sound->setBuffer(*buffer);
@@ -118,6 +136,9 @@ void GameSound::loadSound(sf::Sound *sound, sf::SoundBuffer *buffer, std::string
 
 void GameSound::loadSoundColl(sf::Sound *sound[], sf::SoundBuffer *buffer[], std::string path, int size)
 {
+	if (!SOUND_ENABLE) {
+		return;
+	}
 	for (int i = 0; i < size; i++) {
 		int index = i + 1;
 		if (!buffer[i]->loadFromFile(path + std::to_string(index) + ".wav"))
@@ -129,6 +150,9 @@ void GameSound::loadSoundColl(sf::Sound *sound[], sf::SoundBuffer *buffer[], std
 
 void GameSound::loadMusic(sf::Music *music, std::string path)
 {
+	if (!SOUND_ENABLE) {
+		return;
+	}
 	if (!music->openFromFile(path))
 		return;
 	music->setVolume(50);
@@ -138,5 +162,18 @@ void GameSound::loadMusic(sf::Music *music, std::string path)
 
 void GameSound::playOuch()
 {
+	if (!SOUND_ENABLE) {
+		return;
+	}
 	ouch_arr[rand() % SOUND_OUCH_NUM]->play();
+}
+
+
+void GameSound::playLoading()
+{
+	if (!SOUND_ENABLE) {
+		return;
+	}
+	spaceship->play();
+	loadingnow->play();
 }
