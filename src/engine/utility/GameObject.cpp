@@ -88,6 +88,11 @@ void GameObject::setScale(float s) {
 	this->scale = s;
 }
 
+void GameObject::randScale(float min, float max) {
+   float floor = min, ceiling = max, range = (ceiling - floor);
+   this->scale = floor + float((range * rand()) / (RAND_MAX + 1.0));
+}
+
 void GameObject::setModelHeight(float mheight) {
 	assert(!(mheight < 0.f));
 	this->modelHeight = mheight;

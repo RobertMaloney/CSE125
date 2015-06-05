@@ -120,21 +120,10 @@ public:
 
 class Rock : public EatableResource{
 public:
-	Rock() : EatableResource(1, ROCK_1){
-      int pick = rand() % 4;
-
-      if (pick == 0)
-         this->setModel(ROCK_1);
-      else if (pick == 1)
-         this->setModel(ROCK_2);
-      else if (pick == 2)
-         this->setModel(ROCK_3);
-      else if (pick == 3)
-         this->setModel(ROCK_4);
-   };
+	Rock() : Rock(1){};
 	Rock(int points) : EatableResource(1, ROCK_1){};
 	Rock(int points, float radius, float theta, float azimuth, float direction) :
-		EatableResource(points, TALL_ROCK_1, radius, theta, azimuth, direction) {
+		EatableResource(points, ROCK_1, 500.f, theta, azimuth, direction) {
       int pick = rand() % 3;
 
       if (pick == 0)
@@ -143,8 +132,8 @@ public:
          this->setModel(ROCK_2);
       else if (pick == 2)
          this->setModel(ROCK_3);
-      else if (pick == 3)
-         this->setModel(ROCK_4);
+
+      this->randScale(.5f, 3.f);
    };
 
    virtual ~Rock() {};
@@ -162,7 +151,7 @@ public:
    };
 
    TallRock(float radius, float theta, float azimuth, float direction) :
-	   EatableResource(1,TALL_ROCK_1, radius, theta, azimuth, direction) {
+	   EatableResource(1,TALL_ROCK_1, 500.f, theta, azimuth, direction) {
       int pick = rand() % 3;
 
       if (pick == 0)
@@ -218,7 +207,7 @@ class Pill : public PowerUpResource {
 public:
    Pill() : PowerUpResource(0, 0, .5f, PILL) {};
    Pill(float radius, float theta, float azimuth, float direction) :
-      PowerUpResource(0, 0, .5f, PILL, radius, theta, azimuth, direction){};
+      PowerUpResource(0, 0, .5f, PILL, 503.f, theta, azimuth, direction){};
 
    virtual ~Pill() { };
 };
