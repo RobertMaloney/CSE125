@@ -28,8 +28,9 @@ void GameEngine::calculatePercent(Timer* t){
 			gstate->top = (*it);
 		}
 	}	
+	//cout << "time: " << t->getMinRemaining() << "  " << t->getSecRemaining() << endl;
 	//std::cout << occupied << "  " << total << endl;
-	if (occupied >= total || (t->getMinRemaining() && t->getSecRemaining()) ){
+	if (occupied >= total || (t->getMinRemaining() == 0 && t->getSecRemaining() == 0) ){
 		//Win or lose
 		for (auto it = gstate->getPlayers().begin(); it != gstate->getPlayers().end(); ++it) {
 			if ((*it) == gstate->top && (*it)->getPercent()!= 0){//win
