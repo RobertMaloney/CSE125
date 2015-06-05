@@ -881,99 +881,102 @@ void GraphicsEngine::renderBoard(int width, int height, glm::mat4 & identity, st
 	glUniform2fv(glGetUniformLocation(m_textureShader->Id(), "scale"), 1, glm::value_ptr(m_screen_scale));
 	glUniform1i(glGetUniformLocation(m_textureShader->Id(), "tex"), 0);
 
+	int newW = HUDW*1.6;
+	int newH = HUDH*1.6;
+
 	//HUD1
-	glViewport(0 + width / 2, height - HUDH * 4-HUDH*0.3, HUDW*1.3, HUDH*1.3);
+	glViewport(0 + width / 2 + newW/3, height - HUDH * 4-HUDH*1.2, newW, newH);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUD1->render(&identity);
 
 	// HUD2
-	glViewport(0 + width / 2, height - HUDH * 5-HUDH*0.6, HUDW*1.3, HUDH*1.3);
+	glViewport(0 + width / 2 + newW /3, height - HUDH * 5 - HUDH*1.8, newW, newH);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUD2->render(&identity);
 
 	//HUD3
-	glViewport(0 + width / 2, height - HUDH * 6 - HUDH*0.9, HUDW*1.3, HUDH*1.3);
+	glViewport(0 + width / 2 + newW / 3, height - HUDH * 6 - HUDH*2.4, newW, newH);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUD3->render(&identity);
 
 	// HUD4
-	glViewport(0 + width / 2, height - HUDH * 7 - HUDH*1.2, HUDW*1.3, HUDH*1.3);
+	glViewport(0 + width / 2 + newW / 3, height - HUDH * 7 - HUDH * 3, newW, newH);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUD4->render(&identity);
 
 	//TODO: replace with numbers...
 	//HUDN1
-	float first = HUDW / 3 * 1.3;
+	float first = newW/3;
 	float second = first*2;
 	float third = first*3;
 
-	float space = first * 3;
+	float space = first * 6;
 
-	//width is HUDW/3*1.3 height is HUDH*1.3, sry for hardcoding
-	glViewport(0 +space + HUDW*1.3 + width / 2, height - HUDH * 4 - HUDH*0.3, HUDW / 3 * 1.3, HUDH*1.3);
+	//width is HUDW/3*1.3 height is newH, sry for hardcoding
+	glViewport(0 + space + newW + width / 2 - newW / 3, height - HUDH * 4 - HUDH*1.2, newW / 3, newH);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN10->render(&identity);
 
-	glViewport(0 + space + HUDW*1.3 + first + width / 2, height - HUDH * 4 - HUDH*0.3, HUDW / 3 * 1.3, HUDH*1.3);
+	glViewport(0 + space + newW + first + width / 2 - newW / 3, height - HUDH * 4 - HUDH*1.2, newW / 3, newH);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN11->render(&identity);
 
-	glViewport(0 + space + HUDW*1.3 + second + width / 2, height - HUDH * 4 - HUDH*0.3, HUDW / 3 * 1.3, HUDH*1.3);
+	glViewport(0 + space + newW + second + width / 2 - newW / 3, height - HUDH * 4 - HUDH*1.2, newW / 3, newH);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN12->render(&identity);
 
-	glViewport(0 + space + HUDW*1.3 + third + width / 2, height - HUDH * 4 - HUDH*0.3, HUDW / 3 * 1.3, HUDH*1.3);
+	glViewport(0 + space + newW + third + width / 2 - newW / 3, height - HUDH * 4 - HUDH*1.2, newW / 3, newH);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN13->render(&identity);
 
 	// HUDN2
-	glViewport(0 + space + HUDW*1.3 + width / 2, height - HUDH * 5 - HUDH*0.6, HUDW / 3 * 1.3, HUDH*1.3);
+	glViewport(0 + space + newW + width / 2 - newW / 3, height - HUDH * 5 - HUDH*1.8, newW / 3, newH);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN20->render(&identity);
 
-	glViewport(0 + space + HUDW*1.3 + first + width / 2, height - HUDH * 5 - HUDH*0.6, HUDW / 3 * 1.3, HUDH*1.3);
+	glViewport(0 + space + newW + first + width / 2 - newW / 3, height - HUDH * 5 - HUDH*1.8, newW / 3, newH);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN21->render(&identity);
 
-	glViewport(0 + space + HUDW*1.3 + second + width / 2, height - HUDH * 5 - HUDH*0.6, HUDW / 3 * 1.3, HUDH*1.3);
+	glViewport(0 + space + newW + second + width / 2 - newW / 3, height - HUDH * 5 - HUDH*1.8, newW / 3, newH);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN22->render(&identity);
 
-	glViewport(0 + space + HUDW*1.3 + third + width / 2, height - HUDH * 5 - HUDH*0.6, HUDW / 3 * 1.3, HUDH*1.3);
+	glViewport(0 + space + newW + third + width / 2 - newW / 3, height - HUDH * 5 - HUDH*1.8, newW / 3, newH);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN23->render(&identity);
 
 	//HUDN3
-	glViewport(0 + space + HUDW*1.3 + width / 2, height - HUDH * 6 - HUDH*0.9, HUDW / 3 * 1.3, HUDH*1.3);
+	glViewport(0 + space + newW + width / 2 - newW / 3, height - HUDH * 6 - HUDH*2.4, newW / 3, newH);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN30->render(&identity);
 
-	glViewport(0 + space + HUDW*1.3 + first + width / 2, height - HUDH * 6 - HUDH*0.9, HUDW / 3 * 1.3, HUDH*1.3);
+	glViewport(0 + space + newW + first + width / 2 - newW / 3, height - HUDH * 6 - HUDH*2.4, newW / 3, newH);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN31->render(&identity);
 
-	glViewport(0 + space + HUDW*1.3 + second + width / 2, height - HUDH * 6 - HUDH*0.9, HUDW / 3 * 1.3, HUDH*1.3);
+	glViewport(0 + space + newW + second + width / 2 - newW / 3, height - HUDH * 6 - HUDH*2.4, newW / 3, newH);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN32->render(&identity);
 
-	glViewport(0 + space + HUDW*1.3 + third + width / 2, height - HUDH * 6 - HUDH*0.9, HUDW / 3 * 1.3, HUDH*1.3);
+	glViewport(0 + space + newW + third + width / 2 - newW / 3, height - HUDH * 6 - HUDH*2.4, newW / 3, newH);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN33->render(&identity);
 
 	// HUDN4
-	glViewport(0 + space + HUDW*1.3 + width / 2, height - HUDH * 7 - HUDH*1.2, HUDW / 3 * 1.3, HUDH*1.3);
+	glViewport(0 + space + newW + width / 2 - newW / 3, height - HUDH * 7 - HUDH * 3, newW / 3, newH);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN40->render(&identity);
 
-	glViewport(0 + space + HUDW*1.3 + first + width / 2, height - HUDH * 7 - HUDH*1.2, HUDW / 3 * 1.3, HUDH*1.3);
+	glViewport(0 + space + newW + first + width / 2 - newW / 3, height - HUDH * 7 - HUDH * 3, newW / 3, newH);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN41->render(&identity);
 
-	glViewport(0 + space + HUDW*1.3 + second + width / 2, height - HUDH * 7 - HUDH*1.2, HUDW / 3 * 1.3, HUDH*1.3);
+	glViewport(0 + space + newW + second + width / 2 - newW / 3, height - HUDH * 7 - HUDH * 3, newW / 3, newH);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN42->render(&identity);
 
-	glViewport(0 + space + HUDW*1.3 + third + width / 2, height - HUDH * 7 - HUDH*1.2, HUDW / 3 * 1.3, HUDH*1.3);
+	glViewport(0 + space + newW + third + width / 2 - newW / 3, height - HUDH * 7 - HUDH * 3, newW / 3, newH);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN43->render(&identity);
 
