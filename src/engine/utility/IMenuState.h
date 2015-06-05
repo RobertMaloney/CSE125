@@ -5,6 +5,7 @@
 
 //forward declarations
 class GameClient;
+class InputHandler;
 
 /*
  * IMenuState.h
@@ -16,6 +17,7 @@ class IMenuState
 public:
 	IMenuState * changeTo;
 	GameClient * gameclient;
+	InputHandler* input;
 
 	static bool replay_flag;
 	static bool pause_flag;

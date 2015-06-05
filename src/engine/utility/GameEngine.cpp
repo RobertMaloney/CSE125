@@ -3,14 +3,14 @@
 
 GameEngine::GameEngine(PhysicsEngine * pe) {
 	gstate = &GameState::getInstance();
-   this->pe = pe;
+    this->pe = pe;
 }
 
 
 GameEngine::~GameEngine() {
 }
 
-void GameEngine::calculatePercent(){
+void GameEngine::calculatePercent(Timer* t){
 	int total = gstate->getTotal();
 	int occupied = 0;
 	int max = 0;
@@ -29,10 +29,10 @@ void GameEngine::calculatePercent(){
 		}
 	}	
 	//std::cout << occupied << "  " << total << endl;
-	if (occupied >= total ){
+	if (occupied >= total || (t->getMinRemaining() && t->getSecRemaining()) ){
 		//Win or lose
 		for (auto it = gstate->getPlayers().begin(); it != gstate->getPlayers().end(); ++it) {
-			if ((*it) == gstate->top){//win
+			if ((*it) == gstate->top && (*it)->getPercent()!= 0){//win
 				(*it)->setStatus(GStatus::WIN);
 				//std::cout << (*it)->getId() << ": YOU WIN "  << endl;
 			}

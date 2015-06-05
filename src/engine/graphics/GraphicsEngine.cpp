@@ -664,6 +664,7 @@ void GraphicsEngine::DrawAndPoll() {
 	//Update HUD order
 	if (sorted){
 		UpdateHudOrder();
+		sorted = false;
 	}
 
 	//Update HUD 

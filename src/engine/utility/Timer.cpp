@@ -2,6 +2,10 @@
 
 Timer::Timer(int maxSec)
 {
+	init(maxSec);
+}
+
+void Timer::init(int maxSec){
 	this->startTime = clock();
 	this->maxSeconds = maxSec;
 }
@@ -11,7 +15,7 @@ void Timer::start() {
 }
 
 void Timer::reset() {
-   this->startTime = clock();
+	this->init(this->maxSeconds);
 }
 
 double Timer::getTimeInSeconds() {

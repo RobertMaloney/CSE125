@@ -10,11 +10,12 @@ private:
    int maxSeconds;
 
 public:
-	Timer() : Timer(180) {};
+   Timer() : Timer(60) {};
    Timer(int maxSec);
 
    void start();
    void reset();
+   void init(int);
    void setStop(int seconds);
    bool atMax();
    double getTimeInSeconds();

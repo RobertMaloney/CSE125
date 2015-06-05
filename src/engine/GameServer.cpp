@@ -91,8 +91,9 @@ void GameServer::run() {
 		
 		physics->update(PHYSICS_DT);      // do a physics step
 
-		engine->calculatePercent();
+		
 		engine->updatePlayerTime(timer->getMinRemaining(), timer->getSecRemaining());
+		engine->calculatePercent(timer);
 		
 	//	start = high_resolution_clock::now();
 		this->tick();                       // send state back to client
@@ -122,12 +123,6 @@ void GameServer::stop() {
 }
 
 
-void GameServer::reset() {
-	serverLock.lock();
-	this->loadConfiguration(configFile);
-	gameState->setResetting(true);
-	serverLock.unlock();
-}
 
 
 void GameServer::acceptWaitingClient() {
@@ -171,6 +166,13 @@ void GameServer::getUpdates(vector<Packet> & updates) {
 	}
 	changed.clear();
 }
+void GameServer::reset() {
+	serverLock.lock();
+	this->loadConfiguration(configFile);
+	gameState->setResetting(true);
+	serverLock.unlock();
+	timer->reset();
+}
 
 
 void GameServer::tick() {
@@ -180,7 +182,9 @@ void GameServer::tick() {
 		ObjectDB & odb = ObjectDB::getInstance();
 		odb.reloadObjects(configFile);
 		odb.getObjectState(updates);
+		reset();
 		gameState->setResetting(false);
+	
 	
 	} else {
 		high_resolution_clock::time_point start = high_resolution_clock::now();

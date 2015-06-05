@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include "GameState.h"
 #include "../physics/PhysicsEngine.h"
+#include "Timer.h"
 #include "NPC.h"
 
 using namespace std;
@@ -19,7 +20,7 @@ public:
 	~GameEngine();
 
 
-	void calculatePercent();
+	void calculatePercent(Timer* t);
 	void updatePlayerTime(int, int);
 	void endGame();
 	GameState* gstate;

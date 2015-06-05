@@ -30,6 +30,8 @@ void MenuState::init(GameClient* gc)
 
 	//play menu music
 	GameSound::menubgm->play();
+
+	this->input = &InputHandler::getInstance();
 }
 
 
@@ -328,7 +330,7 @@ void MenuState::replay(){
 	GraphicsEngine::setCursor(GLFW_CURSOR_DISABLED);
 	GraphicsEngine::reset();
 
-
+	input->handleKey(GLFW_KEY_R, GLFW_PRESS, 0);
 
 	GameSound::ingamebgm->play();
 }
