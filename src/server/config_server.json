@@ -6,6 +6,7 @@
     "num resources": 1000,
     "num clouds": 100,
     "num pills": 10,
+	"num npcs": 15,
 
     "physics engine": {
         "gravity": 100,

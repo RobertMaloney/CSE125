@@ -237,8 +237,8 @@ void GraphicsEngine::Initialize() {
 	m_quad = new Quad(0.5f, glm::vec3(1));
 	m_cube = new Cube(glm::vec3(), glm::quat(), glm::vec3(1), 0.5f);
 	m_particleTex = HUD::makeHUD("../../media/texture/particle0.png");
-	m_kyle = HUD::makeHUD("../../media/texture/kyle.png");
-	cout << "K:" << m_kyle << endl;
+	m_kyle = HUD::makeHUD("../../media/texture/particle0.png");
+
 
 	// CAMERA
 	glm::mat4 camview = glm::lookAt(
