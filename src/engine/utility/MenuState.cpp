@@ -292,10 +292,13 @@ void MenuState::changeBgm()
 
 void MenuState::play()
 {
+	GraphicsEngine::setMenuStatus(MenuStatus::LOADING);
+	GraphicsEngine::DrawAndPollMenu();
 	//make new TCPconnection and connect to server
 	this->connectToServer();
 	//if success (no exceptions) login to server
 	this->login();
+
 	//gameclient->inMenu = false;
 	GameClient::inMenu = false;
 	

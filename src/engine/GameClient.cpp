@@ -220,30 +220,37 @@ void GameClient::updateGameState() {
 										obj->getAngle(), 
 										obj->getHeight(),
 										obj->getScale(),
-										obj->getVisible());
+										obj->getVisible(),
+										obj->getParticle());
 
 		//play collision sounds
 		if (obj->getId() == this->playerid) {
 			if (oldeat == false && obj->getEat() == true) {
 				GameSound::nom->play();
-				GraphicsEngine::spawnPSystem(MatrixNode::quatAngle(obj->getOrientation(), 0.f, obj->getHeight(), 1.f));
+				//GraphicsEngine::spawnPSystem(MatrixNode::quatAngle(obj->getOrientation(), 0.f, obj->getHeight(), 1.f));
 			}
 			if (oldhit == false && obj->getHit() == true)
 				GameSound::playOuch();
 		}
 
-
-		if (obj->getId() == this->playerid) {
-			this->checkGameStatus(dynamic_cast<Player*>(obj));
-			GraphicsEngine::updatePercent(obj->getModel(), dynamic_cast<Player*>(obj)->getPercent());
-		}
 	}
+
+	static bool first = true;
+	if (first) {
+		first = false;
+		inMenu = false;
+		GraphicsEngine::setCursor(GLFW_CURSOR_DISABLED);
+	}
+
+	Player* thep = dynamic_cast<Player*>(gstate.getObject(this->playerid));
+	GraphicsEngine::updatePercent(thep->getModel(), thep->getPercent());
+	this->checkGameStatus(thep);
 }
 
 void GameClient::checkGameStatus(Player * p){
 	if (p->getStatus() == GStatus::WIN && !this->isResetting()){
 		std::cout << "I win. yayyyyy" << endl;
-
+		std::cout << p->getPercent() << endl;
         //Another menu status or leaderboard or whatever thing should happen here : ask player to replay or end the game....
 		inMenu = true;
 		MenuState::submit = false;
