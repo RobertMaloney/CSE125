@@ -96,6 +96,7 @@ bool				GraphicsEngine::sorted = false;
 int                 GraphicsEngine::pmin = 0;
 int                 GraphicsEngine::psec = 0;
 std::vector<int>    GraphicsEngine::myvector = { 0, 0, 0, 0 };
+bool				GraphicsEngine::loadDone = false;
 
 Renderable			*GraphicsEngine::m_skybox = NULL;
 Renderable			*GraphicsEngine::m_border = NULL;
@@ -710,6 +711,11 @@ void GraphicsEngine::DrawAndPoll() {
 
 	glfwSwapBuffers(m_window);
 	glfwPollEvents();
+
+	// (!loadDone){
+		//putHandler::handleKey(GLFW_KEY_L, GLFW_PRESS, 0);
+		//adDone = true;
+	//
 }
 
 void GraphicsEngine::renderHUD(int width, int height, glm::mat4 & identity){
@@ -1347,4 +1353,5 @@ void GraphicsEngine::reset(){
 	pmin = 0;
 	psec = 0;
 	myvector = { 0, 0, 0, 0 };
+	loadDone = false;
 }

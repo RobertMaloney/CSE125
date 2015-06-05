@@ -27,6 +27,6 @@ void Config::writeJson(std::string path) {
 void Config::validate() {
 	if (settings["graphics"].isNull()) {
 		settings["graphics"]["width"] = 1600;
-		settings["graphics"]["height"] = 900;
+		settings["graphics"]["height"] = 1200;
 	}
 }

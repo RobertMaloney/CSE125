@@ -1,5 +1,6 @@
 #include "GameServer.h"
 
+bool		GameServer::loadDone = false;
 
 GameServer::GameServer() {
 	this->clients = new unordered_map<TCPConnection*, ObjectId>();
@@ -9,6 +10,8 @@ GameServer::GameServer() {
 	this->physics = new PhysicsEngine();
 	this->engine = new GameEngine(this->physics);
 	this->timer = new Timer();
+	this->gameStarted = false;
+
 }
 
 
@@ -82,7 +85,8 @@ void GameServer::run() {
 			//continue;
 		} 
 		
-		if (!gameStarted) {
+		if ((!gameStarted) && loadDone) {
+			cout << "done" << endl;
 			timer->start();
 			gameStarted = true;
 		}

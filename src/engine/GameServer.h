@@ -48,6 +48,8 @@ public:
     GameServer();
     ~GameServer();
 
+	static bool loadDone;
+
 	void run();
 	void stop();
 	void reset();
@@ -72,6 +74,8 @@ private:
 	
 	bool running;
 	bool gameStarted;
+
+
 	mutex serverLock;
 	condition_variable serverCV;
 	Json::Value configFile;

@@ -34,6 +34,7 @@ public:
 
 	GameState gstate;
 	ObjectId playerid;
+	static bool loadDone;
 
 	IMenuState * mstate;
 	TCPConnection* connection;

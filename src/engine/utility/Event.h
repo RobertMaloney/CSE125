@@ -19,6 +19,7 @@ enum EventType {
    SUB,
    ADD,
    REPLAY,
+   LOAD_END,
 };
 
 

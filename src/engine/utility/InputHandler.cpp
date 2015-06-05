@@ -5,11 +5,11 @@
 vector<Packet> InputHandler::input;
 vector<Packet> InputHandler::clientInput;
 
-InputHandler & InputHandler::getInstance(){
+/*InputHandler & InputHandler::getInstance(){
 	static InputHandler input;
 	return input;
 
-}
+}*/
 
 void InputHandler::handleKey(int key, int action, int mods) {
 	Packet p;
@@ -131,10 +131,18 @@ void InputHandler::handleKey(int key, int action, int mods) {
 			GraphicsEngine::setMenuStatus(MenuStatus::MCONTINUE);
 		}
 	}
-	else if (key == GLFW_KEY_R) {//Esc
+	else if (key == GLFW_KEY_R) {//Replay
 		if (action == GLFW_PRESS) {
 			cout << "client replay" << endl;
 			p.writeByte(EventType::REPLAY);
+			input.push_back(p);
+
+		}
+	}
+	else if (key == GLFW_KEY_L) {//Load down
+		if (action == GLFW_PRESS) {
+			cout << "client load down" << endl;
+			p.writeByte(EventType::LOAD_END);
 			input.push_back(p);
 
 		}

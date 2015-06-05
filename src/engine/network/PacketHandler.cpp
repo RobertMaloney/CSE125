@@ -82,6 +82,10 @@ void replayHandler(ObjectId id, Packet & p) {
 	GameState::getInstance().reset(id);
 }
 
+void loadHandler(ObjectId id, Packet & p) {
+	GameServer::loadDone = true;
+}
+
 
 PacketHandler::PacketHandler(){
 	eventHandlers[EventType::MOVE_FORWARD] = EventHandler(forwardHandler);
@@ -98,6 +102,7 @@ PacketHandler::PacketHandler(){
 
 	eventHandlers[EventType::LOOK] = EventHandler(lookHandler);
 	eventHandlers[EventType::REPLAY] = EventHandler(replayHandler);
+	eventHandlers[EventType::LOAD_END] = EventHandler(loadHandler);
 }
 
 

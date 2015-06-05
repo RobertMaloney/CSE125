@@ -2,6 +2,7 @@
 #include "utility\Config.h"
 
 bool GameClient::inMenu = true;
+bool GameClient::loadDone = false;
 
 GameClient::GameClient() 
 {
@@ -69,6 +70,14 @@ void GameClient::run() {
 			this->updateGameState();
 			updates.clear();
 			GraphicsEngine::DrawAndPoll();
+
+			if (!loadDone){
+				ObjectDB * b = &ObjectDB::getInstance();
+				if (b->getSize() >= Config::settings["totalObjects"].asInt()){
+					loadDone = true;
+					InputHandler::handleKey(GLFW_KEY_L, GLFW_PRESS, 0);
+				}
+			}
 		}
 
 	}
@@ -245,6 +254,8 @@ void GameClient::updateGameState() {
 	GraphicsEngine::updatePercent(thep->getModel(), thep->getPercent());
 	GraphicsEngine::updateTimer(thep->getMin(), thep->getSec());
 	this->checkGameStatus(thep);
+
+
 }
 
 void GameClient::checkGameStatus(Player * p){
