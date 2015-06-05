@@ -1,7 +1,7 @@
 {
     "ip": "127.0.0.1",
     "port": "9000",
-	"totalObjects": 2,
+	"totalObjects": 1031,
 	"controls": {
 		"MoveUp": "W",
 		"MoveDown": "S",
