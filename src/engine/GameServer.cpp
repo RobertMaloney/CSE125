@@ -65,6 +65,7 @@ void GameServer::initialize() {
 	physics->loadConfiguration(configFile);
 	gameState->initWithServer(configFile);
     engine->generateResources(configFile);
+	timer->init(configFile["timer"].asInt());
 }
 
 

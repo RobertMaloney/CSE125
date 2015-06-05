@@ -3,6 +3,7 @@
 
 #include <ctime>
 #include <string>
+#include "Configurable.h"
 
 class Timer {
 private:
