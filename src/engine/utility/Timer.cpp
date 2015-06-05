@@ -1,9 +1,9 @@
 #include "Timer.h"
 
-Timer::Timer()
+Timer::Timer(int maxSec)
 {
-   this->startTime = clock();
-   this->maxSeconds = 180;
+	this->startTime = clock();
+	this->maxSeconds = maxSec;
 }
 
 void Timer::start() {
@@ -32,9 +32,14 @@ std::string Timer::getTimeText() {
    return buffer;
 }
 
-Timer & Timer::getInstance(){
-   static Timer timer;
-   return timer;
+int Timer::getMin() {
+	double timeInSeconds = getTimeInSeconds();
+	return (int)timeInSeconds / 60;
+}
+
+int Timer::getSec() {
+	double timeInSeconds = getTimeInSeconds();
+	return (int)timeInSeconds % 60;
 }
 
 bool Timer::atMax()

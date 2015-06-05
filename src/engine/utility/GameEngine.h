@@ -20,6 +20,7 @@ public:
 
 
 	void calculatePercent();
+	void updatePlayerTime(int, int);
 	void endGame();
 	GameState* gstate;
    void generateResources(Json::Value configFile);

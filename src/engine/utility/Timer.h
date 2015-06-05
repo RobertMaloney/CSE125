@@ -10,7 +10,8 @@ private:
    int maxSeconds;
 
 public:
-   Timer();
+	Timer() : Timer(180) {};
+   Timer(int maxSec);
 
    void start();
    void reset();
@@ -18,7 +19,9 @@ public:
    bool atMax();
    double getTimeInSeconds();
    std::string getTimeText();
-   static Timer & getInstance();
+
+   int getMin();
+   int getSec();
 };
 
 #endif

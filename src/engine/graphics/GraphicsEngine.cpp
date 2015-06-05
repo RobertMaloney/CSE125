@@ -80,6 +80,8 @@ int					GraphicsEngine::p1p = 0;
 int					GraphicsEngine::p2p = 0;
 int					GraphicsEngine::p3p = 0;
 int					GraphicsEngine::p4p = 0;
+int                 GraphicsEngine::pmin = 0;
+int                 GraphicsEngine::psec = 0;
 
 Renderable			*GraphicsEngine::m_skybox = NULL;
 Renderable			*GraphicsEngine::m_border = NULL;
@@ -376,9 +378,33 @@ void GraphicsEngine::RenderScore(int Player1, int Player2, int Player3, int Play
 	m_HUDN42->setTextureId(FindTexuture(Hud42));
 }
 
-//void GraphicsEngine::RenderTimer(){
+void GraphicsEngine::RenderTimer(int min, int sec){
 
-//}
+	int Sec1 = 0;
+	int Sec2 = 0;
+	int Min1 = 0;
+	int Min2 = 0;
+
+	Sec1 = sec % 10;
+	Sec2 = sec / 10;
+
+	Min1 = min % 10;
+	Min2 = min / 10;
+
+	if (Min2 == 0)
+	{
+		Min2 = 10;
+	}
+
+	//Min
+	m_timer4->setTextureId(FindTexuture(Min1));
+	m_timer5->setTextureId(FindTexuture(Min2));
+
+	//Sec
+	m_timer1->setTextureId(FindTexuture(Sec1));
+	m_timer2->setTextureId(FindTexuture(Sec2));
+}
+
 
 GLuint GraphicsEngine::FindTexuture(int id){
 
@@ -601,7 +627,7 @@ void GraphicsEngine::DrawAndPoll() {
 
 	//Update HUD 
 	RenderScore(p1p, p2p, p3p, p4p); //p,,b,g,o
-	//RenderTimer();
+	RenderTimer(pmin, psec);
 
 	// Update lights
 	LightHandler::updateLighting(m_defaultShader->Id());
@@ -1140,6 +1166,11 @@ void GraphicsEngine::updatePercent(Model m, int p) {
 		p4p = p;
 		break;
 	}
+}
+
+void GraphicsEngine::updateTimer(int min, int sec) {
+	pmin = min;
+	psec = sec;
 }
 
 //A mapping from ObjectId to node in scene graph

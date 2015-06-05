@@ -25,6 +25,8 @@ Player::Player(Model thebm, float radius, float theta, float azimuth, float dire
 	this->stomach = 0;
 	this->burp_count = 0;
 	this->status = PENDING;
+	this->sec = 0;
+	this->min = 0;
 }
 
 Player::~Player() {
@@ -274,7 +276,9 @@ void Player::serialize(Packet & p) {
 	p.writeInt(this->score);
 	p.writeInt(this->percent);
 	p.writeInt(this->status);
-	//TODO: moves??? no. just no.
+	p.writeInt(this->min);
+	p.writeInt(this->sec);
+	//TODO: moves??? no. just no
 }
 
 
@@ -310,5 +314,23 @@ void Player::deserialize(Packet & p) {
 		}
 		stomach = 0;
 	}
-		
+
+	this->min = p.readInt();
+	this->sec = p.readInt();	
+}
+
+int Player::getMin() {
+	return this->min;
+}
+
+void Player::setMin(int min) {
+	this->min = min;
+}
+
+int Player::getSec() {
+	return this->sec;
+}
+
+void Player::setSec(int sec) {
+	this->sec = sec;
 }

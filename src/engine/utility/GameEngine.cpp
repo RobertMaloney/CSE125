@@ -293,3 +293,10 @@ void GameEngine::generateNPC(int num) {
    }
    gstate->setTotal(gstate->getTotal() + total);
 }
+
+void GameEngine::updatePlayerTime(int min, int sec) {
+	for (auto it = gstate->getPlayers().begin(); it != gstate->getPlayers().end(); ++it) {
+		(*it)->setMin(min);
+		(*it)->setSec(sec);
+	}
+}
