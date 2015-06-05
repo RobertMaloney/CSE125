@@ -107,6 +107,7 @@ private:
 	static int                      HUDH;
 	static int                      B;
 	static int                      p1p, p2p, p3p, p4p;
+	static bool                     n1, n2, n3, n4, sorted;
 	static int                      pmin, psec;
 
 	static GLuint					m_timerId, m_plusId, m_minusId, m_borderId, m_skyboxId, m_groundId, m_HudIdPer, m_HudIdSpa, m_HudIdCol;
@@ -123,6 +124,7 @@ private:
 
 
 	static int						m_sunLight;
+	static std::vector<int>         myvector;
 
 
 	static MenuStatus ms;
@@ -134,7 +136,9 @@ private:
 	static void RenderTimer(int min, int sec);
 	static GLuint FindTexuture(int id);
 	static void renderHUD(int width, int height, glm::mat4 & identity);
-	static void renderBoard(int width, int height, glm::mat4 & identity);
+	static void renderBoard(int width, int height, glm::mat4 & identity, std::vector<int>);
+	static std::vector<int> SortBoard();
+	static GLuint getTexBasedOnScore(int, int, int, int, int);
 
 };
 

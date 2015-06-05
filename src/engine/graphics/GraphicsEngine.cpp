@@ -81,8 +81,14 @@ int					GraphicsEngine::p1p = 0;
 int					GraphicsEngine::p2p = 0;
 int					GraphicsEngine::p3p = 0;
 int					GraphicsEngine::p4p = 0;
+bool				GraphicsEngine::n1 = true;
+bool				GraphicsEngine::n2 = true;
+bool				GraphicsEngine::n3 = true;
+bool				GraphicsEngine::n4 = true;
+bool				GraphicsEngine::sorted = false;
 int                 GraphicsEngine::pmin = 0;
 int                 GraphicsEngine::psec = 0;
+std::vector<int>    GraphicsEngine::myvector = { 0, 0, 0, 0 };
 
 Renderable			*GraphicsEngine::m_skybox = NULL;
 Renderable			*GraphicsEngine::m_border = NULL;
@@ -820,7 +826,7 @@ void GraphicsEngine::renderHUD(int width, int height, glm::mat4 & identity){
 }
 
 
-void GraphicsEngine::renderBoard(int width, int height, glm::mat4 & identity){
+void GraphicsEngine::renderBoard(int width, int height, glm::mat4 & identity, std::vector<int> myvector){
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -854,73 +860,77 @@ void GraphicsEngine::renderBoard(int width, int height, glm::mat4 & identity){
 	float second = first*2;
 	float third = first*3;
 
+	float space = first * 3;
+
 	//width is HUDW/3*1.3 height is HUDH*1.3, sry for hardcoding
-	glViewport(0 + HUDW*1.3 + width / 2, height - HUDH * 4 - HUDH*0.3, HUDW / 3 * 1.3, HUDH*1.3);
+	glViewport(0 +space + HUDW*1.3 + width / 2, height - HUDH * 4 - HUDH*0.3, HUDW / 3 * 1.3, HUDH*1.3);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN10->render(&identity);
 
-	glViewport(0 + HUDW*1.3 + first + width / 2, height - HUDH * 4 - HUDH*0.3, HUDW / 3 * 1.3, HUDH*1.3);
+	glViewport(0 + space + HUDW*1.3 + first + width / 2, height - HUDH * 4 - HUDH*0.3, HUDW / 3 * 1.3, HUDH*1.3);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN11->render(&identity);
 
-	glViewport(0 + HUDW*1.3 + second + width / 2, height - HUDH * 4 - HUDH*0.3, HUDW / 3 * 1.3, HUDH*1.3);
+	glViewport(0 + space + HUDW*1.3 + second + width / 2, height - HUDH * 4 - HUDH*0.3, HUDW / 3 * 1.3, HUDH*1.3);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN12->render(&identity);
 
-	glViewport(0 + HUDW*1.3 + third + width / 2, height - HUDH * 4 - HUDH*0.3, HUDW / 3 * 1.3, HUDH*1.3);
+	glViewport(0 + space + HUDW*1.3 + third + width / 2, height - HUDH * 4 - HUDH*0.3, HUDW / 3 * 1.3, HUDH*1.3);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN13->render(&identity);
 
 	// HUDN2
-	glViewport(0 + HUDW*1.3 + width / 2, height - HUDH * 5 - HUDH*0.6, HUDW / 3 * 1.3, HUDH*1.3);
+	glViewport(0 + space + HUDW*1.3 + width / 2, height - HUDH * 5 - HUDH*0.6, HUDW / 3 * 1.3, HUDH*1.3);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN20->render(&identity);
 
-	glViewport(0 + HUDW*1.3 + first + width / 2, height - HUDH * 5 - HUDH*0.6, HUDW / 3 * 1.3, HUDH*1.3);
+	glViewport(0 + space + HUDW*1.3 + first + width / 2, height - HUDH * 5 - HUDH*0.6, HUDW / 3 * 1.3, HUDH*1.3);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN21->render(&identity);
 
-	glViewport(0 + HUDW*1.3 + second + width / 2, height - HUDH * 5 - HUDH*0.6, HUDW / 3 * 1.3, HUDH*1.3);
+	glViewport(0 + space + HUDW*1.3 + second + width / 2, height - HUDH * 5 - HUDH*0.6, HUDW / 3 * 1.3, HUDH*1.3);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN22->render(&identity);
 
-	glViewport(0 + HUDW*1.3 + third + width / 2, height - HUDH * 5 - HUDH*0.6, HUDW / 3 * 1.3, HUDH*1.3);
+	glViewport(0 + space + HUDW*1.3 + third + width / 2, height - HUDH * 5 - HUDH*0.6, HUDW / 3 * 1.3, HUDH*1.3);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN23->render(&identity);
 
 	//HUDN3
-	glViewport(0 + HUDW*1.3 + width / 2, height - HUDH * 6 - HUDH*0.9, HUDW / 3 * 1.3, HUDH*1.3);
+	glViewport(0 + space + HUDW*1.3 + width / 2, height - HUDH * 6 - HUDH*0.9, HUDW / 3 * 1.3, HUDH*1.3);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN30->render(&identity);
 
-	glViewport(0 + HUDW*1.3 + first + width / 2, height - HUDH * 6 - HUDH*0.9, HUDW / 3 * 1.3, HUDH*1.3);
+	glViewport(0 + space + HUDW*1.3 + first + width / 2, height - HUDH * 6 - HUDH*0.9, HUDW / 3 * 1.3, HUDH*1.3);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN31->render(&identity);
 
-	glViewport(0 + HUDW*1.3 + second + width / 2, height - HUDH * 6 - HUDH*0.9, HUDW / 3 * 1.3, HUDH*1.3);
+	glViewport(0 + space + HUDW*1.3 + second + width / 2, height - HUDH * 6 - HUDH*0.9, HUDW / 3 * 1.3, HUDH*1.3);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN32->render(&identity);
 
-	glViewport(0 + HUDW*1.3 + third + width / 2, height - HUDH * 6 - HUDH*0.9, HUDW / 3 * 1.3, HUDH*1.3);
+	glViewport(0 + space + HUDW*1.3 + third + width / 2, height - HUDH * 6 - HUDH*0.9, HUDW / 3 * 1.3, HUDH*1.3);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN33->render(&identity);
 
 	// HUDN4
-	glViewport(0 + HUDW*1.3 + width / 2, height - HUDH * 7 - HUDH*1.2, HUDW / 3 * 1.3, HUDH*1.3);
+	glViewport(0 + space + HUDW*1.3 + width / 2, height - HUDH * 7 - HUDH*1.2, HUDW / 3 * 1.3, HUDH*1.3);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN40->render(&identity);
 
-	glViewport(0 + HUDW*1.3 + first + width / 2, height - HUDH * 7 - HUDH*1.2, HUDW / 3 * 1.3, HUDH*1.3);
+	glViewport(0 + space + HUDW*1.3 + first + width / 2, height - HUDH * 7 - HUDH*1.2, HUDW / 3 * 1.3, HUDH*1.3);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN41->render(&identity);
 
-	glViewport(0 + HUDW*1.3 + second + width / 2, height - HUDH * 7 - HUDH*1.2, HUDW / 3 * 1.3, HUDH*1.3);
+	glViewport(0 + space + HUDW*1.3 + second + width / 2, height - HUDH * 7 - HUDH*1.2, HUDW / 3 * 1.3, HUDH*1.3);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN42->render(&identity);
 
-	glViewport(0 + HUDW*1.3 + third + width / 2, height - HUDH * 7 - HUDH*1.2, HUDW / 3 * 1.3, HUDH*1.3);
+	glViewport(0 + space + HUDW*1.3 + third + width / 2, height - HUDH * 7 - HUDH*1.2, HUDW / 3 * 1.3, HUDH*1.3);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUDN43->render(&identity);
+
+	RenderScore(myvector[3], myvector[2], myvector[1], myvector[0]);
 
 	glDisable(GL_BLEND);
 }
@@ -974,7 +984,10 @@ void GraphicsEngine::DrawAndPollMenu()
 	m_menu->render(&identity);
 
 	if (ms == MWINREPLAY || ms == MWINQUIT || ms == MLOSEREPLAY || ms == MLOSEQUIT){
-		renderBoard(width, height, identity);
+		if (sorted == false){
+			myvector = SortBoard();
+		}
+		renderBoard(width, height, identity, myvector);
 	}
 
 
@@ -984,7 +997,70 @@ void GraphicsEngine::DrawAndPollMenu()
 	glfwPollEvents();
 }
 
+std::vector<int> GraphicsEngine::SortBoard(){
+	//p1p, p2p, p3p,p4p
+	int p1 = p1p;
+	int p2 = p2p;
+	int p3 = p3p;
+	int p4 = p4p;
 
+	int myints[] = { p1, p2, p3, p4 };
+	std::vector<int> myvector(myints, myints + 4);
+
+	// using default comparison (operator <):
+	std::sort(myvector.begin(), myvector.begin() + 4);
+
+	GLuint m_4 = getTexBasedOnScore(myvector[0], p1, p2, p3, p4);
+	GLuint m_3 = getTexBasedOnScore(myvector[1], p1, p2, p3, p4);
+	GLuint m_2 = getTexBasedOnScore(myvector[2], p1, p2, p3, p4);
+	GLuint m_1 = getTexBasedOnScore(myvector[3], p1, p2, p3, p4);
+
+	m_HUD1->setTextureId(m_1);
+	m_HUD2->setTextureId(m_2);
+	m_HUD3->setTextureId(m_3);
+	m_HUD4->setTextureId(m_4);
+
+	sorted = true;
+	return myvector;
+}
+
+GLuint GraphicsEngine::getTexBasedOnScore(int num, int p1, int p2, int p3, int p4){
+	if (num == p1 && n1){
+		n1 = false;
+		return m_HudId1;
+	}
+	else if (num == p2 && n2){
+		n2 = false;
+		return m_HudId2;
+	}
+	else if (num == p3 && n3){
+		n3 = false;
+		return m_HudId3;
+	}
+	else if (num == p4 && n4){
+		n4 = false;
+		return m_HudId4;
+	}
+	else {
+		cout << "error no texture for HUD in score borad" << endl;
+		return m_HudId4;
+	}
+	/*switch (num){
+	case p1:
+		return HUD::makeHUD("../../media/texture/HUD1.png");
+		break;
+	case p2p:
+		return HUD::makeHUD("../../media/texture/HUD2.png");
+		break;
+	case p3p:
+		return HUD::makeHUD("../../media/texture/HUD3.png");;
+		break;
+	case p4p:
+		return HUD::makeHUD("../../media/texture/HUD4.png");
+		break;
+	}*/
+
+}
 /**
 * GraphicsEngine::renderScene(Node*, glm::mat4*)
 * Description: This function renders the scene graph using depth traversal.
@@ -1169,6 +1245,7 @@ void GraphicsEngine::updatePercent(Model m, int p) {
 		p4p = p;
 		break;
 	}
+	myvector = { p1p, p2p, p3p, p4p };
 }
 
 void GraphicsEngine::updateTimer(int min, int sec) {
