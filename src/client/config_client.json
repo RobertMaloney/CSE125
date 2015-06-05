@@ -2,6 +2,8 @@
     "ip": "127.0.0.1",
     "port": "9000",
 	"totalObjects": 1031,
+	"sun period": 0.12,
+
 	"controls": {
 		"MoveUp": "W",
 		"MoveDown": "S",
@@ -20,9 +22,9 @@
 	},
 
 	"gas": {
-		"velocity": [10, 20],
-		"acceleration": [10, 20],
-		"life": [10, 20],
-		"size": [0.1, 0.5]
+		"velocity": [2, 15],
+		"acceleration": [2, 15],
+		"life": [1, 2],
+		"size": [0.5, 2.5]
 	}
 }

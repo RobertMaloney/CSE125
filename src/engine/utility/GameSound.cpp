@@ -110,9 +110,7 @@ void GameSound::init()
 
 void GameSound::loadSound(sf::Sound *sound, sf::SoundBuffer *buffer, std::string path)
 {
-	if (!SOUND_ENABLE) {
-		return;
-	}
+
 	if (!buffer->loadFromFile(path))
 		return;
 	sound->setBuffer(*buffer);
@@ -121,9 +119,7 @@ void GameSound::loadSound(sf::Sound *sound, sf::SoundBuffer *buffer, std::string
 
 void GameSound::loadSoundColl(sf::Sound *sound[], sf::SoundBuffer *buffer[], std::string path, int size)
 {
-	if (!SOUND_ENABLE) {
-		return;
-	}
+
 	for (int i = 0; i < size; i++) {
 		int index = i + 1;
 		if (!buffer[i]->loadFromFile(path + std::to_string(index) + ".wav"))
@@ -135,9 +131,7 @@ void GameSound::loadSoundColl(sf::Sound *sound[], sf::SoundBuffer *buffer[], std
 
 void GameSound::loadMusic(sf::Music *music, std::string path)
 {
-	if (!SOUND_ENABLE) {
-		return;
-	}
+
 	if (!music->openFromFile(path))
 		return;
 	music->setVolume(50);
@@ -147,8 +141,6 @@ void GameSound::loadMusic(sf::Music *music, std::string path)
 
 void GameSound::playOuch()
 {
-	if (!SOUND_ENABLE) {
-		return;
-	}
+
 	ouch_arr[rand() % SOUND_OUCH_NUM]->play();
 }

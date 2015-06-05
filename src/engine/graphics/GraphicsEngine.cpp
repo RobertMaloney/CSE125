@@ -251,7 +251,7 @@ void GraphicsEngine::Initialize() {
 	m_quad = new Quad(0.5f, glm::vec3(1));
 	m_cube = new Cube(glm::vec3(), glm::quat(), glm::vec3(1), 0.5f);
 	m_particleTex = HUD::makeHUD("../../media/texture/particle0.png");
-	m_kyle = HUD::makeHUD("../../media/texture/particle1.png");
+	m_kyle = HUD::makeHUD("../../media/texture/particle0.png");
 
 
 	// CAMERA
@@ -666,7 +666,7 @@ void GraphicsEngine::DrawAndPoll(bool loadDone) {
 
 		// SUN AROUND PLANET
 		glm::vec3 sunLightDir = LightHandler::getLight(m_sunLight).position;
-		sunLightDir = glm::angleAxis(glm::radians(0.03f), glm::vec3(2, -2, 0)) * sunLightDir;
+		sunLightDir = glm::angleAxis(glm::radians(Config::settings["sun period"].asFloat()), glm::vec3(2, -2, 0)) * sunLightDir;
 		LightHandler::changePosition(m_sunLight, sunLightDir);
 
 		//Update HUD order

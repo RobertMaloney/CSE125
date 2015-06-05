@@ -3,11 +3,12 @@
 
 #define SFML_STATIC
 #include <SFML/Audio.hpp>
+#include "Config.h"
 //#include <SFML/System.hpp>
 #pragma comment(lib, "winmm.lib") // SO weird I need this for music
 
 #define SOUND_OUCH_NUM 10
-const bool SOUND_ENABLE = false;
+
 
 class GameSound 
 {
