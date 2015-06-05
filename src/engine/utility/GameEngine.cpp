@@ -64,6 +64,7 @@ void GameEngine::generateResources(Json::Value configFile)
 }
 
 void GameEngine::generateRandomResources(int num) {
+	srand(time(NULL));
 	int total = 0;
 	for (int i = 0; i < num; i++)
 	{

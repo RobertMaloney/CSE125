@@ -86,16 +86,13 @@ void GameServer::run() {
 		} 
 		
 		if ((!gameStarted) && loadDone) {
-			cout << "done" << endl;
+			//cout << "done" << endl;
 			timer->start();
 			gameStarted = true;
 		}
 
 		this->processClientEvents(); 		// process the client input events
-		
 		physics->update(PHYSICS_DT);      // do a physics step
-
-		
 		engine->updatePlayerTime(timer->getMinRemaining(), timer->getSecRemaining());
 		engine->calculatePercent(timer);
 		
@@ -107,8 +104,8 @@ void GameServer::run() {
 		//calculates the ms from start until here.
 		elapsedTime = chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - startMain).count();
 		if (elapsedTime > TIME_PER_FRAME) {  // this is so know if we need to slow down the loop
-			//cerr << "Server loop took long than a frame." << endl;
-			//cout << "dustyplanet:-$ ";
+			cerr << "Server loop took long than a frame." << endl;
+			cout << "dustyplanet:-$ ";
 		}
 		
 	//	start = high_resolution_clock::now();
@@ -174,9 +171,9 @@ void GameServer::reset() {
 	serverLock.lock();
 	this->loadConfiguration(configFile);
 	gameState->setResetting(true);
-	serverLock.unlock();
 	timer->reset();
 	loadDone = false;
+	serverLock.unlock();
 }
 
 
@@ -189,13 +186,8 @@ void GameServer::tick() {
 		odb.getObjectState(updates);
 		reset();
 		gameState->setResetting(false);
-	
-	
 	} else {
-		high_resolution_clock::time_point start = high_resolution_clock::now();
 		this->getUpdates(updates);
-	//	std::cout << " getUpdates: " << chrono::duration_cast<milliseconds>(high_resolution_clock::now() - start).count();
-	//	std::cout << " updatesSize: " << updates.size(); 
 	}
 
 	for (auto it = clients->begin(); it != clients->end(); ) {
