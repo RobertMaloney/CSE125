@@ -63,6 +63,14 @@ public:
 			glm::vec3(0.29f, 0.f, 0.51f),
 			glm::vec3(0.56f, 0.f, 1.f), };
 
+		particleGraphic = geo;
+		texId = tex;
+
+		init(numParticles, colors);
+
+	}
+
+	void init(int numParticles, glm::vec3 colors[]){
 		for (int i = 0; i < numParticles; ++i) { // random on unit circle for now
 			Particle3D p;
 			p.position = Random::ballRand(Random::linearRand(0.5f, 0.5f));
@@ -79,9 +87,6 @@ public:
 			p.size = Random::linearRand(Config::settings["particles"]["size"][0].asFloat(), Config::settings["particles"]["size"][1].asFloat());
 			m_particles.push_back(p);
 		}
-
-		particleGraphic = geo;
-		texId = tex;
 	}
 	virtual MatrixNode* asMatrixNode() {
 		return 0;
