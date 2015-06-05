@@ -75,8 +75,10 @@ public:
 	float getAngle();
 	float getHeight();
 	void setHeight(float h);
+
 	float getScale();
 	void setScale(float);
+   void randScale(float min, float max);
 
 	void setModelHeight(float mheight);
 	float getModelHeight();

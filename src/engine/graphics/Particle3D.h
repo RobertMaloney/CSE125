@@ -75,6 +75,7 @@ public:
 			glm::vec3(0.f, 0.f, 1.f),
 			glm::vec3(0.29f, 0.f, 0.51f),
 			glm::vec3(0.56f, 0.f, 1.f), };
+			//glm::vec3(0.f, 0.f, 0.f) };
 
 		for (int i = 0; i < numParticles; ++i) { // random on unit circle for now
 			Particle3D p;

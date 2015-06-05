@@ -1,19 +1,19 @@
-# Blender MTL File: 'stump.blend'
+# Blender MTL File: 'flower1.blend'
 # Material Count: 2
 
-newmtl Light_Wood.002
+newmtl Green_leafs
 Ns 96.078431
 Ka 0.000000 0.000000 0.000000
-Kd 0.749804 0.611765 0.401569
+Kd 0.238431 0.423530 0.341961
 Ks 0.165000 0.165000 0.165000
 Ni 1.000000
 d 1.000000
 illum 2
 
-newmtl Wood.002
+newmtl Mushroom_Red
 Ns 96.078431
 Ka 0.000000 0.000000 0.000000
-Kd 0.533334 0.436078 0.285490
+Kd 0.661961 0.250980 0.203922
 Ks 0.165000 0.165000 0.165000
 Ni 1.000000
 d 1.000000
