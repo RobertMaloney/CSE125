@@ -55,11 +55,11 @@ void GameEngine::generateResources(Json::Value configFile)
    this->configFile = configFile;
    generateRandomResources(configFile["num resources"].asInt());
    //generateRandomResources(1);
-   //generateClouds( configFile["num clouds"].asInt());
-   //generatePills(configFile["num pills"].asInt());
+   generateClouds( configFile["num clouds"].asInt());
+   generatePills(configFile["num pills"].asInt());
   // //generateClusterTree(505, 10, 10, 200);
    ////generateRockRing();
-  // generateNPC(15);
+   generateNPC(configFile["num npcs"].asInt());
 }
 
 void GameEngine::generateRandomResources(int num) {

@@ -86,7 +86,7 @@ public:
 				p.color = colors[i % 7];
 			}
 			else{//Player
-				p.color = colors[0];
+			//	p.color = colors[0];
 			}
 			p.life = Random::linearRand(Config::settings["particles"]["life"][0].asFloat(), Config::settings["particles"]["life"][1].asFloat());
 			p.totalLife = p.life;
