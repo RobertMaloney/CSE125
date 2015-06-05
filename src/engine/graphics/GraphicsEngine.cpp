@@ -96,7 +96,7 @@ bool				GraphicsEngine::sorted = false;
 int                 GraphicsEngine::pmin = 0;
 int                 GraphicsEngine::psec = 0;
 std::vector<int>    GraphicsEngine::myvector = { 0, 0, 0, 0 };
-bool				GraphicsEngine::loadDone = false;
+//bool				GraphicsEngine::loadDone = false;
 
 Renderable			*GraphicsEngine::m_skybox = NULL;
 Renderable			*GraphicsEngine::m_border = NULL;
@@ -619,103 +619,111 @@ void GraphicsEngine::UpdateHudOrder(){
 * Description: This function should be called within in the main game loop to
 * draw the next frame and poll for user input
 */
-void GraphicsEngine::DrawAndPoll() {
-	int height, width;
-	glfwGetWindowSize(m_window, &width, &height);
-
-	glViewport(0, 0, width, height);
-	m_projection = glm::perspective(
-		45.f,
-		((float)width) / height,
-		0.1f, 1000.f);
-
-	for (auto it = m_psystems.begin(); it != m_psystems.end(); ++it) {
-		(*it)->simulate(glfwGetTime());
+void GraphicsEngine::DrawAndPoll(bool loadDone) {
+	if (!loadDone){
+		//draw loading
+		ms = LOADING;
+		DrawAndPollMenu();
 	}
-	glfwSetTime(0.0); // reset for next frame
+	else{
 
-	MatrixData cameraData = m_mainCamera->getFlatViewMatrix();
-	m_view = cameraData.flattened;
-	glm::mat4 skybox_view = glm::scale(glm::mat4(glm::mat3(cameraData.flattened)), glm::vec3(1) / cameraData.scale); // try optimizing later
+		int height, width;
+		glfwGetWindowSize(m_window, &width, &height);
 
-	//glm::vec4 glPos = m_projection * skybox_view * glm::vec4(1.f, 1.f, 1.f, 1.f);
-	//std::cout << glm::to_string(glPos) << std::endl;
+		glViewport(0, 0, width, height);
+		m_projection = glm::perspective(
+			45.f,
+			((float)width) / height,
+			0.1f, 1000.f);
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		for (auto it = m_psystems.begin(); it != m_psystems.end(); ++it) {
+			(*it)->simulate(glfwGetTime());
+		}
+		glfwSetTime(0.0); // reset for next frame
 
-	// render skybox
-	glm::mat4 identity;
-	glDepthMask(GL_FALSE);
-	m_skyboxShader->Use();
-	glUniformMatrix4fv(glGetUniformLocation(m_skyboxShader->Id(), "view"), 1, GL_FALSE, glm::value_ptr(skybox_view));
-	glUniformMatrix4fv(glGetUniformLocation(m_skyboxShader->Id(), "projection"), 1, GL_FALSE, glm::value_ptr(m_projection));
-	glActiveTexture(GL_TEXTURE0);
-	glUniform1i(glGetUniformLocation(m_skyboxShader->Id(), "skybox"), 0);
-	m_skybox->render(&identity);
-	glDepthMask(GL_TRUE);
+		MatrixData cameraData = m_mainCamera->getFlatViewMatrix();
+		m_view = cameraData.flattened;
+		glm::mat4 skybox_view = glm::scale(glm::mat4(glm::mat3(cameraData.flattened)), glm::vec3(1) / cameraData.scale); // try optimizing later
 
-	// render the rest of the scene
-	m_defaultShader->Use();
+		//glm::vec4 glPos = m_projection * skybox_view * glm::vec4(1.f, 1.f, 1.f, 1.f);
+		//std::cout << glm::to_string(glPos) << std::endl;
 
-	// SUN AROUND PLANET
-	glm::vec3 sunLightDir = LightHandler::getLight(m_sunLight).position;
-	sunLightDir = glm::angleAxis(glm::radians(0.03f), glm::vec3(2, -2, 0)) * sunLightDir;
-	LightHandler::changePosition(m_sunLight, sunLightDir);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	//Update HUD order
-	if (sorted){
-		UpdateHudOrder();
-		sorted = false;
-	}
+		// render skybox
+		glm::mat4 identity;
+		glDepthMask(GL_FALSE);
+		m_skyboxShader->Use();
+		glUniformMatrix4fv(glGetUniformLocation(m_skyboxShader->Id(), "view"), 1, GL_FALSE, glm::value_ptr(skybox_view));
+		glUniformMatrix4fv(glGetUniformLocation(m_skyboxShader->Id(), "projection"), 1, GL_FALSE, glm::value_ptr(m_projection));
+		glActiveTexture(GL_TEXTURE0);
+		glUniform1i(glGetUniformLocation(m_skyboxShader->Id(), "skybox"), 0);
+		m_skybox->render(&identity);
+		glDepthMask(GL_TRUE);
 
-	//Update HUD 
-	RenderScore(p1p, p2p, p3p, p4p); //p,,b,g,o
-	RenderTimer(pmin, psec);
+		// render the rest of the scene
+		m_defaultShader->Use();
 
-	// Update lights
-	LightHandler::updateLighting(m_defaultShader->Id());
-	glUniform1f(glGetUniformLocation(m_defaultShader->Id(), "hasTex"), 0);
-	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "projection"), 1, GL_FALSE, glm::value_ptr(m_projection));
-	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "view"), 1, GL_FALSE, glm::value_ptr(m_view));
-	glUniform3fv(glGetUniformLocation(m_defaultShader->Id(), "camPos"), 1, glm::value_ptr(cameraData.translation));
+		// SUN AROUND PLANET
+		glm::vec3 sunLightDir = LightHandler::getLight(m_sunLight).position;
+		sunLightDir = glm::angleAxis(glm::radians(0.03f), glm::vec3(2, -2, 0)) * sunLightDir;
+		LightHandler::changePosition(m_sunLight, sunLightDir);
 
-	renderScene(m_scene, &identity);
+		//Update HUD order
+		if (sorted){
+			UpdateHudOrder();
+			sorted = false;
+		}
 
+		//Update HUD 
+		RenderScore(p1p, p2p, p3p, p4p); //p,,b,g,o
+		RenderTimer(pmin, psec);
 
-	//Mini map
-	//m_defaultShader->Use();
-	glViewport(width - HUDW * 2 + B / 2, height - HUDW * 2 + B / 2, HUDW * 2 - B, HUDH * 2 - B);
-	//glViewport(width - HUDW * 2 , height - HUDW * 2 , HUDW * 2, HUDH * 2);
-	glClear(GL_DEPTH_BUFFER_BIT);
+		// Update lights
+		LightHandler::updateLighting(m_defaultShader->Id());
+		glUniform1f(glGetUniformLocation(m_defaultShader->Id(), "hasTex"), 0);
+		glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "projection"), 1, GL_FALSE, glm::value_ptr(m_projection));
+		glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "view"), 1, GL_FALSE, glm::value_ptr(m_view));
+		glUniform3fv(glGetUniformLocation(m_defaultShader->Id(), "camPos"), 1, glm::value_ptr(cameraData.translation));
 
-	//view = m_minimapCamera->getFlatViewMatrix();
-	
-	// change aspect ratio
-	m_projection = glm::perspective(45.f, 1.f, 0.1f, 1000.f);
-
-	// minimap
-	cameraData = m_minimapCamera->getFlatViewMatrix();
-	glUniform1f(glGetUniformLocation(m_defaultShader->Id(), "hasTex"), 0);
-	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "view"), 1, GL_FALSE, glm::value_ptr(cameraData.flattened));
-	glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "projection"), 1, GL_FALSE, glm::value_ptr(m_projection));
-	glUniform3fv(glGetUniformLocation(m_defaultShader->Id(), "camPos"), 1, glm::value_ptr(cameraData.translation));
-
-	renderScene(m_scene, &identity);
+		renderScene(m_scene, &identity);
 
 
-	// HUD
-	glDepthMask(GL_FALSE);
-	m_textureShader->Use();
-	renderHUD(width, height, identity);
-	glEnable(GL_DEPTH_TEST);
+		//Mini map
+		//m_defaultShader->Use();
+		glViewport(width - HUDW * 2 + B / 2, height - HUDW * 2 + B / 2, HUDW * 2 - B, HUDH * 2 - B);
+		//glViewport(width - HUDW * 2 , height - HUDW * 2 , HUDW * 2, HUDH * 2);
+		glClear(GL_DEPTH_BUFFER_BIT);
 
-	glfwSwapBuffers(m_window);
-	glfwPollEvents();
+		//view = m_minimapCamera->getFlatViewMatrix();
 
-	// (!loadDone){
+		// change aspect ratio
+		m_projection = glm::perspective(45.f, 1.f, 0.1f, 1000.f);
+
+		// minimap
+		cameraData = m_minimapCamera->getFlatViewMatrix();
+		glUniform1f(glGetUniformLocation(m_defaultShader->Id(), "hasTex"), 0);
+		glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "view"), 1, GL_FALSE, glm::value_ptr(cameraData.flattened));
+		glUniformMatrix4fv(glGetUniformLocation(m_defaultShader->Id(), "projection"), 1, GL_FALSE, glm::value_ptr(m_projection));
+		glUniform3fv(glGetUniformLocation(m_defaultShader->Id(), "camPos"), 1, glm::value_ptr(cameraData.translation));
+
+		renderScene(m_scene, &identity);
+
+
+		// HUD
+		glDepthMask(GL_FALSE);
+		m_textureShader->Use();
+		renderHUD(width, height, identity);
+		glEnable(GL_DEPTH_TEST);
+
+		glfwSwapBuffers(m_window);
+		glfwPollEvents();
+
+		// (!loadDone){
 		//putHandler::handleKey(GLFW_KEY_L, GLFW_PRESS, 0);
 		//adDone = true;
-	//
+		//
+	}
 }
 
 void GraphicsEngine::renderHUD(int width, int height, glm::mat4 & identity){
@@ -1353,5 +1361,5 @@ void GraphicsEngine::reset(){
 	pmin = 0;
 	psec = 0;
 	myvector = { 0, 0, 0, 0 };
-	loadDone = false;
+	//loadDone = false;
 }

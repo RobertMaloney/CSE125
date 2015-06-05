@@ -54,12 +54,12 @@ enum MenuStatus {
 
 class GraphicsEngine {
 public:
-	static bool		loadDone;
+	//static bool		loadDone;
 
 	static void Initialize();
 	static bool Closing();
 	static void CloseGame();
-	static void DrawAndPoll();
+	static void DrawAndPoll(bool);
 	static void DrawAndPollMenu();
 	static void Destroy();
 	static void SetKeyCallback(KeyCallback);

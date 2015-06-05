@@ -176,6 +176,7 @@ void GameServer::reset() {
 	gameState->setResetting(true);
 	serverLock.unlock();
 	timer->reset();
+	loadDone = false;
 }
 
 

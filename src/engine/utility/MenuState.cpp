@@ -326,6 +326,7 @@ void MenuState::replay(){
 	p.writeByte(static_cast<byte>(EventType::REPLAY));
 	gameclient->connection->send(p);
 	GameClient::inMenu = false;
+	GameClient::loadDone = false;
 	gameclient->setResetting(true);
 	GraphicsEngine::setCursor(GLFW_CURSOR_DISABLED);
 	GraphicsEngine::reset();

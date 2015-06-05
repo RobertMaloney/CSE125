@@ -62,15 +62,6 @@ void GameClient::run() {
 		}
 		else{
 			//std::cout << "game " << std::endl;
-			this->sendEvents(InputHandler::input);
-			this->receiveUpdates();
-
-			//Note: currently, it only updates game objects. Each package only includes the id and position of a game object.
-			//Note: This method reads updates, translates update, updates game states (in client) and scene graph (in GraphicsEngine)
-			this->updateGameState();
-			updates.clear();
-			GraphicsEngine::DrawAndPoll();
-
 			if (!loadDone){
 				ObjectDB * b = &ObjectDB::getInstance();
 				if (b->getSize() >= Config::settings["totalObjects"].asInt()){
@@ -78,6 +69,15 @@ void GameClient::run() {
 					InputHandler::handleKey(GLFW_KEY_L, GLFW_PRESS, 0);
 				}
 			}
+
+			this->sendEvents(InputHandler::input);
+			this->receiveUpdates();
+
+			//Note: currently, it only updates game objects. Each package only includes the id and position of a game object.
+			//Note: This method reads updates, translates update, updates game states (in client) and scene graph (in GraphicsEngine)
+			this->updateGameState();
+			updates.clear();
+			GraphicsEngine::DrawAndPoll(loadDone);
 		}
 
 	}
