@@ -826,22 +826,22 @@ void GraphicsEngine::renderBoard(int width, int height, glm::mat4 & identity){
 	glUniform1i(glGetUniformLocation(m_textureShader->Id(), "tex"), 0);
 
 	//HUD1
-	glViewport(0, height - HUDH, HUDW, HUDH);
+	glViewport(0 + width/2, height - HUDH*5, HUDW, HUDH);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUD1->render(&identity);
 
 	// HUD2
-	glViewport(0, height - HUDH - HUDH, HUDW, HUDH);
+	glViewport(0 + width/2, height - HUDH*6, HUDW, HUDH);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUD2->render(&identity);
 
 	//HUD3
-	glViewport(0, height - HUDH - HUDH - HUDH, HUDW, HUDH);
+	glViewport(0 + width/2, height - HUDH*7, HUDW, HUDH);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUD3->render(&identity);
 
 	// HUD4
-	glViewport(0, height - HUDH - HUDH - HUDH - HUDH, HUDW, HUDH);
+	glViewport(0 + width/2, height - HUDH *8, HUDW, HUDH);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_HUD4->render(&identity);
 

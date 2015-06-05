@@ -98,6 +98,8 @@ void InputHandler::handleKey(int key, int action, int mods) {
 			p.writeByte(EventType::ADD);
 			input.push_back(p);
 			GraphicsEngine::ZoomIn();
+			GameClient::inMenu = true;
+			GraphicsEngine::setMenuStatus(MenuStatus::MLOSEREPLAY);
 		}
 	}
 	// Minus zoom out
@@ -107,6 +109,8 @@ void InputHandler::handleKey(int key, int action, int mods) {
 			p.writeByte(EventType::SUB);
 			input.push_back(p);
 			GraphicsEngine::ZoomOut();
+			GameClient::inMenu = true;
+			GraphicsEngine::setMenuStatus(MenuStatus::MWINREPLAY);
 		}
 	}
 	// Escape pause
