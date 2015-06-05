@@ -84,8 +84,9 @@ public:
 
     static void setCursor(int);
 
-	static MatrixNode* addNode(Renderable*, bool);
+	static MatrixNode* addNode(Renderable*, bool, PType);
     static Renderable* selectModel(Model model);
+	static PType getPType(Model model);
     static void updatePercent(Model m, int p);
 	static void updateTimer(int min, int sec);
 	static void reverseCam(bool);

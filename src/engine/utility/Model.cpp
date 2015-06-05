@@ -33,6 +33,38 @@ std::map<Model, std::string> ResourceMap::map = {
       { BIRD, "bird" }
 };
 
+std::map<Model, PType> ResourceMap::map2 = {
+	{ OB_TYPE, PType::P_PLAYER },
+	{ PB_TYPE, PType::P_PLAYER },
+	{ BB_TYPE, PType::P_PLAYER },
+	{ GB_TYPE, PType::P_PLAYER },
+	{ TREE, PType::P_TREE },
+	{ STUMP, PType::P_STUMP },
+	{ GRASS, PType::P_RES },
+	{ MUSHROOM, PType::P_MUSH },
+	{ MUSHROOM_1, PType::P_MUSH },
+	{ MUSHROOM_2, PType::P_MUSH },
+	{ MUSHROOM_3, PType::P_MUSH },
+	{ MUSHROOM_4, PType::P_MUSH },
+	{ FLOWER_1, PType::P_FLOWER },
+	{ FLOWER_2, PType::P_FLOWER },
+	{ FLOWER_3, PType::P_FLOWER },
+	{ FLOWER_4, PType::P_FLOWER },
+	{ FLOWER_5, PType::P_FLOWER },
+	{ FLOWER_6, PType::P_FLOWER },
+	{ CLOUD, PType::P_POWER },
+	{ PILL, PType::P_POWER },
+	{ ROCK_1, PType::P_ROCK },
+	{ ROCK_2, PType::P_ROCK },
+	{ ROCK_3, PType::P_ROCK },
+	{ ROCK_4, PType::P_ROCK },
+	{ TALL_ROCK_1, PType::P_TALL },
+	{ TALL_ROCK_2, PType::P_TALL },
+	{ TALL_ROCK_3, PType::P_TALL },
+	{ BUNNY, PType::P_POWER },
+	{ BIRD, PType::P_POWER }
+};
+
 std::string ResourceMap::getObjFile(Model rm)
 {
    return std::string(map[rm]) + ".obj";
@@ -51,4 +83,12 @@ Model ResourceMap::getModelFromString(std::string m) {
 			return it->first;
 		}
 	}
+}
+
+
+
+
+PType ResourceMap::getPType(Model rm)
+{
+	return map2[rm];
 }
