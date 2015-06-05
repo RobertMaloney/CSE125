@@ -91,6 +91,7 @@
     <ClInclude Include="graphics\Random.h" />
     <ClInclude Include="utility\NPC.h" />
     <ClInclude Include="utility\Timer.h" />
+    <ClInclude Include="graphics\PType.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

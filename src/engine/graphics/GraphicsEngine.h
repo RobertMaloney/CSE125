@@ -13,21 +13,24 @@
 #include <gtc\matrix_transform.hpp>
 #include <gtc\type_ptr.hpp>
 #include <gtx\string_cast.hpp>
+#include <gtc\constants.hpp>
 
 #include <vector>
 #include <deque>
 #include <unordered_map>
 
+#include "Shader.h"
 #include "MatrixNode.h"
 #include "Geode.h"
 #include "CameraNode.h"
 #include "Renderable.h"
-#include "Shader.h"
+#include "Particle3D.h"
 
-#include "..\network\Packet.h"
 #include "..\utility\GameObject.h"
-//#include "..\utility\GameState.h"
 #include "..\utility\InputHandler.h"
+
+//#include "..\utility\Config.h"
+
 
 
 typedef unsigned int ObjectId;
@@ -82,8 +85,8 @@ public:
 	static MatrixNode* addNode(Renderable*, bool);
     static Renderable* selectModel(Model model);
     static void updatePercent(Model m, int p);
-	static void spawnPSystem(glm::mat4&);
 	static void reverseCam(bool);
+	static MatrixNode* spawnPSystem(glm::mat4&, GLuint, PType);
 
 private:
 	static glm::mat4				m_view, m_projection;

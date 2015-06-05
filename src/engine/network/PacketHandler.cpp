@@ -5,48 +5,56 @@
 void forwardHandler(ObjectId id, Packet &p) {
 	Player* player = static_cast<Player*> (ObjectDB::getInstance().get(id));
 	player->setMoving(Player::UP, true);
+	player->setParticle(true);
 }
 
 
 void stopForwardHandler(ObjectId id, Packet &p) {
 	Player* player = static_cast<Player*> (ObjectDB::getInstance().get(id));
 	player->setMoving(Player::UP, false);
+	player->setParticle(false);
 }
 
 
 void backwardHandler(ObjectId id, Packet &p) {
 	Player* player = static_cast<Player*> (ObjectDB::getInstance().get(id));
 	player->setMoving(Player::DOWN, true);
+	player->setParticle(true);
 }
 
 
 void stopBackwardHandler(ObjectId id, Packet &p) {
 	Player* player = static_cast<Player*> (ObjectDB::getInstance().get(id));
 	player->setMoving(Player::DOWN, false);
+	player->setParticle(false);
     }
 
 
 void leftHandler(ObjectId id, Packet &p) {
 	Player* player = static_cast<Player*> (ObjectDB::getInstance().get(id));
 	player->setMoving(Player::LEFT, true);
+	player->setParticle(true);
 }
 
 
 void stopLeftHandler(ObjectId id, Packet &p) {
 	Player* player = static_cast<Player*> (ObjectDB::getInstance().get(id));
 	player->setMoving(Player::LEFT, false);
+	player->setParticle(false);
     }
 
 
 void rightHandler(ObjectId id, Packet &p) {
 	Player* player = static_cast<Player*> (ObjectDB::getInstance().get(id));
 	player->setMoving(Player::RIGHT, true);
+	player->setParticle(true);
 }
 
 
 void stopRightHandler(ObjectId id, Packet &p) {
 	Player* player = static_cast<Player*> (ObjectDB::getInstance().get(id));
 	player->setMoving(Player::RIGHT, false);
+	player->setParticle(false);
 }
 
 void lookHandler(ObjectId id, Packet &p) {
@@ -57,12 +65,16 @@ void lookHandler(ObjectId id, Packet &p) {
 }
 
 void jumpHandler(ObjectId id, Packet & p) {
-	(dynamic_cast<Player*>(ObjectDB::getInstance().get(id)))->setMoving(Player::JUMP, true);
+	Player* player = dynamic_cast<Player*>(ObjectDB::getInstance().get(id));
+    player->setMoving(Player::JUMP, true);
+	player->setParticle(true);
 }
 
 
 void stopJumpHandler(ObjectId id, Packet & p) {
-	(dynamic_cast<Player*>(ObjectDB::getInstance().get(id)))->setMoving(Player::JUMP, false);
+	Player* player = dynamic_cast<Player*>(ObjectDB::getInstance().get(id));
+	player->setMoving(Player::JUMP, false);
+	player->setParticle(false);
 }
 
 

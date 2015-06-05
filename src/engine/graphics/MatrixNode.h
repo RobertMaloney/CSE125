@@ -24,10 +24,14 @@ private:
 	std::vector<Node*> m_children;
 	bool visible;
 	bool particle;
+	MatrixNode *mps;
+	ParticleSystem *ps;
 
 public:
+
 	MatrixNode(){
 		m_parent = 0;
+		hasParticle = false;
 	}
 
 	virtual MatrixNode* asMatrixNode() {
@@ -80,6 +84,20 @@ public:
 	}
 	void setParticle(bool f){
 		particle = f;
+	}
+
+	MatrixNode* getParticleNode(){
+		return mps;
+	}
+	void setParticleNode(MatrixNode *p){
+		mps = p;
+	}
+
+	ParticleSystem* getParticleSystem(){
+		return ps;
+	}
+	void setParticleSystem(ParticleSystem *p){
+		ps = p;
 	}
 
 	static glm::mat4 quatAngle(glm::quat & q, float angle, float height, float scale) {

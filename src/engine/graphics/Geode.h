@@ -10,6 +10,10 @@ private:
 
 public:
 
+	Geode(){
+		hasParticle = false;
+	}
+
 	virtual MatrixNode* asMatrixNode() {
 		return 0;
 	}
