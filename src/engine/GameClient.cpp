@@ -253,7 +253,9 @@ void GameClient::updateGameState() {
 	Player* thep = dynamic_cast<Player*>(gstate.getObject(this->playerid));
 	GraphicsEngine::updatePercent(thep->getModel(), thep->getPercent());
 	GraphicsEngine::updateTimer(thep->getMin(), thep->getSec());
-	this->checkGameStatus(thep);
+	if (loadDone){
+		this->checkGameStatus(thep);
+	}
 
 
 }

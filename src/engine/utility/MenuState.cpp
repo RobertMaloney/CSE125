@@ -197,12 +197,15 @@ void MenuState::menuUp()
 
 	// Status for GraphicsEngine to select texture, not related to select state in menu state
     if (m == MenuStatus::MWINREPLAY || m == MenuStatus::MWINQUIT){
+		replay_flag = true;
 		GraphicsEngine::setMenuStatus(MenuStatus::MWINREPLAY);
 	}
 	else if (m == MenuStatus::MLOSEREPLAY || m == MenuStatus::MLOSEQUIT){
+		replay_flag = true;
 		GraphicsEngine::setMenuStatus(MenuStatus::MLOSEREPLAY);
 	}
 	else if (m == MenuStatus::MCONTINUE || m == MenuStatus::MPAUSEQUIT){
+		pause_flag = true;
 		GraphicsEngine::setMenuStatus(MenuStatus::MCONTINUE);
 	}
 	else{
@@ -223,12 +226,15 @@ void MenuState::menuDown()
 
 	// Status for GraphicsEngine to select texture, not related to select state in menu state
 	if (m == MenuStatus::MWINREPLAY || m == MenuStatus::MWINQUIT){
+		replay_flag = false;
 		GraphicsEngine::setMenuStatus(MenuStatus::MWINQUIT);
 	}
 	else if (m == MenuStatus::MLOSEREPLAY || m == MenuStatus::MLOSEQUIT){
+		replay_flag = false;
 		GraphicsEngine::setMenuStatus(MenuStatus::MLOSEQUIT);
 	}
 	else if (m == MenuStatus::MCONTINUE || m == MenuStatus::MPAUSEQUIT){
+		pause_flag = false;
 		GraphicsEngine::setMenuStatus(MenuStatus::MPAUSEQUIT);
 	}
 	else{
