@@ -235,6 +235,13 @@ void GameClient::updateGameState() {
 
 	}
 
+	static bool first = true;
+	if (first) {
+		first = false;
+		inMenu = false;
+		GraphicsEngine::setCursor(GLFW_CURSOR_DISABLED);
+	}
+
 	Player* thep = dynamic_cast<Player*>(gstate.getObject(this->playerid));
 	GraphicsEngine::updatePercent(thep->getModel(), thep->getPercent());
 	this->checkGameStatus(thep);

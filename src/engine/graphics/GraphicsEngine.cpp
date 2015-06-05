@@ -38,7 +38,7 @@ GLuint				GraphicsEngine::m_particleTex = 0;
 CameraNode			*GraphicsEngine::m_mainCamera = NULL;
 CameraNode			*GraphicsEngine::m_minimapCamera = NULL;
 
-MenuStatus          GraphicsEngine::ms = START;
+MenuStatus          GraphicsEngine::ms = LOADING;
 GLuint				GraphicsEngine::m_skyboxId = 0;
 
 GLuint				GraphicsEngine::m_HudId1 = 0;
@@ -73,6 +73,7 @@ GLuint				GraphicsEngine::m_menuId5 = 0;
 GLuint				GraphicsEngine::m_menuId6 = 0;
 GLuint				GraphicsEngine::m_menuId7 = 0;
 GLuint				GraphicsEngine::m_menuId8 = 0;
+GLuint				GraphicsEngine::m_menuIdLoading = 0;
 
 int					GraphicsEngine::HUDW = 100;
 int					GraphicsEngine::HUDH = 100;
@@ -192,6 +193,13 @@ void GraphicsEngine::Initialize() {
 	// Turn on z-buffering
 	glEnable(GL_DEPTH_TEST);
 
+	// Menu
+	m_textureShader->Use();
+	m_menu = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.f);
+	m_screen_scale = glm::vec2(2.0f, 2.0f);
+	m_menuIdLoading = HUD::makeHUD("../../media/texture/start_bg.png");
+	DrawAndPollMenu();
+
 	// SKYBOX
 	m_skyboxShader->Use();
 	m_skybox = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.f);
@@ -204,22 +212,14 @@ void GraphicsEngine::Initialize() {
     m_textureShader->Use();
 	addHUD();//pass in current texture unit
 
-	// Menu
-	m_textureShader->Use();
-	m_menu = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.f);
-
 	m_menuId1 = HUD::makeHUD("../../media/texture/bg_start.png");//start start  
-	m_menu->setTextureId(m_menuId1);
-
-
 	m_menuId2 = HUD::makeHUD("../../media/texture/bg_quit.png");//start quit   
 	m_menuId3 = HUD::makeHUD("../../media/texture/win_replay.png");//win replay  
 	m_menuId4 = HUD::makeHUD("../../media/texture/win_quit.png");//win quit    
 	m_menuId5 = HUD::makeHUD("../../media/texture/lose_replay.png");//lose replay  
 	m_menuId6 = HUD::makeHUD("../../media/texture/lose_quit.png");//lose quit  TODO bug  
 	m_menuId7 = HUD::makeHUD("../../media/texture/bg_continue.png");//lose replay  
-	m_menuId8 = HUD::makeHUD("../../media/texture/bg_pausequit.png");//lose quit  TODO bug  
-
+	m_menuId8 = HUD::makeHUD("../../media/texture/bg_pausequit.png");//lose quit  TODO bug 
 
 	// WORLD
 	//m_textureShader->Use();
@@ -261,9 +261,9 @@ void GraphicsEngine::Initialize() {
 
 	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
 
+	ms = START;
 	m_initialized = true;
 
-	m_screen_scale = glm::vec2(2.0f, 2.0f);
 }
 
 void GraphicsEngine::RenderScore(int Player1, int Player2, int Player3, int Player4)
@@ -939,6 +939,9 @@ void GraphicsEngine::DrawAndPollMenu()
 		break;
 	case(MPAUSEQUIT) :
 		m_menu->setTextureId(m_menuId8);
+		break;
+	case(LOADING) :
+		m_menu->setTextureId(m_menuIdLoading);
 		break;
 	}
 	
