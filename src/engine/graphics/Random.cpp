@@ -15,3 +15,4 @@ float Random::linearRand(float min, float max) {
 	static std::uniform_real_distribution<float> line(0.f, 1.f);
 	return line(gen) * (max - min) + min;
 }
+

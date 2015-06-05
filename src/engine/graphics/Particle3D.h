@@ -20,6 +20,7 @@ struct Particle3D {
 	glm::vec3 position;
 	glm::vec3 velocity;
 	glm::vec3 acceleration;
+	glm::vec3 rotation;
 	glm::vec3 color;
 	float size;
 	float life, totalLife;
@@ -76,15 +77,25 @@ public:
 			glm::vec3(0.29f, 0.f, 0.51f),
 			glm::vec3(0.56f, 0.f, 1.f), };
 			//glm::vec3(0.f, 0.f, 0.f) };
-
+		if (type == P_PLAYER){
+			numParticles = 100;
+		}
+		glm::vec3 v = Random::ballRand(Random::linearRand(Config::settings["gas"]["velocity"][0].asFloat(), Config::settings["gas"]["velocity"][1].asFloat()));
 		for (int i = 0; i < numParticles; ++i) { // random on unit circle for now
 			Particle3D p;
 			p.position = Random::ballRand(Random::linearRand(0.5f, 0.5f));
 
 			if (type == P_PLAYER){
-				p.color = colors[2];
+				/*p.color = colors[2];
 				p.velocity = Random::ballRand(Random::linearRand(Config::settings["gas"]["velocity"][0].asFloat(), Config::settings["gas"]["velocity"][1].asFloat()));
 				p.acceleration = glm::vec3(0, 0, Random::linearRand(Config::settings["gas"]["acceleration"][0].asFloat(), Config::settings["gas"]["acceleration"][1].asFloat()));
+				p.life = Random::linearRand(Config::settings["gas"]["life"][0].asFloat(), Config::settings["gas"]["life"][1].asFloat());
+				p.totalLife = p.life;
+				p.size = Random::linearRand(Config::settings["gas"]["size"][0].asFloat(), Config::settings["gas"]["size"][1].asFloat());
+				*/
+				p.color = colors[2];
+				p.velocity = v;
+				p.acceleration = glm::vec3(0,0,1);// glm::vec3(0, 0, Random::linearRand(Config::settings["gas"]["acceleration"][0].asFloat(), Config::settings["gas"]["acceleration"][1].asFloat()));
 				p.life = Random::linearRand(Config::settings["gas"]["life"][0].asFloat(), Config::settings["gas"]["life"][1].asFloat());
 				p.totalLife = p.life;
 				p.size = Random::linearRand(Config::settings["gas"]["size"][0].asFloat(), Config::settings["gas"]["size"][1].asFloat());
@@ -155,8 +166,13 @@ public:
 			p.life -= timeElapsed;
 			if (p.life < 0) it = m_particles.erase(it);
 			else {
-				p.velocity += p.acceleration * timeElapsed;
-				p.position += p.velocity * timeElapsed + 0.5f * p.acceleration * timeElapsed * timeElapsed;
+				if (type == PType::P_PLAYER){
+					//p.position
+				}
+				else{
+					p.velocity += p.acceleration * timeElapsed;
+					p.position += p.velocity * timeElapsed + 0.5f * p.acceleration * timeElapsed * timeElapsed;
+				}
 				++it;
 			}
 		}
