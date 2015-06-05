@@ -23,8 +23,8 @@ public:
       JUMP
    };
 
-   NPC() : NPC(MUSHROOM) {};
-   NPC(Model m) : NPC(m, 505, 0, 0, 0) {};
+   NPC() : NPC(BUNNY) {};
+   NPC(Model m) : NPC(m, 500, 0, 0, 0) {};
    NPC(Model m, float radius, float theta, float azimuth, float direction);
 
    ~NPC();
@@ -42,11 +42,52 @@ public:
    void serialize(Packet & p);
    void deserialize(Packet & p);
 
-   virtual void updateStep();
-   void loadConfiguration(Json::Value config);
+   virtual void updateStep() = 0;
+   virtual void loadConfiguration(Json::Value config);
 
    int getPoints();
    void setPoints(int points);
+};
+
+class Bunny : public NPC {
+public:
+   Bunny(float radius, float theta, float azimuth, float direction) :
+      NPC(BUNNY, radius, theta, azimuth, direction) {};
+
+   void NPC::updateStep() {
+      int maxSteps = 100000;
+      step = (step + 1) % maxSteps;
+
+      // determine whether to turn or jump
+      bool jump = !(this->isJumping);
+      bool forward = step % 100 == 0;
+      bool turn = step == maxSteps - 1;
+
+      if (jump)
+      {
+         moves[JUMP] = true;
+      }
+      moves[UP] = true;
+   }
+};
+
+class Bird : public NPC {
+public:
+   Bird(float radius, float theta, float azimuth, float direction) :
+      NPC(BIRD, radius, theta, azimuth, direction) {};
+
+   void NPC::updateStep() {
+      int maxSteps = 1000;
+      step = (step + 1) % maxSteps;
+
+      // determine whether to turn or jump
+      bool forward = true;
+
+      if (forward)
+      {
+         moves[UP] = true;
+      }
+   }
 };
 
 #endif

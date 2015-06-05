@@ -7,6 +7,8 @@ NPC::NPC(Model m, float radius, float theta, float azimuth, float direction) :
    this->resetMoves();
    this->isJumping = false;
    this->points = 0;
+   this->height = radius;
+   this->verticalComponent.height = this->height;
 }
 
 NPC::~NPC() {
@@ -60,6 +62,10 @@ void NPC::integrate(float dt) {
       this->isJumping = true;
    }
 
+   if (glm::length(this->velocity) > .0001f) {
+      this->velocity *= .985f;
+   }
+
    this->resetMoves();
 
    MoveableObject::integrate(dt);
@@ -81,25 +87,6 @@ void NPC::deserialize(Packet & p) {
    GameObject::deserialize(p);
 }
 
-void NPC::updateStep() {
-   int maxSteps = 100000;
-   step = (step + 1) % maxSteps;
-
-   // determine whether to turn or jump
-   bool jump = !(this->isJumping);
-   bool forward = step % 100 == 0;
-   bool turn = step == maxSteps - 1;
-
-   if (turn) {
-      moves[LEFT] = true;
-   }
-   else if (jump)
-   {
-      moves[JUMP] = true;
-      moves[UP] = true;
-   }
-}
-
 void NPC::resetMoves() {
    for (int i = 0; i < 5; i++)
       this->moves[i] = false;
@@ -112,8 +99,6 @@ void NPC::collide(float dt, GameObject & target) {
 void NPC::loadConfiguration(Json::Value config) {
    // orientation not here yet
    this->angle = config["angle"].asFloat();
-   this->height = config["height"].asFloat();
-   this->verticalComponent.height = this->height;
    //this->type = this->typeFromString(config["type"].asString());
    this->modelRadius = config["modelRadius"].asFloat();
    this->modelHeight = config["modelHeight"].asFloat();
@@ -124,6 +109,7 @@ void NPC::loadConfiguration(Json::Value config) {
    this->inverseMass = 1.f / config["mass"].asFloat();
    this->restitution = config["restitution"].asFloat();
    this->points = config["points"].asInt();
+   this->coefficientFriction = config["coefficientFriction"].asFloat();
 }
 
 int NPC::getPoints()

@@ -260,17 +260,34 @@ void GameEngine::generateNPC(int num) {
    int total = 0;
    for (int i = 0; i < num; i++)
    {
-      float radius = 505;
+      float radius = 500;
 
       float theta = (float)(rand() % 360);
       float azimuth = (float)(rand() % 360);
       float direction = (float)(rand() % 360);
-      MoveableObject * newNPC = new NPC(BUNNY, radius, theta, azimuth, direction);
-      newNPC->addVelocity(newNPC->rotateInXYPlane(newNPC->getVelocity(), direction));
-      newNPC->loadConfiguration(configFile["bunny"]);
-      total = total + ((NPC*)newNPC)->getPoints();
-      pe->registerInteraction(newNPC, DRAG | GRAVITY);
 
+      int pick = int(rand() % 2);
+      MoveableObject * newNPC;
+
+      if (pick == 0)
+      {
+         newNPC = new Bunny(radius, theta, azimuth, direction);
+         newNPC->addVelocity(newNPC->rotateInXYPlane(newNPC->getVelocity(), direction));
+         newNPC->loadConfiguration(configFile["bunny"]);
+         pe->registerInteraction(newNPC, DRAG | GRAVITY);
+      }
+      else if (pick == 1)
+      {
+         float floor = 600, ceiling = 700, range = (ceiling - floor);
+         float bradius = floor + float((range * rand()) / (RAND_MAX + 1.0));
+
+         newNPC = new Bird(bradius, theta, azimuth, direction);
+         newNPC->addVelocity(newNPC->rotateInXYPlane(newNPC->getVelocity(), direction));
+         newNPC->loadConfiguration(configFile["bird"]);
+         pe->registerInteraction(newNPC, 0);
+      }
+
+      total = total + ((NPC*)newNPC)->getPoints();
       ObjectId resourceId = IdGenerator::getInstance().createId();
       gstate->addObject(resourceId, newNPC);
    }

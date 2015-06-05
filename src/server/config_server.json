@@ -44,6 +44,23 @@
 		"max stomach size": 100
     },
 
+   "bird": {
+      "orientation": null,
+      "angle": 0,
+      "height": 505,
+      "type": "NPC",
+      "modelRadius": 3,
+      "modelHeight": 3,
+      "visible": true,
+      "particle":false,
+      "angleSpeed": 2,
+      "jumpForce": 5000,
+      "moveForce": 50,
+      "mass": 10,
+      "restitution": 1,
+      "points": 100
+   },
+
    "bunny": {
         "orientation": null,
         "angle": 0,
@@ -55,11 +72,13 @@
 		"particle":false,
         "angleSpeed": 2,
         "jumpForce": 5000,
-        "moveForce": 75,
+      "moveForce": 25,
         "mass": 10,
         "restitution": 1,
-        "points": 50
+      "points": 50,
+      "coefficientFriction": 0.01
     },
+
 
     "moveable object": {
         "orientation": null,
