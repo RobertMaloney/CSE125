@@ -19,23 +19,16 @@
 #include <deque>
 #include <unordered_map>
 
+#include "Shader.h"
 #include "MatrixNode.h"
 #include "Geode.h"
 #include "CameraNode.h"
 #include "Renderable.h"
-#include "Shader.h"
 #include "Particle3D.h"
-#include "Skybox.h"
-#include "LightHandler.h"
-#include "Quad.h"
-#include "HUD.h"
 
-#include "..\network\Packet.h"
 #include "..\utility\GameObject.h"
 #include "..\utility\InputHandler.h"
-#include "..\graphics\Cube.h"
-#include "..\graphics\Geometry.h"
-#include "..\utility\System.h"
+
 //#include "..\utility\Config.h"
 
 

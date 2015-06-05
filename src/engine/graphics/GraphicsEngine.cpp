@@ -1,5 +1,18 @@
 #include "GraphicsEngine.h"
 
+
+
+
+#include "Skybox.h"
+#include "LightHandler.h"
+#include "Quad.h"
+#include "HUD.h"
+
+#include "..\network\Packet.h"
+#include "..\graphics\Cube.h"
+#include "..\graphics\Geometry.h"
+#include "..\utility\System.h"
+
 using namespace std;
 
 // Graphics Engine Static Members
