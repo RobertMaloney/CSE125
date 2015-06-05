@@ -116,7 +116,7 @@ public:
       else if (pick == 3)
          this->setModel(MUSHROOM_4);
 
-      this->randScale(.5f, 3.f);
+      this->randScale(.25f, 2.f);
    };
 
     virtual ~Mushroom() { };
@@ -147,7 +147,7 @@ public:
       else if (pick == 2)
          this->setModel(ROCK_3);
 
-      this->randScale(.5f, 3.f);
+      this->randScale(.25f, 1.5f);
    };
 
    virtual ~Rock() {};
@@ -185,7 +185,7 @@ public:
 	Stump(int points, float radius, float theta, float azimuth, float direction) :
 		EatableResource(points, STUMP, 500.f, theta, azimuth, direction)
    {
-      this->randScale(1.f, 2.f);
+      this->randScale(1.f, 1.5f);
    };
 
    virtual ~Stump() {};
