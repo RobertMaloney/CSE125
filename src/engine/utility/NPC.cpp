@@ -62,6 +62,10 @@ void NPC::integrate(float dt) {
       this->isJumping = true;
    }
 
+   if (glm::length(this->velocity) > .0001f) {
+      this->velocity *= .985f;
+   }
+
    this->resetMoves();
 
    MoveableObject::integrate(dt);
@@ -105,6 +109,7 @@ void NPC::loadConfiguration(Json::Value config) {
    this->inverseMass = 1.f / config["mass"].asFloat();
    this->restitution = config["restitution"].asFloat();
    this->points = config["points"].asInt();
+   this->coefficientFriction = config["coefficientFriction"].asFloat();
 }
 
 int NPC::getPoints()

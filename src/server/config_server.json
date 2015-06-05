@@ -3,7 +3,7 @@
     "fps": 60,
     "ip": "127.0.0.1",
     "port": "9000",
-    "num resources": 1000,
+    "num resources": 100,
     "num clouds": 10,
     "num pills": 2,
 
@@ -69,10 +69,11 @@
       "visible": true,
       "angleSpeed": 2,
       "jumpForce": 5000,
-      "moveForce": 75,
+      "moveForce": 25,
       "mass": 10,
       "restitution": 1,
-      "points": 50
+      "points": 50,
+      "coefficientFriction": 0.01
    },
 
 

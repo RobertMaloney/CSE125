@@ -66,8 +66,8 @@ public:
       if (jump)
       {
          moves[JUMP] = true;
-         moves[UP] = true;
       }
+      moves[UP] = true;
    }
 };
 
