@@ -21,10 +21,6 @@ class EatableResource : public Resource, public IEatable {
 
 	public:
 
-		void loadConfiguration(Json::Value config) {
-			
-		}
-
 		int getPoints(){
 			return this->points;
 		}

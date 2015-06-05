@@ -66,30 +66,44 @@ void GameServer::initialize() {
 
 void GameServer::run() {
 	long long elapsedTime;
+	high_resolution_clock::time_point startMain;
 	high_resolution_clock::time_point start;
+	high_resolution_clock::time_point end;
+
 	running = true;
 
 	while (running) {
-		serverLock.lock();
+		//serverLock.lock();
+		startMain = high_resolution_clock::now();
 		start = high_resolution_clock::now();
-
 		if (clients->size() < maxConnections) {
 			this->acceptWaitingClient();
 		}
 
 		this->processClientEvents(); 		// process the client input events
-		physics->update(PHYSICS_DT);      // do a physics step
-		engine->calculatePercent();
-		this->tick();                       // send state back to client
 
+		
+		physics->update(PHYSICS_DT);      // do a physics step
+
+		engine->calculatePercent();
+		
+		start = high_resolution_clock::now();
+		this->tick();                       // send state back to client
+		end = high_resolution_clock::now();
+		std::cout << " tick: " << chrono::duration_cast<milliseconds>(end - start).count();
+		
 		//calculates the ms from start until here.
-		elapsedTime = chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - start).count();
+		elapsedTime = chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - startMain).count();
 		if (elapsedTime > TIME_PER_FRAME) {  // this is so know if we need to slow down the loop
-			cerr << "Server loop took long than a frame." << endl;
-			cout << "dustyplanet:-$ ";
+			//cerr << "Server loop took long than a frame." << endl;
+			//cout << "dustyplanet:-$ ";
 		}
-		serverLock.unlock();
+		
+		start = high_resolution_clock::now();
+		//serverLock.unlock();
 		sleep_for(microseconds(TIME_PER_FRAME - elapsedTime));
+		end = high_resolution_clock::now();
+		std::cout << " sleep: " <<chrono::duration_cast<milliseconds>(end - start).count() << std::endl;
 	}
 }
 
@@ -148,6 +162,7 @@ void GameServer::getUpdates(vector<Packet> & updates) {
 		updates.push_back(p);
 		p.clear();
 	}
+	changed.clear();
 }
 
 
@@ -159,8 +174,12 @@ void GameServer::tick() {
 		odb.reloadObjects(configFile);
 		odb.getObjectState(updates);
 		gameState->setResetting(false);
+	
 	} else {
+		high_resolution_clock::time_point start = high_resolution_clock::now();
 		this->getUpdates(updates);
+		std::cout << " getUpdates: " << chrono::duration_cast<milliseconds>(high_resolution_clock::now() - start).count();
+		std::cout << " updatesSize: " << updates.size(); 
 	}
 
 	for (auto it = clients->begin(); it != clients->end(); ) {
@@ -173,6 +192,7 @@ void GameServer::tick() {
             ++it;
         }
 	}
+	updates.clear();
 }
 
 

@@ -18,7 +18,6 @@ PhysicsEngine::~PhysicsEngine() {
 
 
 void PhysicsEngine::update(float dt) {
-	changed.clear();
 	this->generateForces(dt);
 	this->integrateObjects(dt);
 	this->generateCollisions();
@@ -59,7 +58,7 @@ void PhysicsEngine::generateCollisions() {
 		
 			// if object is not itself and it is colliding with something then make a collision
 			// pair and add it to the set of collisions in this frame.
-			if (jt->second != it->first && this->checkCollision(it->first, jt->second)) {
+			if (jt->second != it->first && jt->second->getVisible() && this->checkCollision(it->first, jt->second)) {
 
 				// this provides ordering on the pairs so we dont get duplicates
 				GameObject* l = (it->first < jt->second) ? it->first : jt->second;

@@ -134,7 +134,7 @@ void Player::collide(float dt, GameObject & target) {
 	  
       else
       {
-         this->hit = true;
+         //this->hit = true;
       }
       break;
    case IEATABLE: {
@@ -145,7 +145,7 @@ void Player::collide(float dt, GameObject & target) {
 				 target.getModel() == TALL_ROCK_1 ||
 				 target.getModel() == TALL_ROCK_2 ||
 				 target.getModel() == TALL_ROCK_3) && this->getMass() < 12.f) {
-					this->velocity *= -1.f;
+				//	this->velocity *= -1.f;
 					break;
 			}
 			this->eat = true;

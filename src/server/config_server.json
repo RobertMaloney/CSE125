@@ -1,7 +1,7 @@
 {
     "max players": 4,
     "fps": 60,
-    "ip": "127.0.0.1",
+    "ip": "128.54.70.18",
     "port": "9000",
     "num resources": 1000,
     "num clouds": 10,

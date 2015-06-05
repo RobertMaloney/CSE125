@@ -12,5 +12,5 @@ Resource::Resource(Model rm, float radius, float theta, float azimuth, float dir
 
 
 void Resource::loadConfiguration(Json::Value config) {
-	
+	this->visible = true;
 }
