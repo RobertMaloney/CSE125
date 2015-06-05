@@ -1,8 +1,5 @@
 #include "GraphicsEngine.h"
 
-
-
-
 #include "Skybox.h"
 #include "LightHandler.h"
 #include "Quad.h"
@@ -1091,9 +1088,31 @@ void GraphicsEngine::updateObject(ObjectId objId, glm::quat & q, float angle, fl
 	bool new_particle = objNodeMap[objId]->getParticle();
 
 	//check for particle transition
-	if (old_particle != new_particle){
+	if (old_particle == false && new_particle == true){
 		if (objNodeMap[objId] == m_player){
-			spawnPSystem(objNodeMap[objId]->getMatrix(), m_HudId1, PType::P_PLAYER);
+			if (objNodeMap[objId]->hasParticle){
+				MatrixNode * mps = m_player->getParticleNode();
+				if (mps){
+					mps->setMatrix(objNodeMap[objId]->getMatrix());
+					ParticleSystem *ps = mps->getParticleSystem();
+
+					if (ps){
+						ps->init((int)Random::linearRand(50.f, 100.f), m_quad);
+						//m_psystems.push_back(ps);
+					}
+					else{
+						cout << "error particle system node does not exist for player ps" << endl;
+					}
+				}
+				else{
+					cout << "error particle system node does not exist for player pm" << endl;
+				}
+			}
+			else{
+				MatrixNode* mps = spawnPSystem(objNodeMap[objId]->getMatrix(), m_HudId1, PType::P_PLAYER);
+				m_player->setParticleNode(mps);
+				objNodeMap[objId]->hasParticle = true;
+			}
 		}
 		else{
 			spawnPSystem(objNodeMap[objId]->getMatrix(), m_particleTex, PType::P_RES);
@@ -1141,11 +1160,13 @@ void GraphicsEngine::setCursor(int state) {
 	glfwSetInputMode(m_window, GLFW_CURSOR, state);
 }
 
-void GraphicsEngine::spawnPSystem(glm::mat4 &matrix, GLuint m_particleTex, PType p) {
+MatrixNode* GraphicsEngine::spawnPSystem(glm::mat4 &matrix, GLuint m_particleTex, PType p) {
 	ParticleSystem* ps = new ParticleSystem((int) Random::linearRand(50.f, 100.f), m_quad, m_particleTex, p);
 	MatrixNode* pm = new MatrixNode();
 	pm->setMatrix(matrix);
 	pm->addChild(ps);
+	pm->setParticleSystem(ps);
 	m_scene->addChild(pm);
 	m_psystems.push_back(ps);
+	return pm;
 }

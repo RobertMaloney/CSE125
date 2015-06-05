@@ -84,7 +84,7 @@ public:
 	static MatrixNode* addNode(Renderable*, bool);
     static Renderable* selectModel(Model model);
     static void updatePercent(Model m, int p);
-	static void spawnPSystem(glm::mat4&, GLuint, PType);
+	static MatrixNode* spawnPSystem(glm::mat4&, GLuint, PType);
 
 private:
 	static glm::mat4				m_view, m_projection;

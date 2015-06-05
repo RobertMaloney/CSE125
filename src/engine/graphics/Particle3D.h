@@ -36,6 +36,7 @@ private:
 	Renderable* particleGraphic;
 	GLuint texId;
 	PType type;
+	//int num;
 
 	// https://github.com/jesusgollonet/ofpennereasing/blob/master/PennerEasing/Expo.cpp
 	float easeInOut(float t, float b, float c, float d) {
@@ -50,10 +51,22 @@ private:
 public:
 
 	ParticleSystem(int numParticles, Renderable* geo, GLuint tex, PType t) {
+		hasParticle = false;
 		assert(numParticles > 0);
+
+		//num = numParticles;
 
 		type = t;
 
+		texId = tex;
+
+		init(numParticles, geo);
+
+	}
+
+	void init(int numP, Renderable* geo){
+		particleGraphic = geo;
+		int numParticles = numP;
 		glm::vec3 colors[] = {
 			glm::vec3(1.f, 0.f, 0.f),
 			glm::vec3(1.f, 0.5f, 0.f),
@@ -63,14 +76,6 @@ public:
 			glm::vec3(0.29f, 0.f, 0.51f),
 			glm::vec3(0.56f, 0.f, 1.f), };
 
-		particleGraphic = geo;
-		texId = tex;
-
-		init(numParticles, colors);
-
-	}
-
-	void init(int numParticles, glm::vec3 colors[]){
 		for (int i = 0; i < numParticles; ++i) { // random on unit circle for now
 			Particle3D p;
 			p.position = Random::ballRand(Random::linearRand(0.5f, 0.5f));
@@ -141,7 +146,7 @@ public:
 		for (auto it = m_particles.begin(); it != m_particles.end(); ++it) {
 			glUniform3fv(glGetUniformLocation(shaderId, "colorOverride"), 1, glm::value_ptr(it->color));
 			float opacity = easeInOut(it->life, 0.f, 1.0f, it->totalLife);
-			glUniform1f(glGetUniformLocation(shaderId, "transparencyOverride"), opacity);
+			glUniform1f(glGetUniformLocation(shaderId, "transparencyOverride"),opacity );
 			glUniform1f(glGetUniformLocation(shaderId, "billboardScale"), it->size);
 			tmp = glm::translate(transform, it->position);
 			particleGraphic->render(&tmp);
