@@ -114,7 +114,8 @@ void PhysicsEngine::loadConfiguration(Json::Value config) {
 	gGenerator->gravity = -1.f * physics["gravity"].asFloat();
 
 	DragGenerator* dGenerator = (DragGenerator*) forces.find(DRAG)->second;
-	dGenerator->k1 = physics["k1"].asFloat();
-	dGenerator->k2 = physics["k2"].asFloat();
+	dGenerator->k1 = physics["drag"]["k1"].asFloat();
+	dGenerator->k2 = physics["drag"]["k2"].asFloat();
+	dGenerator->scale = physics["drag"]["drag scale"].asFloat();
 }
 

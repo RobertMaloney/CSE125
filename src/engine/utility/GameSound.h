@@ -7,7 +7,7 @@
 #pragma comment(lib, "winmm.lib") // SO weird I need this for music
 
 #define SOUND_OUCH_NUM 10
-const bool SOUND_ENABLE = true;
+const bool SOUND_ENABLE = false;
 
 class GameSound 
 {

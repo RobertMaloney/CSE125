@@ -16,6 +16,7 @@ private:
 
 protected:
 
+	float jumpSlow;
 	float SCORE_SCALE_RATIO;
 	float SCORE_MASS_RATIO;
 	int MAX_BURP_COUNT;
@@ -24,6 +25,7 @@ protected:
 	bool moves[5];
 	bool isJumping;
 
+	int dynamicScore;
 	int score;
 	int percent;
 	int stomach;

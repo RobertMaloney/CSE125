@@ -14,6 +14,7 @@ public:
 
 	float k1;
 	float k2;
+	float scale;
 
 };
 
