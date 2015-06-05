@@ -248,6 +248,8 @@ void Player::deserialize(Packet & p) {
 	this->score = p.readInt();
 	this->percent = p.readInt();
 	this->status = static_cast<GStatus>(p.readInt());
+	this->min = p.readInt();
+	this->sec = p.readInt();
 	this->MAX_BURP_COUNT = p.readInt();
 	this->MAX_STOMACH_SIZE = p.readInt();
 
@@ -268,8 +270,7 @@ void Player::deserialize(Packet & p) {
 		stomach = 0;
 	}
 		
-	this->min = p.readInt();
-	this->sec = p.readInt();	
+	
 }
 
 int Player::getMin() {
