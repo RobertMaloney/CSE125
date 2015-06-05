@@ -5,6 +5,8 @@
 #include <string>
 #include <algorithm>
 
+#include "../graphics/PType.h"
+
 using std::transform;
 
 enum Model {
@@ -42,12 +44,14 @@ enum Model {
 class ResourceMap {
 private:
 	static std::map<Model, std::string> map;
+	static std::map<Model, PType> map2;
 
 public:
 
-	static Model getModelFromString(std::string  m);
+static Model getModelFromString(std::string  m);
    static std::string getObjFile(Model rm);
    static std::string getMatlFile(Model rm);
+   static PType getPType(Model rm);
 };
 /*enum Model {
    RED_TREE_S,

@@ -213,7 +213,7 @@ void GameClient::updateGameState() {
 			}
 
 			//Add node in scene graph (in GraphicsEngine) and add object-node mapping (in GraphicsEngine)
-			GraphicsEngine::insertObject(obj->getId(), GraphicsEngine::addNode(GraphicsEngine::selectModel(obj->getModel()), obj->getVisible()));
+			GraphicsEngine::insertObject(obj->getId(), GraphicsEngine::addNode(GraphicsEngine::selectModel(obj->getModel()), obj->getVisible(), GraphicsEngine::getPType(obj->getModel())));
 		}
 		else {
 			oldeat = obj->getEat();

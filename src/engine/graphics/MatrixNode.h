@@ -2,6 +2,7 @@
 #define MATRIX_NODE_H
 
 #include "Node.h"
+#include "PType.h"
 #include <glm.hpp>
 #include <gtc\matrix_transform.hpp>
 #include <gtc\type_ptr.hpp>
@@ -26,12 +27,14 @@ private:
 	bool particle;
 	MatrixNode *mps;
 	ParticleSystem *ps;
+	PType p;
 
 public:
 
 	MatrixNode(){
 		m_parent = 0;
 		hasParticle = false;
+		p = PType::P_RES;
 	}
 
 	virtual MatrixNode* asMatrixNode() {
@@ -107,6 +110,12 @@ public:
 		return glm::scale(m, glm::vec3(scale, scale, scale));
 	}
 
+	PType getPType(){
+		return p;
+	}
+	void setPType(PType t){
+		p = t;
+	}
 
 };
 #endif

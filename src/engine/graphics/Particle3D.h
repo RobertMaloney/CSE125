@@ -20,6 +20,7 @@ struct Particle3D {
 	glm::vec3 position;
 	glm::vec3 velocity;
 	glm::vec3 acceleration;
+	glm::vec3 rotation;
 	glm::vec3 color;
 	float size;
 	float life, totalLife;
@@ -76,22 +77,72 @@ public:
 			glm::vec3(0.29f, 0.f, 0.51f),
 			glm::vec3(0.56f, 0.f, 1.f), };
 			//glm::vec3(0.f, 0.f, 0.f) };
-
+		if (type == P_PLAYER){
+			numParticles = 100;
+		}
+		glm::vec3 v = Random::ballRand(Random::linearRand(Config::settings["gas"]["velocity"][0].asFloat(), Config::settings["gas"]["velocity"][1].asFloat()));
 		for (int i = 0; i < numParticles; ++i) { // random on unit circle for now
 			Particle3D p;
 			p.position = Random::ballRand(Random::linearRand(0.5f, 0.5f));
-			p.velocity = Random::ballRand(Random::linearRand(Config::settings["particles"]["velocity"][0].asFloat(), Config::settings["particles"]["velocity"][1].asFloat()));
-			p.acceleration = glm::vec3(0, 0, Random::linearRand(Config::settings["particles"]["acceleration"][0].asFloat(), Config::settings["particles"]["acceleration"][1].asFloat()));
-			if (type == P_RES){
-				p.color = colors[i % 7];
+
+			if (type == P_PLAYER){
+				/*p.color = colors[2];
+				p.velocity = Random::ballRand(Random::linearRand(Config::settings["gas"]["velocity"][0].asFloat(), Config::settings["gas"]["velocity"][1].asFloat()));
+				p.acceleration = glm::vec3(0, 0, Random::linearRand(Config::settings["gas"]["acceleration"][0].asFloat(), Config::settings["gas"]["acceleration"][1].asFloat()));
+				p.life = Random::linearRand(Config::settings["gas"]["life"][0].asFloat(), Config::settings["gas"]["life"][1].asFloat());
+				p.totalLife = p.life;
+				p.size = Random::linearRand(Config::settings["gas"]["size"][0].asFloat(), Config::settings["gas"]["size"][1].asFloat());
+				*/
+				p.color = colors[2];
+				p.velocity = v;
+				p.acceleration = glm::vec3(0,0,1);// glm::vec3(0, 0, Random::linearRand(Config::settings["gas"]["acceleration"][0].asFloat(), Config::settings["gas"]["acceleration"][1].asFloat()));
+				p.life = Random::linearRand(Config::settings["gas"]["life"][0].asFloat(), Config::settings["gas"]["life"][1].asFloat());
+				p.totalLife = p.life;
+				p.size = Random::linearRand(Config::settings["gas"]["size"][0].asFloat(), Config::settings["gas"]["size"][1].asFloat());
 			}
-			else{//Player
-			//	p.color = colors[0];
+			else{//RES
+				p.velocity = Random::ballRand(Random::linearRand(Config::settings["particles"]["velocity"][0].asFloat(), Config::settings["particles"]["velocity"][1].asFloat()));
+				p.acceleration = glm::vec3(0, 0, Random::linearRand(Config::settings["particles"]["acceleration"][0].asFloat(), Config::settings["particles"]["acceleration"][1].asFloat()));
+				p.color = chooseColor(type, i);
+				p.life = Random::linearRand(Config::settings["particles"]["life"][0].asFloat(), Config::settings["particles"]["life"][1].asFloat());
+				p.totalLife = p.life;
+				p.size = Random::linearRand(Config::settings["particles"]["size"][0].asFloat(), Config::settings["particles"]["size"][1].asFloat());
 			}
-			p.life = Random::linearRand(Config::settings["particles"]["life"][0].asFloat(), Config::settings["particles"]["life"][1].asFloat());
-			p.totalLife = p.life;
-			p.size = Random::linearRand(Config::settings["particles"]["size"][0].asFloat(), Config::settings["particles"]["size"][1].asFloat());
+
 			m_particles.push_back(p);
+		}
+	}
+
+	glm::vec3 chooseColor(PType t, int i){
+		glm::vec3 colors[] = {
+			glm::vec3(1.f, 0.f, 0.f),
+			glm::vec3(1.f, 0.5f, 0.f),
+			glm::vec3(1.f, 1.f, 0.f),
+			glm::vec3(0.f, 1.f, 0.f),
+			glm::vec3(0.f, 0.f, 1.f),
+			glm::vec3(0.29f, 0.f, 0.51f),
+			glm::vec3(0.56f, 0.f, 1.f),
+		    glm::vec3(1.0f,1.0f,1.0f),
+		    glm::vec3(0.0f,0.0f,0.0f)};
+
+		switch (t){
+		case P_FLOWER:
+			return colors[6];
+		case P_TREE:
+			return colors[3];
+		case P_STUMP:
+			return colors[4];
+		case P_ROCK:
+			return colors[5];
+		case P_TALL:
+			return colors[7];
+		case P_MUSH:
+			return colors[1];
+		case P_POWER:
+			return colors[i % 7];
+		default:
+			return colors[8];
+
 		}
 	}
 	virtual MatrixNode* asMatrixNode() {
@@ -115,8 +166,13 @@ public:
 			p.life -= timeElapsed;
 			if (p.life < 0) it = m_particles.erase(it);
 			else {
-				p.velocity += p.acceleration * timeElapsed;
-				p.position += p.velocity * timeElapsed + 0.5f * p.acceleration * timeElapsed * timeElapsed;
+				if (type == PType::P_PLAYER){
+					//p.position
+				}
+				else{
+					p.velocity += p.acceleration * timeElapsed;
+					p.position += p.velocity * timeElapsed + 0.5f * p.acceleration * timeElapsed * timeElapsed;
+				}
 				++it;
 			}
 		}

@@ -251,7 +251,7 @@ void GraphicsEngine::Initialize() {
 	m_quad = new Quad(0.5f, glm::vec3(1));
 	m_cube = new Cube(glm::vec3(), glm::quat(), glm::vec3(1), 0.5f);
 	m_particleTex = HUD::makeHUD("../../media/texture/particle0.png");
-	m_kyle = HUD::makeHUD("../../media/texture/particle0.png");
+	m_kyle = HUD::makeHUD("../../media/texture/particle1.png");
 
 
 	// CAMERA
@@ -1200,7 +1200,7 @@ MenuStatus GraphicsEngine::getMenuStatus(){
 
 void GraphicsEngine::bindPlayerNode(GameObject* player) {
    Renderable * model = GraphicsEngine::selectModel(player->getModel());
-   m_player = GraphicsEngine::addNode(model, true);
+   m_player = GraphicsEngine::addNode(model, true, PType::P_PLAYER);
    m_player->addChild(m_mainCamera);
    m_player->addChild(m_minimapCamera);
 
@@ -1209,11 +1209,12 @@ void GraphicsEngine::bindPlayerNode(GameObject* player) {
 
 
 //Add node into scene graph using a model
-MatrixNode* GraphicsEngine::addNode(Renderable* objModel, bool f){
+MatrixNode* GraphicsEngine::addNode(Renderable* objModel, bool f, PType p){
 	//Renderable* objModel = new Geometry(modelPath);// "../../media/pb.obj");
 	Geode* objGeode = new Geode();
 	objGeode->setRenderable(objModel);
 	MatrixNode * m_node = new MatrixNode();
+	m_node->setPType(p);
 	m_node->addChild(objGeode);
 	m_scene->addChild(m_node);
 	m_node->setVisible(f);
@@ -1232,6 +1233,11 @@ Renderable * GraphicsEngine::selectModel(Model model){
    const char * path = pathString.c_str();
    newModel = new Geometry(path);
    return newModel;
+}
+
+
+PType GraphicsEngine::getPType(Model model){
+	return ResourceMap::getPType(model);
 }
 
 // Translate from vec4 postion to matrix in the node of scene graph??
@@ -1273,7 +1279,7 @@ void GraphicsEngine::updateObject(ObjectId objId, glm::quat & q, float angle, fl
 			}
 		}
 		else{
-			spawnPSystem(objNodeMap[objId]->getMatrix(), m_particleTex, PType::P_RES);
+			spawnPSystem(objNodeMap[objId]->getMatrix(), m_particleTex, objNodeMap[objId]->getPType());
 		}
 	}
 
