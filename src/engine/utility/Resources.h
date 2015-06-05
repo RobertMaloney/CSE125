@@ -169,7 +169,10 @@ public:
 	Stump() : Stump(10){};
 	Stump(int points) : EatableResource(points, STUMP) {};
 	Stump(int points, float radius, float theta, float azimuth, float direction) :
-		EatableResource(points, STUMP, radius, theta, azimuth, direction){};
+		EatableResource(points, STUMP, 500.f, theta, azimuth, direction)
+   {
+      this->randScale(1.f, 2.f);
+   };
 
    virtual ~Stump() {};
 };
@@ -186,9 +189,27 @@ public:
 class Flower : public EatableResource{
 public:
 	Flower() : Flower(10){};
-	Flower(int points) : EatableResource(points, FLOWER){};
+	Flower(int points) : EatableResource(points, FLOWER_1){};
 	Flower(int points, float radius, float theta, float azimuth, float direction) :
-		EatableResource(points, FLOWER, radius, theta, azimuth, direction){};
+		EatableResource(points, FLOWER_1, 500.f, theta, azimuth, direction)
+   {
+      int pick = rand() % 6;
+
+      if (pick == 0)
+         this->setModel(FLOWER_1);
+      else if (pick == 1)
+         this->setModel(FLOWER_2);
+      else if (pick == 2)
+         this->setModel(FLOWER_3);
+      else if (pick == 3)
+         this->setModel(FLOWER_4);
+      else if (pick == 4)
+         this->setModel(FLOWER_5);
+      else if (pick == 5)
+         this->setModel(FLOWER_6);
+
+      this->randScale(1.5f, 3.f);
+   };
 
    virtual ~Flower() { };
 };
@@ -198,7 +219,10 @@ public:
    Cloud() : Cloud(15) {};
    Cloud(int points) : EatableResource(points, CLOUD){};
    Cloud(int points, float radius, float theta, float azimuth, float direction) :
-      EatableResource(points, CLOUD, radius, theta, azimuth, direction) {};
+      EatableResource(points, CLOUD, radius, theta, azimuth, direction) 
+   {
+      this->randScale(1.f, 3.f);
+   };
 
    virtual ~Cloud() { };
 };
