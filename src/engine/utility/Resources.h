@@ -103,7 +103,21 @@ public:
     Mushroom() : Mushroom(10){};
 	Mushroom(int points) : EatableResource(points, MUSHROOM){};
 	Mushroom(int points, float radius, float theta, float azimuth, float direction) :
-		EatableResource(points, MUSHROOM, radius, theta, azimuth, direction){};
+		EatableResource(points, MUSHROOM, 500.f, theta, azimuth, direction)
+   {
+      int pick = rand() % 4;
+
+      if (pick == 0)
+         this->setModel(MUSHROOM_1);
+      else if (pick == 1)
+         this->setModel(MUSHROOM_2);
+      else if (pick == 2)
+         this->setModel(MUSHROOM_3);
+      else if (pick == 3)
+         this->setModel(MUSHROOM_4);
+
+      this->randScale(.5f, 3.f);
+   };
 
     virtual ~Mushroom() { };
 };
