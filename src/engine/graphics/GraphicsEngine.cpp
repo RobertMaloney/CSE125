@@ -1301,3 +1301,19 @@ void GraphicsEngine::reverseCam(bool on) {
 		m_mainCamera->setViewMatrix(camview);
 	}
 }
+
+void GraphicsEngine::reset(){
+
+	p1p = 0;
+	p2p = 0;
+	p3p = 0;
+	p4p = 0;
+	n1 = true;
+	n2 = true;
+	n3 = true;
+	n4 = true;
+	sorted = false;
+	pmin = 0;
+	psec = 0;
+	myvector = { 0, 0, 0, 0 };
+}

@@ -88,6 +88,7 @@ public:
 	static void updateTimer(int min, int sec);
 	static void reverseCam(bool);
 	static MatrixNode* spawnPSystem(glm::mat4&, GLuint, PType);
+	static void reset();
 
 private:
 	static glm::mat4				m_view, m_projection;

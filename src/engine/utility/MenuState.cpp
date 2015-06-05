@@ -326,7 +326,7 @@ void MenuState::replay(){
 	GameClient::inMenu = false;
 	gameclient->setResetting(true);
 	GraphicsEngine::setCursor(GLFW_CURSOR_DISABLED);
-	
+	GraphicsEngine::reset();
 
 
 
