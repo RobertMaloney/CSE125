@@ -153,13 +153,13 @@ void MoveableObject::integrate(float dt) {
 	this->velocity += newAcceleration * dt;
 
 	// temporary form of friction
-	if (glm::length(this->velocity) > .0001f) {
+/*	if (glm::length(this->velocity) > .0001f) {
 		if (this->type == PLAYER && dynamic_cast<Player*>(this)->getJumping()) {
 			return;
 		}
 		this->velocity *= .985f;
 	}
-
+	*/
 	this->eat = false;
 	this->hit = false;
 }
