@@ -159,12 +159,10 @@ void MenuState::updateMenuState() {
 		switch (input) {
 			case (MOVE_FORWARD) :
 				menuUp();
-				//debugging
 				checkMenu();
 				break;
 			case (MOVE_BACKWARD) :
 				menuDown();
-				//debugging
 				checkMenu();
 				break;
 			case (CONFIRM) :
@@ -358,7 +356,6 @@ void MenuState::checkMenu()
 	case (PLAY) :
 		if (replay_flag){
 			std::cout << "check menu" << std::endl;
-			replay();
 	//		std::cout << "REPLAY" << std::endl;
 		}
 		else if (pause_flag){
