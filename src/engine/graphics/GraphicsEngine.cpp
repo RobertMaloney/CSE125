@@ -42,6 +42,13 @@ GLuint				GraphicsEngine::m_HudId1 = 0;
 GLuint				GraphicsEngine::m_HudId2 = 0;
 GLuint				GraphicsEngine::m_HudId3 = 0;
 GLuint				GraphicsEngine::m_HudId4 = 0;
+
+GLuint				GraphicsEngine::m_HudIdO1 = 0;
+GLuint				GraphicsEngine::m_HudIdO2 = 0;
+GLuint				GraphicsEngine::m_HudIdO3 = 0;
+GLuint				GraphicsEngine::m_HudIdO4 = 0;
+
+
 GLuint				GraphicsEngine::m_HudIdN1 = 0;
 GLuint				GraphicsEngine::m_HudIdN2 = 0;
 GLuint				GraphicsEngine::m_HudIdN3 = 0;
@@ -448,19 +455,23 @@ GLuint GraphicsEngine::FindTexuture(int id){
 
 void GraphicsEngine::addHUD(){
 	m_HUD1 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
-	m_HudId1 = HUD::makeHUD("../../media/texture/HUD1.png");
+	m_HudIdO1 = HUD::makeHUD("../../media/texture/HUD1.png");
+	m_HudId1 = m_HudIdO1;
 	m_HUD1->setTextureId(m_HudId1);
 
 	m_HUD2 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
-	m_HudId2 = HUD::makeHUD("../../media/texture/HUD2.png");
+	m_HudIdO2 = HUD::makeHUD("../../media/texture/HUD2.png");
+	m_HudId2 = m_HudIdO2;
 	m_HUD2->setTextureId(m_HudId2);
 
 	m_HUD3 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
-	m_HudId3 = HUD::makeHUD("../../media/texture/HUD3.png");
+	m_HudIdO3 = HUD::makeHUD("../../media/texture/HUD3.png");
+	m_HudId3 = m_HudIdO3;
 	m_HUD3->setTextureId(m_HudId3);
 
 	m_HUD4 = new Cube(glm::vec3(), glm::quat(), glm::vec3(1.f, 0.f, 0.f), 1.0f);
-	m_HudId4 = HUD::makeHUD("../../media/texture/HUD4.png");
+	m_HudIdO4 = HUD::makeHUD("../../media/texture/HUD4.png");
+	m_HudId4 = m_HudIdO4;
 	m_HUD4->setTextureId(m_HudId4);
 
 	//TODO replace pictures with right ones
@@ -586,6 +597,22 @@ void GraphicsEngine::CloseGame() {
 	glfwSetWindowShouldClose(m_window, GL_TRUE);
 }
 
+void GraphicsEngine::UpdateHudOrder(){
+	m_HudId1 = m_HudIdO1;
+	m_HUD1->setTextureId(m_HudId1);
+
+	m_HudId2 = m_HudIdO2;
+	m_HUD2->setTextureId(m_HudId2);
+
+	m_HudId3 = m_HudIdO3;
+	m_HUD3->setTextureId(m_HudId3);
+
+	m_HudId4 = m_HudIdO4;
+	m_HUD4->setTextureId(m_HudId4);
+
+	myvector = { p1p, p2p, p3p, p4p };
+}
+
 /**
 * GraphicsEngine::DrawAndPoll()
 * Description: This function should be called within in the main game loop to
@@ -633,6 +660,11 @@ void GraphicsEngine::DrawAndPoll() {
 	glm::vec3 sunLightDir = LightHandler::getLight(m_sunLight).position;
 	sunLightDir = glm::angleAxis(glm::radians(0.03f), glm::vec3(2, -2, 0)) * sunLightDir;
 	LightHandler::changePosition(m_sunLight, sunLightDir);
+
+	//Update HUD order
+	if (sorted){
+		UpdateHudOrder();
+	}
 
 	//Update HUD 
 	RenderScore(p1p, p2p, p3p, p4p); //p,,b,g,o
@@ -1303,7 +1335,6 @@ void GraphicsEngine::reverseCam(bool on) {
 }
 
 void GraphicsEngine::reset(){
-
 	p1p = 0;
 	p2p = 0;
 	p3p = 0;
@@ -1312,7 +1343,6 @@ void GraphicsEngine::reset(){
 	n2 = true;
 	n3 = true;
 	n4 = true;
-	sorted = false;
 	pmin = 0;
 	psec = 0;
 	myvector = { 0, 0, 0, 0 };
