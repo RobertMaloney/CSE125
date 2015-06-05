@@ -92,7 +92,7 @@ void GameServer::run() {
 		physics->update(PHYSICS_DT);      // do a physics step
 
 		engine->calculatePercent();
-		engine->updatePlayerTime(timer->getMin(), timer->getSec());
+		engine->updatePlayerTime(timer->getMinRemaining(), timer->getSecRemaining());
 		
 	//	start = high_resolution_clock::now();
 		this->tick();                       // send state back to client

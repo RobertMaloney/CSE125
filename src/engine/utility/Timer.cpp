@@ -22,6 +22,14 @@ double Timer::getTimeInSeconds() {
    return timeInSeconds >= maxSeconds ? maxSeconds : timeInSeconds;
 }
 
+double Timer::getTimeInSecondsRemaining() {
+   clock_t endTime = clock();
+   clock_t clockTicksTaken = endTime - startTime;
+   double timeInSeconds = maxSeconds - (clockTicksTaken / (double)CLOCKS_PER_SEC);
+   
+   return timeInSeconds <= 0 ? 0 : timeInSeconds;
+}
+
 std::string Timer::getTimeText() {
    double timeInSeconds = getTimeInSeconds();
    int minutes = (int)timeInSeconds / 60;
@@ -40,6 +48,16 @@ int Timer::getMin() {
 int Timer::getSec() {
 	double timeInSeconds = getTimeInSeconds();
 	return (int)timeInSeconds % 60;
+}
+
+int Timer::getMinRemaining() {
+   double timeInSeconds = getTimeInSecondsRemaining();
+   return (int)timeInSeconds / 60;
+}
+
+int Timer::getSecRemaining() {
+   double timeInSeconds = getTimeInSecondsRemaining();
+   return (int)timeInSeconds % 60;
 }
 
 bool Timer::atMax()

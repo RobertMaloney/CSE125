@@ -18,10 +18,14 @@ public:
    void setStop(int seconds);
    bool atMax();
    double getTimeInSeconds();
+   double getTimeInSecondsRemaining();
    std::string getTimeText();
 
    int getMin();
    int getSec();
+
+   int getMinRemaining();
+   int getSecRemaining();
 };
 
 #endif
