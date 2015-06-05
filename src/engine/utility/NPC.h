@@ -7,7 +7,7 @@
 #include "../physics/MoveableObject.h"
 #include "Config.h"
 
-class NPC : public MoveableObject, public Configurable, public IEatable {
+class NPC : public MoveableObject, public IEatable {
 protected:
    bool moves[5];
    bool isJumping;

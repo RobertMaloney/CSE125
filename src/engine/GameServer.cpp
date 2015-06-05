@@ -75,7 +75,7 @@ void GameServer::run() {
 	while (running) {
 		//serverLock.lock();
 		startMain = high_resolution_clock::now();
-		start = high_resolution_clock::now();
+	//	start = high_resolution_clock::now();
 		if (clients->size() < maxConnections) {
 			this->acceptWaitingClient();
 		}
@@ -87,10 +87,10 @@ void GameServer::run() {
 
 		engine->calculatePercent();
 		
-		start = high_resolution_clock::now();
+	//	start = high_resolution_clock::now();
 		this->tick();                       // send state back to client
-		end = high_resolution_clock::now();
-		std::cout << " tick: " << chrono::duration_cast<milliseconds>(end - start).count();
+	//	end = high_resolution_clock::now();
+	//	std::cout << " tick: " << chrono::duration_cast<milliseconds>(end - start).count();
 		
 		//calculates the ms from start until here.
 		elapsedTime = chrono::duration_cast<chrono::microseconds>(high_resolution_clock::now() - startMain).count();
@@ -99,11 +99,11 @@ void GameServer::run() {
 			//cout << "dustyplanet:-$ ";
 		}
 		
-		start = high_resolution_clock::now();
+	//	start = high_resolution_clock::now();
 		//serverLock.unlock();
 		sleep_for(microseconds(TIME_PER_FRAME - elapsedTime));
-		end = high_resolution_clock::now();
-		std::cout << " sleep: " <<chrono::duration_cast<milliseconds>(end - start).count() << std::endl;
+	//	end = high_resolution_clock::now();
+		//std::cout << " sleep: " <<chrono::duration_cast<milliseconds>(end - start).count() << std::endl;
 	}
 }
 
@@ -178,8 +178,8 @@ void GameServer::tick() {
 	} else {
 		high_resolution_clock::time_point start = high_resolution_clock::now();
 		this->getUpdates(updates);
-		std::cout << " getUpdates: " << chrono::duration_cast<milliseconds>(high_resolution_clock::now() - start).count();
-		std::cout << " updatesSize: " << updates.size(); 
+	//	std::cout << " getUpdates: " << chrono::duration_cast<milliseconds>(high_resolution_clock::now() - start).count();
+	//	std::cout << " updatesSize: " << updates.size(); 
 	}
 
 	for (auto it = clients->begin(); it != clients->end(); ) {

@@ -56,6 +56,8 @@ public:
 	int getScore();
 	void setScore(int s);
 
+	void burpUpdate();
+
 	int getPercent();
 	void setPercent(int p);
 

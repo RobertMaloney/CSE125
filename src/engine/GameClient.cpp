@@ -57,10 +57,10 @@ void GameClient::run() {
 			mstate->handleEvents();
 			mstate->update();
 			//current_state->draw();
-			std::cout << "menu " << std::endl;
+		//	std::cout << "menu " << std::endl;
 		}
 		else{
-			std::cout << "game " << std::endl;
+			//std::cout << "game " << std::endl;
 			this->sendEvents(InputHandler::input);
 			this->receiveUpdates();
 

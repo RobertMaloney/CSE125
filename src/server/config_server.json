@@ -40,7 +40,7 @@
 		
 		"score scale ratio": 250,
 		"score mass ratio": 750,
-		"max burp count": 1000,
+		"max burp count": 5,
 		"max stomach size": 100
     },
 

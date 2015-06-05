@@ -120,7 +120,7 @@ public:
 
 class Rock : public EatableResource{
 public:
-	Rock() : EatableResource(0, ROCK_1){
+	Rock() : EatableResource(1, ROCK_1){
       int pick = rand() % 4;
 
       if (pick == 0)
@@ -132,7 +132,7 @@ public:
       else if (pick == 3)
          this->setModel(ROCK_4);
    };
-	Rock(int points) : EatableResource(0, ROCK_1){};
+	Rock(int points) : EatableResource(1, ROCK_1){};
 	Rock(int points, float radius, float theta, float azimuth, float direction) :
 		EatableResource(points, TALL_ROCK_1, radius, theta, azimuth, direction) {
       int pick = rand() % 3;
@@ -162,7 +162,7 @@ public:
    };
 
    TallRock(float radius, float theta, float azimuth, float direction) :
-	   EatableResource(0,TALL_ROCK_1, radius, theta, azimuth, direction) {
+	   EatableResource(1,TALL_ROCK_1, radius, theta, azimuth, direction) {
       int pick = rand() % 3;
 
       if (pick == 0)
