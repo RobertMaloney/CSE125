@@ -2,9 +2,11 @@
 #include "utility\Config.h"
 
 bool GameClient::inMenu = true;
+bool GameClient::loadDone = false;
 
 GameClient::GameClient() 
 {
+	resetting = false;
     connection = new TCPConnection();
 }
 
@@ -18,9 +20,6 @@ GameClient::~GameClient() {
 
 
 void GameClient::init() {
-	//get sound ready
-	GameSound::init();
-
 	//get socket ready
 	Socket::initialize();
 
@@ -36,7 +35,12 @@ void GameClient::run() {
 	bool DEBUG = true;
 	bool loggedIn = false;
 
+
+	//get sound ready
+	GameSound::init();
+
 	//deque<Packet> updates; 
+	GameSound::playLoading();
 
 	// LOAD CONFIG
 	if (!Config::parseJson("config_client.json"))
@@ -47,6 +51,9 @@ void GameClient::run() {
 
 	this->init();
 
+	//stop loading music
+	GameSound::stopLoading();
+
 	while (!GraphicsEngine::Closing()) {
 
 		//updateState();
@@ -56,8 +63,21 @@ void GameClient::run() {
 			mstate->handleEvents();
 			mstate->update();
 			//current_state->draw();
+		//	std::cout << "menu " << std::endl;
 		}
 		else{
+			//std::cout << "game " << std::endl;
+			if (!loadDone){
+				ObjectDB * b = &ObjectDB::getInstance();
+				if (b->getSize() >= Config::settings["totalObjects"].asInt()){
+					loadDone = true;
+					GameSound::stopLoading();
+					// start ingame bgm here unfortunately
+					GameSound::ingamebgm->play();
+					InputHandler::handleKey(GLFW_KEY_L, GLFW_PRESS, 0);
+				}
+			}
+
 			this->sendEvents(InputHandler::input);
 			this->receiveUpdates();
 
@@ -65,7 +85,7 @@ void GameClient::run() {
 			//Note: This method reads updates, translates update, updates game states (in client) and scene graph (in GraphicsEngine)
 			this->updateGameState();
 			updates.clear();
-			GraphicsEngine::DrawAndPoll();
+			GraphicsEngine::DrawAndPoll(loadDone);
 		}
 
 	}
@@ -97,6 +117,13 @@ void GameClient::receiveUpdates()
 	clientUpdates = vector<Packet>(InputHandler::clientInput);
 	InputHandler::clientInput.clear();
 }*/
+
+bool GameClient::isResetting() {
+	return this->resetting;
+}
+void GameClient::setResetting(bool b) {
+	this->resetting = b;
+}
 
 void GameClient::updateGameState() {
 	if (updates.size() <= 0 && clientonly_updates.size() <= 0) {
@@ -192,7 +219,16 @@ void GameClient::updateGameState() {
 			oldeat = obj->getEat();
 			oldhit = obj->getHit();
 			//Update the object in game state
-			obj->deserialize(*packet);//For now it only updates obj (pos) in game state
+			if (obj->getType() == PLAYER && obj->getId() != this->playerid){
+				Player p;
+				p.deserialize(*packet);
+				//cout << "Percent = " << (static_cast<Player*>(obj))->getPercent() << endl; 
+				GraphicsEngine::updatePercent(obj->getModel(), p.getPercent());
+				obj = &p;
+			}
+			else {
+				obj->deserialize(*packet);//For now it only updates obj (pos) in game state
+			}
 		}
 
 		//Update the object in node (in GraphicsEngine)
@@ -201,47 +237,59 @@ void GameClient::updateGameState() {
 										obj->getAngle(), 
 										obj->getHeight(),
 										obj->getScale(),
-										obj->getVisible());
+										obj->getVisible(),
+										obj->getParticle());
 
 		//play collision sounds
 		if (obj->getId() == this->playerid) {
-			if (oldeat == false && obj->getEat() == true)
+			if (oldeat == false && obj->getEat() == true) {
 				GameSound::nom->play();
+			}
 			if (oldhit == false && obj->getHit() == true)
 				GameSound::playOuch();
 		}
 
-
-		if (obj->getId() == this->playerid)
-		    this->checkGameStatus(dynamic_cast<Player*>(obj));
-
-		if (obj->getType() == PLAYER){
-			//cout << "Percent = " << (static_cast<Player*>(obj))->getPercent() << endl; 
-			GraphicsEngine::updatePercent(obj->getModel(), (static_cast<Player*>(obj))->getPercent());
-		}
-		
 	}
+
+	static bool first = true;
+	if (first) {
+		first = false;
+		inMenu = false;
+		GraphicsEngine::setCursor(GLFW_CURSOR_DISABLED);
+	}
+
+	Player* thep = dynamic_cast<Player*>(gstate.getObject(this->playerid));
+	GraphicsEngine::updatePercent(thep->getModel(), thep->getPercent());
+	GraphicsEngine::updateTimer(thep->getMin(), thep->getSec());
+	this->checkGameStatus(thep);
+
+
 }
 
 void GameClient::checkGameStatus(Player * p){
-	if (p->getStatus() == GStatus::WIN){
+	if (p->getStatus() == GStatus::WIN && !this->isResetting()){
 		std::cout << "I win. yayyyyy" << endl;
-
+		std::cout << p->getPercent() << endl;
         //Another menu status or leaderboard or whatever thing should happen here : ask player to replay or end the game....
 		inMenu = true;
 		MenuState::submit = false;
 		MenuState::replay_flag = true;
-
+	
 		GraphicsEngine::setMenuStatus(MenuStatus::MWINREPLAY);
 	}
-	else if (p->getStatus() == GStatus::LOSE){
+	else if (p->getStatus() == GStatus::LOSE && !this->isResetting()){
 		std::cout << "I lose :(" << endl;
 
 		inMenu = true;
 		MenuState::submit = false;
 		MenuState::replay_flag = true;
 		GraphicsEngine::setMenuStatus(MenuStatus::MLOSEREPLAY);
-	}// else do nothing
+	}
+
+	if (p->getStatus() == GStatus::PENDING) {
+		this->setResetting(false);
+	}
+
 }
 
 void GameClient::close() {

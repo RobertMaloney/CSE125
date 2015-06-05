@@ -8,24 +8,31 @@
 #include "../physics/MoveableObject.h"
 
 using namespace std;
-#define MAX_STOMACH_SIZE 100
-#define MAX_BURP_COUNT 5
+
 
 class Player : public MoveableObject {
 private:
-	const float SCORE_SCALE_RATIO = 250.f;
-	const float SCORE_MASS_RATIO = 750.f;
+	
 
 protected:
+
+	float jumpSlow;
+	float SCORE_SCALE_RATIO;
+	float SCORE_MASS_RATIO;
+	int MAX_BURP_COUNT;
+	int MAX_STOMACH_SIZE;
 
 	bool moves[5];
 	bool isJumping;
 
-   int score;
-   int percent;
-   int stomach;
-   int burp_count;
-   GStatus status;
+	int dynamicScore;
+	int score;
+	int percent;
+	int stomach;
+	int min;
+	int sec;
+	int burp_count;
+	GStatus status;
 
 public:
 
@@ -40,7 +47,7 @@ public:
 
 
     Player() : Player(OB_TYPE) {};
-	Player(Model bm) : Player(bm, 505, 0, 0, 0){};
+	Player(Model bm) : Player(bm, 500, 0, 0, 0){};
 	Player(Model bm, float radius, float theta, float azimuth, float direction);
 
     ~Player();
@@ -53,12 +60,15 @@ public:
 	int getScore();
 	void setScore(int s);
 
+	void burpUpdate();
+
 	int getPercent();
 	void setPercent(int p);
 
 	GStatus getStatus();
 	void setStatus(GStatus s);
-
+	GStatus statusFromString(string & string);
+	
 	virtual void integrate(float dt);
 	virtual void collide(float dt, GameObject & target) override;
 	virtual void loadConfiguration(Json::Value config);
@@ -66,6 +76,11 @@ public:
 	void serialize(Packet & p);
 	void deserialize(Packet & p);
 
+	int getMin();
+	void setMin(int min);
+
+	int getSec();
+	void setSec(int sec);
 };
 
 #endif

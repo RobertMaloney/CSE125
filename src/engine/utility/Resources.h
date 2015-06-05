@@ -17,7 +17,10 @@ class EatableResource : public Resource, public IEatable {
 
 		virtual ~EatableResource() { };
 
+
+
 	public:
+
 		int getPoints(){
 			return this->points;
 		}
@@ -100,7 +103,21 @@ public:
     Mushroom() : Mushroom(10){};
 	Mushroom(int points) : EatableResource(points, MUSHROOM){};
 	Mushroom(int points, float radius, float theta, float azimuth, float direction) :
-		EatableResource(points, MUSHROOM, radius, theta, azimuth, direction){};
+		EatableResource(points, MUSHROOM, 500.f, theta, azimuth, direction)
+   {
+      int pick = rand() % 4;
+
+      if (pick == 0)
+         this->setModel(MUSHROOM_1);
+      else if (pick == 1)
+         this->setModel(MUSHROOM_2);
+      else if (pick == 2)
+         this->setModel(MUSHROOM_3);
+      else if (pick == 3)
+         this->setModel(MUSHROOM_4);
+
+      this->randScale(.25f, 2.f);
+   };
 
     virtual ~Mushroom() { };
 };
@@ -115,23 +132,12 @@ public:
    virtual ~Tree() {};
 };
 
-class Rock : public Resource{
+class Rock : public EatableResource{
 public:
-	Rock() : Resource(ROCK_1){
-      int pick = rand() % 4;
-
-      if (pick == 0)
-         this->setModel(ROCK_1);
-      else if (pick == 1)
-         this->setModel(ROCK_2);
-      else if (pick == 2)
-         this->setModel(ROCK_3);
-      else if (pick == 3)
-         this->setModel(ROCK_4);
-   };
-
-	Rock(float radius, float theta, float azimuth, float direction) :
-		Resource(TALL_ROCK_1, radius, theta, azimuth, direction) {
+	Rock() : Rock(1){};
+	Rock(int points) : EatableResource(1, ROCK_1){};
+	Rock(int points, float radius, float theta, float azimuth, float direction) :
+		EatableResource(points, ROCK_1, 500.f, theta, azimuth, direction) {
       int pick = rand() % 3;
 
       if (pick == 0)
@@ -140,16 +146,16 @@ public:
          this->setModel(ROCK_2);
       else if (pick == 2)
          this->setModel(ROCK_3);
-      else if (pick == 3)
-         this->setModel(ROCK_4);
+
+      this->randScale(.25f, 1.5f);
    };
 
    virtual ~Rock() {};
 };
 
-class TallRock : public Resource{
+class TallRock : public EatableResource {
 public:
-   TallRock() : Resource(TALL_ROCK_1){
+	TallRock() : EatableResource(0,TALL_ROCK_1){
       int pick = rand() % 3;
 
       if (pick == 0)
@@ -159,7 +165,7 @@ public:
    };
 
    TallRock(float radius, float theta, float azimuth, float direction) :
-      Resource(TALL_ROCK_1, radius, theta, azimuth, direction) {
+	   EatableResource(1,TALL_ROCK_1, 500.f, theta, azimuth, direction) {
       int pick = rand() % 3;
 
       if (pick == 0)
@@ -177,7 +183,10 @@ public:
 	Stump() : Stump(10){};
 	Stump(int points) : EatableResource(points, STUMP) {};
 	Stump(int points, float radius, float theta, float azimuth, float direction) :
-		EatableResource(points, STUMP, radius, theta, azimuth, direction){};
+		EatableResource(points, STUMP, 500.f, theta, azimuth, direction)
+   {
+      this->randScale(1.f, 1.5f);
+   };
 
    virtual ~Stump() {};
 };
@@ -194,27 +203,49 @@ public:
 class Flower : public EatableResource{
 public:
 	Flower() : Flower(10){};
-	Flower(int points) : EatableResource(points, FLOWER){};
+	Flower(int points) : EatableResource(points, FLOWER_1){};
 	Flower(int points, float radius, float theta, float azimuth, float direction) :
-		EatableResource(points, FLOWER, radius, theta, azimuth, direction){};
+		EatableResource(points, FLOWER_1, 500.f, theta, azimuth, direction)
+   {
+      int pick = rand() % 6;
+
+      if (pick == 0)
+         this->setModel(FLOWER_1);
+      else if (pick == 1)
+         this->setModel(FLOWER_2);
+      else if (pick == 2)
+         this->setModel(FLOWER_3);
+      else if (pick == 3)
+         this->setModel(FLOWER_4);
+      else if (pick == 4)
+         this->setModel(FLOWER_5);
+      else if (pick == 5)
+         this->setModel(FLOWER_6);
+
+      this->randScale(1.5f, 3.f);
+   };
 
    virtual ~Flower() { };
 };
 
-class Cloud : public Resource {
+class Cloud : public EatableResource {
 public:
-   Cloud() : Resource(CLOUD) {};
-   Cloud(float radius, float theta, float azimuth, float direction) :
-      Resource(CLOUD, radius, theta, azimuth, direction) {};
+   Cloud() : Cloud(15) {};
+   Cloud(int points) : EatableResource(points, CLOUD){};
+   Cloud(int points, float radius, float theta, float azimuth, float direction) :
+      EatableResource(points, CLOUD, radius, theta, azimuth, direction) 
+   {
+      this->randScale(1.f, 3.f);
+   };
 
    virtual ~Cloud() { };
 };
 
 class Pill : public PowerUpResource {
 public:
-   Pill() : PowerUpResource(5000, 20, -10, PILL) {};
+   Pill() : PowerUpResource(0, 0, .5f, PILL) {};
    Pill(float radius, float theta, float azimuth, float direction) :
-      PowerUpResource(5000, 20, -10, PILL, radius, theta, azimuth, direction){};
+      PowerUpResource(0, 0, .5f, PILL, 503.f, theta, azimuth, direction){};
 
    virtual ~Pill() { };
 };

@@ -3,26 +3,34 @@
 
 #include "GameObject.h"
 #include "GameState.h"
+#include "../physics/PhysicsEngine.h"
+#include "Timer.h"
+#include "NPC.h"
 
 using namespace std;
 
 class GameEngine {
+private:
+   PhysicsEngine * pe;
+   Json::Value configFile;
 
 public:
 
-	GameEngine();
+	GameEngine(PhysicsEngine*);
 	~GameEngine();
 
 
-	void calculatePercent();
+	void calculatePercent(Timer* t);
+	void updatePlayerTime(int, int);
 	void endGame();
 	GameState* gstate;
-	void generateResources(int, int, int);
+   void generateResources(Json::Value configFile);
    void generateRandomResources(int);
    void generateClouds(int);
    void generateClusterTree(float, float, float, int);
    void generateRockRing();
    void generatePills(int);
+   void generateNPC(int);
 };
 
 

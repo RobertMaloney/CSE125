@@ -10,16 +10,27 @@ std::map<Model, std::string> ResourceMap::map = {
       { STUMP, "stump" },
       { GRASS, "grass" },
       { MUSHROOM, "mushroom" },
-      { FLOWER, "flower" },
+      { MUSHROOM_1, "mushroom1" },
+      { MUSHROOM_2, "mushroom2" },
+      { MUSHROOM_3, "mushroom3" },
+      { MUSHROOM_4, "mushroom4" },
+      { FLOWER_1, "flower1" },
+      { FLOWER_2, "flower2" },
+      { FLOWER_3, "flower3" },
+      { FLOWER_4, "flower4" },
+      { FLOWER_5, "flower5" },
+      { FLOWER_6, "flower6" },
       { CLOUD, "cloud" },
       { PILL, "pill" },
-      { ROCK_1, "rock1" },
-      { ROCK_2, "rock2" },
-      { ROCK_3, "rock3" },
+      { ROCK_1, "boulder1" },
+      { ROCK_2, "boulder2" },
+      { ROCK_3, "boulder3" },
       { ROCK_4, "rock4" },
       { TALL_ROCK_1, "rock5" },
       { TALL_ROCK_2, "rock6" },
-      { TALL_ROCK_3, "rock7" }
+      { TALL_ROCK_3, "rock7" },
+      { BUNNY, "bunny" },
+      { BIRD, "bird" }
 };
 
 std::string ResourceMap::getObjFile(Model rm)
@@ -30,4 +41,14 @@ std::string ResourceMap::getObjFile(Model rm)
 std::string ResourceMap::getMatlFile(Model rm)
 {
    return std::string(map[rm]) + ".matl";
+}
+
+
+Model ResourceMap::getModelFromString(std::string m) {
+	transform(m.begin(), m.end(), m.begin(), ::tolower);
+	for (auto it = map.begin(); it != map.end(); ++it) {
+		if (m == it->second){
+			return it->first;
+		}
+	}
 }

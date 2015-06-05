@@ -13,65 +13,70 @@ sf::Sound	*GameSound::menumove	= NULL,
 			*GameSound::jump		= NULL,
 			*GameSound::spaceship	= NULL,
 			*GameSound::loadingnow	= NULL,
+			*GameSound::spaceship_loading = NULL,
 
 			*GameSound::ouch_arr[SOUND_OUCH_NUM] = {}
 ;
 
-sf::Music	*GameSound::menubgm = NULL,
-			*GameSound::menubgm2 = NULL,
-			*GameSound::ingamebgm = NULL,
-			*GameSound::ingamebgm2 = NULL,
-			*GameSound::loadingloop = NULL
+sf::Music	*GameSound::menubgm		= NULL,
+			*GameSound::menubgm2	= NULL,
+			*GameSound::ingamebgm	= NULL,
+			*GameSound::ingamebgm2	= NULL,
+			*GameSound::loadingloop	= NULL
 ;
 
-sf::SoundBuffer	*GameSound::menumove_buf = NULL,
-*GameSound::menuconfirm_buf = NULL,
-*GameSound::menuback_buf = NULL,
-*GameSound::blobmove_buf = NULL,
-*GameSound::nom_buf = NULL,
-*GameSound::regburp_buf = NULL,
-*GameSound::bigburp_buf = NULL,
-*GameSound::jump_buf = NULL,
-*GameSound::spaceship_buf = NULL,
-*GameSound::loadingnow_buf = NULL,
+sf::SoundBuffer	*GameSound::menumove_buf	= NULL,
+				*GameSound::menuconfirm_buf = NULL,
+				*GameSound::menuback_buf	= NULL,
+				*GameSound::blobmove_buf	= NULL,
+				*GameSound::nom_buf			= NULL,
+				*GameSound::regburp_buf		= NULL,
+				*GameSound::bigburp_buf		= NULL,
+				*GameSound::jump_buf		= NULL,
+				*GameSound::spaceship_buf	= NULL,
+				*GameSound::loadingnow_buf	= NULL,
+				*GameSound::spaceship_loading_buf  = NULL,
 
-*GameSound::ouch_buf_arr[SOUND_OUCH_NUM] = {}
+				*GameSound::ouch_buf_arr[SOUND_OUCH_NUM] = {}
 ;
 
 void GameSound::init()
 {
-	menumove_buf = new sf::SoundBuffer();
+	menumove_buf	= new sf::SoundBuffer();
 	menuconfirm_buf = new sf::SoundBuffer();
-	menuback_buf = new sf::SoundBuffer();
-	blobmove_buf = new sf::SoundBuffer();
-	nom_buf = new sf::SoundBuffer();
-	regburp_buf = new sf::SoundBuffer();
-	bigburp_buf = new sf::SoundBuffer();
-	jump_buf = new sf::SoundBuffer();
-	spaceship_buf = new sf::SoundBuffer();
-	loadingnow_buf = new sf::SoundBuffer();
+	menuback_buf	= new sf::SoundBuffer();
+	blobmove_buf	= new sf::SoundBuffer();
+	nom_buf			= new sf::SoundBuffer();
+	regburp_buf		= new sf::SoundBuffer();
+	bigburp_buf		= new sf::SoundBuffer();
+	jump_buf		= new sf::SoundBuffer();
+	spaceship_buf	= new sf::SoundBuffer();
+	loadingnow_buf	= new sf::SoundBuffer();
+	spaceship_loading_buf = new sf::SoundBuffer();
 	for (int i = 0; i < SOUND_OUCH_NUM; i++) {
 		ouch_buf_arr[i] = new sf::SoundBuffer();
 	}
 
-	menuconfirm = new sf::Sound();
-	menumove = new sf::Sound();
-	menuback = new sf::Sound();
-	blobmove = new sf::Sound();
-	nom = new sf::Sound();
-	regburp = new sf::Sound();
-	bigburp = new sf::Sound();
-	jump = new sf::Sound();
-	spaceship = new sf::Sound();
-	loadingnow = new sf::Sound();
+	menuconfirm		= new sf::Sound();
+	menumove		= new sf::Sound();
+	menuback		= new sf::Sound();
+	blobmove		= new sf::Sound();
+	nom				= new sf::Sound();
+	regburp			= new sf::Sound();
+	bigburp			= new sf::Sound();
+	jump			= new sf::Sound();
+	spaceship		= new sf::Sound();
+	loadingnow		= new sf::Sound();
+	spaceship_loading = new sf::Sound();
 	for (int i = 0; i < SOUND_OUCH_NUM; i++) {
 		ouch_arr[i] = new sf::Sound();
 	}
 
-	menubgm = new sf::Music();
-	menubgm2 = new sf::Music();
-	ingamebgm = new sf::Music();
-	ingamebgm2 = new sf::Music();
+	menubgm			= new sf::Music();
+	menubgm2		= new sf::Music();
+	ingamebgm		= new sf::Music();
+	ingamebgm2		= new sf::Music();
+	loadingloop		= new sf::Music();
 
 	//menumove
 	loadSound(menumove, menumove_buf, "../../media/sound/menumove.wav");
@@ -104,6 +109,9 @@ void GameSound::init()
 	//loadingnow
 	loadSound(loadingnow, loadingnow_buf, "../../media/sound/loadingnow.wav");
 
+	//loadingnow
+	loadSound(spaceship_loading, spaceship_loading_buf, "../../media/sound/spaceship_loading.wav");
+
 	//ouch
 	loadSoundColl(ouch_arr, ouch_buf_arr, "../../media/sound/ouch", SOUND_OUCH_NUM);
 
@@ -120,6 +128,9 @@ void GameSound::init()
 
 	//ingamebgm2
 	loadMusic(ingamebgm2, "../../media/sound/ingamebgm2.flac");
+
+	//loadingbgm
+	loadMusic(loadingloop, "../../media/sound/loadingloop.wav");
 }
 
 
@@ -174,6 +185,12 @@ void GameSound::playLoading()
 	if (!SOUND_ENABLE) {
 		return;
 	}
-	spaceship->play();
-	loadingnow->play();
+	spaceship_loading->play();
+	loadingloop->play();
+}
+
+
+void GameSound::stopLoading()
+{
+	loadingloop->stop();
 }

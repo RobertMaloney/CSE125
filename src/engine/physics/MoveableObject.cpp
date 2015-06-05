@@ -5,8 +5,9 @@ MoveableObject::MoveableObject(float radius, float theta, float azimuth, float d
 	this->setMass(10.f);
 	this->restitution = .99f;
 	memset((void*) &this->verticalComponent, 0, sizeof(VerticalMovement));
-	this->verticalComponent.height = 505.f;
+	this->verticalComponent.height = radius;
 	this->setMassScale(1.f);
+	coefficientFriction = .01f;
 }
 
 
@@ -115,11 +116,22 @@ float MoveableObject::getAngleSpeed() {
 }
 
 vec3 MoveableObject::rotateInXYPlane(vec3 original, float radians) {
-	std::cout << "rotating velocity : " << radians << std::endl;
+	//std::cout << "rotating velocity : " << radians << std::endl;
 	original.x = original.x * glm::cos(glm::radians(radians)) - original.y * glm::sin(glm::radians(radians));
 	original.y = original.x * glm::sin(glm::radians(radians)) + original.y * glm::cos(glm::radians(radians));
 	return original;
 }
+
+
+float MoveableObject::getFrictionCoefficient() {
+	return this->coefficientFriction;
+}
+
+
+void MoveableObject::setFrictionCoefficient(float coeff) {
+	this->coefficientFriction = coeff;
+}
+
 
 #include "../utility/Player.h"
 void MoveableObject::integrate(float dt) {
@@ -141,13 +153,13 @@ void MoveableObject::integrate(float dt) {
 	this->velocity += newAcceleration * dt;
 
 	// temporary form of friction
-	if (glm::length(this->velocity) > .0001f) {
+/*	if (glm::length(this->velocity) > .0001f) {
 		if (this->type == PLAYER && dynamic_cast<Player*>(this)->getJumping()) {
 			return;
 		}
 		this->velocity *= .985f;
 	}
-
+	*/
 	this->eat = false;
 	this->hit = false;
 }
@@ -159,5 +171,24 @@ void MoveableObject::collide(float dt, GameObject & target) {
 
 
 void MoveableObject::loadConfiguration(Json::Value config) {
+	std::cout << " moveableConfig ";
+	/*
+	    "orientation": null,
+        "angle": 0,
+        "height": 505,
+        "type": "MoveableObject",
+        "modelRadius": 1,
+        "modelHeight": 1,
+        "visible":  true,
+		"eat": false,
+		"hit": false,
+		"scale": 1,
+		"model": tree,
+        "angleSpeed": 1,
+        "jumpForce": 80000,
+        "moveForce": 1000,
+        "mass": 10,
+        "restitution": 1
+	*/
 	this->verticalComponent.height = this->height;
 }

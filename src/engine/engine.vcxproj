@@ -106,6 +106,7 @@
     <ClCompile Include="GameServer.cpp" />
     <ClCompile Include="Graphics\GraphicsEngine.cpp" />
     <ClCompile Include="graphics\LightHandler.cpp" />
+    <ClCompile Include="graphics\Random.cpp" />
     <ClCompile Include="graphics\Shader.cpp" />
     <ClCompile Include="network\Packet.cpp" />
     <ClCompile Include="network\PacketHandler.cpp" />
@@ -123,6 +124,7 @@
     <ClCompile Include="utility\InputHandler.cpp" />
     <ClCompile Include="physics\MoveableObject.cpp" />
     <ClCompile Include="utility\MenuState.cpp" />
+    <ClCompile Include="utility\NPC.cpp" />
     <ClCompile Include="utility\ObjectDB.cpp" />
     <ClCompile Include="Utility\ObjLoader.cpp" />
     <ClCompile Include="utility\Player.cpp" />
@@ -130,6 +132,7 @@
     <ClCompile Include="utility\Model.cpp" />
     <ClCompile Include="physics\PhysicsEngine.cpp" />
     <ClCompile Include="utility\jsoncpp.cpp" />
+    <ClCompile Include="utility\Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameClient.h" />
@@ -144,6 +147,10 @@
     <ClInclude Include="graphics\HUD.h" />
     <ClInclude Include="graphics\MatrixNode.h" />
     <ClInclude Include="graphics\Node.h" />
+    <ClInclude Include="graphics\Particle3D.h" />
+    <ClInclude Include="graphics\PType.h" />
+    <ClInclude Include="graphics\Quad.h" />
+    <ClInclude Include="graphics\Random.h" />
     <ClInclude Include="Graphics\Renderable.h" />
     <ClInclude Include="graphics\Shader.h" />
     <ClInclude Include="graphics\Skybox.h" />
@@ -172,6 +179,7 @@
     <ClInclude Include="utility\InputHandler.h" />
     <ClInclude Include="utility\MenuState.h" />
     <ClInclude Include="physics\MoveableObject.h" />
+    <ClInclude Include="utility\NPC.h" />
     <ClInclude Include="utility\ObjectDB.h" />
     <ClInclude Include="Utility\ObjLoader.h" />
     <ClInclude Include="utility\Player.h" />
@@ -182,6 +190,7 @@
     <ClInclude Include="utility\Status.h" />
     <ClInclude Include="utility\System.h" />
     <ClInclude Include="physics\PhysicsEngine.h" />
+    <ClInclude Include="utility\Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

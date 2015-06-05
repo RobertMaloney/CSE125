@@ -2,7 +2,7 @@
 
 GameState::GameState()
 {
-
+	resetting = false;
 }
 
 
@@ -20,11 +20,13 @@ void GameState::init()
 
 
 //server uses this to intialize
-void GameState::initWithServer()
+void GameState::initWithServer(Json::Value & config)
 {
 	//get db
+
 	map = &ObjectDB::getInstance();
 }
+
 
 
 bool GameState::addPlayer(ObjectId theId, Player* p) {
@@ -88,4 +90,28 @@ int GameState::getTotal(){
 
 void GameState::setTotal(int t){
 	this->total = t;
+}
+
+bool GameState::isResetting(){
+	return this->resetting;
+}
+
+
+void GameState::setResetting(bool b) {
+	this->resetting = b;
+}
+
+
+void GameState::reset(ObjectId clientId) {
+	static set<ObjectId> clients;
+
+	if (clients.find(clientId) == clients.end()) {
+		clients.insert(clientId);
+	}
+
+	if (clients.size() == this->players.size()) {
+		this->resetting = true;
+		clients.clear();
+	}
+//	std::cout << "Reset : " << clientId << std::endl;
 }

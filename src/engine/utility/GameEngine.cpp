@@ -1,15 +1,16 @@
 #include "GameEngine.h"
 
 
-GameEngine::GameEngine() {
+GameEngine::GameEngine(PhysicsEngine * pe) {
 	gstate = &GameState::getInstance();
+    this->pe = pe;
 }
 
 
 GameEngine::~GameEngine() {
 }
 
-void GameEngine::calculatePercent(){
+void GameEngine::calculatePercent(Timer* t){
 	int total = gstate->getTotal();
 	int occupied = 0;
 	int max = 0;
@@ -20,23 +21,25 @@ void GameEngine::calculatePercent(){
 		int p = int(float(s) / total * 100.0);
 		//std::cout << (*it)->getId() << ": " << p << endl;
 		(*it)->setPercent(p);
+		//std::cout << (*it)->getId()  << (*it)->getPercent() << endl;
 		//cout << "score = " << s << " total = " << total << " p = " << p << endl;
 		if (s > max){
 			max = s;
 			gstate->top = (*it);
 		}
 	}	
+	//cout << "time: " << t->getMinRemaining() << "  " << t->getSecRemaining() << endl;
 	//std::cout << occupied << "  " << total << endl;
-	if (occupied == total){
+	if (occupied >= total || (t->getMinRemaining() == 0 && t->getSecRemaining() == 0) ){
 		//Win or lose
 		for (auto it = gstate->getPlayers().begin(); it != gstate->getPlayers().end(); ++it) {
-			if ((*it) == gstate->top){//win
+			if ((*it) == gstate->top && (*it)->getPercent()!= 0){//win
 				(*it)->setStatus(GStatus::WIN);
-				std::cout << (*it)->getId() << ": YOU WIN "  << endl;
+				//std::cout << (*it)->getId() << ": YOU WIN "  << endl;
 			}
 			else{//lose
 				(*it)->setStatus(GStatus::LOSE);
-				std::cout << (*it)->getId() << ": YOU LOSE " << endl;
+				//std::cout << (*it)->getId() << ": YOU LOSE " << endl;
 			}
 			
 		}
@@ -45,16 +48,19 @@ void GameEngine::calculatePercent(){
 }
 
 void GameEngine::endGame(){
-	std::cout << "GAME END" << endl;
+	//std::cout << "GAME END" << endl;
 }
 
-void GameEngine::generateResources(int randResources, int clouds, int pills)
+void GameEngine::generateResources(Json::Value configFile)
 {
-   //generateRandomResources(randResources);
-   generateClouds(clouds);
-   generatePills(pills);
-   generateClusterTree(505, 10, 10, 200);
-   generateRockRing();
+   this->configFile = configFile;
+   generateRandomResources(configFile["num resources"].asInt());
+   //generateRandomResources(1);
+   generateClouds( configFile["num clouds"].asInt());
+   generatePills(configFile["num pills"].asInt());
+  // //generateClusterTree(505, 10, 10, 200);
+   ////generateRockRing();
+   generateNPC(configFile["num npcs"].asInt());
 }
 
 void GameEngine::generateRandomResources(int num) {
@@ -65,9 +71,7 @@ void GameEngine::generateRandomResources(int num) {
 		float theta = (float)(rand() % 180);
 		float azimuth = (float)(rand() % 360);
 		float direction = (float)(rand() % 360);
-		Resource * newRe = new Tree(30, radius, theta, azimuth, direction);
-		newRe->setModelRadius(3.f);
-		newRe->setModelHeight(17.f);
+      Resource * newRe;
 
 
 		int pick = rand() % 5;
@@ -80,13 +84,16 @@ void GameEngine::generateRandomResources(int num) {
 		// flower    xy 2.f z 1.5f
 		//Scores are placeholder, need to handle them differently...
 		if (pick == 0){
-			newRe = new Tree(30, radius, theta, azimuth, direction);
+         newRe = new Tree(30, 500, theta, azimuth, direction);
+         float floor = 1.0, ceiling = 2.0, range = (ceiling - floor);
+         float scale = floor + float((range * rand()) / (RAND_MAX + 1.0));
+         newRe->setScale(scale);
 			newRe->setModelRadius(3.f);
 			newRe->setModelHeight(17.f);
 			total = total + 30;
 		}
 		else if (pick == 1) {
-			newRe = new Rock(radius, theta, azimuth, direction);
+			newRe = new Rock(0,radius, theta, azimuth, direction);
 			newRe->setModelRadius(2.f);
 			newRe->setModelHeight(4.5f);
 		}
@@ -129,7 +136,7 @@ void GameEngine::generateClouds(int num) {
       float theta = (float)(rand() % 360);
       float azimuth = (float)(rand() % 360);
       float direction = (float)(0);
-      Resource * newRe = new Cloud(radius, theta, azimuth, direction);
+      Resource * newRe = new Cloud(15.f, radius, theta, azimuth, direction);
 
       ObjectId resourceId = IdGenerator::getInstance().createId();
       gstate->addResource(resourceId, newRe);
@@ -161,13 +168,16 @@ void GameEngine::generateClusterTree(float radius, float theta, float azimuth, i
       // flower    xy 2.f z 1.5f
       //Scores are placeholder, need to handle them differently...
       if (pick >= 0 && pick < 60){
-         newRe = new Tree(30, radius, theta, azimuth, direction);
+         newRe = new Tree(30, 500, theta, azimuth, direction);
+         float floor = 1.0, ceiling = 2.0, range = (ceiling - floor);
+         float scale = floor + float((range * rand()) / (RAND_MAX + 1.0));
+         newRe->setScale(scale);
          newRe->setModelRadius(3.f);
          newRe->setModelHeight(17.f);
          total = total + 30;
       }
       else if (pick >= 60 && pick < 70) {
-         newRe = new Rock(radius, theta, azimuth, direction);
+         newRe = new Rock(0,radius, theta, azimuth, direction);
          newRe->setModelRadius(2.f);
          newRe->setModelHeight(4.5f);
       }
@@ -194,7 +204,7 @@ void GameEngine::generateClusterTree(float radius, float theta, float azimuth, i
       ObjectId resourceId = IdGenerator::getInstance().createId();
       gstate->addResource(resourceId, newRe);
    }
-   gstate->setTotal(total);
+   gstate->setTotal(gstate->getTotal() + total);
 }
 
 void GameEngine::generateRockRing()
@@ -224,7 +234,7 @@ void GameEngine::generateRockRing()
          //azimuth = floor + float((range * rand()) / (RAND_MAX + 1.0));
 
          float direction = (float)(0);
-         Resource * newRe = new Rock(radius, theta, azimuth, direction);
+         Resource * newRe = new Rock(0,radius, theta, azimuth, direction);
 
          ObjectId resourceId = IdGenerator::getInstance().createId();
          gstate->addResource(resourceId, newRe);
@@ -245,4 +255,49 @@ void GameEngine::generatePills(int num) {
       ObjectId resourceId = IdGenerator::getInstance().createId();
       gstate->addResource(resourceId, newRe);
    }
+}
+
+void GameEngine::generateNPC(int num) {
+   int total = 0;
+   for (int i = 0; i < num; i++)
+   {
+      float radius = 500;
+
+      float theta = (float)(rand() % 360);
+      float azimuth = (float)(rand() % 360);
+      float direction = (float)(rand() % 360);
+
+      int pick = int(rand() % 2);
+      MoveableObject * newNPC;
+
+      if (pick == 0)
+      {
+         newNPC = new Bunny(radius, theta, azimuth, direction);
+         newNPC->addVelocity(newNPC->rotateInXYPlane(newNPC->getVelocity(), direction));
+         newNPC->loadConfiguration(configFile["bunny"]);
+         pe->registerInteraction(newNPC, DRAG | GRAVITY);
+      }
+      else if (pick == 1)
+      {
+         float floor = 600, ceiling = 700, range = (ceiling - floor);
+         float bradius = floor + float((range * rand()) / (RAND_MAX + 1.0));
+
+         newNPC = new Bird(bradius, theta, azimuth, direction);
+         newNPC->addVelocity(newNPC->rotateInXYPlane(newNPC->getVelocity(), direction));
+         newNPC->loadConfiguration(configFile["bird"]);
+         pe->registerInteraction(newNPC, 0);
+      }
+
+      total = total + ((NPC*)newNPC)->getPoints();
+      ObjectId resourceId = IdGenerator::getInstance().createId();
+      gstate->addObject(resourceId, newNPC);
+   }
+   gstate->setTotal(gstate->getTotal() + total);
+}
+
+void GameEngine::updatePlayerTime(int min, int sec) {
+	for (auto it = gstate->getPlayers().begin(); it != gstate->getPlayers().end(); ++it) {
+		(*it)->setMin(min);
+		(*it)->setSec(sec);
+	}
 }

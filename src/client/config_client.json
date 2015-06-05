@@ -1,6 +1,7 @@
 {
     "ip": "127.0.0.1",
     "port": "9000",
+	"totalObjects": 1031,
 	"controls": {
 		"MoveUp": "W",
 		"MoveDown": "S",
@@ -10,6 +11,11 @@
 	"graphics": {
 		"width": 1600,
 		"height": 1200
+	},
+	"particles": {
+		"velocity": [2, 15],
+		"acceleration": [2, 15],
+		"life": [1, 2],
+		"size": [0.5, 2.5]
 	}
-
 }

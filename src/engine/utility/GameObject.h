@@ -1,6 +1,7 @@
 #ifndef GAME_OBJECT_H
 #define GAME_OBJECT_H
 
+#include <iostream>
 #include <algorithm>
 #include <glm.hpp>
 #include <gtc\quaternion.hpp>
@@ -23,7 +24,8 @@ enum ObjectType {
 	MOVEABLE,
 	GAMEOBJECT,
 	IEATABLE,
-   POWERUP
+   POWERUP,
+   NPCOBJ
 };
 
 class GameObject : public Serializable, public Collidable, public Configurable {
@@ -44,6 +46,7 @@ protected:
 	ObjectType typeFromString(string typeName);
 
 	bool visible;
+	bool particle;
 
 	// Model
 	Model rm = TREE;
@@ -72,14 +75,19 @@ public:
 	float getAngle();
 	float getHeight();
 	void setHeight(float h);
+
 	float getScale();
 	void setScale(float);
+   void randScale(float min, float max);
 
 	void setModelHeight(float mheight);
 	float getModelHeight();
 
 	bool getVisible();
 	void setVisible(bool v);
+
+	bool getParticle();
+	void setParticle(bool v);
 
 	bool getEat();
 	bool getHit();
@@ -89,6 +97,8 @@ public:
 
 	void setDeleteFlag(bool flag);
 	bool getDeleteFlag();
+
+	string typeAsString();
 
 	ObjectType getType() const;
 

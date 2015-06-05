@@ -33,6 +33,7 @@ public:
 
 	bool add(ObjectId theId, GameObject* object);
 
+	void reloadObjects(Json::Value & config);
 	bool remove(ObjectId objectId);
 	GameObject* get(ObjectId objectId);
 

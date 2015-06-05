@@ -11,6 +11,7 @@ GameObject::GameObject(float radius, float theta, float azimuth, float direction
 	this->height = radius;
 	this->orientation = glm::quat(glm::vec3(theta, azimuth, 0.f));
 	this->visible = true;
+	this->particle = false;
 	this->eat = false;
 	this->hit = false;
 }
@@ -23,6 +24,9 @@ GameObject::~GameObject() {
 
 void GameObject::serialize(Packet & p) {
 	p.writeUInt(id);
+
+	p.writeInt(static_cast<int>(this->type));
+
 	for (int i = 0; i < 4; ++i) {
 		//p.writeFloat(this->loc[i]);
 		p.writeFloat(this->orientation[i]);
@@ -31,6 +35,7 @@ void GameObject::serialize(Packet & p) {
 	p.writeFloat(this->height);
 	p.writeFloat(this->scale);
 	p.writeByte(this->visible);
+	p.writeByte(this->particle);
     p.writeInt(static_cast<int>(this->rm));
 	p.writeByte(this->eat);
 	p.writeByte(this->hit);
@@ -39,6 +44,8 @@ void GameObject::serialize(Packet & p) {
 
 void GameObject::deserialize(Packet & p) {
 	this->id = p.readUInt();
+
+	this->type = static_cast<ObjectType>(p.readInt());
 	for (int i = 0; i < 4; ++i) {
 		//this->loc[i] = p.readFloat();
 		this->orientation[i] = p.readFloat();
@@ -47,6 +54,7 @@ void GameObject::deserialize(Packet & p) {
 	this->height = p.readFloat();
 	this->scale = p.readFloat();
 	this->visible = p.readBool();
+	this->particle = p.readBool();
     this->rm = static_cast<Model>(p.readInt());
 	this->eat = p.readBool();
 	this->hit = p.readBool();
@@ -80,6 +88,11 @@ void GameObject::setScale(float s) {
 	this->scale = s;
 }
 
+void GameObject::randScale(float min, float max) {
+   float floor = min, ceiling = max, range = (ceiling - floor);
+   this->scale = floor + float((range * rand()) / (RAND_MAX + 1.0));
+}
+
 void GameObject::setModelHeight(float mheight) {
 	assert(!(mheight < 0.f));
 	this->modelHeight = mheight;
@@ -111,6 +124,14 @@ bool GameObject::getVisible(){
 
 void GameObject::setVisible(bool v){
 	this->visible = v;
+}
+
+bool GameObject::getParticle(){
+	return this->particle;
+}
+
+void GameObject::setParticle(bool v){
+	this->particle = v;
 }
 
 bool GameObject::getEat(){
@@ -152,17 +173,37 @@ ObjectType GameObject::typeFromString(string typeName) {
 	return ObjectType::GAMEOBJECT;
 }
 
+string GameObject::typeAsString() {
+	switch (this->type) {
+	case PLAYER:
+		return "player";
+	case MOVEABLE:
+		return "moveable";
+	case IEATABLE:
+		return "ieatable";
+	default:
+		return "gameobject";
+	}
+}
+
 void GameObject::collide(float dt, GameObject & target) {
 
 }
 
 
 void GameObject::loadConfiguration(Json::Value config) {
+	
 	//"orientation": null,
-	this->angle = config["angle"].asFloat();
-	this->height = config["height"].asFloat();
-	this->type = this->typeFromString(config["type"].asString());
-	this->modelRadius = config["modelRadius"].asFloat();
-	this->modelHeight = config["modelHeight"].asFloat();
-	this->visible = config["visible"].asBool();
+	Json::Value & obj = config["game object"];
+	this->angle = obj["angle"].asFloat();
+	this->height = obj["height"].asFloat();
+	this->type = this->typeFromString(obj["type"].asString());
+	this->scale = obj["scale"].asFloat();
+	this->modelRadius = obj["modelRadius"].asFloat();
+	this->modelHeight = obj["modelHeight"].asFloat();
+	this->visible = obj["visible"].asBool();
+	this->particle = obj["particle"].asBool();
+	this->rm = ResourceMap::getModelFromString(obj["model"].asString());
+	this->eat = obj["eat"].asBool();
+	this->hit = obj["hit"].asBool();
 }

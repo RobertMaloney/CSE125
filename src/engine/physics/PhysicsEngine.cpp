@@ -18,7 +18,6 @@ PhysicsEngine::~PhysicsEngine() {
 
 
 void PhysicsEngine::update(float dt) {
-	changed.clear();
 	this->generateForces(dt);
 	this->integrateObjects(dt);
 	this->generateCollisions();
@@ -52,13 +51,14 @@ void PhysicsEngine::registerInteraction(MoveableObject* object, unsigned int fla
 void PhysicsEngine::generateCollisions() {
 	// loop over each object that has interactions
 	for (auto it = interactions.begin(); it != interactions.end(); ++it) {
-		
+      if (it->first->getType() == NPCOBJ) continue; // NPCS do not collide
+
 		// loop over all objects
 		for (auto jt = objectDb->objects.begin(); jt != objectDb->objects.end(); ++jt) {
 		
 			// if object is not itself and it is colliding with something then make a collision
 			// pair and add it to the set of collisions in this frame.
-			if (jt->second != it->first && this->checkCollision(it->first, jt->second)) {
+			if (jt->second != it->first && jt->second->getVisible() && this->checkCollision(it->first, jt->second)) {
 
 				// this provides ordering on the pairs so we dont get duplicates
 				GameObject* l = (it->first < jt->second) ? it->first : jt->second;
@@ -109,11 +109,13 @@ void PhysicsEngine::integrateObjects(float dt) {
 
 
 void PhysicsEngine::loadConfiguration(Json::Value config) {
+	Json::Value & physics = config["physics engine"];
 	GravityGenerator* gGenerator = (GravityGenerator*) forces.find(GRAVITY)->second;
-	gGenerator->gravity = -1.f * config["gravity"].asFloat();
+	gGenerator->gravity = -1.f * physics["gravity"].asFloat();
 
 	DragGenerator* dGenerator = (DragGenerator*) forces.find(DRAG)->second;
-	dGenerator->k1 = config["k1"].asFloat();
-	dGenerator->k2 = config["k2"].asFloat();
+	dGenerator->k1 = physics["drag"]["k1"].asFloat();
+	dGenerator->k2 = physics["drag"]["k2"].asFloat();
+	dGenerator->scale = physics["drag"]["drag scale"].asFloat();
 }
 

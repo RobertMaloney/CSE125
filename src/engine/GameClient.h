@@ -31,8 +31,10 @@ using std::cout;
 class GameClient {
 
 public:
+
 	GameState gstate;
 	ObjectId playerid;
+	static bool loadDone;
 
 	IMenuState * mstate;
 	TCPConnection* connection;
@@ -46,6 +48,9 @@ public:
 
 	void run();
 	void close();
+
+	bool isResetting();
+	void setResetting(bool b);
 
 	//managing states
 	void addState(IMenuState *state);
@@ -64,6 +69,7 @@ public:
 	//void receiveClientInput();
 
 private:
+	bool resetting;
 	//stack of states
 	vector<IMenuState *> states;
 	vector<Packet> updates;

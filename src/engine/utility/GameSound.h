@@ -22,6 +22,7 @@ public:
 						*jump,
 						*spaceship,
 						*loadingnow,
+						*spaceship_loading,
 						*ouch_arr[SOUND_OUCH_NUM]
 						;
 
@@ -35,6 +36,7 @@ public:
 
 	static void playOuch();
 	static void playLoading();
+	static void stopLoading();
 
 private:
 	//music doesn't need buffer
@@ -48,6 +50,7 @@ private:
 							*jump_buf,
 							*spaceship_buf,
 							*loadingnow_buf,
+							*spaceship_loading_buf,
 							*ouch_buf_arr[SOUND_OUCH_NUM]
 							;
 

@@ -15,5 +15,7 @@ public:
    Resource(Model rm, float radius, float theta, float azimuth, float direction);
 
    ~Resource() {};
+
+   virtual void loadConfiguration(Json::Value config);
 };
 #endif

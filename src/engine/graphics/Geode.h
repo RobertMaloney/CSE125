@@ -10,6 +10,10 @@ private:
 
 public:
 
+	Geode(){
+		hasParticle = false;
+	}
+
 	virtual MatrixNode* asMatrixNode() {
 		return 0;
 	}
@@ -17,6 +21,9 @@ public:
 		return this;
 	}
 	virtual CameraNode* asCamera() {
+		return 0;
+	}
+	virtual ParticleSystem* asPSystem() {
 		return 0;
 	}
 	virtual std::string getName() {

@@ -23,10 +23,15 @@ private:
 	glm::mat4 m_matrix;
 	std::vector<Node*> m_children;
 	bool visible;
+	bool particle;
+	MatrixNode *mps;
+	ParticleSystem *ps;
 
 public:
+
 	MatrixNode(){
 		m_parent = 0;
+		hasParticle = false;
 	}
 
 	virtual MatrixNode* asMatrixNode() {
@@ -36,6 +41,9 @@ public:
 		return 0;
 	}
 	virtual CameraNode* asCamera() {
+		return 0;
+	}
+	virtual ParticleSystem* asPSystem() {
 		return 0;
 	}
 	virtual std::string getName() {
@@ -69,6 +77,27 @@ public:
 	}
 	void setVisible(bool f){
 		visible = f;
+	}
+
+	bool getParticle(){
+		return particle;
+	}
+	void setParticle(bool f){
+		particle = f;
+	}
+
+	MatrixNode* getParticleNode(){
+		return mps;
+	}
+	void setParticleNode(MatrixNode *p){
+		mps = p;
+	}
+
+	ParticleSystem* getParticleSystem(){
+		return ps;
+	}
+	void setParticleSystem(ParticleSystem *p){
+		ps = p;
 	}
 
 	static glm::mat4 quatAngle(glm::quat & q, float angle, float height, float scale) {

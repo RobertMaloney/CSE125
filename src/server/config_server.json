@@ -3,32 +3,85 @@
     "fps": 60,
     "ip": "127.0.0.1",
     "port": "9000",
-   "num resources": 500,
-   "num clouds": 40,
-   "num pills": 30,
+    "num resources": 1000,
+    "num clouds": 10,
+    "num pills": 10,
+	"num npcs": 10,
 
     "physics engine": {
         "gravity": 100,
         "drag": {
-            "k1": 1,
-            "k2": 1
+            "k1": 0.8,
+            "k2": 0.8,
+			"drag scale": 2
         }
     },
 
     "player": {
         "orientation": null,
         "angle": 0,
-        "height": 505,
+		"height": 500,
         "type": "Player",
         "modelRadius": 6,
         "modelHeight": 6,
         "visible": true,
+		"particle":false,
         "angleSpeed": 2,
-        "jumpForce": 15000,
-        "moveForce": 100,
+        "jumpForce": 32500,
+        "moveForce": 150,
         "mass": 10,
-        "restitution": 1
+        "restitution": 1,
+        "burp count": 0,
+        "isJumping": false,
+		"jump slow": 0.70,
+        "score": 0,
+        "percent": 0,
+		"scale": 1,
+        "stomach": 0,
+        "status": "Pending",
+		"coefficientFriction": 0.2,
+		
+		"score scale ratio": 425,
+		"score mass ratio": 620,
+		"max burp count": 5,
+		"max stomach size": 100
     },
+
+   "bird": {
+      "orientation": null,
+      "angle": 0,
+      "height": 505,
+      "type": "NPC",
+      "modelRadius": 3,
+      "modelHeight": 3,
+      "visible": true,
+      "particle":false,
+      "angleSpeed": 2,
+      "jumpForce": 5000,
+      "moveForce": 50,
+      "mass": 10,
+      "restitution": 1,
+      "points": 100
+   },
+
+   "bunny": {
+        "orientation": null,
+        "angle": 0,
+        "height": 505,
+        "type": "NPC",
+        "modelRadius": 3,
+        "modelHeight": 3,
+        "visible": true,
+		"particle":false,
+        "angleSpeed": 2,
+        "jumpForce": 5000,
+      "moveForce": 25,
+        "mass": 10,
+        "restitution": 1,
+      "points": 50,
+      "coefficientFriction": 0.01
+    },
+
 
     "moveable object": {
         "orientation": null,
@@ -37,7 +90,12 @@
         "type": "MoveableObject",
         "modelRadius": 1,
         "modelHeight": 1,
-        "visible":  true,
+        "visible": true,
+		"particle":false,
+        "eat": false,
+        "hit": false,
+        "scale": 1,
+        "model": "tree",
         "angleSpeed": 1,
         "jumpForce": 80000,
         "moveForce": 1000,
@@ -52,7 +110,11 @@
         "type": "GameObject",
         "modelRadius": 1,
         "modelHeight": 1,
-        "visible":  true
+        "visible": true,
+		"particle":false,
+        "eat": false,
+        "hit": false,
+        "scale": 1,
+        "model": "tree"
     }
-
 }

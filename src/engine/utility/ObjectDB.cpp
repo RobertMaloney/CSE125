@@ -15,6 +15,13 @@ ObjectDB::~ObjectDB() {
 }
 
 
+void ObjectDB::reloadObjects(Json::Value & config) {
+	for (auto it = objects.begin(); it != objects.end(); ++it) {
+		it->second->loadConfiguration(config);
+	}
+}
+
+
 bool ObjectDB::add(ObjectId id, GameObject* object) {
 	if (!object) {
 		return false;

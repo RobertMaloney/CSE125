@@ -18,6 +18,8 @@ enum EventType {
    STOP_JUMP,
    SUB,
    ADD,
+   REPLAY,
+   LOAD_END,
 };
 
 
