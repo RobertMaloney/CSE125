@@ -227,7 +227,6 @@ void GameClient::updateGameState() {
 		if (obj->getId() == this->playerid) {
 			if (oldeat == false && obj->getEat() == true) {
 				GameSound::nom->play();
-				//GraphicsEngine::spawnPSystem(MatrixNode::quatAngle(obj->getOrientation(), 0.f, obj->getHeight(), 1.f));
 			}
 			if (oldhit == false && obj->getHit() == true)
 				GameSound::playOuch();

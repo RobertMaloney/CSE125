@@ -148,6 +148,7 @@
     <ClInclude Include="graphics\MatrixNode.h" />
     <ClInclude Include="graphics\Node.h" />
     <ClInclude Include="graphics\Particle3D.h" />
+    <ClInclude Include="graphics\PType.h" />
     <ClInclude Include="graphics\Quad.h" />
     <ClInclude Include="graphics\Random.h" />
     <ClInclude Include="Graphics\Renderable.h" />

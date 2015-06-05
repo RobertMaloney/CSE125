@@ -6,13 +6,15 @@
 #include <vec3.hpp>
 #include <vector>
 #include <ctime>
-#include <string>
 #include <algorithm>
 #include "Node.h"
-#include "HUD.h"
-#include "Quad.h"
+//#include "Quad.h"
 #include "Random.h"
+#include "PType.h"
 #include "..\utility\Config.h"
+
+
+
 
 struct Particle3D {
 	glm::vec3 position;
@@ -21,6 +23,7 @@ struct Particle3D {
 	glm::vec3 color;
 	float size;
 	float life, totalLife;
+
 };
 
 static int __cdecl particleSort(const void* a, const void* b) {
@@ -32,6 +35,7 @@ private:
 	std::vector<Particle3D> m_particles;
 	Renderable* particleGraphic;
 	GLuint texId;
+	PType type;
 
 	// https://github.com/jesusgollonet/ofpennereasing/blob/master/PennerEasing/Expo.cpp
 	float easeInOut(float t, float b, float c, float d) {
@@ -41,9 +45,14 @@ private:
 		return c / 2 * (-pow(2, -10 * --t) + 2) + b;
 	}
 
+
+
 public:
-	ParticleSystem(int numParticles, Renderable* geo, GLuint tex) {
+
+	ParticleSystem(int numParticles, Renderable* geo, GLuint tex, PType t) {
 		assert(numParticles > 0);
+
+		type = t;
 
 		glm::vec3 colors[] = {
 			glm::vec3(1.f, 0.f, 0.f),
@@ -59,7 +68,12 @@ public:
 			p.position = Random::ballRand(Random::linearRand(0.5f, 0.5f));
 			p.velocity = Random::ballRand(Random::linearRand(Config::settings["particles"]["velocity"][0].asFloat(), Config::settings["particles"]["velocity"][1].asFloat()));
 			p.acceleration = glm::vec3(0, 0, Random::linearRand(Config::settings["particles"]["acceleration"][0].asFloat(), Config::settings["particles"]["acceleration"][1].asFloat()));
-			p.color = colors[i % 7];
+			if (type == P_RES){
+				p.color = colors[i % 7];
+			}
+			else{//Player
+				p.color = colors[0];
+			}
 			p.life = Random::linearRand(Config::settings["particles"]["life"][0].asFloat(), Config::settings["particles"]["life"][1].asFloat());
 			p.totalLife = p.life;
 			p.size = Random::linearRand(Config::settings["particles"]["size"][0].asFloat(), Config::settings["particles"]["size"][1].asFloat());
@@ -130,5 +144,7 @@ public:
 		glUniform1i(glGetUniformLocation(shaderId, "billboard"), 0);
 		glDisable(GL_BLEND);
 	}
+
+
 };
 #endif

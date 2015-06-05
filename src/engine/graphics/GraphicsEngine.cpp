@@ -1,18 +1,4 @@
-
 #include "GraphicsEngine.h"
-
-#include "..\graphics\Cube.h"
-#include "..\graphics\Geometry.h"
-#include "..\utility\System.h"
-#include "..\utility\Config.h"
-#include <gtc\constants.hpp>
-#include "Shader.h"
-#include "Skybox.h"
-#include "LightHandler.h"
-#include "HUD.h"
-#include "..\utility\GameSound.h"
-#include "Particle3D.h"
-#include "Quad.h"
 
 using namespace std;
 
@@ -1092,8 +1078,14 @@ void GraphicsEngine::updateObject(ObjectId objId, glm::quat & q, float angle, fl
 	bool new_particle = objNodeMap[objId]->getParticle();
 
 	//check for particle transition
-	if (old_particle != new_particle)
-		spawnPSystem(objNodeMap[objId]->getMatrix());
+	if (old_particle != new_particle){
+		if (objNodeMap[objId] == m_player){
+			spawnPSystem(objNodeMap[objId]->getMatrix(), m_HudId1, PType::P_PLAYER);
+		}
+		else{
+			spawnPSystem(objNodeMap[objId]->getMatrix(), m_particleTex, PType::P_RES);
+		}
+	}
 
 }
 
@@ -1136,8 +1128,8 @@ void GraphicsEngine::setCursor(int state) {
 	glfwSetInputMode(m_window, GLFW_CURSOR, state);
 }
 
-void GraphicsEngine::spawnPSystem(glm::mat4 &matrix) {
-	ParticleSystem* ps = new ParticleSystem((int) Random::linearRand(50.f, 100.f), m_quad, m_particleTex);
+void GraphicsEngine::spawnPSystem(glm::mat4 &matrix, GLuint m_particleTex, PType p) {
+	ParticleSystem* ps = new ParticleSystem((int) Random::linearRand(50.f, 100.f), m_quad, m_particleTex, p);
 	MatrixNode* pm = new MatrixNode();
 	pm->setMatrix(matrix);
 	pm->addChild(ps);
