@@ -13,21 +13,24 @@
 #include <gtc\matrix_transform.hpp>
 #include <gtc\type_ptr.hpp>
 #include <gtx\string_cast.hpp>
+#include <gtc\constants.hpp>
 
 #include <vector>
 #include <deque>
 #include <unordered_map>
 
+#include "Shader.h"
 #include "MatrixNode.h"
 #include "Geode.h"
 #include "CameraNode.h"
 #include "Renderable.h"
-#include "Shader.h"
+#include "Particle3D.h"
 
-#include "..\network\Packet.h"
 #include "..\utility\GameObject.h"
-//#include "..\utility\GameState.h"
 #include "..\utility\InputHandler.h"
+
+//#include "..\utility\Config.h"
+
 
 
 typedef unsigned int ObjectId;
@@ -82,8 +85,9 @@ public:
 	static MatrixNode* addNode(Renderable*, bool);
     static Renderable* selectModel(Model model);
     static void updatePercent(Model m, int p);
-	static void spawnPSystem(glm::mat4&);
+	static void updateTimer(int min, int sec);
 	static void reverseCam(bool);
+	static MatrixNode* spawnPSystem(glm::mat4&, GLuint, PType);
 
 private:
 	static glm::mat4				m_view, m_projection;
@@ -103,6 +107,7 @@ private:
 	static int                      HUDH;
 	static int                      B;
 	static int                      p1p, p2p, p3p, p4p;
+	static int                      pmin, psec;
 
 	static GLuint					m_timerId, m_plusId, m_minusId, m_borderId, m_skyboxId, m_groundId, m_HudIdPer, m_HudIdSpa, m_HudIdCol;
 	static GLuint                   m_HudId1, m_HudId2, m_HudId3, m_HudId4, m_HudIdN0, m_HudIdN1, m_HudIdN2, m_HudIdN3, m_HudIdN4, m_HudIdN5, m_HudIdN6, m_HudIdN7, m_HudIdN8, m_HudIdN9;
@@ -126,6 +131,7 @@ private:
 	static void renderScene(Node*, glm::mat4*);
 	static void addHUD();
 	static void RenderScore(int Player1, int player2, int player3, int player4);
+	static void RenderTimer(int min, int sec);
 	static GLuint FindTexuture(int id);
 	static void renderHUD(int width, int height, glm::mat4 & identity);
 	static void renderBoard(int width, int height, glm::mat4 & identity);

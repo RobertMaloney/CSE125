@@ -21,6 +21,7 @@
 #include "utility/IdGenerator.h"
 #include "utility/GameState.h"
 #include "utility/GameEngine.h"
+#include "utility/Timer.h"
 
 using std::ifstream;
 using std::to_string;
@@ -70,6 +71,7 @@ private:
 
 	
 	bool running;
+	bool gameStarted;
 	mutex serverLock;
 	condition_variable serverCV;
 	Json::Value configFile;
@@ -80,7 +82,7 @@ private:
     TCPListener* listener;
     PacketHandler* handler;
 	unordered_map<TCPConnection*, ObjectId>* clients;
-
+	Timer * timer;
 };
 
 

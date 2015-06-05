@@ -27,6 +27,8 @@ protected:
 	int score;
 	int percent;
 	int stomach;
+	int min;
+	int sec;
 	int burp_count;
 	GStatus status;
 
@@ -72,6 +74,11 @@ public:
 	void serialize(Packet & p);
 	void deserialize(Packet & p);
 
+	int getMin();
+	void setMin(int min);
+
+	int getSec();
+	void setSec(int sec);
 };
 
 #endif

@@ -8,6 +8,7 @@ GameServer::GameServer() {
 	this->gameState = &GameState::getInstance();
 	this->physics = new PhysicsEngine();
 	this->engine = new GameEngine(this->physics);
+	this->timer = new Timer();
 }
 
 
@@ -78,14 +79,20 @@ void GameServer::run() {
 	//	start = high_resolution_clock::now();
 		if (clients->size() < maxConnections) {
 			this->acceptWaitingClient();
+			//continue;
+		} 
+		
+		if (!gameStarted) {
+			timer->start();
+			gameStarted = true;
 		}
 
 		this->processClientEvents(); 		// process the client input events
-
 		
 		physics->update(PHYSICS_DT);      // do a physics step
 
 		engine->calculatePercent();
+		engine->updatePlayerTime(timer->getMin(), timer->getSec());
 		
 	//	start = high_resolution_clock::now();
 		this->tick();                       // send state back to client

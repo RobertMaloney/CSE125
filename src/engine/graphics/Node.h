@@ -14,6 +14,7 @@ protected:
 	bool withTexture = false;
 
 public:
+	bool hasParticle;
 	virtual MatrixNode* asMatrixNode() = 0;
 	virtual Geode* asGeode() = 0;
 	virtual CameraNode* asCamera() = 0;

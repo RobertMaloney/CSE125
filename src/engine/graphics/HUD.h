@@ -2,7 +2,7 @@
 #define HUD_H
 
 #include <string>
-#include <glew.h>
+//#include <glew.h>
 #include <SOIL.h>
 
 class HUD {

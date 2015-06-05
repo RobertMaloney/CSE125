@@ -6,13 +6,15 @@
 #include <vec3.hpp>
 #include <vector>
 #include <ctime>
-#include <string>
 #include <algorithm>
 #include "Node.h"
-#include "HUD.h"
-#include "Quad.h"
+//#include "Quad.h"
 #include "Random.h"
+#include "PType.h"
 #include "..\utility\Config.h"
+
+
+
 
 struct Particle3D {
 	glm::vec3 position;
@@ -21,6 +23,7 @@ struct Particle3D {
 	glm::vec3 color;
 	float size;
 	float life, totalLife;
+
 };
 
 static int __cdecl particleSort(const void* a, const void* b) {
@@ -32,6 +35,8 @@ private:
 	std::vector<Particle3D> m_particles;
 	Renderable* particleGraphic;
 	GLuint texId;
+	PType type;
+	//int num;
 
 	// https://github.com/jesusgollonet/ofpennereasing/blob/master/PennerEasing/Expo.cpp
 	float easeInOut(float t, float b, float c, float d) {
@@ -41,10 +46,27 @@ private:
 		return c / 2 * (-pow(2, -10 * --t) + 2) + b;
 	}
 
+
+
 public:
-	ParticleSystem(int numParticles, Renderable* geo, GLuint tex) {
+
+	ParticleSystem(int numParticles, Renderable* geo, GLuint tex, PType t) {
+		hasParticle = false;
 		assert(numParticles > 0);
 
+		//num = numParticles;
+
+		type = t;
+
+		texId = tex;
+
+		init(numParticles, geo);
+
+	}
+
+	void init(int numP, Renderable* geo){
+		particleGraphic = geo;
+		int numParticles = numP;
 		glm::vec3 colors[] = {
 			glm::vec3(1.f, 0.f, 0.f),
 			glm::vec3(1.f, 0.5f, 0.f),
@@ -59,15 +81,17 @@ public:
 			p.position = Random::ballRand(Random::linearRand(0.5f, 0.5f));
 			p.velocity = Random::ballRand(Random::linearRand(Config::settings["particles"]["velocity"][0].asFloat(), Config::settings["particles"]["velocity"][1].asFloat()));
 			p.acceleration = glm::vec3(0, 0, Random::linearRand(Config::settings["particles"]["acceleration"][0].asFloat(), Config::settings["particles"]["acceleration"][1].asFloat()));
-			p.color = colors[i % 7];
+			if (type == P_RES){
+				p.color = colors[i % 7];
+			}
+			else{//Player
+				p.color = colors[0];
+			}
 			p.life = Random::linearRand(Config::settings["particles"]["life"][0].asFloat(), Config::settings["particles"]["life"][1].asFloat());
 			p.totalLife = p.life;
 			p.size = Random::linearRand(Config::settings["particles"]["size"][0].asFloat(), Config::settings["particles"]["size"][1].asFloat());
 			m_particles.push_back(p);
 		}
-
-		particleGraphic = geo;
-		texId = tex;
 	}
 	virtual MatrixNode* asMatrixNode() {
 		return 0;
@@ -122,7 +146,7 @@ public:
 		for (auto it = m_particles.begin(); it != m_particles.end(); ++it) {
 			glUniform3fv(glGetUniformLocation(shaderId, "colorOverride"), 1, glm::value_ptr(it->color));
 			float opacity = easeInOut(it->life, 0.f, 1.0f, it->totalLife);
-			glUniform1f(glGetUniformLocation(shaderId, "transparencyOverride"), opacity);
+			glUniform1f(glGetUniformLocation(shaderId, "transparencyOverride"),opacity );
 			glUniform1f(glGetUniformLocation(shaderId, "billboardScale"), it->size);
 			tmp = glm::translate(transform, it->position);
 			particleGraphic->render(&tmp);
@@ -130,5 +154,7 @@ public:
 		glUniform1i(glGetUniformLocation(shaderId, "billboard"), 0);
 		glDisable(GL_BLEND);
 	}
+
+
 };
 #endif

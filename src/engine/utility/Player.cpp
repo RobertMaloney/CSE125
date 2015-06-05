@@ -19,6 +19,8 @@ Player::Player(Model thebm, float radius, float theta, float azimuth, float dire
 	this->stomach = 0;
 	this->burp_count = 0;
 	this->status = PENDING;
+	this->sec = 0;
+	this->min = 0;
 }
 
 Player::~Player() {
@@ -110,26 +112,26 @@ void Player::collide(float dt, GameObject & target) {
 
    switch (target.getType()) {
    case PLAYER:
-        this->velocity *= -1;
-	    this->hit = true;
-        break;
+      this->velocity *= -1;
+	  this->hit = true;
+      break;
    case GAMEOBJECT:
     //    this->hit = true;
-        break;
+      break;
    case IEATABLE: {
-	    this->eat = true;
-        IEatable* eatable = dynamic_cast<IEatable*>(&target);
-        if (eatable) {
-			this->setScore(this->getScore() + eatable->getPoints());
-			float mass = this->getMass() / this->getMassScale();
-			this->setScale((this->getScore() + SCORE_SCALE_RATIO) / SCORE_SCALE_RATIO);
-			this->setMassScale((this->getScore() + SCORE_MASS_RATIO) / SCORE_MASS_RATIO);
-			this->setMass(mass * this->getMassScale());
-        }
-        target.setVisible(false);
-		target.setParticle(true);
-	}
-		break;
+			this->eat = true;
+            IEatable* eatable = dynamic_cast<IEatable*>(&target);
+            if (eatable) {
+               this->setScore(this->getScore() + eatable->getPoints());
+				float mass = this->getMass() / this->getMassScale();
+				this->setScale((this->getScore() + SCORE_SCALE_RATIO) / SCORE_SCALE_RATIO);
+				this->setMassScale((this->getScore() + SCORE_MASS_RATIO) / SCORE_MASS_RATIO);
+				this->setMass(mass * this->getMassScale());
+            }
+            target.setVisible(false);
+			target.setParticle(true);
+         }
+			break;
    case NPCOBJ: {
          this->eat = true;
          IEatable* eatable = dynamic_cast<IEatable*>(&target);
@@ -227,6 +229,9 @@ void Player::serialize(Packet & p) {
 	p.writeInt(this->score);
 	p.writeInt(this->percent);
 	p.writeInt(this->status);
+	p.writeInt(this->min);
+	p.writeInt(this->sec);
+	//TODO: moves??? no. just no
 	p.writeInt(this->MAX_BURP_COUNT);
 	p.writeInt(this->MAX_STOMACH_SIZE);
 
@@ -237,7 +242,7 @@ void Player::serialize(Packet & p) {
 
 void Player::deserialize(Packet & p) {
 	int oldscore = this->score;
-	
+
 	GameObject::deserialize(p);
 
 	this->score = p.readInt();
@@ -255,12 +260,30 @@ void Player::deserialize(Packet & p) {
 	if (stomach >= MAX_STOMACH_SIZE) {
 		burp_count += 1;
 		if (burp_count < MAX_BURP_COUNT) {
-			GameSound::regburp->play();
+		GameSound::regburp->play();
 		} else {
- 			GameSound::bigburp->play();
+		GameSound::bigburp->play();
 			burp_count = 0;
 		}
 		stomach = 0;
 	}
+		
+	this->min = p.readInt();
+	this->sec = p.readInt();	
+}
 
+int Player::getMin() {
+	return this->min;
+}
+
+void Player::setMin(int min) {
+	this->min = min;
+}
+
+int Player::getSec() {
+	return this->sec;
+}
+
+void Player::setSec(int sec) {
+	this->sec = sec;
 }
