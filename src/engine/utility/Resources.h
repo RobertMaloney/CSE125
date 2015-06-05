@@ -107,14 +107,26 @@ public:
    {
       int pick = rand() % 4;
 
-      if (pick == 0)
+      if (pick == 0) {
+         this->setModelRadius(7.6f);
+         this->setModelHeight(14.5f);
          this->setModel(MUSHROOM_1);
-      else if (pick == 1)
+      }
+      else if (pick == 1) {
+         this->setModelRadius(6.5f);
+         this->setModelHeight(23.5f);
          this->setModel(MUSHROOM_2);
-      else if (pick == 2)
+      }
+      else if (pick == 2) {
+         this->setModelRadius(7.3f);
+         this->setModelHeight(20.0f);
          this->setModel(MUSHROOM_3);
-      else if (pick == 3)
+      }
+      else if (pick == 3) {
+         this->setModelRadius(8.8f);
+         this->setModelHeight(29.f);
          this->setModel(MUSHROOM_4);
+      }
 
       this->randScale(.25f, 2.f);
    };
@@ -127,7 +139,12 @@ public:
 	Tree() : Tree(10){};
 	Tree(int points) : EatableResource(points, TREE){};
 	Tree(int points, float radius, float theta, float azimuth, float direction) :
-       EatableResource(points, TREE, radius, theta, azimuth, direction) {};
+       EatableResource(points, TREE, radius, theta, azimuth, direction) 
+   {
+      this->setModelRadius(5.2f);
+      this->setModelHeight(18.4f);
+      this->randScale(1.f, 2.5f);
+   };
 
    virtual ~Tree() {};
 };
@@ -140,12 +157,21 @@ public:
 		EatableResource(points, ROCK_1, 500.f, theta, azimuth, direction) {
       int pick = rand() % 3;
 
-      if (pick == 0)
+      if (pick == 0) {
          this->setModel(ROCK_1);
-      else if (pick == 1)
+         this->setModelHeight(8.4f);
+         this->setModelRadius(16.f);
+      }
+      else if (pick == 1) {
          this->setModel(ROCK_2);
-      else if (pick == 2)
+         this->setModelHeight(12.9f);
+         this->setModelRadius(16.f);
+      }
+      else if (pick == 2) {
          this->setModel(ROCK_3);
+         this->setModelHeight(8.1f);
+         this->setModelRadius(12.f);
+      }
 
       this->randScale(.25f, 1.5f);
    };
@@ -185,6 +211,8 @@ public:
 	Stump(int points, float radius, float theta, float azimuth, float direction) :
 		EatableResource(points, STUMP, 500.f, theta, azimuth, direction)
    {
+      this->setModelRadius(5.f);
+      this->setModelHeight(5.6f);
       this->randScale(1.f, 1.5f);
    };
 
@@ -222,6 +250,8 @@ public:
       else if (pick == 5)
          this->setModel(FLOWER_6);
 
+      this->setModelHeight(2.f);
+      this->setModelRadius(2.f);
       this->randScale(1.5f, 3.f);
    };
 
@@ -235,6 +265,8 @@ public:
    Cloud(int points, float radius, float theta, float azimuth, float direction) :
       EatableResource(points, CLOUD, radius, theta, azimuth, direction) 
    {
+      this->setModelRadius(21.f);
+      this->setModelHeight(6.5f);
       this->randScale(1.f, 3.f);
    };
 
