@@ -5,7 +5,7 @@
     "port": "9000",
     "num resources": 1000,
     "num clouds": 10,
-    "num pills": 2,
+    "num pills": 100,
 
     "physics engine": {
         "gravity": 100,
@@ -26,7 +26,7 @@
 		"particle":false,
         "angleSpeed": 2,
         "jumpForce": 25000,
-        "moveForce": 200,
+        "moveForce": 250,
         "mass": 10,
         "restitution": 1,
         "burp count": 0,

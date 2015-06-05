@@ -38,12 +38,12 @@ void InputHandler::handleKey(int key, int action, int mods) {
 			p.writeByte(EventType::MOVE_BACKWARD);
 			input.push_back(p);
 			clientInput.push_back(p);
-			GraphicsEngine::reverseCam(true);
+		//	GraphicsEngine::reverseCam(true);
 		} else if (action == GLFW_RELEASE) {
 			p.writeByte(EventType::STOP_BACKWARD);
 			input.push_back(p);
 			clientInput.push_back(p);
-			GraphicsEngine::reverseCam(false);
+		//	GraphicsEngine::reverseCam(false);
 		}
 	} else if (key == GLFW_KEY_D) {
 		if (action == GLFW_PRESS) {
@@ -69,11 +69,19 @@ void InputHandler::handleKey(int key, int action, int mods) {
 			clientInput.push_back(p);
 		}
 	}
-	else if (key == GLFW_KEY_Q && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+/*	else if (key == GLFW_KEY_Q && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
 		GraphicsEngine::ScaleUp();
 	}
 	else if (key == GLFW_KEY_E && action == GLFW_PRESS) {
 		GraphicsEngine::ScaleDown();
+	}*/
+	else if (key == GLFW_KEY_Q){
+		if (action == GLFW_PRESS){
+			GraphicsEngine::reverseCam(true);
+		}
+		else if (action == GLFW_RELEASE) {
+			GraphicsEngine::reverseCam(false);
+		}
 	}
 	//ENTER
 	else if (key == GLFW_KEY_ENTER) {

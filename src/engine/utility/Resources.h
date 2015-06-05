@@ -154,9 +154,9 @@ public:
    virtual ~Rock() {};
 };
 
-class TallRock : public Resource{
+class TallRock : public EatableResource {
 public:
-   TallRock() : Resource(TALL_ROCK_1){
+	TallRock() : EatableResource(0,TALL_ROCK_1){
       int pick = rand() % 3;
 
       if (pick == 0)
@@ -166,7 +166,7 @@ public:
    };
 
    TallRock(float radius, float theta, float azimuth, float direction) :
-      Resource(TALL_ROCK_1, radius, theta, azimuth, direction) {
+	   EatableResource(0,TALL_ROCK_1, radius, theta, azimuth, direction) {
       int pick = rand() % 3;
 
       if (pick == 0)
@@ -220,9 +220,9 @@ public:
 
 class Pill : public PowerUpResource {
 public:
-   Pill() : PowerUpResource(0, 0, .75f, PILL) {};
+   Pill() : PowerUpResource(0, 0, .5f, PILL) {};
    Pill(float radius, float theta, float azimuth, float direction) :
-      PowerUpResource(0, 0, .75f, PILL, radius, theta, azimuth, direction){};
+      PowerUpResource(0, 0, .5f, PILL, radius, theta, azimuth, direction){};
 
    virtual ~Pill() { };
 };

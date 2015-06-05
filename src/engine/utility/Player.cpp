@@ -68,13 +68,13 @@ void Player::integrate(float dt) {
 	float forceScaleByMass = (log(this->getMass()) == 0) ? 1 : log(this->getMass());
 	float forceConst = this->moveForce * forceScaleByMass;
 
-	if (moves[RIGHT] && !(verticalComponent.height > 505.f)) {
+	if (moves[RIGHT]  /*&&!(verticalComponent.height > 505.f)*/) {
 		float cosa = glm::cos(glm::radians(angle - 90.f));
 		float sina = glm::sin(glm::radians(angle - 90.f));
 		this->addForce(cosa * forceConst, sina * forceConst, 0.f);
 	}
 
-	if (moves[LEFT] && !(verticalComponent.height > 505.f)) {
+	if (moves[LEFT] /*&& !(verticalComponent.height > 505.f)*/) {
 		float cosa = glm::cos(glm::radians(angle + 90.f));
 		float sina = glm::sin(glm::radians(angle + 90.f));
 		this->addForce(cosa * forceConst, sina * forceConst, 0.f);
@@ -84,11 +84,11 @@ void Player::integrate(float dt) {
 	float cosa = glm::cos(glm::radians(angle));
 	float sina = glm::sin(glm::radians(angle));
 
-	if (moves[UP] && !(verticalComponent.height > 505.f)) {
+	if (moves[UP] /*&& !(verticalComponent.height > 505.f)*/) {
 		this->addForce(cosa * forceConst, sina * forceConst, 0.f);
 	}
 
-	if (moves[DOWN] && !(verticalComponent.height > 505.f)) {
+	if (moves[DOWN] /*&& !(verticalComponent.height > 505.f)*/) {
 		this->addForce(cosa * -forceConst, sina * -forceConst, 0.f);
 	}
 
@@ -129,7 +129,7 @@ void Player::collide(float dt, GameObject & target) {
 		   target.getModel() == TALL_ROCK_1 ||
 		   target.getModel() == TALL_ROCK_2 ||
 		   target.getModel() == TALL_ROCK_3) && this->getMass() < 20.f) {
-		   this->velocity *= -1.f;
+		 //  this->velocity *= -1.f;
 	   }
 	  
       else
@@ -144,7 +144,7 @@ void Player::collide(float dt, GameObject & target) {
 				 target.getModel() == ROCK_4 ||
 				 target.getModel() == TALL_ROCK_1 ||
 				 target.getModel() == TALL_ROCK_2 ||
-				 target.getModel() == TALL_ROCK_3) && this->getMass() < 20.f) {
+				 target.getModel() == TALL_ROCK_3) && this->getMass() < 12.f) {
 					this->velocity *= -1.f;
 					break;
 			}
@@ -152,7 +152,7 @@ void Player::collide(float dt, GameObject & target) {
            // std::cout << "EAT " << endl;
             IEatable* eatable = dynamic_cast<IEatable*>(&target);
             if (eatable) {
-				std::cout << " mass : " << this->getMass();
+				//std::cout << " mass : " << this->getMass();
              //  std::cout << this->getId() << " old score: " << this->getScore() << endl;
                this->setScore(this->getScore() + eatable->getPoints());
             //   std::cout << this->getId() << " new score: " << this->getScore() << endl;
@@ -191,6 +191,7 @@ void Player::collide(float dt, GameObject & target) {
       break;
    case POWERUP:
          {
+				   std::cout << "Mass before: " << this->getMass();
 			 this->eat = true;
           //  std::cout << "POWER UP" << endl;
             PowerUpResource * powerUp = dynamic_cast<PowerUpResource *>(&target);
@@ -203,6 +204,7 @@ void Player::collide(float dt, GameObject & target) {
             }
             target.setVisible(false);
 			target.setParticle(true);
+			std::cout << " Mass After: " << this->getMass();
          }
          break;
 	}
