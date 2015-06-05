@@ -86,6 +86,20 @@ void loadHandler(ObjectId id, Packet & p) {
 	GameServer::loadDone = true;
 }
 
+void pauseHandler(ObjectId id, Packet & p) {
+	if (!GameServer::pause){
+		GameServer::pause = true;
+		GameServer::pauseTrue = true;
+	}
+}
+
+void continueHandler(ObjectId id, Packet & p) {
+	if (GameServer::pause){
+		GameServer::pause = false;
+		GameServer::continueTrue = true;
+	}
+}
+
 
 PacketHandler::PacketHandler(){
 	eventHandlers[EventType::MOVE_FORWARD] = EventHandler(forwardHandler);
@@ -103,6 +117,8 @@ PacketHandler::PacketHandler(){
 	eventHandlers[EventType::LOOK] = EventHandler(lookHandler);
 	eventHandlers[EventType::REPLAY] = EventHandler(replayHandler);
 	eventHandlers[EventType::LOAD_END] = EventHandler(loadHandler);
+	eventHandlers[EventType::PPAUSE] = EventHandler(pauseHandler);
+	eventHandlers[EventType::CONTINUE] = EventHandler(continueHandler);
 }
 
 

@@ -6,6 +6,7 @@ Timer::Timer(int maxSec)
 }
 
 void Timer::init(int maxSec){
+	//this->waitSeconds = 0;
 	this->startTime = clock();
 	this->maxSeconds = maxSec;
 }
@@ -44,6 +45,15 @@ std::string Timer::getTimeText() {
    return buffer;
 }
 
+void Timer::pause(){
+	this->pauseStart = clock();
+}
+void Timer::restart(){
+	clock_t endTime = clock();
+	clock_t clockTicksTaken = endTime - pauseStart;
+	this->startTime = this->startTime + clockTicksTaken;
+	//this->waitSeconds = 0;
+}
 int Timer::getMin() {
 	double timeInSeconds = getTimeInSeconds();
 	return (int)timeInSeconds / 60;

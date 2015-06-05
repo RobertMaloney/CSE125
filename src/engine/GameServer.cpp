@@ -1,6 +1,9 @@
 #include "GameServer.h"
 
 bool		GameServer::loadDone = false;
+bool		GameServer::pause = false;
+bool		GameServer::pauseTrue = false;
+bool		GameServer::continueTrue = false;
 
 GameServer::GameServer() {
 	this->clients = new unordered_map<TCPConnection*, ObjectId>();
@@ -93,14 +96,31 @@ void GameServer::run() {
 
 		this->processClientEvents(); 		// process the client input events
 		
-		physics->update(PHYSICS_DT);      // do a physics step
+		if (pauseTrue){
+			timer->pause();
+			pauseTrue = false;
+		}
+		if (continueTrue){
+			timer->restart();
+			continueTrue = false;
+		}
 
+		if (!pause){
+
+			//pause all clients
+
+
+			physics->update(PHYSICS_DT);      // do a physics step
+
+			engine->updatePlayerTime(timer->getMinRemaining(), timer->getSecRemaining());
+			engine->calculatePercent(timer);
+
+		}
 		
-		engine->updatePlayerTime(timer->getMinRemaining(), timer->getSecRemaining());
-		engine->calculatePercent(timer);
+		this->tick();
 		
 	//	start = high_resolution_clock::now();
-		this->tick();                       // send state back to client
+		                      // send state back to client
 	//	end = high_resolution_clock::now();
 	//	std::cout << " tick: " << chrono::duration_cast<milliseconds>(end - start).count();
 		
@@ -177,6 +197,9 @@ void GameServer::reset() {
 	serverLock.unlock();
 	timer->reset();
 	loadDone = false;
+	pause = false;
+	pauseTrue = false;
+	continueTrue = false;
 }
 
 

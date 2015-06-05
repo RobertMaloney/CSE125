@@ -7,7 +7,9 @@
 class Timer {
 private:
    clock_t startTime;
+   clock_t pauseStart;
    int maxSeconds;
+   //int waitSeconds;
 
 public:
    Timer() : Timer(60) {};
@@ -21,6 +23,9 @@ public:
    double getTimeInSeconds();
    double getTimeInSecondsRemaining();
    std::string getTimeText();
+
+   void pause();
+   void restart();
 
    int getMin();
    int getSec();

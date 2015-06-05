@@ -123,6 +123,8 @@ void InputHandler::handleKey(int key, int action, int mods) {
 	else if (key == GLFW_KEY_ESCAPE) {//Esc
 		if (action == GLFW_PRESS) {
 			cout << "Game Pause" << endl;
+			p.writeByte(EventType::PPAUSE);
+			input.push_back(p);
 			//GraphicsEngine::ZoomOut();
 		    GameClient::inMenu = true;
 			GraphicsEngine::setCursor(GLFW_CURSOR_NORMAL);
@@ -131,6 +133,7 @@ void InputHandler::handleKey(int key, int action, int mods) {
 			GraphicsEngine::setMenuStatus(MenuStatus::MCONTINUE);
 		}
 	}
+	//!!!!!!!! Avoid hitting R, L and C...
 	else if (key == GLFW_KEY_R) {//Replay
 		if (action == GLFW_PRESS) {
 			cout << "client replay" << endl;
@@ -143,6 +146,15 @@ void InputHandler::handleKey(int key, int action, int mods) {
 		if (action == GLFW_PRESS) {
 			cout << "client load down" << endl;
 			p.writeByte(EventType::LOAD_END);
+			input.push_back(p);
+
+		}
+	}
+
+	else if (key == GLFW_KEY_C) {//Load down
+		if (action == GLFW_PRESS) {
+			cout << "game continue" << endl;
+			p.writeByte(EventType::CONTINUE);
 			input.push_back(p);
 
 		}

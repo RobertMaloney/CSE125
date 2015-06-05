@@ -318,6 +318,7 @@ void MenuState::conti()
 
 	GameClient::inMenu = false;
 	GraphicsEngine::setCursor(GLFW_CURSOR_DISABLED);
+	InputHandler::handleKey(GLFW_KEY_C, GLFW_PRESS, 0);
 }
 
 void MenuState::replay(){

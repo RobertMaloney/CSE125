@@ -49,6 +49,9 @@ public:
     ~GameServer();
 
 	static bool loadDone;
+	static bool pause;
+	static bool continueTrue;
+	static bool pauseTrue;
 
 	void run();
 	void stop();

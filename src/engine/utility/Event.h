@@ -20,6 +20,8 @@ enum EventType {
    ADD,
    REPLAY,
    LOAD_END,
+   PPAUSE,
+   CONTINUE,
 };
 
 
