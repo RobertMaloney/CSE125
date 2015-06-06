@@ -16,7 +16,7 @@ void GravityGenerator::updateForce(MoveableObject* target, float dt) {
 	
 	if (verticalComponent.height < 506.f) {
 		vec3 unitVelocity = glm::normalize(target->getVelocity());
-		target->addForce(target->getMass() * gravity * unitVelocity * 1.f * target->getFrictionCoefficient());
+		target->addForce(target->getMass() * gravity * unitVelocity * target->getFrictionCoefficient());
 	}
 
 	if (verticalComponent.height < 500.f) {
