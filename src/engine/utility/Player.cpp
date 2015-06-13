@@ -286,7 +286,7 @@ void Player::deserialize(Packet & p) {
 	if (stomach >= MAX_STOMACH_SIZE) {
 		burp_count += 1;
 		if (burp_count < MAX_BURP_COUNT) {
-			GameSound::regburp->play();
+			//GameSound::regburp->play();
 		}
 		else {
 			GameSound::bigburp->play();
