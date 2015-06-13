@@ -136,7 +136,11 @@ void GameServer::acceptWaitingClient() {
 
 	ObjectId playerId = idGen->createId();
 
-	Player* newPlayer = new Player(TREE, 500.f, 0.f, 0.f, 0.f);
+	float theta = (float)(rand() % 180);
+	float azimuth = (float)(rand() % 360);
+	float direction = (float)(rand() % 360);
+
+	Player* newPlayer = new Player(TREE, 500.f, theta, azimuth, direction);
 	newPlayer->loadConfiguration(configFile);
 
 	if (!gameState->addPlayer(playerId, newPlayer)){
